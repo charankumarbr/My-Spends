@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_payment"
+        android:title="@string/payment_types"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_credit_card_white_24dp"/>
+
+    <item
+        android:id="@+id/menu_add_expense"
+        android:title="@string/add_expense"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_add_white_24dp"/>
+</menu>

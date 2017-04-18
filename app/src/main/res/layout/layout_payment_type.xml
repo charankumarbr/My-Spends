@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <in.charanbr.expensetracker.customview.CustomTextView
+        android:id="@+id/lpt_textview_ptype_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textSize="17sp"
+        android:layout_marginLeft="16dp"
+        android:layout_toLeftOf="@+id/lpt_switch_active"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:fontName="@string/font_noto_sans"
+        android:textColor="@color/primary_text"/>
+
+    <Switch
+        android:id="@+id/lpt_switch_active"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="16dp"/>
+
+    <!--<in.charanbr.expensetracker.customview.CustomTextView
+        android:id="@+id/lpt_ctextview_created"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"
+        android:layout_alignLeft="@+id/lpt_textview_ptype_name"
+        android:layout_below="@+id/lpt_textview_ptype_name"
+        android:textColor="@color/secondary_text"
+        android:layout_marginBottom="10dp"
+        app:fontName="@string/font_noto_sans"/>-->
+
+</RelativeLayout>

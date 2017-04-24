@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -32,6 +33,7 @@ import in.charanbr.expensetracker.database.DBManager;
 import in.charanbr.expensetracker.model.Expense;
 import in.charanbr.expensetracker.model.ExpenseDate;
 import in.charanbr.expensetracker.model.PaymentType;
+import in.charanbr.expensetracker.ui.fragment.AddPaymentTypeFragment;
 import in.charanbr.expensetracker.util.AppConstants;
 import in.charanbr.expensetracker.util.AppLog;
 import in.charanbr.expensetracker.util.AppPref;
@@ -41,7 +43,7 @@ import in.charanbr.expensetracker.util.AppUtil;
  * Created by Charan.Br on 4/11/2017.
  */
 
-public final class NewExpenseActivity extends BaseActivity {
+public final class NewExpenseActivity extends BaseActivity implements AddPaymentTypeFragment.OnPaymentTypeListener {
 
     private Expense mExpense = null;
 
@@ -51,10 +53,15 @@ public final class NewExpenseActivity extends BaseActivity {
 
     private CustomTextView mCTvExpenseDate = null;
     private CustomTextView mCTvCurrencySymbol = null;
+    private CustomTextView mCTvAddNewExpense = null;
+
     private TextInputEditText mTIEtAmount = null;
     private TextInputEditText mTIEtNote = null;
 
+    private CheckBox mCbAddAnotherExpense;
+
     private int mSelectedTypeId = -1;
+    private int mOkStatus = RESULT_CANCELED;
 
     private boolean isNew = false;
 
@@ -92,6 +99,9 @@ public final class NewExpenseActivity extends BaseActivity {
         mCTvCurrencySymbol = (CustomTextView) findViewById(R.id.ane_ctextview_currency);
         mCTvCurrencySymbol.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY));
 
+        mCTvAddNewExpense = (CustomTextView) findViewById(R.id.ane_ctextview_add_new_payment);
+        mCTvAddNewExpense.setOnClickListener(clickListener);
+
         mTIEtAmount = (TextInputEditText) findViewById(R.id.ane_tiedittext_expense_amount);
         InputFilter.LengthFilter lengthFilter = new InputFilter.LengthFilter(10);
         mTIEtAmount.setFilters(new InputFilter[]{new MoneyValueFilter(), lengthFilter});
@@ -99,27 +109,12 @@ public final class NewExpenseActivity extends BaseActivity {
         mTIEtNote = (TextInputEditText) findViewById(R.id.ane_tiedittext_expense_note);
         mTIEtNote.setOnEditorActionListener(onEditorActionListener);
 
+        mCbAddAnotherExpense = (CheckBox) findViewById(R.id.ane_checkbox_add_another);
+
         mVEditDate = findViewById(R.id.ane_imageview_edit_date);
 
-        ArrayList<PaymentType> paymentTypes = DBManager.getPaymentTypes();
-        if (null != paymentTypes) {
-            mFlexboxLayout = (FlexboxLayout) findViewById(R.id.ane_fblayout_payment_mode);
-            LayoutInflater inflater = LayoutInflater.from(NewExpenseActivity.this);
-            for (int index = 0; index < paymentTypes.size(); index++) {
-                RadioButton radioButton = (RadioButton) inflater.inflate(R.layout.layout_radio_button, null);
-                radioButton.setId(index);
-                radioButton.setTag(paymentTypes.get(index).getId());
-                radioButton.setText(paymentTypes.get(index).getName());
-                if (!isNew && paymentTypes.get(index).getId() == mExpense.getPaymentTypePriId()) {
-                    radioButton.setChecked(true);
-
-                } else {
-                    radioButton.setChecked(false);
-                }
-                radioButton.setOnCheckedChangeListener(paymentModeSelectedListener);
-                mFlexboxLayout.addView(radioButton);
-            }
-        }
+        mFlexboxLayout = (FlexboxLayout) findViewById(R.id.ane_fblayout_payment_mode);
+        getPaymentTypes();
 
         if (isNew) {
             mCTvExpenseDate.setText(getString(R.string.expense_on) + " " + mExpenseDate.getFormattedDate());
@@ -136,6 +131,28 @@ public final class NewExpenseActivity extends BaseActivity {
 
             mVEditDate.setVisibility(View.VISIBLE);
             mVEditDate.setOnClickListener(clickListener);
+        }
+    }
+
+    private void getPaymentTypes() {
+        mFlexboxLayout.removeAllViews();
+        ArrayList<PaymentType> paymentTypes = DBManager.getPaymentTypes();
+        if (null != paymentTypes) {
+            LayoutInflater inflater = LayoutInflater.from(NewExpenseActivity.this);
+            for (int index = 0; index < paymentTypes.size(); index++) {
+                RadioButton radioButton = (RadioButton) inflater.inflate(R.layout.layout_radio_button, null);
+                radioButton.setId(index);
+                radioButton.setTag(paymentTypes.get(index).getId());
+                radioButton.setText(paymentTypes.get(index).getName());
+                if (!isNew && paymentTypes.get(index).getId() == mExpense.getPaymentTypePriId()) {
+                    radioButton.setChecked(true);
+
+                } else {
+                    radioButton.setChecked(false);
+                }
+                radioButton.setOnCheckedChangeListener(paymentModeSelectedListener);
+                mFlexboxLayout.addView(radioButton);
+            }
         }
     }
 
@@ -173,9 +190,18 @@ public final class NewExpenseActivity extends BaseActivity {
                 View customTitleView = inflater.inflate(R.layout.layout_date_title, null);
                 datePickerDialog.setCustomTitle(customTitleView);
                 datePickerDialog.show();
+
+            } else if (v.getId() == R.id.ane_ctextview_add_new_payment) {
+                showPaymentTypeDialog();
             }
         }
     };
+
+    private void showPaymentTypeDialog() {
+        AppUtil.toggleKeyboard(null, false);
+        AddPaymentTypeFragment addPaymentTypeFragment = AddPaymentTypeFragment.newInstance();
+        addPaymentTypeFragment.show(getSupportFragmentManager(), "AddPaymentTFragment");
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -208,7 +234,7 @@ public final class NewExpenseActivity extends BaseActivity {
 
     private void closeActivity() {
         AppUtil.toggleKeyboard(null, false);
-        setResult(RESULT_CANCELED);
+        setResult(mOkStatus);
         finish();
     }
 
@@ -231,7 +257,7 @@ public final class NewExpenseActivity extends BaseActivity {
     private CompoundButton.OnCheckedChangeListener paymentModeSelectedListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            resetAll();
+            resetAllPaymentTypes();
             AppLog.d("CheckedChange", "Checked:" + isChecked + "::Title:" + buttonView.getText());
             if (isChecked) {
                 buttonView.setChecked(true);
@@ -254,6 +280,13 @@ public final class NewExpenseActivity extends BaseActivity {
     };
 
     private void resetAll() {
+        mTIEtAmount.setText("");
+        mSelectedTypeId = -1;
+        resetAllPaymentTypes();
+        mTIEtNote.setText("");
+    }
+
+    private void resetAllPaymentTypes() {
         for (int index = 0; index < mFlexboxLayout.getChildCount(); index++) {
             if (mFlexboxLayout.getChildAt(index) instanceof RadioButton) {
                 ((RadioButton) mFlexboxLayout.getChildAt(index)).setChecked(false);
@@ -274,8 +307,14 @@ public final class NewExpenseActivity extends BaseActivity {
             if (DBManager.addExpense(expense) != -1) {
                 AppUtil.showToast("Expense tracked!");
                 AppUtil.toggleKeyboard(null, false);
-                setResult(RESULT_OK);
-                finish();
+                mOkStatus = RESULT_OK;
+                if (!mCbAddAnotherExpense.isChecked()) {
+                    setResult(RESULT_OK);
+                    finish();
+
+                } else {
+                    resetAll();
+                }
 
             } else {
                 AppUtil.showSnackbar(mViewComplete, "Could not add this Expense!");
@@ -303,8 +342,14 @@ public final class NewExpenseActivity extends BaseActivity {
             if (updateCount == 1) {
                 AppUtil.showToast("Expense updated!");
                 AppUtil.toggleKeyboard(null, false);
-                setResult(RESULT_OK);
-                finish();
+                mOkStatus = RESULT_OK;
+                if (!mCbAddAnotherExpense.isChecked()) {
+                    setResult(RESULT_OK);
+                    finish();
+
+                } else {
+                    resetAll();
+                }
             }
         }
     }
@@ -411,5 +456,10 @@ public final class NewExpenseActivity extends BaseActivity {
         }
 
         return false;
+    }
+
+    @Override
+    public void onPaymentTypeAdded() {
+        getPaymentTypes();
     }
 }

@@ -19,7 +19,11 @@
     </style>
 
     <declare-styleable name="CustomTextView">
-        <attr name="fontName" format="string"/>
+        <attr name="fontName" format="string" />
     </declare-styleable>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

@@ -12,19 +12,17 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
-
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".ui.activity.BaseActivity" />
-
         <activity
             android:name=".ui.activity.ViewExpenseActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
-
-        <activity android:name=".ui.activity.PaymentActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".ui.activity.PaymentActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".ui.activity.LaunchDeciderActivity"
+        <activity
+            android:name=".ui.activity.LaunchDeciderActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,16 +30,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.activity.AppSetupActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
-
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ui.activity.NewExpenseActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.activity.ExpensesListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
     </application>
 
 </manifest>

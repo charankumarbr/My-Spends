@@ -103,10 +103,29 @@ class DBAdapter {
 
         SQLiteDatabase database = expenseTrackerDBHelper.getReadableDatabase();
 
-        Cursor cursor = database.rawQuery("Select * FROM " + DBConstants.TableName.PAYMENT_TYPE + " WHERE " + DBConstants.COLUMN.NAME + " LIKE '"
-                + typeName + "' AND " + DBConstants.COLUMN.PAYMENT_TYPE_ID + " LIKE '%" + selectedPaymentTypeId + "%';", null);
+        Cursor cursor = null;
 
-        return null != cursor && cursor.getCount() > 0;
+        boolean status = false;
+        try {
+            cursor = database.rawQuery("Select * FROM " + DBConstants.TableName.PAYMENT_TYPE + " WHERE " + DBConstants.COLUMN.NAME + " LIKE '"
+                    + typeName + "' AND " + DBConstants.COLUMN.PAYMENT_TYPE_ID + " LIKE '%" + selectedPaymentTypeId + "%';", null);
+
+            status = ((null != cursor) && cursor.getCount() > 0);
+
+        } finally {
+
+            if (null != cursor && !cursor.isClosed()) {
+                cursor.close();
+            }
+            cursor = null;
+
+            if (null != database && database.isOpen()) {
+                database.close();
+            }
+            database = null;
+        }
+
+        return status;
 
     }
 
@@ -118,9 +137,12 @@ class DBAdapter {
         contentValues.put(DBConstants.COLUMN.IS_ACTIVE, 1); //-- deemed active while inserting --//
 
         SQLiteDatabase database = expenseTrackerDBHelper.getWritableDatabase();
+
+        long insertCount = -1;
+
         if (null != database) {
             try {
-                return database.insert(DBConstants.TableName.PAYMENT_TYPE, null, contentValues);
+                insertCount = database.insert(DBConstants.TableName.PAYMENT_TYPE, null, contentValues);
 
             } finally {
                 if (null != database && database.isOpen()) {
@@ -131,7 +153,7 @@ class DBAdapter {
             }
         }
 
-        return -1;
+        return insertCount;
     }
 
     public static long insertExpense(Expense expense) {
@@ -144,9 +166,12 @@ class DBAdapter {
         contentValues.put(DBConstants.COLUMN.UPDATED_ON, expense.getCreatedOn());
 
         SQLiteDatabase database = expenseTrackerDBHelper.getWritableDatabase();
+
+        long insertCount = -1;
+
         if (null != database) {
             try {
-                return database.insert(DBConstants.TableName.EXPENSE, null, contentValues);
+                insertCount = database.insert(DBConstants.TableName.EXPENSE, null, contentValues);
 
             } finally {
                 if (null != database && database.isOpen()) {
@@ -157,12 +182,14 @@ class DBAdapter {
             }
         }
 
-        return -1;
+        return insertCount;
     }
 
     public static int updateExpense(Expense expense) {
 
         SQLiteDatabase database = expenseTrackerDBHelper.getWritableDatabase();
+
+        int updateCount = -1;
 
         try {
             if (null != database) {
@@ -172,16 +199,17 @@ class DBAdapter {
                 contentValues.put(DBConstants.COLUMN.AMOUNT, expense.getAmount());
                 contentValues.put(DBConstants.COLUMN.NOTE, expense.getNote());
                 contentValues.put(DBConstants.COLUMN.UPDATED_ON, System.currentTimeMillis());
-                return database.update(DBConstants.TableName.EXPENSE, contentValues, BaseColumns._ID + " = ?", new String[]{String.valueOf(expense.getId())});
-
+                updateCount = database.update(DBConstants.TableName.EXPENSE, contentValues, BaseColumns._ID + " = ?", new String[]{String.valueOf(expense.getId())});
             }
+
         } finally {
-            if (database.isOpen()) {
+            if (null != database && database.isOpen()) {
                 database.close();
             }
+            database = null;
         }
 
-        return -1;
+        return updateCount;
     }
 
     /*public static ArrayList<Expense> fetchExpenses(ExpenseDate expenseDate) {
@@ -229,6 +257,8 @@ class DBAdapter {
 
         SQLiteDatabase database = expenseTrackerDBHelper.getReadableDatabase();
 
+        String paymentTypeName = "";
+
         if (null != database) {
             Cursor cursor = null;
             try {
@@ -263,21 +293,22 @@ class DBAdapter {
                         }
 
                     }
-                    return paymentType.toString();
+                    paymentTypeName = paymentType.toString();
                 }
             } finally {
                 if (null != cursor && !cursor.isClosed()) {
                     cursor.close();
                 }
                 cursor = null;
-                if (database.isOpen()) {
+
+                if (null != database && database.isOpen()) {
                     database.close();
                 }
                 database = null;
             }
         }
 
-        return "";
+        return paymentTypeName;
     }
 
     public static Float fetchTotalAmount(ExpenseDate expenseDate) {
@@ -286,12 +317,14 @@ class DBAdapter {
 
         Cursor cursor = null;
 
+        Float totalAmount = null;
+
         try {
             cursor = database.rawQuery("SELECT SUM(" + DBConstants.COLUMN.AMOUNT + ") FROM " + DBConstants.TableName.EXPENSE
                     + " WHERE " + DBConstants.COLUMN.EXPENSE_DATE + " LIKE '" + expenseDate.toString() + "';", null);
 
             if (null != cursor && cursor.moveToFirst()) {
-                return cursor.getFloat(0);
+                totalAmount = cursor.getFloat(0);
             }
 
         } finally {
@@ -307,7 +340,7 @@ class DBAdapter {
             database = null;
         }
 
-        return null;
+        return totalAmount;
     }
 
     public static Expense fetchExpense(int expensePrimaryKey) {
@@ -315,6 +348,7 @@ class DBAdapter {
         Expense expense = null;
 
         SQLiteDatabase database = expenseTrackerDBHelper.getReadableDatabase();
+
         if (null != database) {
             Cursor cursor = database.query(DBConstants.TableName.EXPENSE, null, BaseColumns._ID + " = ?",
                     new String[]{String.valueOf(expensePrimaryKey)}, null, null, null);
@@ -330,6 +364,7 @@ class DBAdapter {
                     expense.setExpenseDate(new ExpenseDate(cursor.getString(cursor.getColumnIndex(DBConstants.COLUMN.EXPENSE_DATE))));
                     expense.setNote(cursor.getString(cursor.getColumnIndex(DBConstants.COLUMN.NOTE)));
                 }
+
             } finally {
                 if (null != cursor && !cursor.isClosed()) {
                     cursor.close();
@@ -353,13 +388,7 @@ class DBAdapter {
         SQLiteDatabase database = expenseTrackerDBHelper.getReadableDatabase();
 
         if (null != database) {
-
             allPaymentTypesCursor = database.rawQuery("SELECT * FROM " + DBConstants.TableName.PAYMENT_TYPE + ";", null);
-
-            /*if (database.isOpen()) {
-                database.close();
-            }
-            database = null;*/
         }
 
         return allPaymentTypesCursor;
@@ -369,39 +398,104 @@ class DBAdapter {
 
         SQLiteDatabase database = expenseTrackerDBHelper.getReadableDatabase();
 
-        try {
-            int checkedStatus = -1;
-            if (isChecked) {
-                checkedStatus = 1;
-            } else {
-                checkedStatus = 0;
-            }
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(DBConstants.COLUMN.IS_ACTIVE, checkedStatus);
-            return database.update(DBConstants.TableName.PAYMENT_TYPE, contentValues, BaseColumns._ID + " = " + primaryKey, null);
+        int updateCount = 0;
 
-        } finally {
-            if (database.isOpen()) {
-                database.close();
+        ContentValues contentValues = null;
+        if (null != database) {
+            try {
+                int checkedStatus;
+
+                if (isChecked) {
+                    checkedStatus = 1;
+
+                } else {
+                    checkedStatus = 0;
+                }
+
+                contentValues = new ContentValues();
+                contentValues.put(DBConstants.COLUMN.IS_ACTIVE, checkedStatus);
+                updateCount = database.update(DBConstants.TableName.PAYMENT_TYPE, contentValues, BaseColumns._ID + " = " + primaryKey, null);
+
+            } finally {
+                if (database.isOpen()) {
+                    database.close();
+                }
+                database = null;
+                contentValues.clear();
+                contentValues = null;
             }
-            database = null;
         }
+
+        return updateCount;
     }
 
     public static int deleteExpense(int expenseId) {
 
         SQLiteDatabase database = expenseTrackerDBHelper.getWritableDatabase();
 
-        try {
-            if (null != database) {
-                return database.delete(DBConstants.TableName.EXPENSE, BaseColumns._ID + " = ?", new String[]{String.valueOf(expenseId)});
-            }
-        } finally {
-            if (database.isOpen()) {
-                database.close();
+        int deleteCount = 0;
+        if (null != database) {
+            try {
+                deleteCount = database.delete(DBConstants.TableName.EXPENSE, BaseColumns._ID + " = ?", new String[]{String.valueOf(expenseId)});
+
+            } finally {
+                if (database.isOpen()) {
+                    database.close();
+                }
+                database = null;
             }
         }
 
-        return 0;
+        return deleteCount;
     }
+
+    public static String fetchMonthlyExpensesTotal(ExpenseDate expenseDate) {
+
+        SQLiteDatabase database = expenseTrackerDBHelper.getReadableDatabase();
+
+        Cursor monthlyExpensesCursor = null;
+
+        String monthlyExpense = null;
+
+        if (null != database) {
+            try {
+                String sqlSelection = "%" + expenseDate.getMonth() + "|" + expenseDate.getYear();
+                monthlyExpensesCursor = database.rawQuery("SELECT SUM(" + DBConstants.COLUMN.AMOUNT + ") FROM " + DBConstants.TableName.EXPENSE +
+                        " WHERE " + DBConstants.COLUMN.EXPENSE_DATE + " LIKE '" + sqlSelection + "';", null);
+
+                if (null != monthlyExpensesCursor && monthlyExpensesCursor.moveToFirst()) {
+                    monthlyExpense = monthlyExpensesCursor.getString(0);
+                }
+
+            } finally {
+                if (null != monthlyExpensesCursor && !monthlyExpensesCursor.isClosed()) {
+                    monthlyExpensesCursor.close();
+                }
+                monthlyExpensesCursor = null;
+
+                if (null != database && database.isOpen()) {
+                    database.close();
+                }
+                database = null;
+            }
+        }
+
+        return monthlyExpense;
+    }
+
+    public static Cursor fetchMonthlyExpenses(ExpenseDate expenseDate) {
+
+        Cursor cursor = null;
+
+        SQLiteDatabase database = expenseTrackerDBHelper.getReadableDatabase();
+
+        if (null != database) {
+            String sqlSelection = "%" + expenseDate.getMonth() + "|" + expenseDate.getYear();
+            cursor = database.rawQuery("SELECT * FROM " + DBConstants.TableName.EXPENSE +
+                    " WHERE " + DBConstants.COLUMN.EXPENSE_DATE + " LIKE '" + sqlSelection + "';", null);
+        }
+
+        return cursor;
+    }
+
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/layout_toolbar"
+        android:id="@+id/ael_toolbar"/>
+
+    <ProgressBar
+        android:id="@+id/ael_progress_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
+    <ListView
+        android:id="@+id/ael_listview_expenses_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:fastScrollEnabled="true"
+        android:overScrollMode="never"
+        android:listSelector="@android:color/transparent"
+        android:visibility="gone"
+        android:layout_below="@+id/ael_toolbar"/>
+
+    <in.charanbr.expensetracker.customview.CustomTextView
+        android:id="@+id/ael_ctextview_no_expenses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fontName="@string/font_noto_sans"
+        android:textSize="19sp"
+        android:text="No expenses for this month."
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/colorAccent"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
+</RelativeLayout>

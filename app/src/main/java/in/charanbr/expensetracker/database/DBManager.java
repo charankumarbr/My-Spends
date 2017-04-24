@@ -70,4 +70,12 @@ public final class DBManager {
     public static int updateExpense(Expense expense) {
         return DBAdapter.updateExpense(expense);
     }
+
+    public static String getMonthlyExpensesTotal(ExpenseDate expenseDate) {
+        return DBAdapter.fetchMonthlyExpensesTotal(expenseDate);
+    }
+
+    public static Cursor getMonthlyExpenses(ExpenseDate expenseDate) {
+        return DBAdapter.fetchMonthlyExpenses(expenseDate);
+    }
 }

@@ -18,8 +18,6 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.CalendarView;
 
-import java.text.NumberFormat;
-
 import in.charanbr.expensetracker.ui.fragment.AddExpenseFragment;
 import in.charanbr.expensetracker.ui.fragment.AddPaymentTypeFragment;
 import in.charanbr.expensetracker.ExpenseTracker;
@@ -47,6 +45,8 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
     private ExpenseAdapter mExpenseAdapter;
 
+    private CustomTextView mCTvMonthlyExpenseInfo = null;
+    private CustomTextView mCTvMonthlyExpense = null;
     private CustomTextView mCTvTotalExpense = null;
     private CustomTextView mCTvNoExpense = null;
     private CustomTextView mCTvExpenseHeader = null;
@@ -74,9 +74,13 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
         mLvExpense = (BottomSheetListView) findViewById(R.id.am_listview_expense);
 
+        mCTvMonthlyExpenseInfo = (CustomTextView) findViewById(R.id.am_ctextview_month_info);
+        mCTvMonthlyExpense = (CustomTextView) findViewById(R.id.am_ctextview_month_expense);
         mCTvTotalExpense = (CustomTextView) findViewById(R.id.am_textview_total_expense);
         mCTvNoExpense = (CustomTextView) findViewById(R.id.am_textview_no_expense);
         mCTvExpenseHeader = (CustomTextView) findViewById(R.id.am_textview_expense_header);
+
+        findViewById(R.id.am_layout_month_expense).setOnClickListener(clickListener);
 
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.am_card_layout_bottom));
 
@@ -101,6 +105,23 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         return true;
     }
 
+    private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (v.getId() == R.id.am_layout_month_expense) {
+                boolean status = (boolean) mCTvMonthlyExpense.getTag();
+                if (status) {
+                    Intent monthlyExpenseIntent = new Intent(MainActivity.this, ExpensesListActivity.class);
+                    monthlyExpenseIntent.putExtra(AppConstants.Bundle.EXPENSE_DATE, mCalendarExpenseDate);
+                    startActivityForResult(monthlyExpenseIntent, AppConstants.EXPENSE_LIST_CODE);
+
+                } else {
+                    AppUtil.showSnackbar(findViewById(R.id.activity_main), "No expenses tracked in this month!");
+                }
+            }
+        }
+    };
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_add_expense) {
@@ -114,7 +135,11 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
             //showPaymentDialog();
             startActivity(new Intent(MainActivity.this, PaymentActivity.class));
             return true;
+
+        } else if (item.getItemId() == R.id.menu_reports) {
+            return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -186,57 +211,85 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new ExpenseCursorLoader(MainActivity.this, mCalendarExpenseDate, AppConstants.LoaderConstants.LOADER_EXPENSE);
+        if (id == DBConstants.LoaderId.EXPENSE) {
+            return new ExpenseCursorLoader(MainActivity.this, mCalendarExpenseDate, AppConstants.LoaderConstants.LOADER_EXPENSE);
+        }
+
+        return null;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (null != data && data.getCount() > 0) {
-            AppLog.d("Height", "::" + bottomSheetBehavior.getPeekHeight() + "::State:" + bottomSheetBehavior.getState());
-            bottomSheetBehavior.setPeekHeight(AppUtil.dpToPx(120));
+        if (loader.getId() == DBConstants.LoaderId.EXPENSE) {
+            if (null != data && data.getCount() > 0) {
+                AppLog.d("Height", "::" + bottomSheetBehavior.getPeekHeight() + "::State:" + bottomSheetBehavior.getState());
+                bottomSheetBehavior.setPeekHeight(AppUtil.dpToPx(120));
 
-            mLvExpense.setVisibility(View.VISIBLE);
-            mCTvNoExpense.setVisibility(View.GONE);
+                mLvExpense.setVisibility(View.VISIBLE);
+                mCTvNoExpense.setVisibility(View.GONE);
 
-            if (null == mLvExpense.getAdapter()) {
-                mExpenseAdapter = new ExpenseAdapter(MainActivity.this, data);
+                if (null == mLvExpense.getAdapter()) {
+                    mExpenseAdapter = new ExpenseAdapter(MainActivity.this, data);
+
+                } else {
+                    mExpenseAdapter.swapCursor(data);
+                }
+                mLvExpense.setAdapter(mExpenseAdapter);
+                Float totalAmount = DBManager.getTotalExpenses(mCalendarExpenseDate);
+                if (null != totalAmount) {
+                    mCTvTotalExpense.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)
+                            + " " + String.format(AppConstants.FLOAT_FORMAT, totalAmount));
+
+                } else {
+                    mCTvTotalExpense.setText("");
+                }
 
             } else {
-                mExpenseAdapter.swapCursor(data);
-            }
-            mLvExpense.setAdapter(mExpenseAdapter);
-            Float totalAmount = DBManager.getTotalExpenses(mCalendarExpenseDate);
-            if (null != totalAmount) {
+                mLvExpense.setVisibility(View.GONE);
                 mCTvTotalExpense.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)
-                        + " " + String.format(AppConstants.FLOAT_FORMAT, totalAmount));
-
-            } else {
-                mCTvTotalExpense.setText("");
+                        + " " + "0.00");
+                mCTvNoExpense.setVisibility(View.VISIBLE);
+                bottomSheetBehavior.setPeekHeight(AppUtil.dpToPx(150));
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
+            getMonthlyExpense();
+        }
+    }
+
+    private void getMonthlyExpense() {
+        String monthlyExpense = DBManager.getMonthlyExpensesTotal(mCalendarExpenseDate);
+        /*mCTvMonthlyExpenseInfo.setText("Expense for " + AppUtil.getShortMonth(mCalendarExpenseDate.getMonth())
+                + " " + mCalendarExpenseDate.getYear());*/
+        mCTvMonthlyExpenseInfo.setText("Monthly Expenses");
+
+        if (null != monthlyExpense) {
+            mCTvMonthlyExpense.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)
+                    + " " + AppUtil.getStringAmount(monthlyExpense));
+            mCTvMonthlyExpense.setTag(Boolean.TRUE);
 
         } else {
-            mLvExpense.setVisibility(View.GONE);
-            mCTvTotalExpense.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)
-                    + " " + "0.00");
-            mCTvNoExpense.setVisibility(View.VISIBLE);
-            bottomSheetBehavior.setPeekHeight(AppUtil.dpToPx(150));
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            mCTvMonthlyExpense.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY) + " 0.00");
+            mCTvMonthlyExpense.setTag(Boolean.FALSE);
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        if (null != mExpenseAdapter) {
-            mExpenseAdapter.swapCursor(null);
+        if (loader.getId() == DBConstants.LoaderId.EXPENSE) {
+            if (null != mExpenseAdapter) {
+                mExpenseAdapter.swapCursor(null);
+            }
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == AppConstants.VIEW_EXPENSE_CODE || requestCode == AppConstants.NEW_EXPENSE_CODE) {
+        if (requestCode == AppConstants.VIEW_EXPENSE_CODE || requestCode == AppConstants.NEW_EXPENSE_CODE
+                || requestCode == AppConstants.EXPENSE_LIST_CODE) {
             if (resultCode == RESULT_OK) {
                 getExpenses();
             }
         }
     }
+
 }

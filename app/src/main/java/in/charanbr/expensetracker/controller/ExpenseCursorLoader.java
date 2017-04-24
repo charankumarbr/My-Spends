@@ -37,6 +37,9 @@ public final class ExpenseCursorLoader extends CursorLoader {
 
             case AppConstants.LoaderConstants.LOADER_PAYMENT:
                 return DBManager.getPaymentTypesCursor();
+
+            case AppConstants.LoaderConstants.LOADER_EXPENSES_LIST:
+                return DBManager.getMonthlyExpenses(mExpenseDate);
         }
 
         return null;

@@ -21,6 +21,7 @@ public interface DBConstants {
     interface LoaderId {
         int EXPENSE = 3205;
         int PAYMENT_TYPE = 1663;
+        int EXPENSES_LIST = 6955;
     }
 
     interface COLUMN {

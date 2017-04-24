@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
@@ -19,10 +20,12 @@ import com.google.android.flexbox.FlexboxLayout;
 
 import java.util.ArrayList;
 
+import in.charanbr.expensetracker.ExpenseTracker;
 import in.charanbr.expensetracker.R;
 import in.charanbr.expensetracker.database.DBManager;
 import in.charanbr.expensetracker.model.PaymentMode;
 import in.charanbr.expensetracker.model.PaymentType;
+import in.charanbr.expensetracker.ui.activity.PaymentActivity;
 import in.charanbr.expensetracker.util.AppLog;
 import in.charanbr.expensetracker.util.AppUtil;
 
@@ -33,6 +36,8 @@ import in.charanbr.expensetracker.util.AppUtil;
  * create an instance of this fragment.
  */
 public class AddPaymentTypeFragment extends DialogFragment {
+
+    private Context mContext;
 
     private TextInputEditText mTIETTypeName = null;
 
@@ -71,6 +76,7 @@ public class AddPaymentTypeFragment extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mListener = (OnPaymentTypeListener) context;
+        mContext = context;
     }
 
     @Override

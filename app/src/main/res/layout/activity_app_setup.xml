@@ -15,7 +15,9 @@
         android:cacheColorHint="@android:color/transparent"
         android:scrollbars="vertical"
         android:visibility="gone"
-        android:layout_below="@+id/aas_toolbar"/>
+        android:layout_below="@+id/aas_toolbar"
+        android:fastScrollEnabled="true"
+        android:fastScrollStyle="@color/colorAccent"/>
 
     <ProgressBar
         android:id="@+id/aas_progress_bar_loading"

@@ -71,7 +71,7 @@ public final class ExpenseAdapter extends CursorAdapter {
 
             holder.tvNote.setText(cursor.getString(mIndexDesc));
 
-            holder.tvPaymentTypeName.setText(mContext.getString(R.string.paid_by) + ": " +
+            holder.tvPaymentTypeName.setText(mContext.getString(R.string.paid_by) + " " +
                     DBManager.getPaymentTypeName(cursor.getInt(mIndexPTPriId)));
             holder.tvAmount.setTag(cursor.getInt(mIndexPriId));
         }

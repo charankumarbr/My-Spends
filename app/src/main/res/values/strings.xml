@@ -14,7 +14,7 @@
     <string name="enter_valid_payment_name">Enter a valid Payment Name</string>
     <string name="Rs">\u20B9</string>
     <string name="font_noto_sans">fontNotoSans</string>
-    <string name="paid_by">Paid by</string>
+    <string name="paid_by">Paid by:</string>
     <string name="note">Note</string>
     <string name="value">default</string>
     <string name="done_caps">DONE</string>
@@ -32,4 +32,9 @@
     <string name="delete_expense">Delete Expense</string>
     <string name="confirm_delete_message">Are you sure you want to delete this expense? It cannot be recovered later.</string>
     <string name="expense_deleted_successfully">Expense deleted successfully!</string>
+    <string name="add_another_expense">Add another expense</string>
+    <string name="title_activity_expenses_list">ExpensesListActivity</string>
+    <string name="add_new">Add New</string>
+    <string name="expenses_for_month_of">Expenses for the month of</string>
+    <string name="reports">Reports</string>
 </resources>

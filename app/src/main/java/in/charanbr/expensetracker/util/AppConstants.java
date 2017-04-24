@@ -15,6 +15,7 @@ public interface AppConstants {
     int VIEW_EXPENSE_CODE = 3832;
     int EDIT_EXPENSE_CODE = 3385;
     int NEW_EXPENSE_CODE = 5323;
+    int EXPENSE_LIST_CODE = 3203;
 
     String FLOAT_FORMAT = "%.02f";
 
@@ -27,6 +28,7 @@ public interface AppConstants {
     interface LoaderConstants {
         int LOADER_EXPENSE = 9932;
         int LOADER_PAYMENT = 9901;
+        int LOADER_EXPENSES_LIST = 3282;
     }
 
     interface PrefConstants {

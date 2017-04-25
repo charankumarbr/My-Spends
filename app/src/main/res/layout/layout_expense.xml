@@ -51,4 +51,21 @@
         android:layout_alignParentEnd="true"
         app:fontName="@string/font_noto_sans"/>
 
+    <in.charanbr.expensetracker.customview.CustomTextView
+        android:id="@+id/le_textview_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="27 Apr"
+        android:textColor="@color/colorAccent"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_alignParentEnd="true"
+        app:fontName="@string/font_noto_sans"
+        android:layout_below="@+id/le_textview_amount"
+        android:visibility="gone"/>
+
 </RelativeLayout>

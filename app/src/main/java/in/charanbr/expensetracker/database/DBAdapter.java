@@ -492,7 +492,8 @@ class DBAdapter {
         if (null != database) {
             String sqlSelection = "%" + expenseDate.getMonth() + "|" + expenseDate.getYear();
             cursor = database.rawQuery("SELECT * FROM " + DBConstants.TableName.EXPENSE +
-                    " WHERE " + DBConstants.COLUMN.EXPENSE_DATE + " LIKE '" + sqlSelection + "';", null);
+                    " WHERE " + DBConstants.COLUMN.EXPENSE_DATE + " LIKE '" + sqlSelection + "'"
+                    + " ORDER BY SUBSTR(" + DBConstants.COLUMN.EXPENSE_DATE + ", 0, 3) DESC;", null);
         }
 
         return cursor;

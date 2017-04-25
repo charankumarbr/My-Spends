@@ -20,15 +20,7 @@ public class ExpenseDate implements Parcelable {
     }
 
     public ExpenseDate(String expenseDate) {
-        if (expenseDate.contains("|")) {
-            String[] splits = expenseDate.split("\\|");
-            dayOfMonth = Integer.parseInt(splits[0]);
-            month = Integer.parseInt(splits[1]);
-            year = Integer.parseInt(splits[2]);
-
-        } else {
-            throw new IllegalArgumentException("Invalid Expense Date");
-        }
+        changeDate(expenseDate);
     }
 
     public int getDayOfMonth() {
@@ -116,5 +108,17 @@ public class ExpenseDate implements Parcelable {
         }
 
         return false;
+    }
+
+    public void changeDate(String expenseDate) {
+        if (expenseDate.contains("|")) {
+            String[] splits = expenseDate.split("\\|");
+            dayOfMonth = Integer.parseInt(splits[0]);
+            month = Integer.parseInt(splits[1]);
+            year = Integer.parseInt(splits[2]);
+
+        } else {
+            throw new IllegalArgumentException("Invalid Expense Date");
+        }
     }
 }

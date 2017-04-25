@@ -1,12 +1,15 @@
 package in.charanbr.expensetracker.ui.activity;
 
+import android.app.Dialog;
 import android.app.LoaderManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -137,10 +140,44 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
             return true;
 
         } else if (item.getItemId() == R.id.menu_reports) {
+            AppUtil.showSnackbar(findViewById(R.id.activity_main), "User, wait for an update!");
+            return true;
+
+        } else if (item.getItemId() == R.id.menu_about) {
+            showAboutAppDialog();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showAboutAppDialog() {
+        AlertDialog.Builder aboutappDialog = new AlertDialog.Builder(MainActivity.this);
+        aboutappDialog.setTitle(getString(R.string.about) + " " + getString(R.string.app_name));
+        aboutappDialog.setMessage(getString(R.string.app_name) + " " + getString(R.string.about_app_msg));
+        aboutappDialog.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        aboutappDialog.setNegativeButton(getString(R.string.contact_us), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                intent.setType("message/rfc822");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"phoenix.apps.in@gmail.com"});
+                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.about) + getString(R.string.app_name));
+                Intent mailer = Intent.createChooser(intent, null);
+                startActivity(Intent.createChooser(mailer, "Send Email..."));
+            }
+        });
+
+        if (!isFinishing()) {
+            aboutappDialog.create().show();
+        }
     }
 
     private void showPaymentDialog() {
@@ -229,7 +266,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
                 mCTvNoExpense.setVisibility(View.GONE);
 
                 if (null == mLvExpense.getAdapter()) {
-                    mExpenseAdapter = new ExpenseAdapter(MainActivity.this, data);
+                    mExpenseAdapter = new ExpenseAdapter(MainActivity.this, data, false);
 
                 } else {
                     mExpenseAdapter.swapCursor(data);

@@ -12,6 +12,7 @@ import in.charanbr.expensetracker.R;
 import in.charanbr.expensetracker.customview.CustomTextView;
 import in.charanbr.expensetracker.database.DBConstants;
 import in.charanbr.expensetracker.database.DBManager;
+import in.charanbr.expensetracker.model.ExpenseDate;
 import in.charanbr.expensetracker.util.AppConstants;
 import in.charanbr.expensetracker.util.AppPref;
 import in.charanbr.expensetracker.util.AppUtil;
@@ -30,11 +31,17 @@ public final class ExpenseAdapter extends CursorAdapter {
     private int mIndexDesc;
     private int mIndexPTPriId;
     private int mIndexPriId;
+    private int mIndexExpenseDate;
 
-    public ExpenseAdapter(Context context, Cursor c) {
+    private boolean mIsExpenseList = false;
+
+    private ExpenseDate mExpenseDate;
+
+    public ExpenseAdapter(Context context, Cursor c, boolean isExpenseList) {
         super(context, c, false);
         mContext = context;
         mCurrencySymbol = AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY);
+        mIsExpenseList = isExpenseList;
         /*numberFormat = NumberFormat.getNumberInstance();
         numberFormat.setMaximumFractionDigits(2);
         numberFormat.setMinimumFractionDigits(2);*/
@@ -47,12 +54,20 @@ public final class ExpenseAdapter extends CursorAdapter {
         holder.tvAmount = (CustomTextView) view.findViewById(R.id.le_textview_amount);
         holder.tvNote = (CustomTextView) view.findViewById(R.id.le_textview_payment_note);
         holder.tvPaymentTypeName = (CustomTextView) view.findViewById(R.id.le_textview_payment_type);
+        holder.tvExpenseDate = (CustomTextView) view.findViewById(R.id.le_textview_date);
+        if (mIsExpenseList) {
+            holder.tvExpenseDate.setVisibility(View.VISIBLE);
+
+        } else {
+            holder.tvExpenseDate.setVisibility(View.GONE);
+        }
         view.setTag(holder);
 
         mIndexAmount = cursor.getColumnIndex(DBConstants.COLUMN.AMOUNT);
         mIndexDesc = cursor.getColumnIndex(DBConstants.COLUMN.NOTE);
         mIndexPTPriId = cursor.getColumnIndex(DBConstants.COLUMN.PAYMENT_TYPE_PRI_ID);
         mIndexPriId = cursor.getColumnIndex(BaseColumns._ID);
+        mIndexExpenseDate = cursor.getColumnIndex(DBConstants.COLUMN.EXPENSE_DATE);
 
         return view;
     }
@@ -74,6 +89,16 @@ public final class ExpenseAdapter extends CursorAdapter {
             holder.tvPaymentTypeName.setText(mContext.getString(R.string.paid_by) + " " +
                     DBManager.getPaymentTypeName(cursor.getInt(mIndexPTPriId)));
             holder.tvAmount.setTag(cursor.getInt(mIndexPriId));
+
+            if (mIsExpenseList) {
+                if (null == mExpenseDate) {
+                    mExpenseDate = new ExpenseDate(cursor.getString(mIndexExpenseDate));
+
+                } else {
+                    mExpenseDate.changeDate(cursor.getString(mIndexExpenseDate));
+                }
+                holder.tvExpenseDate.setText(mExpenseDate.getDayOfMonth() + " " + AppUtil.getShortMonth(mExpenseDate.getMonth()));
+            }
         }
     }
 
@@ -81,6 +106,7 @@ public final class ExpenseAdapter extends CursorAdapter {
         CustomTextView tvNote;
         CustomTextView tvAmount;
         CustomTextView tvPaymentTypeName;
+        CustomTextView tvExpenseDate;
     }
 
 }

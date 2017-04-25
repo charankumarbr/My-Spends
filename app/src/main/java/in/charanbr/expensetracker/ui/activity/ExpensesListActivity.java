@@ -90,7 +90,7 @@ public class ExpensesListActivity extends BaseActivity implements LoaderManager.
                 mCTvNoExpenses.setVisibility(View.GONE);
                 AppUtil.showToast("" + data.getCount() + " records");
                 if (null == mLvExpenses.getAdapter()) {
-                    mExpenseAdapter = new ExpenseAdapter(ExpensesListActivity.this, data);
+                    mExpenseAdapter = new ExpenseAdapter(ExpensesListActivity.this, data, true);
                     mLvExpenses.setAdapter(mExpenseAdapter);
                     mLvExpenses.setOnItemClickListener(itemClickListener);
 

@@ -78,4 +78,8 @@ public final class DBManager {
     public static Cursor getMonthlyExpenses(ExpenseDate expenseDate) {
         return DBAdapter.fetchMonthlyExpenses(expenseDate);
     }
+
+    public static boolean hasExpense(ExpenseDate expenseDate) {
+        return DBAdapter.checkExpense(expenseDate);
+    }
 }

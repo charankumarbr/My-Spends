@@ -2,8 +2,11 @@ package in.charanbr.expensetracker.ui.activity;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
@@ -67,24 +70,35 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
     private View mVEditDate = null;
 
+    private boolean mViaNotification = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getIntent().hasExtra(AppConstants.Bundle.EXPENSE)) {
-            mExpense = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE);
-            isNew = false;
-
-        } else if (getIntent().hasExtra(AppConstants.Bundle.EXPENSE_DATE)) {
-            mExpenseDate = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE_DATE);
-            isNew = true;
+        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) {
+            startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
+            finish();
 
         } else {
-            onDestroy();
-        }
+            if (getIntent().hasExtra(AppConstants.Bundle.EXPENSE)) {
+                mExpense = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE);
+                isNew = false;
 
-        setContentView(R.layout.activity_new_expense);
-        init();
+            } else if (getIntent().hasExtra(AppConstants.Bundle.EXPENSE_DATE)) {
+                mExpenseDate = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE_DATE);
+                isNew = true;
+
+            } else {
+                finish();
+            }
+
+            mViaNotification = getIntent().getBooleanExtra(AppConstants.Bundle.VIA_NOTIFICATION, false);
+            AppLog.d("TimeInMillis", getIntent().getLongExtra("check", 100L) + ":: millisCheck");
+
+            setContentView(R.layout.activity_new_expense);
+            init();
+        }
     }
 
     private void init() {
@@ -92,6 +106,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         Toolbar toolbar = (Toolbar) findViewById(R.id.lt_toolbar);
         toolbar.setTitle(isNew ? "Add Expense" : "Edit Expense");
         setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
@@ -234,7 +249,16 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
     private void closeActivity() {
         AppUtil.toggleKeyboard(null, false);
-        setResult(mOkStatus);
+        if (mViaNotification) {
+            /*Intent upIntent = NavUtils.getParentActivityIntent(this);
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(upIntent)
+                    .startActivities();*/
+            startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
+
+        } else {
+            setResult(mOkStatus);
+        }
         finish();
     }
 

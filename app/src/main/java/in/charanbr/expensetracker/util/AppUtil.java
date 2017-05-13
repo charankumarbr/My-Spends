@@ -51,18 +51,17 @@ public final class AppUtil {
                 Integer.parseInt(dateParts[2]));
     }
 
+    public static String convertToDateDB(long millis) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy h:mm:ss a");
+        return simpleDateFormat.format(new Date(millis));
+    }
+
     public static void showToast(int stringId) {
         Toast.makeText(ExpenseTracker.APP_CONTEXT, ExpenseTracker.APP_CONTEXT.getString(stringId), Toast.LENGTH_SHORT).show();
     }
 
     public static void showToast(String message) {
         Toast.makeText(ExpenseTracker.APP_CONTEXT, message, Toast.LENGTH_SHORT).show();
-    }
-
-    public static String convertToDateDB(long millis) {
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy h:mm:ss a");
-        return simpleDateFormat.format(new Date(millis));
     }
 
     public static int dpToPx(int dp) {

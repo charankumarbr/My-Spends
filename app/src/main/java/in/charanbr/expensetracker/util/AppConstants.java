@@ -10,6 +10,7 @@ public interface AppConstants {
         String EXPENSE_PRIMARY_KEY = "expensePrimaryKey";
         String EXPENSE = "expense";
         String EXPENSE_DATE = "expenseDate";
+        String VIA_NOTIFICATION = "viaNotification";
     }
 
     int VIEW_EXPENSE_CODE = 3832;
@@ -34,5 +35,7 @@ public interface AppConstants {
     interface PrefConstants {
         String APP_SETUP = "appSetup";
         String CURRENCY = "currency";
+        String NOTIFICATION_HOUR = "notificationHour";
+        String NOTIFICATION_MIN = "notificationMin";
     }
 }

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
@@ -21,6 +22,7 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.CalendarView;
 
+import in.charanbr.expensetracker.BuildConfig;
 import in.charanbr.expensetracker.ui.fragment.AddExpenseFragment;
 import in.charanbr.expensetracker.ui.fragment.AddPaymentTypeFragment;
 import in.charanbr.expensetracker.ExpenseTracker;
@@ -154,7 +156,8 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
     private void showAboutAppDialog() {
         AlertDialog.Builder aboutappDialog = new AlertDialog.Builder(MainActivity.this);
         aboutappDialog.setTitle(getString(R.string.about) + " " + getString(R.string.app_name));
-        aboutappDialog.setMessage(getString(R.string.app_name) + " " + getString(R.string.about_app_msg));
+        aboutappDialog.setMessage("Version:" + BuildConfig.VERSION_NAME + "\n\n"
+                + getString(R.string.app_name) + " " + getString(R.string.about_app_msg));
         aboutappDialog.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -166,12 +169,13 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                Intent intent = new Intent(Intent.ACTION_SENDTO);
-                intent.setType("message/rfc822");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"phoenix.apps.in@gmail.com"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.about) + getString(R.string.app_name));
+                Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + Uri.encode("phoenix.apps.in@gmail.com")));
+                //intent.setType("text/plain");
+                //intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"phoenix.apps.in@gmail.com"});
+                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.about) + " " + getString(R.string.app_name) + "-v" + BuildConfig.VERSION_NAME);
                 Intent mailer = Intent.createChooser(intent, null);
-                startActivity(Intent.createChooser(mailer, "Send Email..."));
+                startActivity(Intent.createChooser(mailer, "Send email via..."));
+                //startActivity(intent);
             }
         });
 
@@ -238,7 +242,9 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
     @Override
     public void onBackPressed() {
-        if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+        AppLog.d("onBackPressed", "State::" + bottomSheetBehavior.getState());
+        if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED
+                && mCTvNoExpense.getVisibility() == View.GONE) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
         } else {
@@ -297,7 +303,8 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         String monthlyExpense = DBManager.getMonthlyExpensesTotal(mCalendarExpenseDate);
         /*mCTvMonthlyExpenseInfo.setText("Expense for " + AppUtil.getShortMonth(mCalendarExpenseDate.getMonth())
                 + " " + mCalendarExpenseDate.getYear());*/
-        mCTvMonthlyExpenseInfo.setText("Monthly Expenses");
+        mCTvMonthlyExpenseInfo.setText(AppUtil.getShortMonth(mCalendarExpenseDate.getMonth())
+                + " month expenses");
 
         if (null != monthlyExpense) {
             mCTvMonthlyExpense.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)
@@ -329,4 +336,9 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         }
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        AppLog.d("main", "onNewIntent");
+        super.onNewIntent(intent);
+    }
 }

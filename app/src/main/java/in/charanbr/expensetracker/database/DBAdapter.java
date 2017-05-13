@@ -499,4 +499,33 @@ class DBAdapter {
         return cursor;
     }
 
+    public static boolean checkExpense(ExpenseDate expenseDate) {
+
+        SQLiteDatabase database = expenseTrackerDBHelper.getReadableDatabase();
+        Cursor cursor = null;
+        int count = 0;
+
+        if (null != database) {
+            try {
+                cursor = database.rawQuery("SELECT count(" + BaseColumns._ID + ") FROM " + DBConstants.TableName.EXPENSE
+                        + " WHERE " + DBConstants.COLUMN.EXPENSE_DATE + " LIKE '" + expenseDate.toString() + "';", null);
+
+                if (null != cursor && cursor.moveToFirst()) {
+                    count = cursor.getInt(0);
+                }
+            } finally {
+                if (null != cursor && !cursor.isClosed()) {
+                    cursor.close();
+                }
+                cursor = null;
+
+                if (null != database && database.isOpen()) {
+                    database.close();
+                }
+                database = null;
+            }
+        }
+
+        return count > 0 ? true : false;
+    }
 }

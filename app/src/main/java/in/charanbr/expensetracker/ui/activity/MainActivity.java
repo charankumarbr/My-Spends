@@ -142,7 +142,8 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
             return true;
 
         } else if (item.getItemId() == R.id.menu_reports) {
-            AppUtil.showSnackbar(findViewById(R.id.activity_main), "User, wait for an update!");
+            //AppUtil.showSnackbar(findViewById(R.id.activity_main), "User, wait for an update!");
+            startActivity(new Intent(MainActivity.this, ReportActivity.class));
             return true;
 
         } else if (item.getItemId() == R.id.menu_about) {
@@ -156,7 +157,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
     private void showAboutAppDialog() {
         AlertDialog.Builder aboutappDialog = new AlertDialog.Builder(MainActivity.this);
         aboutappDialog.setTitle(getString(R.string.about) + " " + getString(R.string.app_name));
-        aboutappDialog.setMessage("Version:" + BuildConfig.VERSION_NAME + "\n\n"
+        aboutappDialog.setMessage("Version: " + BuildConfig.VERSION_NAME + "\n\n"
                 + getString(R.string.app_name) + " " + getString(R.string.about_app_msg));
         aboutappDialog.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
             @Override

@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Expense Tracker</string>
-    <!--<string name="app_name">Track My Spends</string>-->
+    <!--<string name="app_name">Expense Tracker</string>-->
+    <string name="app_name">Track My Spends</string>
     <string name="add_expense">Add Expense</string>
     <string name="add_payment">Add Payment</string>
     <string name="add_payment_type">Add Payment Type</string>
@@ -38,6 +38,7 @@
     <string name="expenses_for_month_of">Expenses for the month of</string>
     <string name="reports">Reports</string>
     <string name="about">About</string>
+    <string name="about_app">About App</string>
     <string name="about_app_msg">is an app to track all your spends/expenditure. And first of it\'s kind to NOT TO read your personal data.\n\n
         ->This app keeps track of your spends/expenditure when you add it.\n\n <!--This app DOES NOT need internet to work.-->
         ->All the data will be saved on the phone.\n<!--\n

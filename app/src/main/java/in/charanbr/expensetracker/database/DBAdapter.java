@@ -1,5 +1,6 @@
 package in.charanbr.expensetracker.database;
 
+import android.app.Notification;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,14 +23,21 @@ class DBAdapter {
 
     private static ExpenseTrackerDB expenseTrackerDBHelper = new ExpenseTrackerDB(ExpenseTracker.APP_CONTEXT);
 
-    public static ArrayList<PaymentType> fetchPaymentTypes() {
+    public static ArrayList<PaymentType> fetchPaymentTypes(boolean isActive) {
 
         SQLiteDatabase database = expenseTrackerDBHelper.getReadableDatabase();
 
         ArrayList<PaymentType> paymentTypes = null;
 
-        Cursor cursor = database.rawQuery("SELECT * FROM " + DBConstants.TableName.PAYMENT_TYPE
-                + " WHERE " + DBConstants.COLUMN.IS_ACTIVE + " = 1", null);
+        Cursor cursor = null;
+
+        if (isActive) {
+            cursor = database.rawQuery("SELECT * FROM " + DBConstants.TableName.PAYMENT_TYPE
+                    + " WHERE " + DBConstants.COLUMN.IS_ACTIVE + " = 1", null);
+
+        } else {
+            cursor = database.rawQuery("SELECT * FROM " + DBConstants.TableName.PAYMENT_TYPE, null);
+        }
 
         try {
             if (null != cursor && cursor.getCount() > 0) {
@@ -164,6 +172,7 @@ class DBAdapter {
         contentValues.put(DBConstants.COLUMN.AMOUNT, expense.getAmount());
         contentValues.put(DBConstants.COLUMN.NOTE, expense.getNote());
         contentValues.put(DBConstants.COLUMN.UPDATED_ON, expense.getCreatedOn());
+        contentValues.put(DBConstants.COLUMN.EXPENSE_ON, expense.getExpenseDate().getTimeInMillis());
 
         SQLiteDatabase database = expenseTrackerDBHelper.getWritableDatabase();
 
@@ -527,5 +536,49 @@ class DBAdapter {
         }
 
         return count > 0 ? true : false;
+    }
+
+    public static Cursor fetchExpenses(ExpenseDate fromDate, ExpenseDate toDate, Integer[] paidBy) {
+
+        Cursor cursor = null;
+
+        SQLiteDatabase database = expenseTrackerDBHelper.getReadableDatabase();
+
+        //if (null == paidBy) {
+            if (null != database) {
+
+                StringBuilder builder = new StringBuilder();
+                builder.append("SELECT * FROM ");
+                builder.append(DBConstants.TableName.EXPENSE);
+                builder.append(" WHERE ");
+                builder.append(DBConstants.COLUMN.EXPENSE_ON);
+                builder.append(" >= ");
+                builder.append(fromDate.getTimeInMillis());
+                builder.append(" AND ");
+                builder.append(DBConstants.COLUMN.EXPENSE_ON);
+                builder.append(" <= ");
+                builder.append(toDate.getTimeInMillis());
+
+                if (null != paidBy) {
+                    builder.append(" AND (");
+                    for (int index = 0; index < paidBy.length; index++) {
+                        builder.append(DBConstants.COLUMN.PAYMENT_TYPE_PRI_ID);
+                        builder.append(" = ");
+                        builder.append(paidBy[index]);
+
+                        if (index != paidBy.length - 1) {
+                            builder.append(" OR ");
+                        }
+                    }
+                    builder.append(")");
+                }
+                builder.append(" ORDER BY SUBSTR(");
+                builder.append(DBConstants.COLUMN.EXPENSE_DATE);
+                builder.append(", 0, 3) DESC;");
+                cursor = database.rawQuery(builder.toString(), null);
+            }
+        //}
+
+        return cursor;
     }
 }

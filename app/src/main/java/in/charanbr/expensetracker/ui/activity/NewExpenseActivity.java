@@ -151,7 +151,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
     private void getPaymentTypes() {
         mFlexboxLayout.removeAllViews();
-        ArrayList<PaymentType> paymentTypes = DBManager.getPaymentTypes();
+        ArrayList<PaymentType> paymentTypes = DBManager.getPaymentTypes(true);
         if (null != paymentTypes) {
             LayoutInflater inflater = LayoutInflater.from(NewExpenseActivity.this);
             for (int index = 0; index < paymentTypes.size(); index++) {

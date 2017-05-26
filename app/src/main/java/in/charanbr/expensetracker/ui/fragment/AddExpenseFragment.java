@@ -67,7 +67,6 @@ public class AddExpenseFragment extends DialogFragment {
      * @param expenseDate Parameter 1.
      * @return A new instance of fragment AddExpenseFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static AddExpenseFragment newInstance(ExpenseDate expenseDate) {
         AddExpenseFragment fragment = new AddExpenseFragment();
         Bundle args = new Bundle();
@@ -115,7 +114,7 @@ public class AddExpenseFragment extends DialogFragment {
         mTIEtAmount.setFilters(new InputFilter[]{new MoneyValueFilter()});
         mTIEtNote = (TextInputEditText) addView.findViewById(R.id.fae_tiedittext_expense_note);
 
-        ArrayList<PaymentType> paymentTypes = DBManager.getPaymentTypes();
+        ArrayList<PaymentType> paymentTypes = DBManager.getPaymentTypes(true);
         if (null != paymentTypes) {
             mFlexboxLayout = (FlexboxLayout) addView.findViewById(R.id.fae_fblayout_payment_mode);
             for (int index = 0; index < paymentTypes.size(); index++) {

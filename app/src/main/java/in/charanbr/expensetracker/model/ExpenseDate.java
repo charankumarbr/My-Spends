@@ -3,6 +3,7 @@ package in.charanbr.expensetracker.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Calendar;
 import java.util.UnknownFormatConversionException;
 
 import in.charanbr.expensetracker.util.AppLog;
@@ -80,6 +81,23 @@ public class ExpenseDate implements Parcelable {
 
     public String getFormattedDate() {
         return AppUtil.getThDate(dayOfMonth) + " " + AppUtil.getShortMonth(getMonth()) + " " + getYear();
+    }
+
+    public long getTimeInMillis() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.YEAR, year);
+        return calendar.getTimeInMillis();
+    }
+
+    public long reportToDateTimeInMillis() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.YEAR, year);
+        calendar.add(Calendar.MONTH, 3);
+        return calendar.getTimeInMillis();
     }
 
     @Override

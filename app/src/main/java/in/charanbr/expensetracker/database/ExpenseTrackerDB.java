@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import in.charanbr.expensetracker.model.Expense;
+import in.charanbr.expensetracker.model.ExpenseDate;
+
 /**
  * Created by Charan.Br on 2/11/2017.
  */
@@ -50,7 +53,8 @@ public final class ExpenseTrackerDB extends SQLiteOpenHelper {
                 + DBConstants.COLUMN.NOTE + " TEXT,"
                 + DBConstants.COLUMN.PAYMENT_TYPE_PRI_ID + " INTEGER,"
                 + DBConstants.COLUMN.CREATED_ON + " TEXT,"
-                + DBConstants.COLUMN.UPDATED_ON + " TEXT);");
+                + DBConstants.COLUMN.UPDATED_ON + " TEXT,"
+                + DBConstants.COLUMN.EXPENSE_ON + "TEXT);");
     }
 
     private void insertCashPaymentType(SQLiteDatabase db) {
@@ -91,7 +95,26 @@ public final class ExpenseTrackerDB extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion == 1 && newVersion > oldVersion) {
+            //-- add new column DBConstants.COLUMN.EXPENSE_ON to the expense table --//
+            Cursor cursorAllExpenses = db.rawQuery("SELECT " + BaseColumns._ID + ","
+                    + DBConstants.COLUMN.EXPENSE_DATE + " FROM " + DBConstants.TableName.EXPENSE, null);
+            db.execSQL("ALTER TABLE " + DBConstants.TableName.EXPENSE + " ADD COLUMN " + DBConstants.COLUMN.EXPENSE_ON + " TEXT;");
+            if (null != cursorAllExpenses && cursorAllExpenses.getCount() > 0 && cursorAllExpenses.moveToFirst()) {
+                int indexBaseColumnId = cursorAllExpenses.getColumnIndex(BaseColumns._ID);
+                int indexExpenseDate = cursorAllExpenses.getColumnIndex(DBConstants.COLUMN.EXPENSE_DATE);
+                ExpenseDate expenseDate = null;
+                do {
+                    ContentValues contentValues = new ContentValues();
+                    expenseDate = new ExpenseDate(cursorAllExpenses.getString(indexExpenseDate));
+                    db.execSQL("UPDATE " + DBConstants.TableName.EXPENSE + " SET "
+                            + DBConstants.COLUMN.EXPENSE_ON + " = " + expenseDate.getTimeInMillis()
+                            + " WHERE " + BaseColumns._ID + " = " + cursorAllExpenses.getInt(indexBaseColumnId));
+                    expenseDate = null;
 
+                } while (cursorAllExpenses.moveToNext());
+            }
+        }
     }
 
 }

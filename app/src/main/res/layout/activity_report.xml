@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lfn_layout_complete"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -25,6 +26,7 @@
         android:weightSum="2">
 
         <in.charanbr.expensetracker.customview.CustomTextView
+            android:id="@+id/ar_ctextview_date"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -40,6 +42,7 @@
             android:background="@android:color/white"/>
 
         <in.charanbr.expensetracker.customview.CustomTextView
+            android:id="@+id/ar_ctextview_paid_by"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -60,14 +63,22 @@
         android:layout_marginEnd="16dp"
         android:gravity="center"
         android:textSize="17sp"
-        android:visibility="gone"
-        app:fontName="@string/font_noto_sans"/>
+        app:fontName="@string/font_noto_sans"
+        android:textColor="@color/colorPrimary"/>
+
+    <ProgressBar
+        android:id="@+id/ar_progressbar_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 
     <ListView
         android:id="@+id/ar_listview_expenses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/ar_layout_filter_options"
-        android:listSelector="@android:color/transparent"/>
+        android:listSelector="@android:color/transparent"
+        android:visibility="gone"/>
 
 </RelativeLayout>

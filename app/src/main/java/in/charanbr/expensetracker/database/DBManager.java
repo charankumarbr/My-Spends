@@ -15,8 +15,8 @@ import in.charanbr.expensetracker.model.PaymentType;
 
 public final class DBManager {
 
-    public static ArrayList<PaymentType> getPaymentTypes() {
-        return DBAdapter.fetchPaymentTypes();
+    public static ArrayList<PaymentType> getPaymentTypes(boolean isActive) {
+        return DBAdapter.fetchPaymentTypes(isActive);
     }
 
     public static ArrayList<PaymentMode> getPaymentModes() {
@@ -81,5 +81,9 @@ public final class DBManager {
 
     public static boolean hasExpense(ExpenseDate expenseDate) {
         return DBAdapter.checkExpense(expenseDate);
+    }
+
+    public static Cursor getExpenses(ExpenseDate fromDate, ExpenseDate toDate, Integer[] paidBy) {
+        return DBAdapter.fetchExpenses(fromDate, toDate, paidBy);
     }
 }

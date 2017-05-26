@@ -8,7 +8,7 @@ public interface DBConstants {
 
     String DB_NAME = "in_charanbr_expensetracker.db";
 
-    int DB_VERSION = 1;
+    int DB_VERSION = 2;
 
     int PAYMENT_MODE_COUNT = 4;
 
@@ -36,6 +36,7 @@ public interface DBConstants {
         String NOTE = "note";
         String PAYMENT_TYPE_PRI_ID = "payment_type_pri_id";
         String UPDATED_ON = "updated_on";
+        String EXPENSE_ON = "expense_on";
     }
 
     interface PAYMENT_MODE {

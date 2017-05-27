@@ -61,8 +61,10 @@ public class ExpensesListActivity extends BaseActivity implements LoaderManager.
         String titlePart = AppUtil.getMonth(mExpenseDate.getMonth()) + " " + mExpenseDate.getYear();
         toolbar.setTitle(titlePart + " Expenses");
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        if (null != getSupportActionBar()) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+        }
 
         getLoaderManager().initLoader(DBConstants.LoaderId.EXPENSES_LIST, null, this);
 
@@ -88,7 +90,6 @@ public class ExpensesListActivity extends BaseActivity implements LoaderManager.
             if (null != data && data.getCount() > 0) {
                 mLvExpenses.setVisibility(View.VISIBLE);
                 mCTvNoExpenses.setVisibility(View.GONE);
-                AppUtil.showToast("" + data.getCount() + " records");
                 if (null == mLvExpenses.getAdapter()) {
                     mExpenseAdapter = new ExpenseAdapter(ExpensesListActivity.this, data, true);
                     mLvExpenses.setAdapter(mExpenseAdapter);

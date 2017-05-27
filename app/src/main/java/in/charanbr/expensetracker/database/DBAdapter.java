@@ -221,7 +221,7 @@ class DBAdapter {
         return updateCount;
     }
 
-    /*public static ArrayList<Expense> fetchExpenses(ExpenseDate expenseDate) {
+    /*public static ArrayList<Expense> fetchExpense(ExpenseDate expenseDate) {
         ArrayList<Expense> expenses = null;
 
         SQLiteDatabase database = expenseTrackerDBHelper.getReadableDatabase();
@@ -251,7 +251,7 @@ class DBAdapter {
         return expenses;
     }*/
 
-    public static Cursor fetchExpenses(ExpenseDate expenseDate) {
+    public static Cursor fetchExpense(ExpenseDate expenseDate) {
 
         SQLiteDatabase database = expenseTrackerDBHelper.getReadableDatabase();
         if (null != database) {
@@ -500,9 +500,16 @@ class DBAdapter {
 
         if (null != database) {
             String sqlSelection = "%" + expenseDate.getMonth() + "|" + expenseDate.getYear();
-            cursor = database.rawQuery("SELECT * FROM " + DBConstants.TableName.EXPENSE +
-                    " WHERE " + DBConstants.COLUMN.EXPENSE_DATE + " LIKE '" + sqlSelection + "'"
-                    + " ORDER BY SUBSTR(" + DBConstants.COLUMN.EXPENSE_DATE + ", 0, 3) DESC;", null);
+            String query = new StringBuilder().append("SELECT * FROM ")
+                    .append(DBConstants.TableName.EXPENSE)
+                    .append(" WHERE ")
+                    .append(DBConstants.COLUMN.EXPENSE_DATE)
+                    .append(" LIKE '").append(sqlSelection).append("'")
+                    .append(" ORDER BY ")
+                    .append(BaseColumns._ID).append(" DESC, ")
+                    .append(DBConstants.COLUMN.EXPENSE_ON).append(" DESC;").toString();
+
+            cursor = database.rawQuery(query, null);
         }
 
         return cursor;
@@ -538,46 +545,46 @@ class DBAdapter {
         return count > 0 ? true : false;
     }
 
-    public static Cursor fetchExpenses(ExpenseDate fromDate, ExpenseDate toDate, Integer[] paidBy) {
+    public static Cursor fetchExpense(ExpenseDate fromDate, ExpenseDate toDate, Integer[] paidBy) {
 
         Cursor cursor = null;
 
         SQLiteDatabase database = expenseTrackerDBHelper.getReadableDatabase();
 
-        //if (null == paidBy) {
-            if (null != database) {
+        if (null != database) {
+            StringBuilder builder = new StringBuilder();
+            builder.append("SELECT * FROM ");
+            builder.append(DBConstants.TableName.EXPENSE);
+            builder.append(" WHERE ");
+            builder.append(DBConstants.COLUMN.EXPENSE_ON);
+            builder.append(" >= ");
+            builder.append(fromDate.getTimeInMillis());
+            builder.append(" AND ");
+            builder.append(DBConstants.COLUMN.EXPENSE_ON);
+            builder.append(" <= ");
+            builder.append(toDate.getTimeInMillis());
 
-                StringBuilder builder = new StringBuilder();
-                builder.append("SELECT * FROM ");
-                builder.append(DBConstants.TableName.EXPENSE);
-                builder.append(" WHERE ");
-                builder.append(DBConstants.COLUMN.EXPENSE_ON);
-                builder.append(" >= ");
-                builder.append(fromDate.getTimeInMillis());
-                builder.append(" AND ");
-                builder.append(DBConstants.COLUMN.EXPENSE_ON);
-                builder.append(" <= ");
-                builder.append(toDate.getTimeInMillis());
+            if (null != paidBy) {
+                builder.append(" AND (");
+                for (int index = 0; index < paidBy.length; index++) {
+                    builder.append(DBConstants.COLUMN.PAYMENT_TYPE_PRI_ID);
+                    builder.append(" = ");
+                    builder.append(paidBy[index]);
 
-                if (null != paidBy) {
-                    builder.append(" AND (");
-                    for (int index = 0; index < paidBy.length; index++) {
-                        builder.append(DBConstants.COLUMN.PAYMENT_TYPE_PRI_ID);
-                        builder.append(" = ");
-                        builder.append(paidBy[index]);
-
-                        if (index != paidBy.length - 1) {
-                            builder.append(" OR ");
-                        }
+                    if (index != paidBy.length - 1) {
+                        builder.append(" OR ");
                     }
-                    builder.append(")");
                 }
-                builder.append(" ORDER BY SUBSTR(");
-                builder.append(DBConstants.COLUMN.EXPENSE_DATE);
-                builder.append(", 0, 3) DESC;");
-                cursor = database.rawQuery(builder.toString(), null);
+                builder.append(")");
             }
-        //}
+
+            builder.append(" ORDER BY ");
+            builder.append(DBConstants.COLUMN.EXPENSE_ON);
+            builder.append(" DESC, ");
+            builder.append(BaseColumns._ID);
+            builder.append(" DESC;");
+            cursor = database.rawQuery(builder.toString(), null);
+        }
 
         return cursor;
     }

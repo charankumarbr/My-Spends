@@ -23,7 +23,6 @@ import in.charanbr.expensetracker.model.ExpenseDate;
 import in.charanbr.expensetracker.ui.fragment.DatePickerFragment;
 import in.charanbr.expensetracker.ui.fragment.PaidByFragment;
 import in.charanbr.expensetracker.util.AppConstants;
-import in.charanbr.expensetracker.util.AppLog;
 import in.charanbr.expensetracker.util.AppUtil;
 
 public class ReportActivity extends BaseActivity implements View.OnClickListener, DatePickerFragment.OnDatePickedListener, PaidByFragment.OnPaidBySelectedListener {
@@ -68,6 +67,9 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
         mLvExpenses.setOnItemClickListener(itemClickListener);
 
         mCTvMsg = (CustomTextView) findViewById(R.id.ar_ctextview_msg);
+        mFromDate = AppUtil.getFirstDayOfMonth();
+        mToDate = AppUtil.getCurrentDayOfMonth();
+        getExpenses();
     }
 
     @Override
@@ -102,9 +104,10 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
         } else {
             if (null != mPaidBy && Arrays.deepEquals(mPaidBy, paidById)) {
                 //-- same paid by selection, nothing to do --//
+            } else {
+                mPaidBy = paidById;
+                getExpenses();
             }
-            mPaidBy = paidById;
-            getExpenses();
         }
     }
 
@@ -112,7 +115,7 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
         if (null != mFromDate || null != mToDate) {
             mPbLoading.setVisibility(View.VISIBLE);
             mCTvMsg.setVisibility(View.GONE);
-            Cursor cursor = DBManager.getExpenses(mFromDate, mToDate, mPaidBy);
+            Cursor cursor = DBManager.getExpense(mFromDate, mToDate, mPaidBy);
             mPbLoading.setVisibility(View.GONE);
             if (null != cursor && cursor.getCount() > 0) {
                 mLvExpenses.setVisibility(View.VISIBLE);

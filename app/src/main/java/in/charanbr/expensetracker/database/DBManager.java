@@ -35,12 +35,12 @@ public final class DBManager {
         return DBAdapter.insertExpense(expense);
     }
 
-    /*public static ArrayList<Expense> getExpenses(ExpenseDate expenseDate) {
-        return DBAdapter.fetchExpenses(expenseDate);
+    /*public static ArrayList<Expense> getExpense(ExpenseDate expenseDate) {
+        return DBAdapter.fetchExpense(expenseDate);
     }*/
 
-    public static Cursor getExpenses(ExpenseDate expenseDate) {
-        return DBAdapter.fetchExpenses(expenseDate);
+    public static Cursor getExpense(ExpenseDate expenseDate) {
+        return DBAdapter.fetchExpense(expenseDate);
     }
 
     public static String getPaymentTypeName(int paymentTypePriId) {
@@ -83,7 +83,7 @@ public final class DBManager {
         return DBAdapter.checkExpense(expenseDate);
     }
 
-    public static Cursor getExpenses(ExpenseDate fromDate, ExpenseDate toDate, Integer[] paidBy) {
-        return DBAdapter.fetchExpenses(fromDate, toDate, paidBy);
+    public static Cursor getExpense(ExpenseDate fromDate, ExpenseDate toDate, Integer[] paidBy) {
+        return DBAdapter.fetchExpense(fromDate, toDate, paidBy);
     }
 }

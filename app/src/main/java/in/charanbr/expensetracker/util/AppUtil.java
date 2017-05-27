@@ -38,8 +38,8 @@ public final class AppUtil {
     /**
      * Convert millis to date - dd-MM-yyyy format
      *
-     * @param millis
-     * @return
+     * @param millis Millis to be converted to ExpenseDate
+     * @return ExpenseDate
      */
     public static ExpenseDate convertToDate(long millis) {
 
@@ -245,4 +245,13 @@ public final class AppUtil {
         snackbar.show();
     }
 
+    public static ExpenseDate getFirstDayOfMonth() {
+        Calendar calendar = Calendar.getInstance();
+        return new ExpenseDate(1, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+    }
+
+    public static ExpenseDate getCurrentDayOfMonth() {
+        Calendar calendar = Calendar.getInstance();
+        return new ExpenseDate(calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+    }
 }

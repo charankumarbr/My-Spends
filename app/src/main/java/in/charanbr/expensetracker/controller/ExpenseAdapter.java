@@ -14,6 +14,7 @@ import in.charanbr.expensetracker.database.DBConstants;
 import in.charanbr.expensetracker.database.DBManager;
 import in.charanbr.expensetracker.model.ExpenseDate;
 import in.charanbr.expensetracker.util.AppConstants;
+import in.charanbr.expensetracker.util.AppLog;
 import in.charanbr.expensetracker.util.AppPref;
 import in.charanbr.expensetracker.util.AppUtil;
 
@@ -98,6 +99,7 @@ public final class ExpenseAdapter extends CursorAdapter {
                     mExpenseDate.changeDate(cursor.getString(mIndexExpenseDate));
                 }
                 holder.tvExpenseDate.setText(mExpenseDate.getDayOfMonth() + " " + AppUtil.getShortMonth(mExpenseDate.getMonth()));
+                AppLog.d("ExpenseAdapter", "Note:" + cursor.getString(mIndexDesc) + "::Id:" + cursor.getInt(mIndexPriId) + "::Millis:" + mExpenseDate.getTimeInMillis());
             }
         }
     }

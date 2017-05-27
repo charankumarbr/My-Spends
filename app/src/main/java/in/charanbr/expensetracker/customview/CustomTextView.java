@@ -38,7 +38,7 @@ public final class CustomTextView extends TextView {
                 textStyle = attributeSet.getAttributeIntValue("http://schemas.android.com/apk/res/android",
                         "textStyle", Typeface.NORMAL);
             }
-            AppLog.d("CustomTextView", fontName + "::" + textStyle);
+            //AppLog.d("CustomTextView", fontName + "::" + textStyle);
             setTypeface(FontCache.getFont(getContext(), fontName, textStyle));
 
             typedArray.recycle();

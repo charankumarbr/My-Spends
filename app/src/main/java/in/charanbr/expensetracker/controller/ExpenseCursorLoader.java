@@ -33,7 +33,7 @@ public final class ExpenseCursorLoader extends CursorLoader {
     public Cursor loadInBackground() {
         switch (mLoaderType) {
             case AppConstants.LoaderConstants.LOADER_EXPENSE:
-                return DBManager.getExpenses(mExpenseDate);
+                return DBManager.getExpense(mExpenseDate);
 
             case AppConstants.LoaderConstants.LOADER_PAYMENT:
                 return DBManager.getPaymentTypesCursor();

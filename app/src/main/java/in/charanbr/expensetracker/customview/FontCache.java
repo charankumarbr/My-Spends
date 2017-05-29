@@ -10,9 +10,9 @@ import in.charanbr.expensetracker.R;
 /**
  * Created by Charan.Br on 2/28/2017.
  */
-public final class FontCache {
+final class FontCache {
 
-    private static HashMap<String, Typeface> fontMap = new HashMap<>();
+    private static final HashMap<String, Typeface> fontMap = new HashMap<>();
 
     public static Typeface getFont(Context context, String fontName, int textStyle) {
 

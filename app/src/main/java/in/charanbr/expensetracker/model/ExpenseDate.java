@@ -4,9 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.Calendar;
-import java.util.UnknownFormatConversionException;
 
-import in.charanbr.expensetracker.util.AppLog;
 import in.charanbr.expensetracker.util.AppUtil;
 
 /**
@@ -14,7 +12,7 @@ import in.charanbr.expensetracker.util.AppUtil;
  */
 public class ExpenseDate implements Parcelable {
 
-    protected ExpenseDate(Parcel in) {
+    ExpenseDate(Parcel in) {
         dayOfMonth = in.readInt();
         month = in.readInt();
         year = in.readInt();
@@ -121,11 +119,8 @@ public class ExpenseDate implements Parcelable {
         expenseDateBuilder.append(getYear());
 
         String[] otherDateParts = otherDate.split(" ");
-        if (!otherDateParts[0].equals(expenseDateBuilder.toString())) {
-            return true;
-        }
+        return !otherDateParts[0].equals(expenseDateBuilder.toString());
 
-        return false;
     }
 
     public void changeDate(String expenseDate) {

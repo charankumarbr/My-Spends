@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.text.NumberFormat;
 import java.text.ParseException;
 
 import in.charanbr.expensetracker.R;
@@ -51,7 +50,7 @@ public class ViewExpenseActivity extends BaseActivity {
         if (mExpensePrimaryKey < 0) {
             onDestroy();
         }
-        isNew = (mExpensePrimaryKey == 0) ? true : false;
+        isNew = (mExpensePrimaryKey == 0);
 
         setContentView(R.layout.activity_view_expense);
         init();
@@ -68,6 +67,7 @@ public class ViewExpenseActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setElevation(0f);
 
         mCTvAmount = (CustomTextView) findViewById(R.id.ave_ctextview_amount);
         mCTvExpenseOn = (CustomTextView) findViewById(R.id.ave_ctextview_expense_on);

@@ -5,8 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
@@ -55,8 +53,6 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     private FlexboxLayout mFlexboxLayout = null;
 
     private CustomTextView mCTvExpenseDate = null;
-    private CustomTextView mCTvCurrencySymbol = null;
-    private CustomTextView mCTvAddNewExpense = null;
 
     private TextInputEditText mTIEtAmount = null;
     private TextInputEditText mTIEtNote = null;
@@ -107,15 +103,16 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         toolbar.setTitle(isNew ? "Add Expense" : "Edit Expense");
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        if (null != getSupportActionBar()) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+        }
 
         mCTvExpenseDate = (CustomTextView) findViewById(R.id.ane_ctextview_expense_date);
-        mCTvCurrencySymbol = (CustomTextView) findViewById(R.id.ane_ctextview_currency);
-        mCTvCurrencySymbol.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY));
+        CustomTextView cTvCurrencySymbol = (CustomTextView) findViewById(R.id.ane_ctextview_currency);
+        cTvCurrencySymbol.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY));
 
-        mCTvAddNewExpense = (CustomTextView) findViewById(R.id.ane_ctextview_add_new_payment);
-        mCTvAddNewExpense.setOnClickListener(clickListener);
+        findViewById(R.id.ane_ctextview_add_new_payment).setOnClickListener(clickListener);
 
         mTIEtAmount = (TextInputEditText) findViewById(R.id.ane_tiedittext_expense_amount);
         InputFilter.LengthFilter lengthFilter = new InputFilter.LengthFilter(10);
@@ -138,7 +135,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         } else {
             mTIEtAmount.append(AppUtil.getStringAmount(mExpense.getAmount()));
             mTIEtAmount.requestFocus();
-            AppUtil.toggleKeyboard(null, true);
+            AppUtil.toggleKeyboard(true);
             //DecimalFormat df = new DecimalFormat("0.00"); df.format(mExpense.getAmount());
 
             mTIEtNote.setText(mExpense.getNote());
@@ -171,7 +168,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         }
     }
 
-    private View.OnClickListener clickListener = new View.OnClickListener() {
+    private final View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.ane_imageview_edit_date) {
@@ -213,7 +210,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     };
 
     private void showPaymentTypeDialog() {
-        AppUtil.toggleKeyboard(null, false);
+        AppUtil.toggleKeyboard(false);
         AddPaymentTypeFragment addPaymentTypeFragment = AddPaymentTypeFragment.newInstance();
         addPaymentTypeFragment.show(getSupportFragmentManager(), "AddPaymentTFragment");
     }
@@ -248,7 +245,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     }
 
     private void closeActivity() {
-        AppUtil.toggleKeyboard(null, false);
+        AppUtil.toggleKeyboard(false);
         if (mViaNotification) {
             /*Intent upIntent = NavUtils.getParentActivityIntent(this);
             TaskStackBuilder.create(this)
@@ -278,7 +275,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         }
     }
 
-    private CompoundButton.OnCheckedChangeListener paymentModeSelectedListener = new CompoundButton.OnCheckedChangeListener() {
+    private final CompoundButton.OnCheckedChangeListener paymentModeSelectedListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             resetAllPaymentTypes();
@@ -291,7 +288,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         }
     };
 
-    private EditText.OnEditorActionListener onEditorActionListener = new EditText.OnEditorActionListener() {
+    private final EditText.OnEditorActionListener onEditorActionListener = new EditText.OnEditorActionListener() {
 
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -330,7 +327,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
             if (DBManager.addExpense(expense) != -1) {
                 AppUtil.showToast("Expense tracked!");
-                AppUtil.toggleKeyboard(null, false);
+                AppUtil.toggleKeyboard(false);
                 mOkStatus = RESULT_OK;
                 if (!mCbAddAnotherExpense.isChecked()) {
                     setResult(RESULT_OK);
@@ -365,7 +362,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
             int updateCount = DBManager.updateExpense(mExpense);
             if (updateCount == 1) {
                 AppUtil.showToast("Expense updated!");
-                AppUtil.toggleKeyboard(null, false);
+                AppUtil.toggleKeyboard(false);
                 mOkStatus = RESULT_OK;
                 if (!mCbAddAnotherExpense.isChecked()) {
                     setResult(RESULT_OK);

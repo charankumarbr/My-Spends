@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
-import in.charanbr.expensetracker.model.Expense;
 import in.charanbr.expensetracker.model.ExpenseDate;
 
 /**
@@ -40,11 +39,18 @@ public final class ExpenseTrackerDB extends SQLiteOpenHelper {
                 + DBConstants.COLUMN.CREATED_ON + " TEXT,"
                 + DBConstants.COLUMN.IS_ACTIVE + " INTEGER);");
         //-- name + | + payment_mode_id = payment_type_id || Icici1 + | + 1 = Icici1|1
+        if (null != countCursor && !countCursor.isClosed()) {
+            countCursor.close();
+        }
         countCursor = null;
         countCursor = db.rawQuery("select " + BaseColumns._ID + " from " + DBConstants.TableName.PAYMENT_TYPE, null);
         if (null != countCursor && countCursor.getCount() == 0) {
             insertCashPaymentType(db);
         }
+        if (null != countCursor && !countCursor.isClosed()) {
+            countCursor.close();
+        }
+        countCursor = null;
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + DBConstants.TableName.EXPENSE + "("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY,"
@@ -114,6 +120,10 @@ public final class ExpenseTrackerDB extends SQLiteOpenHelper {
 
                 } while (cursorAllExpenses.moveToNext());
             }
+            if (null != cursorAllExpenses && !cursorAllExpenses.isClosed()) {
+                cursorAllExpenses.close();
+            }
+            cursorAllExpenses = null;
         }
     }
 

@@ -63,7 +63,7 @@ public final class BottomSheetListView extends ListView {
         return super.onTouchEvent(motionEvent);
     }
 
-    public boolean canScrollVertically(AbsListView absListView) {
+    private boolean canScrollVertically(AbsListView absListView) {
 
         boolean canScroll = false;
 

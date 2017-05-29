@@ -138,7 +138,7 @@ public class AddExpenseFragment extends DialogFragment {
         }
 
         mTIEtAmount.setFocusable(true);
-        AppUtil.toggleKeyboard(null, true);
+        AppUtil.toggleKeyboard(true);
 
         mTIEtNote.setOnEditorActionListener(onEditorActionListener);
 
@@ -188,7 +188,7 @@ public class AddExpenseFragment extends DialogFragment {
                 return false;
             }
         } catch (NumberFormatException e) {
-            AppUtil.showToast("DIGITS Oopssss!!!");
+            AppUtil.showToast("DIGITS Oops!!!");
             return false;
         }
 
@@ -224,14 +224,14 @@ public class AddExpenseFragment extends DialogFragment {
                 if (null != mListener) {
                     mListener.onExpenseAdded();
                 }
-                AppUtil.toggleKeyboard(null, false);
+                AppUtil.toggleKeyboard(false);
                 dismissAllowingStateLoss();
 
             } else {
                 AppUtil.showToast("Could not add this Expense!");
             }
         } catch (NumberFormatException e) {
-            AppUtil.showToast("DIGITS Oopssss!!!");
+            AppUtil.showToast("DIGITS Oops!!!");
         }
     }
 
@@ -249,7 +249,7 @@ public class AddExpenseFragment extends DialogFragment {
         void onExpenseAdded();
     }
 
-    private CompoundButton.OnCheckedChangeListener paymentModeSelectedListener = new CompoundButton.OnCheckedChangeListener() {
+    private final CompoundButton.OnCheckedChangeListener paymentModeSelectedListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             resetAll();
@@ -262,7 +262,7 @@ public class AddExpenseFragment extends DialogFragment {
         }
     };
 
-    private EditText.OnEditorActionListener onEditorActionListener = new EditText.OnEditorActionListener() {
+    private final EditText.OnEditorActionListener onEditorActionListener = new EditText.OnEditorActionListener() {
 
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

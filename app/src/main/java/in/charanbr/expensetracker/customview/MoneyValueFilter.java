@@ -3,6 +3,7 @@ package in.charanbr.expensetracker.customview;
 /**
  * Created by Charan.Br on 4/10/2017.
  */
+
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.DigitsKeyListener;
@@ -14,10 +15,6 @@ public class MoneyValueFilter extends DigitsKeyListener {
     }
 
     private int digits = 2;
-
-    public void setDigits(int d) {
-        digits = d;
-    }
 
     @Override
     public CharSequence filter(CharSequence source, int start, int end,
@@ -47,7 +44,7 @@ public class MoneyValueFilter extends DigitsKeyListener {
                 // being here means, that a number has
                 // been inserted after the dot
                 // check if the amount of digits is right
-                return (dlen-(i+1) + len > digits) ?
+                return (dlen - (i + 1) + len > digits) ?
                         "" :
                         new SpannableStringBuilder(source, start, end);
             }
@@ -57,7 +54,7 @@ public class MoneyValueFilter extends DigitsKeyListener {
             if (source.charAt(i) == '.') {
                 // being here means, dot has been inserted
                 // check if the amount of digits is right
-                if ((dlen-dend) + (end-(i + 1)) > digits)
+                if ((dlen - dend) + (end - (i + 1)) > digits)
                     return "";
                 else
                     break;  // return new SpannableStringBuilder(source, start, end);

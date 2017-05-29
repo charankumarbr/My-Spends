@@ -4,7 +4,6 @@ import android.app.LoaderManager;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -20,7 +19,7 @@ import in.charanbr.expensetracker.util.AppConstants;
 import in.charanbr.expensetracker.util.AppUtil;
 
 public class PaymentActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, PaymentTypeAdapter.OnStatusChangedListener
-, AddPaymentTypeFragment.OnPaymentTypeListener {
+        , AddPaymentTypeFragment.OnPaymentTypeListener {
 
     private ListView mLvPayment = null;
 

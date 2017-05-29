@@ -24,14 +24,14 @@ import in.charanbr.expensetracker.util.AppUtil;
 
 public class PaymentTypeAdapter extends CursorAdapter {
 
-    private Context mContext;
+    private final Context mContext;
 
     private int mIndexPriId;
     private int mIndexName;
     private int mIndexIsActive;
     private int mIndexCreatedOn;
 
-    private OnStatusChangedListener mListener;
+    private final OnStatusChangedListener mListener;
 
     public PaymentTypeAdapter(Context context, Cursor cursor) {
         super(context, cursor, false);
@@ -74,7 +74,7 @@ public class PaymentTypeAdapter extends CursorAdapter {
             } else {
                 holder.swToggleActive.setEnabled(true);
                 holder.swToggleActive.setTag(cursor.getInt(mIndexPriId));
-                holder.swToggleActive.setChecked((cursor.getInt(mIndexIsActive) == 1) ? true : false);
+                holder.swToggleActive.setChecked(isActive == 1);
                 holder.swToggleActive.setOnCheckedChangeListener(togglePaymentType);
             }
 
@@ -83,7 +83,7 @@ public class PaymentTypeAdapter extends CursorAdapter {
 
     }
 
-    private CompoundButton.OnCheckedChangeListener togglePaymentType = new CompoundButton.OnCheckedChangeListener() {
+    private final CompoundButton.OnCheckedChangeListener togglePaymentType = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             Log.d("onCheckedChange", buttonView.getText().toString() + isChecked);

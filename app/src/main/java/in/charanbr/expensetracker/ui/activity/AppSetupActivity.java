@@ -24,7 +24,6 @@ import in.charanbr.expensetracker.controller.CurrencyListAdapter;
 import in.charanbr.expensetracker.customview.CustomTextView;
 import in.charanbr.expensetracker.model.Currency;
 import in.charanbr.expensetracker.util.AppConstants;
-import in.charanbr.expensetracker.util.AppLog;
 import in.charanbr.expensetracker.util.AppPref;
 import in.charanbr.expensetracker.util.AppUtil;
 
@@ -79,7 +78,7 @@ public class AppSetupActivity extends BaseActivity {
         }).start();
     }
 
-    private Handler currencyHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler currencyHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             if (!isFinishing()) {
@@ -106,7 +105,7 @@ public class AppSetupActivity extends BaseActivity {
         }
     }
 
-    private AdapterView.OnItemClickListener currencyClickListener = new AdapterView.OnItemClickListener() {
+    private final AdapterView.OnItemClickListener currencyClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             view.setSelected(true);

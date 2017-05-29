@@ -13,9 +13,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,6 +21,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Locale;
 import java.util.UnknownFormatConversionException;
 
 import in.charanbr.expensetracker.ExpenseTracker;
@@ -74,7 +73,7 @@ public final class AppUtil {
         return two;
     }
 
-    public static void toggleKeyboard(View view, boolean toShow) {
+    public static void toggleKeyboard(boolean toShow) {
         InputMethodManager inputMethodManager = (InputMethodManager) ExpenseTracker.APP_CONTEXT.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (toShow) {
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
@@ -185,7 +184,7 @@ public final class AppUtil {
 
     public static String getStringAmount(String amountInString) throws NumberFormatException {
         Float amount = Float.valueOf(amountInString);
-        return String.format(AppConstants.FLOAT_FORMAT, amount);
+        return String.format(Locale.ENGLISH, AppConstants.FLOAT_FORMAT, amount);
     }
 
     public static ArrayList<Currency> getAllCurrency() throws IOException, JSONException {
@@ -205,7 +204,7 @@ public final class AppUtil {
         bufferedReader.close();
 
         JSONArray jsonArray = new JSONArray(builder.toString());
-        if (null != jsonArray && jsonArray.length() > 0) {
+        if (jsonArray.length() > 0) {
             currencies = new ArrayList<>();
             for (int index = 0; index < jsonArray.length(); index++) {
                 Currency currency = new Currency();

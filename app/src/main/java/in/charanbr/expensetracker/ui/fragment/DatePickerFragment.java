@@ -2,7 +2,6 @@ package in.charanbr.expensetracker.ui.fragment;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -10,7 +9,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +20,6 @@ import java.util.Calendar;
 import in.charanbr.expensetracker.R;
 import in.charanbr.expensetracker.customview.CustomTextView;
 import in.charanbr.expensetracker.model.ExpenseDate;
-import in.charanbr.expensetracker.ui.activity.NewExpenseActivity;
 import in.charanbr.expensetracker.util.AppLog;
 
 /**
@@ -178,7 +175,7 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
             }
             LayoutInflater inflater = LayoutInflater.from(mContext);
             View customTitleView = inflater.inflate(R.layout.layout_date_title, null);
-            ((CustomTextView) customTitleView).setText("Select the from date");
+            ((CustomTextView) customTitleView).setText(R.string.select_from_date);
             datePickerDialog.setCustomTitle(customTitleView);
             datePickerDialog.show();
 
@@ -210,7 +207,7 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
             datePickerDialog.getDatePicker().setMaxDate(mFromDate.reportToDateTimeInMillis());
             LayoutInflater inflater = LayoutInflater.from(mContext);
             View customTitleView = inflater.inflate(R.layout.layout_date_title, null);
-            ((CustomTextView) customTitleView).setText("Select the to date");
+            ((CustomTextView) customTitleView).setText(R.string.select_to_date);
             datePickerDialog.setCustomTitle(customTitleView);
             datePickerDialog.show();
         }

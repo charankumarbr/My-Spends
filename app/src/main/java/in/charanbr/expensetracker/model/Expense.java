@@ -3,8 +3,6 @@ package in.charanbr.expensetracker.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-
 /**
  * Created by Charan.Br on 2/24/2017.
  */
@@ -29,7 +27,7 @@ public final class Expense implements Parcelable {
 
     }
 
-    protected Expense(Parcel in) {
+    private Expense(Parcel in) {
         id = in.readInt();
         expenseDate = in.readParcelable(ExpenseDate.class.getClassLoader());
         amount = in.readString();

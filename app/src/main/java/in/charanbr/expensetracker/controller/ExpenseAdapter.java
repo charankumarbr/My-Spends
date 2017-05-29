@@ -24,9 +24,9 @@ import in.charanbr.expensetracker.util.AppUtil;
 
 public final class ExpenseAdapter extends CursorAdapter {
 
-    private Context mContext;
+    private final Context mContext;
 
-    private String mCurrencySymbol;
+    private final String mCurrencySymbol;
 
     private int mIndexAmount;
     private int mIndexDesc;

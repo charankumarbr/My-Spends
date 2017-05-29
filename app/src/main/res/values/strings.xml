@@ -45,4 +45,9 @@
         ->Having said this, We DON\'T read your personal data, your spends/expenditures.\n-->
     </string>
     <string name="contact_us">Contact Us</string>
+    <string name="select_from_date">Select the from date</string>
+    <string name="select_to_date">Select the to date</string>
+    <string name="value_month_expenses">%s month expenses</string>
+    <string name="no_expenses_found_in_filter">No expenses found in the filter applied.</string>
+    <integer name="splash_obj_time">1000</integer>
 </resources>

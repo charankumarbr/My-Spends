@@ -16,7 +16,6 @@ import java.util.Random;
 import in.charanbr.expensetracker.R;
 import in.charanbr.expensetracker.database.DBManager;
 import in.charanbr.expensetracker.model.ExpenseDate;
-import in.charanbr.expensetracker.ui.activity.MainActivity;
 import in.charanbr.expensetracker.ui.activity.NewExpenseActivity;
 import in.charanbr.expensetracker.util.AppConstants;
 import in.charanbr.expensetracker.util.AppUtil;

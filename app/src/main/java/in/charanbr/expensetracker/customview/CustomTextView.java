@@ -3,17 +3,16 @@ package in.charanbr.expensetracker.customview;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import in.charanbr.expensetracker.R;
-import in.charanbr.expensetracker.util.AppLog;
 
 /**
  * Created by Charan.Br on 2/28/2017.
  */
 
-public final class CustomTextView extends TextView {
+public final class CustomTextView extends AppCompatTextView {
 
     public CustomTextView(Context context) {
         this(context, null);

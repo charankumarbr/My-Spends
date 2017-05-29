@@ -1,11 +1,9 @@
 package in.charanbr.expensetracker.database;
 
-import android.app.Notification;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
-import android.provider.Settings;
 
 import java.util.ArrayList;
 
@@ -21,7 +19,7 @@ import in.charanbr.expensetracker.model.PaymentType;
 
 class DBAdapter {
 
-    private static ExpenseTrackerDB expenseTrackerDBHelper = new ExpenseTrackerDB(ExpenseTracker.APP_CONTEXT);
+    private static final ExpenseTrackerDB expenseTrackerDBHelper = new ExpenseTrackerDB(ExpenseTracker.APP_CONTEXT);
 
     public static ArrayList<PaymentType> fetchPaymentTypes(boolean isActive) {
 
@@ -500,14 +498,14 @@ class DBAdapter {
 
         if (null != database) {
             String sqlSelection = "%" + expenseDate.getMonth() + "|" + expenseDate.getYear();
-            String query = new StringBuilder().append("SELECT * FROM ")
-                    .append(DBConstants.TableName.EXPENSE)
-                    .append(" WHERE ")
-                    .append(DBConstants.COLUMN.EXPENSE_DATE)
-                    .append(" LIKE '").append(sqlSelection).append("'")
-                    .append(" ORDER BY ")
-                    .append(BaseColumns._ID).append(" DESC, ")
-                    .append(DBConstants.COLUMN.EXPENSE_ON).append(" DESC;").toString();
+            String query = "SELECT * FROM " +
+                    DBConstants.TableName.EXPENSE +
+                    " WHERE " +
+                    DBConstants.COLUMN.EXPENSE_DATE +
+                    " LIKE '" + sqlSelection + "'" +
+                    " ORDER BY " +
+                    BaseColumns._ID + " DESC, " +
+                    DBConstants.COLUMN.EXPENSE_ON + " DESC;";
 
             cursor = database.rawQuery(query, null);
         }
@@ -542,7 +540,7 @@ class DBAdapter {
             }
         }
 
-        return count > 0 ? true : false;
+        return count > 0;
     }
 
     public static Cursor fetchExpense(ExpenseDate fromDate, ExpenseDate toDate, Integer[] paidBy) {

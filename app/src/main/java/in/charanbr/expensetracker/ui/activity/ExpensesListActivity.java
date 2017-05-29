@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +21,6 @@ import in.charanbr.expensetracker.customview.CustomTextView;
 import in.charanbr.expensetracker.database.DBConstants;
 import in.charanbr.expensetracker.model.ExpenseDate;
 import in.charanbr.expensetracker.util.AppConstants;
-import in.charanbr.expensetracker.util.AppLog;
 import in.charanbr.expensetracker.util.AppUtil;
 
 public class ExpensesListActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -119,7 +115,7 @@ public class ExpensesListActivity extends BaseActivity implements LoaderManager.
         }
     }
 
-    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+    private final AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             final int expensePrimaryKey = (int) view.findViewById(R.id.le_textview_amount).getTag();

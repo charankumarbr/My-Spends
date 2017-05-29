@@ -20,9 +20,9 @@ import in.charanbr.expensetracker.model.Currency;
 
 public final class CurrencyListAdapter extends BaseAdapter {
 
-    private Context mContext;
+    private final Context mContext;
 
-    private ArrayList<Currency> mCurrencies;
+    private final ArrayList<Currency> mCurrencies;
 
     private int mSelectedPosition = -1;
 

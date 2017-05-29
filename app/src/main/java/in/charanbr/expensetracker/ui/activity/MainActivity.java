@@ -1,6 +1,5 @@
 package in.charanbr.expensetracker.ui.activity;
 
-import android.app.Dialog;
 import android.app.LoaderManager;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,9 +21,9 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.CalendarView;
 
+import java.util.Locale;
+
 import in.charanbr.expensetracker.BuildConfig;
-import in.charanbr.expensetracker.ui.fragment.AddExpenseFragment;
-import in.charanbr.expensetracker.ui.fragment.AddPaymentTypeFragment;
 import in.charanbr.expensetracker.ExpenseTracker;
 import in.charanbr.expensetracker.R;
 import in.charanbr.expensetracker.controller.ExpenseAdapter;
@@ -34,13 +33,14 @@ import in.charanbr.expensetracker.customview.CustomTextView;
 import in.charanbr.expensetracker.database.DBConstants;
 import in.charanbr.expensetracker.database.DBManager;
 import in.charanbr.expensetracker.model.ExpenseDate;
+import in.charanbr.expensetracker.ui.fragment.AddExpenseFragment;
+import in.charanbr.expensetracker.ui.fragment.AddPaymentTypeFragment;
 import in.charanbr.expensetracker.util.AppConstants;
 import in.charanbr.expensetracker.util.AppLog;
 import in.charanbr.expensetracker.util.AppPref;
 import in.charanbr.expensetracker.util.AppUtil;
 
-public class MainActivity extends BaseActivity implements AddExpenseFragment.OnAddExpenseListener, LoaderManager.LoaderCallbacks<Cursor>
-{
+public class MainActivity extends BaseActivity implements AddExpenseFragment.OnAddExpenseListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private CalendarView mCalendarDate;
 
@@ -110,7 +110,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         return true;
     }
 
-    private View.OnClickListener clickListener = new View.OnClickListener() {
+    private final View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.am_layout_month_expense) {
@@ -186,11 +186,11 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
     }
 
     private void showPaymentDialog() {
-        AddPaymentTypeFragment addPaymentTypeFragment = AddPaymentTypeFragment.newInstance().newInstance();
+        AddPaymentTypeFragment addPaymentTypeFragment = AddPaymentTypeFragment.newInstance();
         addPaymentTypeFragment.show(getSupportFragmentManager(), "AddPaymentTFragment");
     }
 
-    private CalendarView.OnDateChangeListener onDateChangeListener = new CalendarView.OnDateChangeListener() {
+    private final CalendarView.OnDateChangeListener onDateChangeListener = new CalendarView.OnDateChangeListener() {
         @Override
         public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
             AppLog.d("Calendar Click", "DoM:" + dayOfMonth + "::Month:" + month + "::Year:" + year);
@@ -213,7 +213,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         getExpenses();
     }
 
-    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+    private final AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             final int expensePrimaryKey = (int) view.findViewById(R.id.le_textview_amount).getTag();
@@ -282,7 +282,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
                 Float totalAmount = DBManager.getTotalExpenses(mCalendarExpenseDate);
                 if (null != totalAmount) {
                     mCTvTotalExpense.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)
-                            + " " + String.format(AppConstants.FLOAT_FORMAT, totalAmount));
+                            + " " + String.format(Locale.ENGLISH, AppConstants.FLOAT_FORMAT, totalAmount));
 
                 } else {
                     mCTvTotalExpense.setText("");
@@ -304,16 +304,16 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         String monthlyExpense = DBManager.getMonthlyExpensesTotal(mCalendarExpenseDate);
         /*mCTvMonthlyExpenseInfo.setText("Expense for " + AppUtil.getShortMonth(mCalendarExpenseDate.getMonth())
                 + " " + mCalendarExpenseDate.getYear());*/
-        mCTvMonthlyExpenseInfo.setText(AppUtil.getShortMonth(mCalendarExpenseDate.getMonth())
-                + " month expenses");
+        mCTvMonthlyExpenseInfo.setText(String.format(getString(R.string.value_month_expenses), AppUtil.getShortMonth(mCalendarExpenseDate.getMonth())));
 
         if (null != monthlyExpense) {
-            mCTvMonthlyExpense.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)
-                    + " " + AppUtil.getStringAmount(monthlyExpense));
+            mCTvMonthlyExpense.setText(String.format("%s %s",
+                    AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY),
+                    AppUtil.getStringAmount(monthlyExpense)));
             mCTvMonthlyExpense.setTag(Boolean.TRUE);
 
         } else {
-            mCTvMonthlyExpense.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY) + " 0.00");
+            mCTvMonthlyExpense.setText(String.format("%s 0.00", AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)));
             mCTvMonthlyExpense.setTag(Boolean.FALSE);
         }
     }

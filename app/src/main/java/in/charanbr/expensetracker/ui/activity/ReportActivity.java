@@ -55,9 +55,11 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
         toolbar.setTitle("Reports");
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setElevation(0f);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        if (null != getSupportActionBar()) {
+            getSupportActionBar().setElevation(0f);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+        }
 
         findViewById(R.id.ar_ctextview_date).setOnClickListener(this);
         findViewById(R.id.ar_ctextview_paid_by).setOnClickListener(this);
@@ -129,7 +131,7 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
 
             } else {
                 mLvExpenses.setVisibility(View.GONE);
-                mCTvMsg.setText("No expenses found in the filter applied.");
+                mCTvMsg.setText(R.string.no_expenses_found_in_filter);
                 mCTvMsg.setVisibility(View.VISIBLE);
             }
         } else {
@@ -137,7 +139,7 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+    private final AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             final int expensePrimaryKey = (int) view.findViewById(R.id.le_textview_amount).getTag();

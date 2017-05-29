@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
@@ -20,12 +19,10 @@ import com.google.android.flexbox.FlexboxLayout;
 
 import java.util.ArrayList;
 
-import in.charanbr.expensetracker.ExpenseTracker;
 import in.charanbr.expensetracker.R;
 import in.charanbr.expensetracker.database.DBManager;
 import in.charanbr.expensetracker.model.PaymentMode;
 import in.charanbr.expensetracker.model.PaymentType;
-import in.charanbr.expensetracker.ui.activity.PaymentActivity;
 import in.charanbr.expensetracker.util.AppLog;
 import in.charanbr.expensetracker.util.AppUtil;
 
@@ -60,8 +57,7 @@ public class AddPaymentTypeFragment extends DialogFragment {
      * @return A new instance of fragment AddPaymentTypeFragment.
      */
     public static AddPaymentTypeFragment newInstance() {
-        AddPaymentTypeFragment fragment = new AddPaymentTypeFragment();
-        return fragment;
+        return new AddPaymentTypeFragment();
     }
 
     @Override
@@ -103,12 +99,12 @@ public class AddPaymentTypeFragment extends DialogFragment {
         }
 
         mTIETTypeName.requestFocus();
-        AppUtil.toggleKeyboard(null, true);
+        AppUtil.toggleKeyboard(true);
 
         return addPaymentTypeView;
     }
 
-    private View.OnClickListener clickListener = new View.OnClickListener() {
+    private final View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.fapt_acbutton_add) {
@@ -135,7 +131,7 @@ public class AddPaymentTypeFragment extends DialogFragment {
                     mListener.onPaymentTypeAdded();
                 }
                 dismissAllowingStateLoss();
-                AppUtil.toggleKeyboard(null, false);
+                AppUtil.toggleKeyboard(false);
 
             } else {
                 AppUtil.showToast("Could not add Payment type!");
@@ -154,7 +150,7 @@ public class AddPaymentTypeFragment extends DialogFragment {
         }
     };
 
-    private CompoundButton.OnCheckedChangeListener paymentTypeSelectedListener = new CompoundButton.OnCheckedChangeListener() {
+    private final CompoundButton.OnCheckedChangeListener paymentTypeSelectedListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             resetAll();

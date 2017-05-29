@@ -1,7 +1,6 @@
 package in.charanbr.expensetracker.ui.fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -10,20 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.RadioButton;
 
 import com.google.android.flexbox.FlexboxLayout;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import in.charanbr.expensetracker.R;
 import in.charanbr.expensetracker.database.DBManager;
 import in.charanbr.expensetracker.model.PaymentType;
-import in.charanbr.expensetracker.ui.activity.NewExpenseActivity;
 import in.charanbr.expensetracker.util.AppLog;
 
 /**
@@ -73,9 +68,11 @@ public class PaidByFragment extends DialogFragment implements View.OnClickListen
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             int[] iPaidBy = getArguments().getIntArray("paidBy");
-            mSelectedPaidById = new TreeSet<>();
-            for (int index = 0; index < iPaidBy.length; index++) {
-                mSelectedPaidById.add(iPaidBy[index]);
+            if (null != iPaidBy) {
+                mSelectedPaidById = new TreeSet<>();
+                for (int index = 0; index < iPaidBy.length; index++) {
+                    mSelectedPaidById.add(iPaidBy[index]);
+                }
             }
         }
     }
@@ -156,7 +153,7 @@ public class PaidByFragment extends DialogFragment implements View.OnClickListen
         }
     }
 
-    private CompoundButton.OnCheckedChangeListener paymentModeSelectedListener = new CompoundButton.OnCheckedChangeListener() {
+    private final CompoundButton.OnCheckedChangeListener paymentModeSelectedListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             AppLog.d("CheckedChange", "Checked:" + isChecked + "::Title:" + buttonView.getText());

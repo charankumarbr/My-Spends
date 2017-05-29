@@ -12,7 +12,7 @@ import in.charanbr.expensetracker.R;
 
 public final class AppPref {
 
-    private SharedPreferences mSharedPref;
+    private final SharedPreferences mSharedPref;
 
     private static AppPref APP_PREF = null;
 

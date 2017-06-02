@@ -1,6 +1,6 @@
 <resources>
     <!--<string name="app_name">Expense Tracker</string>-->
-    <string name="app_name">Track My Spends</string>
+    <string name="app_name">My Spends</string>
     <string name="add_expense">Add Expense</string>
     <string name="add_payment">Add Payment</string>
     <string name="add_payment_type">Add Payment Type</string>
@@ -19,7 +19,7 @@
     <string name="value">default</string>
     <string name="done_caps">DONE</string>
     <string name="payment_types">Payment Types</string>
-    <string name="pref_name">ExpenseTracker</string>
+    <string name="pref_name">TrackMySpends</string>
     <string name="select_currency">Select Currency</string>
     <string name="expense_on">Expense on:</string>
     <string name="added_on">Added on:</string>
@@ -33,7 +33,6 @@
     <string name="confirm_delete_message">Are you sure you want to delete this expense? It cannot be recovered later.</string>
     <string name="expense_deleted_successfully">Expense deleted successfully!</string>
     <string name="add_another_expense">Add another expense</string>
-    <string name="title_activity_expenses_list">ExpensesListActivity</string>
     <string name="add_new">Add New</string>
     <string name="expenses_for_month_of">Expenses for the month of</string>
     <string name="reports">Reports</string>

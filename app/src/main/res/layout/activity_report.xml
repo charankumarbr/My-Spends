@@ -25,7 +25,7 @@
         android:background="@color/colorPrimary"
         android:weightSum="2">
 
-        <in.charanbr.expensetracker.customview.CustomTextView
+        <in.phoenix.trackmyspends.customview.CustomTextView
             android:id="@+id/ar_ctextview_date"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/white"/>
 
-        <in.charanbr.expensetracker.customview.CustomTextView
+        <in.phoenix.trackmyspends.customview.CustomTextView
             android:id="@+id/ar_ctextview_paid_by"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -53,7 +53,7 @@
             app:fontName="@string/font_noto_sans"/>
     </LinearLayout>
 
-    <in.charanbr.expensetracker.customview.CustomTextView
+    <in.phoenix.trackmyspends.customview.CustomTextView
         android:id="@+id/ar_ctextview_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -11,7 +11,7 @@
         android:layout_marginEnd="8dp"
         android:orientation="vertical">
 
-        <in.charanbr.expensetracker.customview.CustomTextView
+        <in.phoenix.trackmyspends.customview.CustomTextView
             android:id="@+id/fpb_ctextview_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

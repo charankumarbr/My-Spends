@@ -39,7 +39,7 @@
                 android:paddingBottom="8dp"
                 android:visibility="visible">
 
-                <in.charanbr.expensetracker.customview.CustomTextView
+                <in.phoenix.trackmyspends.customview.CustomTextView
                     android:id="@+id/am_ctextview_month_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
                     android:layout_toLeftOf="@+id/am_ctextview_month_expense"
                     android:layout_centerVertical="true"/>
 
-                <in.charanbr.expensetracker.customview.CustomTextView
+                <in.phoenix.trackmyspends.customview.CustomTextView
                     android:id="@+id/am_ctextview_month_expense"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <in.charanbr.expensetracker.customview.CustomTextView
+            <in.phoenix.trackmyspends.customview.CustomTextView
                 android:id="@+id/am_textview_no_expense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -127,7 +127,7 @@
                 android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
-                <in.charanbr.expensetracker.customview.CustomTextView
+                <in.phoenix.trackmyspends.customview.CustomTextView
                     android:id="@+id/am_textview_expense_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
                     android:textSize="18sp"
                     app:fontName="fontNotoSans" />
 
-                <in.charanbr.expensetracker.customview.CustomTextView
+                <in.phoenix.trackmyspends.customview.CustomTextView
                     android:id="@+id/am_textview_total_expense"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -156,7 +156,7 @@
                     app:fontName="fontNotoSans" />
             </RelativeLayout>
 
-            <in.charanbr.expensetracker.customview.BottomSheetListView
+            <in.phoenix.trackmyspends.customview.BottomSheetListView
                 android:id="@+id/am_listview_expense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

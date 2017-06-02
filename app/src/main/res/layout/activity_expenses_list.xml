@@ -24,7 +24,7 @@
         android:visibility="gone"
         android:layout_below="@+id/ael_toolbar"/>
 
-    <in.charanbr.expensetracker.customview.CustomTextView
+    <in.phoenix.trackmyspends.customview.CustomTextView
         android:id="@+id/ael_ctextview_no_expenses"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

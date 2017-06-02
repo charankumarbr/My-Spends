@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <in.charanbr.expensetracker.customview.CustomTextView
+        <in.phoenix.trackmyspends.customview.CustomTextView
             android:id="@+id/ane_ctextview_expense_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <in.charanbr.expensetracker.customview.CustomTextView
+                <in.phoenix.trackmyspends.customview.CustomTextView
                     android:id="@+id/ane_ctextview_currency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <in.charanbr.expensetracker.customview.CustomTextView
+                <in.phoenix.trackmyspends.customview.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
@@ -111,7 +111,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"/>
 
-                <in.charanbr.expensetracker.customview.CustomTextView
+                <in.phoenix.trackmyspends.customview.CustomTextView
                     android:id="@+id/ane_ctextview_add_new_payment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

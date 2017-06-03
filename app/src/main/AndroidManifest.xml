@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="in.phoenix.trackmyspends">
+    package="in.phoenix.myspends">
 
     <application
-        android:name=".TrackMySpends"
+        android:name=".MySpends"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_round"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -54,7 +54,8 @@
 
         <receiver android:name=".controller.HourTimeReceiver" />
 
-        <activity android:name=".ui.activity.ReportActivity"
+        <activity
+            android:name=".ui.activity.ReportActivity"
             android:screenOrientation="portrait"
             android:parentActivityName=".ui.activity.MainActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->

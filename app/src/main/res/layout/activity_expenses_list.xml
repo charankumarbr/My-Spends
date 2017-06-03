@@ -4,14 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/layout_toolbar"
-        android:id="@+id/ael_toolbar"/>
+    <include
+        layout="@layout/layout_toolbar"
+        android:id="@+id/ael_toolbar" />
 
     <ProgressBar
         android:id="@+id/ael_progress_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true" />
 
     <ListView
         android:id="@+id/ael_listview_expenses_list"
@@ -22,9 +23,9 @@
         android:overScrollMode="never"
         android:listSelector="@android:color/transparent"
         android:visibility="gone"
-        android:layout_below="@+id/ael_toolbar"/>
+        android:layout_below="@+id/ael_toolbar" />
 
-    <in.phoenix.trackmyspends.customview.CustomTextView
+    <in.phoenix.myspends.customview.CustomTextView
         android:id="@+id/ael_ctextview_no_expenses"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,5 +36,5 @@
         android:layout_marginEnd="16dp"
         android:textColor="@color/colorAccent"
         android:visibility="gone"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true" />
 </RelativeLayout>

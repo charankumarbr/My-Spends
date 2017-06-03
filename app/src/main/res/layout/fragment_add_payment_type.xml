@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="in.phoenix.trackmyspends.ui.fragment.AddPaymentTypeFragment">
+    tools:context="in.phoenix.myspends.ui.fragment.AddPaymentTypeFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,6 +19,7 @@
             android:id="@+id/fapt_til_type_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/fapt_tiedittext_type_name"
                 android:layout_width="match_parent"
@@ -27,7 +28,7 @@
                 android:maxLength="15"
                 android:hint="Payment Name"
                 android:textSize="16sp"
-                android:inputType="textCapWords"/>
+                android:inputType="textCapWords" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
@@ -35,7 +36,7 @@
             android:layout_height="wrap_content"
             android:text="Type:"
             android:textSize="15sp"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
         <RadioGroup
             android:id="@+id/fapt_radiogroup_type"
@@ -67,7 +68,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:layout_marginBottom="16dp"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 

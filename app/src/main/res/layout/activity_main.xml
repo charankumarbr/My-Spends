@@ -14,7 +14,7 @@
         android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
                 android:paddingBottom="8dp"
                 android:visibility="visible">
 
-                <in.phoenix.trackmyspends.customview.CustomTextView
+                <in.phoenix.myspends.customview.CustomTextView
                     android:id="@+id/am_ctextview_month_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -50,9 +50,9 @@
                     android:layout_alignParentStart="true"
                     android:textColor="@android:color/white"
                     android:layout_toLeftOf="@+id/am_ctextview_month_expense"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true" />
 
-                <in.phoenix.trackmyspends.customview.CustomTextView
+                <in.phoenix.myspends.customview.CustomTextView
                     android:id="@+id/am_ctextview_month_expense"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                     android:textColor="@android:color/white"
                     android:background="@color/colorAccent"
                     app:fontName="fontNotoSans"
-                    android:layout_toLeftOf="@+id/am_imageview_month_view"/>
+                    android:layout_toLeftOf="@+id/am_imageview_month_view" />
 
                 <ImageView
                     android:id="@+id/am_imageview_month_view"
@@ -73,14 +73,14 @@
                     android:src="@drawable/ic_chevron_right_black_24dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:padding="10dp"/>
+                    android:padding="10dp" />
             </RelativeLayout>
 
             <CalendarView
                 android:id="@+id/am_calendar_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusableInTouchMode="true"/>
+                android:focusableInTouchMode="true" />
 
         </LinearLayout>
 
@@ -106,7 +106,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <in.phoenix.trackmyspends.customview.CustomTextView
+            <in.phoenix.myspends.customview.CustomTextView
                 android:id="@+id/am_textview_no_expense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -127,7 +127,7 @@
                 android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
-                <in.phoenix.trackmyspends.customview.CustomTextView
+                <in.phoenix.myspends.customview.CustomTextView
                     android:id="@+id/am_textview_expense_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
                     android:textSize="18sp"
                     app:fontName="fontNotoSans" />
 
-                <in.phoenix.trackmyspends.customview.CustomTextView
+                <in.phoenix.myspends.customview.CustomTextView
                     android:id="@+id/am_textview_total_expense"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -156,7 +156,7 @@
                     app:fontName="fontNotoSans" />
             </RelativeLayout>
 
-            <in.phoenix.trackmyspends.customview.BottomSheetListView
+            <in.phoenix.myspends.customview.BottomSheetListView
                 android:id="@+id/am_listview_expense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

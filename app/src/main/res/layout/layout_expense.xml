@@ -13,7 +13,7 @@
         android:layout_alignParentLeft="true"
         android:layout_margin="12dp">
 
-        <in.phoenix.trackmyspends.customview.CustomTextView
+        <in.phoenix.myspends.customview.CustomTextView
             android:id="@+id/le_textview_payment_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,9 +22,9 @@
             android:maxLines="1"
             android:ellipsize="end"
             app:fontName="@string/font_noto_sans"
-            android:textColor="@color/primary_text"/>
+            android:textColor="@color/primary_text" />
 
-        <in.phoenix.trackmyspends.customview.CustomTextView
+        <in.phoenix.myspends.customview.CustomTextView
             android:id="@+id/le_textview_payment_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,11 +32,11 @@
             app:fontName="@string/font_noto_sans"
             android:textSize="14sp"
             android:text="Cash"
-            android:textColor="@color/secondary_text"/>
+            android:textColor="@color/secondary_text" />
 
     </LinearLayout>
 
-    <in.phoenix.trackmyspends.customview.CustomTextView
+    <in.phoenix.myspends.customview.CustomTextView
         android:id="@+id/le_textview_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,9 +49,9 @@
         android:layout_marginEnd="12dp"
         android:layout_marginTop="12dp"
         android:layout_alignParentEnd="true"
-        app:fontName="@string/font_noto_sans"/>
+        app:fontName="@string/font_noto_sans" />
 
-    <in.phoenix.trackmyspends.customview.CustomTextView
+    <in.phoenix.myspends.customview.CustomTextView
         android:id="@+id/le_textview_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,6 +66,6 @@
         android:layout_alignParentEnd="true"
         app:fontName="@string/font_noto_sans"
         android:layout_below="@+id/le_textview_amount"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>

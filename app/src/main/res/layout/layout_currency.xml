@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_currency_selection">
 
-    <in.phoenix.trackmyspends.customview.CustomTextView
+    <in.phoenix.myspends.customview.CustomTextView
         android:id="@+id/lc_ctextview_code"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
@@ -18,9 +18,9 @@
         app:fontName="@string/font_noto_sans"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
-    <in.phoenix.trackmyspends.customview.CustomTextView
+    <in.phoenix.myspends.customview.CustomTextView
         android:id="@+id/lc_ctextview_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,5 +32,5 @@
         android:textColor="@color/primary_text"
         app:fontName="@string/font_noto_sans"
         android:paddingTop="16dp"
-        android:paddingBottom="16dp"/>
+        android:paddingBottom="16dp" />
 </RelativeLayout>

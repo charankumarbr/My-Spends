@@ -9,7 +9,7 @@
     <string name="payment">Payment</string>
 
     <string name="add">Add</string>
-    <string name="please_select_payment_type">Please select Payment type</string>
+    <string name="please_select_payment_type">Please select Payment Type</string>
     <string name="enter_payment_name">Enter Payment Name</string>
     <string name="enter_valid_payment_name">Enter a valid Payment Name</string>
     <string name="Rs">\u20B9</string>
@@ -19,7 +19,7 @@
     <string name="value">default</string>
     <string name="done_caps">DONE</string>
     <string name="payment_types">Payment Types</string>
-    <string name="pref_name">TrackMySpends</string>
+    <string name="pref_name">MySpendsPrefs</string>
     <string name="select_currency">Select Currency</string>
     <string name="expense_on">Expense on:</string>
     <string name="added_on">Added on:</string>

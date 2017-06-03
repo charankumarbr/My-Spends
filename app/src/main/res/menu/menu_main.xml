@@ -6,21 +6,21 @@
         android:id="@+id/menu_payment"
         android:title="@string/payment_types"
         app:showAsAction="always"
-        android:icon="@drawable/ic_credit_card_white_24dp"/>
+        android:icon="@drawable/ic_credit_card_white_24dp" />
 
     <item
         android:id="@+id/menu_add_expense"
         android:title="@string/add_expense"
         app:showAsAction="always"
-        android:icon="@drawable/ic_add_white_24dp"/>
+        android:icon="@drawable/ic_add_white_24dp" />
 
     <item
         android:id="@+id/menu_reports"
         android:title="@string/reports"
-        app:showAsAction="never|withText"/>
+        app:showAsAction="never|withText" />
 
     <item
         android:id="@+id/menu_about"
         android:title="@string/about_app"
-        app:showAsAction="never|withText"/>
+        app:showAsAction="never|withText" />
 </menu>

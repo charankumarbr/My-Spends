@@ -1,5 +1,4 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -11,7 +10,7 @@
         android:layout_marginEnd="8dp"
         android:orientation="vertical">
 
-        <in.phoenix.trackmyspends.customview.CustomTextView
+        <in.phoenix.myspends.customview.CustomTextView
             android:id="@+id/fpb_ctextview_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,7 +19,7 @@
             android:layout_gravity="center_horizontal"
             android:textSize="17sp"
             android:textColor="@color/colorPrimary"
-            app:fontName="@string/font_noto_sans"/>
+            app:fontName="@string/font_noto_sans" />
 
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/fpb_fblayout_payment_mode"
@@ -46,6 +45,6 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:textSize="16sp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
     </LinearLayout>
 </FrameLayout>

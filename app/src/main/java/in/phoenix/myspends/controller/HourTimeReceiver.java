@@ -16,8 +16,10 @@ import java.util.Random;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.database.DBManager;
 import in.phoenix.myspends.model.ExpenseDate;
+import in.phoenix.myspends.ui.activity.LaunchDeciderActivity;
 import in.phoenix.myspends.ui.activity.NewExpenseActivity;
 import in.phoenix.myspends.util.AppConstants;
+import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
 /**
@@ -34,10 +36,18 @@ public final class HourTimeReceiver extends BroadcastReceiver {
             NotificationManager notificationManager = (NotificationManager) context
                     .getSystemService(Context.NOTIFICATION_SERVICE);
 
-            Intent notificationIntent = new Intent(context, NewExpenseActivity.class);
-            notificationIntent.putExtra(AppConstants.Bundle.EXPENSE_DATE, expenseDate);
+            Intent notificationIntent = null;
+            if (null == AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)) {
+                //-- no currency setup, get it first --//
+                notificationIntent = new Intent(context, LaunchDeciderActivity.class);
+
+            } else {
+                notificationIntent = new Intent(context, NewExpenseActivity.class);
+                notificationIntent.putExtra(AppConstants.Bundle.EXPENSE_DATE, expenseDate);
+                notificationIntent.putExtra("check", Calendar.getInstance().getTimeInMillis());
+            }
+
             notificationIntent.putExtra(AppConstants.Bundle.VIA_NOTIFICATION, true);
-            notificationIntent.putExtra("check", Calendar.getInstance().getTimeInMillis());
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context);

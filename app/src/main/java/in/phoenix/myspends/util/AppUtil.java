@@ -1,11 +1,15 @@
 package in.phoenix.myspends.util;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -252,5 +256,23 @@ public final class AppUtil {
     public static ExpenseDate getCurrentDayOfMonth() {
         Calendar calendar = Calendar.getInstance();
         return new ExpenseDate(calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+    }
+
+    public static boolean isUserLoggedIn() {
+        return null != FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    public static boolean isConnected() {
+
+        ConnectivityManager cm = (ConnectivityManager) MySpends.APP_CONTEXT.
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            NetworkInfo netInfo = cm.getActiveNetworkInfo();
+            if (netInfo != null && netInfo.isConnected()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

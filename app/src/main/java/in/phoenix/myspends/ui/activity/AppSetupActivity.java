@@ -22,6 +22,7 @@ import in.phoenix.myspends.BuildConfig;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.CurrencyListAdapter;
 import in.phoenix.myspends.customview.CustomTextView;
+import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppPref;
@@ -128,6 +129,7 @@ public class AppSetupActivity extends BaseActivity {
 
             } else {
                 Currency selectedCurrency = (Currency) mLvCurrencies.getAdapter().getItem(mPosition);
+                FirebaseDB.initDb().setCurrency(selectedCurrency);
                 AppPref.getInstance().putString(AppConstants.PrefConstants.CURRENCY, selectedCurrency.getCurrencySymbol());
                 startActivity(new Intent(AppSetupActivity.this, MainActivity.class));
                 AppPref.getInstance().putInt(AppConstants.PrefConstants.APP_SETUP, BuildConfig.VERSION_CODE);

@@ -15,3 +15,7 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+# Firebase rules
+-keepattributes Signature
+-keepattributes *Annotation*

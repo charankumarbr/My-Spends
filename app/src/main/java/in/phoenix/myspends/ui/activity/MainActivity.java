@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +21,11 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.CalendarView;
+
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Locale;
 
@@ -149,9 +155,53 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         } else if (item.getItemId() == R.id.menu_about) {
             showAboutAppDialog();
             return true;
+
+        } else if (item.getItemId() == R.id.menu_logout) {
+            confirmLogout();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void confirmLogout() {
+        AlertDialog.Builder logoutBuilder = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Confirm Logout")
+                .setMessage("Are you sure you want to logout?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        if (AppUtil.isConnected()) {
+                            AuthUI.getInstance()
+                                    .signOut(MainActivity.this)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                AppPref.getInstance().clearAll();
+                                                Intent newIntent = new Intent(MainActivity.this, LaunchDeciderActivity.class);
+                                                newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                startActivity(newIntent);
+                                                finish();
+
+                                            } else {
+                                                AppUtil.showToast("Unable to logout.");
+                                            }
+                                        }
+                                    });
+                        } else {
+                            AppUtil.showToast(R.string.no_internet);
+                        }
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+        logoutBuilder.create().show();
     }
 
     private void showAboutAppDialog() {

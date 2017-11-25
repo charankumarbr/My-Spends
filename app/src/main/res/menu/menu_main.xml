@@ -23,4 +23,9 @@
         android:id="@+id/menu_about"
         android:title="@string/about_app"
         app:showAsAction="never|withText" />
+
+    <item
+        android:id="@+id/menu_logout"
+        android:title="@string/logout"
+        app:showAsAction="never|withText" />
 </menu>

@@ -43,4 +43,8 @@ public final class AppPref {
     public int getInt(String key) {
         return mSharedPref.getInt(key, -1);
     }
+
+    public void clearAll() {
+        mSharedPref.edit().clear().apply();
+    }
 }

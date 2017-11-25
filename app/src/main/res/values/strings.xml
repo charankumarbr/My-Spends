@@ -48,5 +48,7 @@
     <string name="select_to_date">Select the to date</string>
     <string name="value_month_expenses">%s month expenses</string>
     <string name="no_expenses_found_in_filter">No expenses found in the filter applied.</string>
+    <string name="logout">Logout</string>
+    <string name="no_internet">No Internet Connection!!</string>
     <integer name="splash_obj_time">1000</integer>
 </resources>

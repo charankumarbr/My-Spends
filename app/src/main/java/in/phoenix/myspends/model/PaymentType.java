@@ -1,27 +1,29 @@
 package in.phoenix.myspends.model;
 
+import in.phoenix.myspends.database.DBConstants;
+
 /**
  * Created by Charan.Br on 2/11/2017.
  */
 
 public final class PaymentType {
 
-    private int id;
+    private String key;
+
+    private int paymentModeId;
 
     private String name;
 
-    private String typeId;
-
-    private String createdOn;
+    private long createdOn;
 
     private boolean isActive;
 
-    public int getId() {
-        return id;
+    public int getPaymentModeId() {
+        return paymentModeId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setPaymentModeId(int paymentModeId) {
+        this.paymentModeId = paymentModeId;
     }
 
     public String getName() {
@@ -32,19 +34,11 @@ public final class PaymentType {
         this.name = name;
     }
 
-    public String getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(String typeId) {
-        this.typeId = typeId;
-    }
-
-    public String getCreatedOn() {
+    public long getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(String createdOn) {
+    public void setCreatedOn(long createdOn) {
         this.createdOn = createdOn;
     }
 
@@ -54,5 +48,25 @@ public final class PaymentType {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public static PaymentType getCashPaymentType() {
+
+        PaymentType cashPaymentType = new PaymentType();
+        cashPaymentType.setName(DBConstants.PAYMENT_MODE.CASH);
+        cashPaymentType.setPaymentModeId(DBConstants.PAYMENT_MODE.CASH_ID);
+        cashPaymentType.setCreatedOn(0);
+        cashPaymentType.setActive(true); //-- deemed active while inserting --//
+        cashPaymentType.setKey("0");
+
+        return cashPaymentType;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

@@ -1,92 +1,46 @@
 package in.phoenix.myspends.controller;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.provider.BaseColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
-import android.widget.CursorAdapter;
 import android.widget.Switch;
+
+import java.util.ArrayList;
 
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
-import in.phoenix.myspends.database.DBConstants;
 import in.phoenix.myspends.database.DBManager;
+import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.util.AppLog;
-import in.phoenix.myspends.util.AppUtil;
 
 /**
  * Created by Charan.Br on 4/7/2017.
  */
 
-public class PaymentTypeAdapter extends CursorAdapter {
+public class PaymentTypeAdapter extends BaseAdapter {
 
     private final Context mContext;
 
-    private int mIndexPriId;
-    private int mIndexName;
-    private int mIndexIsActive;
-    private int mIndexCreatedOn;
-
     private final OnStatusChangedListener mListener;
 
-    public PaymentTypeAdapter(Context context, Cursor cursor) {
-        super(context, cursor, false);
+    private ArrayList<PaymentType> mPaymentTypes;
+
+    public PaymentTypeAdapter(Context context, ArrayList<PaymentType> paymentTypes) {
         mContext = context;
         mListener = (OnStatusChangedListener) context;
-    }
-
-    @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        View paymentTypeView = LayoutInflater.from(context).inflate(R.layout.layout_payment_type, parent, false);
-        ViewHolder holder = new ViewHolder();
-        holder.tvPaymentTypeName = (CustomTextView) paymentTypeView.findViewById(R.id.lpt_textview_ptype_name);
-        holder.swToggleActive = (Switch) paymentTypeView.findViewById(R.id.lpt_switch_active);
-        paymentTypeView.setTag(holder);
-
-        mIndexCreatedOn = cursor.getColumnIndex(DBConstants.COLUMN.CREATED_ON);
-        mIndexIsActive = cursor.getColumnIndex(DBConstants.COLUMN.IS_ACTIVE);
-        mIndexName = cursor.getColumnIndex(DBConstants.COLUMN.NAME);
-        mIndexPriId = cursor.getColumnIndex(BaseColumns._ID);
-
-        return paymentTypeView;
-    }
-
-    @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-
-        if (view.getTag() == null) {
-            AppUtil.showToast("NULL TAG");
-
-        } else {
-            ViewHolder holder = (ViewHolder) view.getTag();
-
-            String createdOn = cursor.getString(mIndexCreatedOn);
-            AppLog.d("Created On", createdOn);
-            int isActive = cursor.getInt(mIndexIsActive);
-            if (createdOn.equals("DEFAULT")) {
-                holder.swToggleActive.setChecked(true);
-                holder.swToggleActive.setEnabled(false);
-
-            } else {
-                holder.swToggleActive.setEnabled(true);
-                holder.swToggleActive.setTag(cursor.getInt(mIndexPriId));
-                holder.swToggleActive.setChecked(isActive == 1);
-                holder.swToggleActive.setOnCheckedChangeListener(togglePaymentType);
-            }
-
-            holder.tvPaymentTypeName.setText(cursor.getString(mIndexName));
+        if (null != paymentTypes) {
+            mPaymentTypes = new ArrayList<>(paymentTypes);
         }
-
     }
 
     private final CompoundButton.OnCheckedChangeListener togglePaymentType = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            Log.d("onCheckedChange", buttonView.getText().toString() + isChecked);
+            AppLog.d("onCheckedChange", buttonView.getText().toString() + isChecked);
             int primaryKey = (int) buttonView.getTag();
             DBManager.togglePaymentType(primaryKey, isChecked);
             if (null != mListener) {
@@ -94,6 +48,75 @@ public class PaymentTypeAdapter extends CursorAdapter {
             }
         }
     };
+
+    @Override
+    public int getCount() {
+        if (null == mPaymentTypes) {
+            return 0;
+        }
+        return mPaymentTypes.size();
+    }
+
+    @Override
+    public PaymentType getItem(int position) {
+        return mPaymentTypes.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View view, ViewGroup parent) {
+
+        ViewHolder holder;
+
+        if (null == view) {
+            view = LayoutInflater.from(mContext).inflate(R.layout.layout_payment_type, parent, false);
+            holder = new ViewHolder();
+            holder.tvPaymentTypeName = (CustomTextView) view.findViewById(R.id.lpt_textview_ptype_name);
+            holder.swToggleActive = (Switch) view.findViewById(R.id.lpt_switch_active);
+            view.setTag(holder);
+
+        } else {
+            holder = (ViewHolder) view.getTag();
+        }
+
+        PaymentType paymentType = getItem(position);
+
+        long createdOn = paymentType.getCreatedOn();
+        AppLog.d("PaymentTypeAdapter", "Created On:" + createdOn);
+        boolean isActive = paymentType.isActive();
+        if (createdOn == 0) {
+            //-- cash payment type --//
+            holder.swToggleActive.setChecked(true);
+            holder.swToggleActive.setEnabled(false);
+
+        } else {
+            holder.swToggleActive.setEnabled(true);
+            holder.swToggleActive.setTag(paymentType.getKey());
+            holder.swToggleActive.setChecked(isActive);
+            holder.swToggleActive.setOnCheckedChangeListener(togglePaymentType);
+        }
+
+        holder.tvPaymentTypeName.setText(paymentType.getName());
+
+        return view;
+    }
+
+    public void setData(ArrayList<PaymentType> spends) {
+        if (null != spends && spends.size() > 0) {
+            if (null == mPaymentTypes) {
+                mPaymentTypes = new ArrayList<>();
+
+            } else {
+                mPaymentTypes.clear();
+            }
+            mPaymentTypes.addAll(spends);
+            notifyDataSetChanged();
+        }
+    }
 
     class ViewHolder {
         CustomTextView tvPaymentTypeName;

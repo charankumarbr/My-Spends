@@ -120,7 +120,7 @@ public class AddExpenseFragment extends DialogFragment {
             for (int index = 0; index < paymentTypes.size(); index++) {
                 RadioButton radioButton = (RadioButton) inflater.inflate(R.layout.layout_radio_button, null);
                 radioButton.setId(index);
-                radioButton.setTag(paymentTypes.get(index).getId());
+                radioButton.setTag(paymentTypes.get(index).getPaymentModeId());
                 radioButton.setText(paymentTypes.get(index).getName());
                 radioButton.setOnCheckedChangeListener(paymentModeSelectedListener);
                 mFlexboxLayout.addView(radioButton);

@@ -12,14 +12,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.database.DBManager;
+import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.PaymentMode;
 import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.util.AppLog;
@@ -43,6 +47,8 @@ public class AddPaymentTypeFragment extends DialogFragment {
     private int mSelectedPaymentModeId = -1;
 
     private OnPaymentTypeListener mListener = null;
+
+    private ProgressBar mPbLoading = null;
 
     public AddPaymentTypeFragment() {
         // Required empty public constructor
@@ -84,12 +90,14 @@ public class AddPaymentTypeFragment extends DialogFragment {
         AppCompatButton buttonAdd = (AppCompatButton) addPaymentTypeView.findViewById(R.id.fapt_acbutton_add);
         buttonAdd.setOnClickListener(clickListener);
 
-        ArrayList<PaymentMode> paymentModes = DBManager.getPaymentModes();
+        mPbLoading = addPaymentTypeView.findViewById(R.id.fapt_pb_loading);
+
+        ArrayList<PaymentMode> paymentModes = PaymentMode.getPaymentModes();
         if (null != paymentModes) {
             for (int index = 0; index < paymentModes.size(); index++) {
                 RadioButton radioButton = (RadioButton) inflater.inflate(R.layout.layout_radio_button, null);
                 radioButton.setId(index);
-                radioButton.setTag(paymentModes.get(index).getModeId());
+                radioButton.setTag(paymentModes.get(index).getId());
                 radioButton.setText(paymentModes.get(index).getName());
                 radioButton.setOnCheckedChangeListener(paymentTypeSelectedListener);
                 mFlexboxLayoutTypes.addView(radioButton);
@@ -121,10 +129,41 @@ public class AddPaymentTypeFragment extends DialogFragment {
 
             PaymentType paymentType = new PaymentType();
             paymentType.setName(paymentTypeName);
-            paymentType.setCreatedOn(AppUtil.convertToDateDB(System.currentTimeMillis()));
-            paymentType.setTypeId(getTypeId(paymentTypeName));
+            paymentType.setCreatedOn(System.currentTimeMillis());
+            paymentType.setPaymentModeId(mSelectedPaymentModeId);
+            paymentType.setActive(true);
 
-            if (DBManager.addPaymentType(paymentType) != -1) {
+            if (AppUtil.isConnected()) {
+                mPbLoading.setVisibility(View.VISIBLE);
+                AppUtil.toggleKeyboard(false);
+                FirebaseDB.initDb().addNewPaymentType(paymentType, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                        AppLog.d("AddNew", "onComplete 1");
+                        if (null != getActivity() && isAdded()) {
+                            AppLog.d("AddNew", "onComplete 2");
+                            mPbLoading.setVisibility(View.GONE);
+                            if (null == databaseError) {
+                                AppLog.d("AddNew", "onComplete 3");
+                                AppLog.d("AddNew", "Key:" + databaseReference.getKey());
+                                if (null != mListener) {
+                                    AppLog.d("AddNew", "onComplete 4");
+                                    mListener.onPaymentTypeAdded();
+                                }
+                                dismissAllowingStateLoss();
+
+                            } else {
+                                AppLog.d("AddNew", "onComplete 5");
+                            }
+                        }
+                    }
+                });
+
+            } else {
+
+            }
+
+            /*if (DBManager.addPaymentType(paymentType) != -1) {
                 if (null != mListener) {
                     mListener.onPaymentTypeAdded();
                 }
@@ -133,7 +172,7 @@ public class AddPaymentTypeFragment extends DialogFragment {
 
             } else {
                 AppUtil.showToast("Could not add Payment type!");
-            }
+            }*/
         }
 
         private String getTypeId(String paymentTypeName) {

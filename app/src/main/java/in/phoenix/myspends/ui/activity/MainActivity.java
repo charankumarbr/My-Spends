@@ -6,10 +6,10 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -20,25 +20,30 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
-import android.widget.CalendarView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
-import java.util.Locale;
+import java.util.ArrayList;
 
 import in.phoenix.myspends.BuildConfig;
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.controller.ExpenseAdapter;
+import in.phoenix.myspends.parser.SpendsParser;
 import in.phoenix.myspends.controller.ExpenseCursorLoader;
-import in.phoenix.myspends.customview.BottomSheetListView;
+import in.phoenix.myspends.controller.NewExpenseAdapter;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.DBConstants;
 import in.phoenix.myspends.database.DBManager;
+import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.ExpenseDate;
+import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.ui.fragment.AddExpenseFragment;
 import in.phoenix.myspends.ui.fragment.AddPaymentTypeFragment;
 import in.phoenix.myspends.util.AppConstants;
@@ -46,15 +51,15 @@ import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
-public class MainActivity extends BaseActivity implements AddExpenseFragment.OnAddExpenseListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends BaseActivity implements AddExpenseFragment.OnAddExpenseListener, LoaderManager.LoaderCallbacks<Cursor>,SpendsParser.SpendsParserListener {
 
-    private CalendarView mCalendarDate;
+    //private CalendarView mCalendarDate;
 
     private ExpenseDate mCalendarExpenseDate;
 
-    private BottomSheetListView mLvExpense;
+    private ListView mLvExpense;
 
-    private ExpenseAdapter mExpenseAdapter;
+    private NewExpenseAdapter mExpenseAdapter;
 
     private CustomTextView mCTvMonthlyExpenseInfo = null;
     private CustomTextView mCTvMonthlyExpense = null;
@@ -62,7 +67,9 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
     private CustomTextView mCTvNoExpense = null;
     private CustomTextView mCTvExpenseHeader = null;
 
-    private BottomSheetBehavior bottomSheetBehavior = null;
+    //private BottomSheetBehavior bottomSheetBehavior = null;
+
+    private ProgressBar mPbLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,24 +86,24 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
 
-        mCalendarDate = (CalendarView) findViewById(R.id.am_calendar_date);
-        mCalendarDate.setOnDateChangeListener(onDateChangeListener);
-        mCalendarExpenseDate = AppUtil.convertToDate(mCalendarDate.getDate());
+        //CalendarView mCalendarDate = (CalendarView) findViewById(R.id.am_calendar_date);
+        //mCalendarDate.setOnDateChangeListener(onDateChangeListener);
+        mCalendarExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());
 
-        mLvExpense = (BottomSheetListView) findViewById(R.id.am_listview_expense);
+        mLvExpense = (ListView) findViewById(R.id.am_lv_spends);
 
         mCTvMonthlyExpenseInfo = (CustomTextView) findViewById(R.id.am_ctextview_month_info);
         mCTvMonthlyExpense = (CustomTextView) findViewById(R.id.am_ctextview_month_expense);
-        mCTvTotalExpense = (CustomTextView) findViewById(R.id.am_textview_total_expense);
-        mCTvNoExpense = (CustomTextView) findViewById(R.id.am_textview_no_expense);
-        mCTvExpenseHeader = (CustomTextView) findViewById(R.id.am_textview_expense_header);
+        //mCTvTotalExpense = (CustomTextView) findViewById(R.id.am_textview_total_expense);
+        //mCTvNoExpense = (CustomTextView) findViewById(R.id.am_textview_no_expense);
+        //mCTvExpenseHeader = (CustomTextView) findViewById(R.id.am_textview_expense_header);
 
         findViewById(R.id.am_layout_month_expense).setOnClickListener(clickListener);
 
-        bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.am_card_layout_bottom));
+        //bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.am_card_layout_bottom));
 
-        getLoaderManager().initLoader(DBConstants.LoaderId.EXPENSE, null, this);
-        mLvExpense.setOnItemClickListener(itemClickListener);
+        //getLoaderManager().initLoader(DBConstants.LoaderId.EXPENSE, null, this);
+        //mLvExpense.setOnItemClickListener(itemClickListener);
 
         Float dimen = getResources().getDimension(R.dimen.title_text_size);
         String value = getString(R.string.value);
@@ -104,10 +111,46 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         AppLog.d("TestDensity", "Dimen:" + dimen + "::value:" + value + "::Density:" + displayMetrics.density + "::ScaledDensity:" + displayMetrics.scaledDensity);
         Float typedValue = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 19, displayMetrics);
         AppLog.d("TestDensity", "TypedValue:" + typedValue);
+
+        mPbLoading = findViewById(R.id.am_pb_loading);
+        getExpenses();
     }
 
     private void getExpenses() {
-        getLoaderManager().restartLoader(DBConstants.LoaderId.EXPENSE, null, this);
+        //getLoaderManager().restartLoader(DBConstants.LoaderId.EXPENSE, null, this);
+        mPbLoading.setVisibility(View.VISIBLE);
+        FirebaseDB.initDb().getSpends(0, new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (null != dataSnapshot) {
+
+                    AppLog.d("MainActivity", "Spends: Snapshot: " + dataSnapshot);
+                    AppLog.d("MainActivity", "Spends:: Snapshot Value: " + dataSnapshot.getValue());
+                    AppLog.d("MainActivity", "Spends:: Snapshot Key: " + dataSnapshot.getKey());
+                    AppLog.d("MainActivity", "Spends:: Snapshot Child Count: " + dataSnapshot.getChildrenCount());
+
+                    if (dataSnapshot.getChildrenCount() > 0 && null != dataSnapshot.getChildren()) {
+                        new SpendsParser(MainActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
+
+                    } else {
+                        mPbLoading.setVisibility(View.GONE);
+                        AppUtil.showToast("No Spends tracked!");
+                        AppLog.d("MainActivity", "Spends: No spends ::" + "Count: ZERO");
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                mPbLoading.setVisibility(View.GONE);
+                if (null != databaseError) {
+                    AppLog.d("MainActivity", "Spends:" + databaseError);
+
+                } else {
+                    AppLog.d("MainActivity", "Spends list failed!");
+                }
+            }
+        });
     }
 
     @Override
@@ -129,6 +172,10 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
                 } else {
                     AppUtil.showSnackbar(findViewById(R.id.activity_main), "No expenses tracked in this month!");
                 }
+
+            } else if (v.getId() == R.id.le_layout_expense) {
+                int position = (int) v.getTag();
+                navigateToViewExpense(position, v);
             }
         }
     };
@@ -240,7 +287,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         addPaymentTypeFragment.show(getSupportFragmentManager(), "AddPaymentTFragment");
     }
 
-    private final CalendarView.OnDateChangeListener onDateChangeListener = new CalendarView.OnDateChangeListener() {
+    /*private final CalendarView.OnDateChangeListener onDateChangeListener = new CalendarView.OnDateChangeListener() {
         @Override
         public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
             AppLog.d("Calendar Click", "DoM:" + dayOfMonth + "::Month:" + month + "::Year:" + year);
@@ -251,7 +298,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
             }
             getExpenses();
         }
-    };
+    };*/
 
     private void showAddExpenseDialog() {
         AddExpenseFragment expenseFragment = AddExpenseFragment.newInstance(mCalendarExpenseDate);
@@ -266,41 +313,46 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
     private final AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            final int expensePrimaryKey = (int) view.findViewById(R.id.le_textview_amount).getTag();
-            Animation animation1 = new AlphaAnimation(0.3f, 1.0f);
-            animation1.setDuration(300);
-            animation1.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    Intent viewExpenseIntent = new Intent(MainActivity.this, ViewExpenseActivity.class);
-                    viewExpenseIntent.putExtra(AppConstants.Bundle.EXPENSE_PRIMARY_KEY, expensePrimaryKey);
-                    startActivityForResult(viewExpenseIntent, AppConstants.VIEW_EXPENSE_CODE);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-            view.startAnimation(animation1);
+            //final int expensePrimaryKey = (int) view.findViewById(R.id.le_textview_amount).getTag();
+            navigateToViewExpense(position, view);
         }
     };
 
+    private void navigateToViewExpense(final int position, View view) {
+        Animation animation1 = new AlphaAnimation(0.3f, 1.0f);
+        animation1.setDuration(300);
+        animation1.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Intent viewExpenseIntent = new Intent(MainActivity.this, ViewExpenseActivity.class);
+                viewExpenseIntent.putExtra(AppConstants.Bundle.EXPENSE, mExpenseAdapter.getItem(position));
+                startActivityForResult(viewExpenseIntent, AppConstants.VIEW_EXPENSE_CODE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(animation1);
+    }
+
     @Override
     public void onBackPressed() {
-        AppLog.d("onBackPressed", "State::" + bottomSheetBehavior.getState());
+        super.onBackPressed();
+        /*AppLog.d("onBackPressed", "State::" + bottomSheetBehavior.getState());
         if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED
                 && mCTvNoExpense.getVisibility() == View.GONE) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
         } else {
             super.onBackPressed();
-        }
+        }*/
     }
 
     @Override
@@ -315,7 +367,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (loader.getId() == DBConstants.LoaderId.EXPENSE) {
-            if (null != data && data.getCount() > 0) {
+            /*if (null != data && data.getCount() > 0) {
                 AppLog.d("Height", "::" + bottomSheetBehavior.getPeekHeight() + "::State:" + bottomSheetBehavior.getState());
                 bottomSheetBehavior.setPeekHeight(AppUtil.dpToPx(120));
 
@@ -345,7 +397,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
                 mCTvNoExpense.setVisibility(View.VISIBLE);
                 bottomSheetBehavior.setPeekHeight(AppUtil.dpToPx(150));
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            }
+            }*/
             getMonthlyExpense();
         }
     }
@@ -372,7 +424,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
     public void onLoaderReset(Loader<Cursor> loader) {
         if (loader.getId() == DBConstants.LoaderId.EXPENSE) {
             if (null != mExpenseAdapter) {
-                mExpenseAdapter.swapCursor(null);
+                //mExpenseAdapter.swapCursor(null);
             }
         }
     }
@@ -391,5 +443,20 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
     protected void onNewIntent(Intent intent) {
         AppLog.d("main", "onNewIntent");
         super.onNewIntent(intent);
+    }
+
+    @Override
+    public void onSpendsParsed(ArrayList<NewExpense> spends) {
+        if (null != spends && spends.size() > 0) {
+            setSpends(spends);
+        }
+    }
+
+    private void setSpends(ArrayList<NewExpense> spends) {
+        if (null == mExpenseAdapter) {
+            mExpenseAdapter = new NewExpenseAdapter(MainActivity.this, spends, clickListener);
+            mLvExpense.setAdapter(mExpenseAdapter);
+        }
+        mPbLoading.setVisibility(View.GONE);
     }
 }

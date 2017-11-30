@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import java.util.Calendar;
 
+import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppUtil;
 
 /**
@@ -20,6 +21,10 @@ public class ExpenseDate implements Parcelable {
 
     public ExpenseDate(String expenseDate) {
         changeDate(expenseDate);
+    }
+
+    public ExpenseDate(long timeInMillis) {
+        changeDate(timeInMillis);
     }
 
     public int getDayOfMonth() {
@@ -73,6 +78,10 @@ public class ExpenseDate implements Parcelable {
         dest.writeInt(year);
     }
 
+    public String getListDate() {
+        return getDayOfMonth() + " " + AppUtil.getShortMonth(getMonth());
+    }
+
     public String getDisplayableDate() {
         return getDayOfMonth() + " " + AppUtil.getShortMonth(getMonth()) + " " + getYear();
     }
@@ -123,6 +132,18 @@ public class ExpenseDate implements Parcelable {
 
     }
 
+    public boolean isSameExpenseDate(long otherDateInMillis) {
+        AppLog.d("ExpenseDate", "Millis:" + getTimeInMillis() + ":: Argument:" + otherDateInMillis);
+
+        Calendar otherCalendar = Calendar.getInstance();
+        otherCalendar.setTimeInMillis(otherDateInMillis);
+        int odayOfMonth = otherCalendar.get(Calendar.DAY_OF_MONTH);
+        int omonth = otherCalendar.get(Calendar.MONTH);
+        int oyear = otherCalendar.get(Calendar.YEAR);
+
+        return (dayOfMonth == odayOfMonth) && (month == omonth) && (year == oyear);
+    }
+
     public void changeDate(String expenseDate) {
         if (expenseDate.contains("|")) {
             String[] splits = expenseDate.split("\\|");
@@ -133,5 +154,13 @@ public class ExpenseDate implements Parcelable {
         } else {
             throw new IllegalArgumentException("Invalid Expense Date");
         }
+    }
+
+    public void changeDate(long timeInMillis) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timeInMillis);
+        dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        month = calendar.get(Calendar.MONTH);
+        year = calendar.get(Calendar.YEAR);
     }
 }

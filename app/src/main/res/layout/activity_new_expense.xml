@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/lfn_layout_complete"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/layout_toolbar" />
+    <include layout="@layout/layout_toolbar"
+        android:id="@+id/ane_toolbar"/>
 
     <RelativeLayout
+        android:id="@+id/ane_layout_expense_date"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ane_toolbar">
 
         <in.phoenix.myspends.customview.CustomTextView
             android:id="@+id/ane_ctextview_expense_date"
@@ -41,7 +43,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:layout_below="@+id/ane_layout_expense_date">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -166,4 +169,11 @@
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/ane_pb_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+</RelativeLayout>

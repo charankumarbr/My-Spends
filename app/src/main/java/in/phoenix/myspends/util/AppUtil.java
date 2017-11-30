@@ -31,6 +31,8 @@ import java.util.UnknownFormatConversionException;
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.model.ExpenseDate;
+import in.phoenix.myspends.model.PaymentMode;
+import in.phoenix.myspends.model.PaymentType;
 
 /**
  * Created by Charan.Br on 2/10/2017.
@@ -93,6 +95,19 @@ public final class AppUtil {
         StringBuilder builder = new StringBuilder();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(strDate);
+        builder.append(getThDate(calendar.get(Calendar.DATE)));
+        builder.append(" ");
+        builder.append(getShortMonth(calendar.get(Calendar.MONTH)));
+        builder.append(" ");
+        builder.append(calendar.get(Calendar.YEAR));
+
+        return builder.toString();
+    }
+
+    public static String dateDBToString(long timeInMillis) throws ParseException {
+        StringBuilder builder = new StringBuilder();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timeInMillis);
         builder.append(getThDate(calendar.get(Calendar.DATE)));
         builder.append(" ");
         builder.append(getShortMonth(calendar.get(Calendar.MONTH)));
@@ -274,5 +289,30 @@ public final class AppUtil {
         }
 
         return false;
+    }
+
+    public static Float getFloatAmount(String amountInString) {
+        return Float.valueOf(amountInString);
+    }
+
+    public static String getPaidByForKey(String paymentTypeKey) {
+
+        PaymentType paymentType = MySpends.getPaymentTypeForKey(paymentTypeKey);
+
+        if (null != paymentType) {
+            StringBuilder builder = new StringBuilder();
+            builder.append(paymentType.getName());
+
+            if (!paymentType.getKey().equals("0") && !(paymentType.getCreatedOn() == 0)) {
+                builder.append(" (");
+                builder.append(PaymentMode.getModeName(paymentType.getPaymentModeId()));
+                builder.append(")");
+            }
+
+            return builder.toString();
+        }
+
+
+        return "";
     }
 }

@@ -5,10 +5,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="in.phoenix.myspends.ui.fragment.AddPaymentTypeFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
         android:layout_marginLeft="12dp"
@@ -32,18 +31,21 @@
         </android.support.design.widget.TextInputLayout>
 
         <TextView
+            android:id="@+id/fapt_tv_type_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Type:"
             android:textSize="15sp"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:layout_below="@+id/fapt_til_type_name"/>
 
         <RadioGroup
             android:id="@+id/fapt_radiogroup_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/fapt_tv_type_header">
 
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/fapt_fblayout_payment_type"
@@ -61,15 +63,23 @@
             android:id="@+id/fapt_acbutton_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
             android:textAllCaps="true"
             android:text="@string/add"
             android:layout_marginTop="16dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:layout_marginBottom="16dp"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:layout_below="@+id/fapt_radiogroup_type"/>
 
-    </LinearLayout>
+        <ProgressBar
+            android:id="@+id/fapt_pb_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"/>
+
+    </RelativeLayout>
 
 </FrameLayout>

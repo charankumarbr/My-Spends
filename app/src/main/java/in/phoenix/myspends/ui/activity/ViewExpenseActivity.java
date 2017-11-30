@@ -5,16 +5,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import java.text.ParseException;
 
+import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.DBManager;
-import in.phoenix.myspends.model.Expense;
+import in.phoenix.myspends.model.ExpenseDate;
+import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
@@ -27,9 +30,10 @@ public class ViewExpenseActivity extends BaseActivity {
 
     private boolean isNew = false;
 
-    private int mExpensePrimaryKey = -1;
+    //private int mExpensePrimaryKey = -1;
 
-    private Expense mExpense = null;
+    private NewExpense mExpense = null;
+    private ExpenseDate mExpenseDate = null;
 
     private CustomTextView mCTvAmount;
     private CustomTextView mCTvExpenseOn;
@@ -43,21 +47,30 @@ public class ViewExpenseActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if ((null == getIntent()) || !getIntent().hasExtra(AppConstants.Bundle.EXPENSE_PRIMARY_KEY)) {
+        if ((null == getIntent()) || !getIntent().hasExtra(AppConstants.Bundle.EXPENSE)) {
             onDestroy();
         }
-        mExpensePrimaryKey = getIntent().getIntExtra(AppConstants.Bundle.EXPENSE_PRIMARY_KEY, -1);
+        /*mExpensePrimaryKey = getIntent().getIntExtra(AppConstants.Bundle.EXPENSE_PRIMARY_KEY, -1);
         if (mExpensePrimaryKey < 0) {
             onDestroy();
         }
-        isNew = (mExpensePrimaryKey == 0);
+        isNew = (mExpensePrimaryKey == 0);*/
 
         setContentView(R.layout.activity_view_expense);
         init();
 
-        if (!isNew) {
+        mExpense = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE);
+
+        /*if (!isNew) {
             getParticularExpense();
-        }
+        }*/
+
+        mCTvAddedOn.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                viewExpense();
+            }
+        }, 200);
     }
 
     private void init() {
@@ -77,17 +90,24 @@ public class ViewExpenseActivity extends BaseActivity {
         mCTvNote = (CustomTextView) findViewById(R.id.ave_cTextView_note);
     }
 
-    private void getParticularExpense() {
-        mExpense = DBManager.getExpense(mExpensePrimaryKey);
-        if (null != mExpense) {
-            mCTvAmount.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)
-                    + " " + AppUtil.getStringAmount(mExpense.getAmount()));
-            mCTvNote.setText(mExpense.getNote());
-            boolean isAddedOnDiffDate = mExpense.getExpenseDate().isSameExpenseDate(mExpense.getCreatedOn());
-            boolean isUpdated = !mExpense.getCreatedOn().equals(mExpense.getUpdatedOn());
+    /*private void getParticularExpense() {
+        //mExpense = DBManager.getExpense(mExpensePrimaryKey);
+        viewExpense();
+    }*/
 
-            mCTvExpenseOn.setText(getString(R.string.expense_on) + " " + mExpense.getExpenseDate().getFormattedDate());
-            if (isAddedOnDiffDate) {
+    private void viewExpense() {
+        if (null != mExpense) {
+            AppLog.d("ViewExpense", "Spend:" + mExpense.toString());
+            mCTvAmount.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)
+                    + " " + AppUtil.getStringAmount(String.valueOf(mExpense.getAmount())));
+            mCTvNote.setText(TextUtils.isEmpty(mExpense.getNote()) ? AppConstants.BLANK_NOTE_TEMPLATE : mExpense.getNote());
+            mExpenseDate = new ExpenseDate(mExpense.getExpenseDate());
+            boolean isAddedOnDiffDate = mExpenseDate.isSameExpenseDate(mExpense.getCreatedOn());
+            boolean isUpdated = mExpense.getCreatedOn() != mExpense.getUpdatedOn();
+
+            mCTvExpenseOn.setText(getString(R.string.expense_on) + " " + mExpenseDate.getFormattedDate());
+            AppLog.d("ViewExpense", "ExpenseDate:" + mExpenseDate.getTimeInMillis() + ":: Created Date:" + mExpense.getCreatedOn() + ":: Expense:" + mExpense.getExpenseDate());
+            if (!isAddedOnDiffDate) {
                 try {
                     mCTvAddedOn.setText(getString(R.string.added_on) + " " + AppUtil.dateDBToString(mExpense.getCreatedOn()));
                     mCTvAddedOn.setVisibility(View.VISIBLE);
@@ -109,7 +129,7 @@ public class ViewExpenseActivity extends BaseActivity {
                 }
             }
 
-            mCTvPaidBy.setText(DBManager.getPaymentTypeName(mExpense.getPaymentTypePriId()));
+            mCTvPaidBy.setText(AppUtil.getPaidByForKey(mExpense.getPaymentTypeKey()));
         }
     }
 
@@ -145,7 +165,7 @@ public class ViewExpenseActivity extends BaseActivity {
         deleteBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                int delCount = DBManager.removeExpense(mExpense.getId());
+                int delCount = 1;//TODO: DBManager.removeExpense(mExpense.getPaymentModeId());
                 AppLog.d(ViewExpenseActivity.this.getLocalClassName(), "Delete:" + delCount);
                 if (delCount == 1) {
                     AppUtil.showToast(R.string.expense_deleted_successfully);
@@ -170,7 +190,7 @@ public class ViewExpenseActivity extends BaseActivity {
         if (requestCode == AppConstants.EDIT_EXPENSE_CODE) {
             if (resultCode == RESULT_OK) {
                 mResultCode = RESULT_OK;
-                getParticularExpense();
+                //getParticularExpense();
             }
         }
     }

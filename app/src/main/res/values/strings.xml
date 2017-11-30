@@ -51,4 +51,5 @@
     <string name="logout">Logout</string>
     <string name="no_internet">No Internet Connection!!</string>
     <integer name="splash_obj_time">1000</integer>
+    <string name="payment_type">Payment Type</string>
 </resources>

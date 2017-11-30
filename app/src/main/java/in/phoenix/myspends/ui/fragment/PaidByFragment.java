@@ -109,9 +109,9 @@ public class PaidByFragment extends DialogFragment implements View.OnClickListen
             for (int index = 0; index < paymentTypes.size(); index++) {
                 CheckBox checkBox = (CheckBox) inflater.inflate(R.layout.layout_checkbox, null);
                 checkBox.setId(index);
-                checkBox.setTag(paymentTypes.get(index).getId());
+                checkBox.setTag(paymentTypes.get(index).getPaymentModeId());
                 checkBox.setText(paymentTypes.get(index).getName());
-                if (null != mSelectedPaidById && mSelectedPaidById.contains(paymentTypes.get(index).getId())) {
+                if (null != mSelectedPaidById && mSelectedPaidById.contains(paymentTypes.get(index).getPaymentModeId())) {
                     checkBox.setChecked(true);
 
                 } else {

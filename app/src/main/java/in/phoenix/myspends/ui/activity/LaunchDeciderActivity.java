@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import in.phoenix.myspends.BuildConfig;
+import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;
@@ -43,12 +44,14 @@ public class LaunchDeciderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_login_signup);
+        mPbLoading = findViewById(R.id.asl_pb_loading);
+
         if (AppUtil.isUserLoggedIn()) {
             getCurrency();
+            MySpends.fetchPaymentTypes();
 
         } else {
-            setContentView(R.layout.activity_login_signup);
-            mPbLoading = findViewById(R.id.asl_pb_loading);
             AppCompatButton btnLogin = findViewById(R.id.als_abtn_login);
             btnLogin.setOnClickListener(new View.OnClickListener() {
                 @Override

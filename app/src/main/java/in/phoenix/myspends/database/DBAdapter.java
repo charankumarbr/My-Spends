@@ -45,7 +45,7 @@ class DBAdapter {
                 int indexName = cursor.getColumnIndex(DBConstants.COLUMN.NAME);
                 do {
                     PaymentType paymentType = new PaymentType();
-                    paymentType.setId(cursor.getInt(indexPrimary));
+                    paymentType.setPaymentModeId(cursor.getInt(indexPrimary));
                     paymentType.setName(cursor.getString(indexName));
                     paymentTypes.add(paymentType);
 
@@ -85,7 +85,7 @@ class DBAdapter {
                     PaymentMode paymentMode = new PaymentMode();
                     paymentMode.setId(cursor.getInt(indexPrimary));
                     paymentMode.setName(cursor.getString(indexName));
-                    paymentMode.setModeId(cursor.getInt(indexTypeId));
+                    //paymentMode.setModeId(cursor.getInt(indexTypeId));
                     paymentModes.add(paymentMode);
 
                 } while (cursor.moveToNext());
@@ -138,7 +138,7 @@ class DBAdapter {
     public static long insertPaymentType(PaymentType paymentType) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DBConstants.COLUMN.NAME, paymentType.getName());
-        contentValues.put(DBConstants.COLUMN.PAYMENT_TYPE_ID, paymentType.getTypeId());
+        //contentValues.put(DBConstants.COLUMN.PAYMENT_TYPE_ID, paymentType.getTypeId());
         contentValues.put(DBConstants.COLUMN.CREATED_ON, paymentType.getCreatedOn());
         contentValues.put(DBConstants.COLUMN.IS_ACTIVE, 1); //-- deemed active while inserting --//
 
@@ -238,7 +238,7 @@ class DBAdapter {
                 do {
                     Expense expense = new Expense();
                     expense.setAmount(Float.parseFloat(cursor.getString(indexAmount)));
-                    expense.setPaymentTypePriId(cursor.getInt(indexPaymentTypePriId));
+                    expense.setPaymentType(cursor.getInt(indexPaymentTypePriId));
                     expense.setCreatedOn(cursor.getString(indexCreatedOn));
                     expense.setNote(cursor.getString(indexDesc));
 

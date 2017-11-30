@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -16,17 +16,11 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="fill_vertical"
-        android:layout_marginTop="?attr/actionBarSize"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_below="@+id/lt_toolbar">
 
             <RelativeLayout
                 android:id="@+id/am_layout_month_expense"
@@ -37,7 +31,7 @@
                 android:background="@color/colorPrimary"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <in.phoenix.myspends.customview.CustomTextView
                     android:id="@+id/am_ctextview_month_info"
@@ -76,95 +70,23 @@
                     android:padding="10dp" />
             </RelativeLayout>
 
-            <CalendarView
-                android:id="@+id/am_calendar_date"
+            <ListView
+                android:id="@+id/am_lv_spends"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusableInTouchMode="true" />
-
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/am_card_layout_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        app:behavior_hideable="false"
-        app:behavior_peekHeight="120dp"
-        app:cardBackgroundColor="@android:color/white"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="4dp"
-        app:cardUseCompatPadding="true"
-        app:layout_behavior="@string/bottom_sheet_behavior">
-
-        <LinearLayout
-            android:id="@+id/am_layout_bottom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <in.phoenix.myspends.customview.CustomTextView
-                android:id="@+id/am_textview_no_expense"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginEnd="12dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="16dp"
-                android:paddingBottom="16dp"
-                android:text="No expenses tracked for this date!"
-                android:textColor="@color/colorAccent"
-                android:textSize="17sp"
-                app:fontName="fontNotoSans" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal">
-
-                <in.phoenix.myspends.customview.CustomTextView
-                    android:id="@+id/am_textview_expense_header"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_toLeftOf="@+id/am_textview_total_expense"
-                    android:text="Tracked Expenses"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="18sp"
-                    app:fontName="fontNotoSans" />
-
-                <in.phoenix.myspends.customview.CustomTextView
-                    android:id="@+id/am_textview_total_expense"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginStart="12dp"
-                    android:background="@color/colorAccent"
-                    android:padding="5dp"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp"
-                    app:fontName="fontNotoSans" />
-            </RelativeLayout>
-
-            <in.phoenix.myspends.customview.BottomSheetListView
-                android:id="@+id/am_listview_expense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:dividerHeight="2dp"
+                android:divider="@null"
+                android:scrollbars="vertical"
                 android:cacheColorHint="@android:color/transparent"
-                android:divider="#DDDDDD"
-                android:dividerHeight="1dp"
-                android:listSelector="@android:color/transparent"
-                android:scrollbars="none" />
+                android:focusableInTouchMode="false"
+                android:smoothScrollbar="true"
+                android:fadingEdge="none"/>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
-</android.support.design.widget.CoordinatorLayout>
+
+    <ProgressBar
+        android:id="@+id/am_pb_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+</RelativeLayout>

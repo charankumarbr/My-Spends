@@ -19,20 +19,26 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.customview.MoneyValueFilter;
 import in.phoenix.myspends.database.DBManager;
+import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Expense;
 import in.phoenix.myspends.model.ExpenseDate;
+import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.ui.fragment.AddPaymentTypeFragment;
 import in.phoenix.myspends.util.AppConstants;
@@ -46,7 +52,7 @@ import in.phoenix.myspends.util.AppUtil;
 
 public final class NewExpenseActivity extends BaseActivity implements AddPaymentTypeFragment.OnPaymentTypeListener {
 
-    private Expense mExpense = null;
+    private NewExpense mExpense = null;
 
     private ExpenseDate mExpenseDate;
 
@@ -59,7 +65,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
     private CheckBox mCbAddAnotherExpense;
 
-    private int mSelectedTypeId = -1;
+    private String mSelectedTypeKey = null;
     private int mOkStatus = RESULT_CANCELED;
 
     private boolean isNew = false;
@@ -67,6 +73,8 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     private View mVEditDate = null;
 
     private boolean mViaNotification = false;
+
+    private ProgressBar mPbLoading = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +107,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
     private void init() {
         initLayout();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.lt_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.ane_toolbar);
         toolbar.setTitle(isNew ? "Add Expense" : "Edit Expense");
         setSupportActionBar(toolbar);
 
@@ -126,6 +134,8 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         mVEditDate = findViewById(R.id.ane_imageview_edit_date);
 
         mFlexboxLayout = (FlexboxLayout) findViewById(R.id.ane_fblayout_payment_mode);
+
+        mPbLoading = findViewById(R.id.ane_pb_loading);
         getPaymentTypes();
 
         if (isNew) {
@@ -135,13 +145,14 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
             mVEditDate.setOnClickListener(clickListener);
 
         } else {
-            mTIEtAmount.append(AppUtil.getStringAmount(mExpense.getAmount()));
+            mTIEtAmount.append(AppUtil.getStringAmount(String.valueOf(mExpense.getAmount())));
             mTIEtAmount.requestFocus();
             AppUtil.toggleKeyboard(true);
             //DecimalFormat df = new DecimalFormat("0.00"); df.format(mExpense.getAmount());
 
             mTIEtNote.setText(mExpense.getNote());
-            mCTvExpenseDate.setText(getString(R.string.expense_on) + " " + mExpense.getExpenseDate().getFormattedDate());
+            mExpenseDate = new ExpenseDate(mExpense.getExpenseDate());
+            mCTvExpenseDate.setText(getString(R.string.expense_on) + " " + mExpenseDate.getFormattedDate());
 
             mVEditDate.setVisibility(View.VISIBLE);
             mVEditDate.setOnClickListener(clickListener);
@@ -150,15 +161,15 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
     private void getPaymentTypes() {
         mFlexboxLayout.removeAllViews();
-        ArrayList<PaymentType> paymentTypes = DBManager.getPaymentTypes(true);
-        if (null != paymentTypes) {
+        ArrayList<PaymentType> paymentTypes = MySpends.getAllPaymentTypes();
+        if (null != paymentTypes && paymentTypes.size() > 0) {
             LayoutInflater inflater = LayoutInflater.from(NewExpenseActivity.this);
             for (int index = 0; index < paymentTypes.size(); index++) {
                 RadioButton radioButton = (RadioButton) inflater.inflate(R.layout.layout_radio_button, null);
                 radioButton.setId(index);
-                radioButton.setTag(paymentTypes.get(index).getId());
+                radioButton.setTag(paymentTypes.get(index).getKey());
                 radioButton.setText(paymentTypes.get(index).getName());
-                if (!isNew && paymentTypes.get(index).getId() == mExpense.getPaymentTypePriId()) {
+                if (!isNew && paymentTypes.get(index).getKey().equals(mExpense.getPaymentTypeKey())) {
                     radioButton.setChecked(true);
 
                 } else {
@@ -284,8 +295,8 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
             AppLog.d("CheckedChange", "Checked:" + isChecked + "::Title:" + buttonView.getText());
             if (isChecked) {
                 buttonView.setChecked(true);
-                mSelectedTypeId = (int) buttonView.getTag();
-                AppLog.d("AddExpense", "TypeId:" + mSelectedTypeId + "::Title:" + buttonView.getText());
+                mSelectedTypeKey = (String) buttonView.getTag();
+                AppLog.d("AddExpense", "TypeIdKey:" + mSelectedTypeKey + "::Title:" + buttonView.getText());
             }
         }
     };
@@ -317,47 +328,68 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     }
 
     private void saveChanges() {
+
+        if (mPbLoading.getVisibility() == View.VISIBLE) {
+            return;
+        }
+
         if (isNew) {
-            Expense expense = new Expense();
-            String amount = AppUtil.getStringAmount(mTIEtAmount.getText().toString());
-            expense.setAmount(amount);
-            expense.setCreatedOn(AppUtil.convertToDateDB(System.currentTimeMillis()));
-            expense.setExpenseDate(mExpenseDate);
-            expense.setNote(mTIEtNote.getText().toString().trim().length() == 0 ? AppConstants.BLANK_NOTE_TEMPLATE : mTIEtNote.getText().toString().trim());
-            expense.setPaymentTypePriId(mSelectedTypeId);
+            if (AppUtil.isConnected()) {
+                if (AppUtil.isUserLoggedIn()) {
+                    NewExpense newExpense = new NewExpense();
+                    newExpense.setAmount(AppUtil.getFloatAmount(mTIEtAmount.getText().toString()));
+                    newExpense.setCreatedOn(System.currentTimeMillis());
+                    newExpense.setExpenseDate(mExpenseDate.getTimeInMillis());
+                    newExpense.setNote(mTIEtNote.getText().toString().trim().length() == 0 ? "" : mTIEtNote.getText().toString().trim());
+                    newExpense.setUpdatedOn(System.currentTimeMillis());
+                    newExpense.setPaymentTypeKey(mSelectedTypeKey);
 
-            if (DBManager.addExpense(expense) != -1) {
-                AppUtil.showToast("Expense tracked!");
-                mOkStatus = RESULT_OK;
-                if (!mCbAddAnotherExpense.isChecked()) {
-                    AppUtil.toggleKeyboard(false);
-                    setResult(RESULT_OK);
-                    finish();
+                    mPbLoading.setVisibility(View.VISIBLE);
+                    FirebaseDB.initDb().addNewExpense(newExpense, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            mPbLoading.setVisibility(View.GONE);
+                            if (null == databaseError) {
+                                AppUtil.showToast("Expense tracked!");
+                                mOkStatus = RESULT_OK;
+                                if (!mCbAddAnotherExpense.isChecked()) {
+                                    AppUtil.toggleKeyboard(false);
+                                    setResult(RESULT_OK);
+                                    finish();
 
+                                } else {
+                                    resetAll();
+                                }
+                            } else {
+                                AppUtil.showSnackbar(mViewComplete, "Could not add this Expense!");
+                            }
+                        }
+                    });
                 } else {
-                    resetAll();
+                    AppUtil.showToast("Not logged in");
                 }
 
             } else {
-                AppUtil.showSnackbar(mViewComplete, "Could not add this Expense!");
+                AppUtil.showToast("No internet!");
             }
 
         } else {
             String amount = AppUtil.getStringAmount(mTIEtAmount.getText().toString());
             if (!mExpense.getAmount().equals(amount)) {
-                mExpense.setAmount(amount);
+                mExpense.setAmount(Float.valueOf(amount));
             }
 
             if (null != mExpenseDate) {
-                mExpense.setExpenseDate(mExpenseDate);
+                mExpense.setExpenseDate(mExpenseDate.getTimeInMillis());
             }
 
             if (!mExpense.getNote().equals(mTIEtNote.getText().toString())) {
                 mExpense.setNote(mTIEtNote.getText().toString().trim().length() == 0 ? AppConstants.BLANK_NOTE_TEMPLATE : mTIEtNote.getText().toString().trim());
             }
 
-            if (mSelectedTypeId != -1 && mExpense.getPaymentTypePriId() != mSelectedTypeId) {
-                mExpense.setPaymentTypePriId(mSelectedTypeId);
+            //TODO: change for flat db changes
+            /*if (mSelectedTypeKey != -1 && mExpense.getPaymentTypePriId() != mSelectedTypeKey) {
+                mExpense.setPaymentTypePriId(mSelectedTypeKey);
             }
 
             int updateCount = DBManager.updateExpense(mExpense);
@@ -372,7 +404,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                 } else {
                     resetAll();
                 }
-            }
+            }*/
         }
     }
 
@@ -384,7 +416,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         }
 
         if (isNew) {
-            if (mSelectedTypeId == -1) {
+            if (mSelectedTypeKey == null) {
                 AppUtil.showSnackbar(mViewComplete, "Select payment type for this expense!");
                 return false;
             }
@@ -437,13 +469,14 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
     private boolean isEdited() {
 
+        AppLog.d("NewExpense", "Backpress: isNew:" + isNew);
         if (isNew) {
 
             if (!TextUtils.isEmpty(mTIEtAmount.getText())) {
                 return true;
             }
 
-            if (mSelectedTypeId != -1) {
+            if (mSelectedTypeKey != null) {
                 return true;
             }
 
@@ -454,24 +487,31 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         } else {
             if (null != mExpense) {
 
-                if (null != mExpenseDate && !mExpense.getExpenseDate().toString().equals(mExpenseDate.toString())) {
+                if (null != mExpenseDate && !mExpenseDate.isSameExpenseDate(mExpense.getExpenseDate())) {
+                    AppLog.d("NewExpense", "Backpress: Date changed!");
+                    AppLog.d("NewExpense", "Expense:" + mExpense.getExpenseDate() + ":: ExpenseDate:" + mExpenseDate.getTimeInMillis());
                     return true;
                 }
 
                 if (!TextUtils.isEmpty(mTIEtAmount.getText())) {
-                    String amount = AppUtil.getStringAmount(mTIEtAmount.getText().toString());
-                    if (!mExpense.getAmount().equals(amount)) {
+                    Float amount = AppUtil.getFloatAmount(mTIEtAmount.getText().toString());
+                    AppLog.d("NewExpense", "Backpress: Amount Compare:" + Float.compare(mExpense.getAmount(), amount));
+                    if (Float.compare(mExpense.getAmount(), amount) != 0) {
+                        AppLog.d("NewExpense", "Backpress: amount changed!");
+                        AppLog.d("NewExpense", "Expense:" + mExpense.getAmount() + ":: Entered:" + amount);
                         return true;
                     }
                 } else {
+                    AppLog.d("NewExpense", "Backpress: No Amount!");
                     return true;
                 }
 
-                if (mSelectedTypeId != -1 && mExpense.getPaymentTypePriId() != mSelectedTypeId) {
+                if (null != mSelectedTypeKey && !mExpense.getPaymentTypeKey().equals(mSelectedTypeKey)) {
                     return true;
                 }
 
                 if (!mExpense.getNote().equals(mTIEtNote.getText().toString())) {
+                    AppLog.d("NewExpense", "Backpress: Note changed!");
                     return true;
                 }
             }

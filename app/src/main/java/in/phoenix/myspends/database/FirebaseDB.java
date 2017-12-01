@@ -96,14 +96,13 @@ public final class FirebaseDB {
     }
 
     public void updateExpense(NewExpense editedExpense, DatabaseReference.CompletionListener completionListener) {
-        /*HashMap<String, Object> values = new HashMap<>();
+        HashMap<String, Object> values = new HashMap<>();
         values.put("amount", editedExpense.getAmount());
         values.put("createdOn", editedExpense.getCreatedOn());
         values.put("expenseDate", editedExpense.getExpenseDate());
         values.put("note", editedExpense.getNote());
         values.put("paymentTypeKey", editedExpense.getPaymentTypeKey());
-        values.put("updatedOn", editedExpense.getUpdatedOn());*/
-        spendsRef.child(editedExpense.getId()).setValue(editedExpense, completionListener);
-        //updateChildren(values, completionListener);
+        values.put("updatedOn", editedExpense.getUpdatedOn());
+        spendsRef.child(editedExpense.getId()).updateChildren(values, completionListener);
     }
 }

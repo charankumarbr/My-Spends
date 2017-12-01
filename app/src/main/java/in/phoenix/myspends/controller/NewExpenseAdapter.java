@@ -126,6 +126,18 @@ public final class NewExpenseAdapter extends BaseAdapter {
         return view;
     }
 
+    public void setData(ArrayList<NewExpense> spends) {
+        if (null != spends) {
+            if (null == mSpends) {
+                mSpends = new ArrayList<>(spends);
+
+            } else {
+                mSpends.clear();
+                mSpends.addAll(spends);
+            }
+        }
+    }
+
     class ExpenseHolder {
         CustomTextView tvNote;
         CustomTextView tvAmount;

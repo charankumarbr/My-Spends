@@ -105,4 +105,8 @@ public final class FirebaseDB {
         values.put("updatedOn", editedExpense.getUpdatedOn());
         spendsRef.child(editedExpense.getId()).updateChildren(values, completionListener);
     }
+
+    public void removeExpense(String key, DatabaseReference.CompletionListener completionListener) {
+        spendsRef.child(key).removeValue(completionListener);
+    }
 }

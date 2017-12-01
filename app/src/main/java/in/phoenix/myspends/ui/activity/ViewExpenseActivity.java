@@ -3,12 +3,17 @@ package in.phoenix.myspends.ui.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
+
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 
 import java.text.ParseException;
 
@@ -16,6 +21,7 @@ import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.DBManager;
+import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.util.AppConstants;
@@ -43,6 +49,8 @@ public class ViewExpenseActivity extends BaseActivity {
     private CustomTextView mCTvNote;
 
     private int mResultCode = RESULT_CANCELED;
+
+    private ProgressBar mPbLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +83,7 @@ public class ViewExpenseActivity extends BaseActivity {
 
     private void init() {
         initLayout();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.lt_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.ave_toolbar);
         toolbar.setTitle(isNew ? "New Expense" : "Tracked Expense");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -88,6 +96,8 @@ public class ViewExpenseActivity extends BaseActivity {
         mCTvLastUpdatedOn = (CustomTextView) findViewById(R.id.ave_ctextview_updated_on);
         mCTvPaidBy = (CustomTextView) findViewById(R.id.ave_cTextView_paid_by);
         mCTvNote = (CustomTextView) findViewById(R.id.ave_cTextView_note);
+
+        mPbLoading = findViewById(R.id.ave_pb_loading);
     }
 
     /*private void getParticularExpense() {
@@ -165,14 +175,14 @@ public class ViewExpenseActivity extends BaseActivity {
         deleteBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                int delCount = 1;//TODO: DBManager.removeExpense(mExpense.getPaymentModeId());
-                AppLog.d(ViewExpenseActivity.this.getLocalClassName(), "Delete:" + delCount);
-                if (delCount == 1) {
-                    AppUtil.showToast(R.string.expense_deleted_successfully);
-                }
+
                 dialog.dismiss();
-                setResult(RESULT_OK);
-                finish();
+                if (AppUtil.isConnected()) {
+                    deleteExpense(mExpense.getId());
+
+                } else {
+                    AppUtil.showToast(getString(R.string.no_internet));
+                }
             }
         });
         deleteBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -183,6 +193,24 @@ public class ViewExpenseActivity extends BaseActivity {
         });
         deleteBuilder.setCancelable(true);
         deleteBuilder.create().show();
+    }
+
+    private void deleteExpense(String key) {
+        mPbLoading.setVisibility(View.VISIBLE);
+        FirebaseDB.initDb().removeExpense(key, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                mPbLoading.setVisibility(View.GONE);
+                if (null == databaseError) {
+                    AppUtil.showToast(R.string.expense_deleted_successfully);
+                    setResult(RESULT_OK);
+                    finish();
+
+                } else {
+                    AppUtil.showSnackbar(mViewComplete, "Unable to delete the expense.");
+                }
+            }
+        });
     }
 
     @Override

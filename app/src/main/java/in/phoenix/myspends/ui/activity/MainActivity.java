@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import in.phoenix.myspends.BuildConfig;
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.customview.ButteryProgressBar;
 import in.phoenix.myspends.parser.SpendsParser;
 import in.phoenix.myspends.controller.ExpenseCursorLoader;
 import in.phoenix.myspends.controller.NewExpenseAdapter;
@@ -70,6 +71,9 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
     //private BottomSheetBehavior bottomSheetBehavior = null;
 
     private ProgressBar mPbLoading;
+
+    private ButteryProgressBar mBpbLoading = null;
+    private boolean isRefresh = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +116,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         Float typedValue = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 19, displayMetrics);
         AppLog.d("TestDensity", "TypedValue:" + typedValue);
 
+        mBpbLoading = findViewById(R.id.am_bpb_loading);
         mPbLoading = findViewById(R.id.am_pb_loading);
         getExpenses();
     }
@@ -122,7 +127,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
             mPbLoading.setVisibility(View.VISIBLE);
 
         } else {
-            getSupportActionBar();
+            mBpbLoading.setVisibility(View.VISIBLE);
         }
         FirebaseDB.initDb().getSpends(0, new ValueEventListener() {
             @Override
@@ -138,7 +143,19 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
                         new SpendsParser(MainActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
 
                     } else {
+
+                        if (isRefresh) {
+                            isRefresh = false;
+
+                            if (null != mExpenseAdapter) {
+                                mExpenseAdapter = null;
+                                mLvExpense.setAdapter(null);
+                                //mLvExpense.setVisibility(View.GONE);
+                            }
+                        }
+
                         mPbLoading.setVisibility(View.GONE);
+                        mBpbLoading.setVisibility(View.INVISIBLE);
                         AppUtil.showToast("No Spends tracked!");
                         AppLog.d("MainActivity", "Spends: No spends ::" + "Count: ZERO");
                     }
@@ -439,6 +456,8 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         if (requestCode == AppConstants.VIEW_EXPENSE_CODE || requestCode == AppConstants.NEW_EXPENSE_CODE
                 || requestCode == AppConstants.EXPENSE_LIST_CODE) {
             if (resultCode == RESULT_OK) {
+                isRefresh = true;
+                AppLog.d("MainActivity", "Spends: Refresh");
                 getExpenses();
             }
         }
@@ -461,7 +480,16 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         if (null == mExpenseAdapter) {
             mExpenseAdapter = new NewExpenseAdapter(MainActivity.this, spends, clickListener);
             mLvExpense.setAdapter(mExpenseAdapter);
+
+        } else {
+            if (isRefresh) {
+                isRefresh = false;
+                mExpenseAdapter.setData(spends);
+                mExpenseAdapter.notifyDataSetChanged();
+                AppLog.d("MainActivity", "Spends: Refresh Done");
+            }
         }
         mPbLoading.setVisibility(View.GONE);
+        mBpbLoading.setVisibility(View.INVISIBLE);
     }
 }

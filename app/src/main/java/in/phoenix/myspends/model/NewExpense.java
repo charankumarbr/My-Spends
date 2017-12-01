@@ -3,12 +3,15 @@ package in.phoenix.myspends.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.Exclude;
+
 /**
  * Created by Charan.Br on 11/26/2017.
  */
 
 public final class NewExpense implements Parcelable {
 
+    @Exclude
     private String id;
 
     private long expenseDate;

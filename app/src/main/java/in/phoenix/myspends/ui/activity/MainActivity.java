@@ -118,7 +118,12 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
     private void getExpenses() {
         //getLoaderManager().restartLoader(DBConstants.LoaderId.EXPENSE, null, this);
-        mPbLoading.setVisibility(View.VISIBLE);
+        if (null == mExpenseAdapter) {
+            mPbLoading.setVisibility(View.VISIBLE);
+
+        } else {
+            getSupportActionBar();
+        }
         FirebaseDB.initDb().getSpends(0, new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

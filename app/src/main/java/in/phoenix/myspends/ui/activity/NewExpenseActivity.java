@@ -24,6 +24,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
@@ -143,11 +144,13 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
             //mVEditDate.setVisibility(View.GONE);
             mVEditDate.setVisibility(View.VISIBLE);
             mVEditDate.setOnClickListener(clickListener);
+            mCbAddAnotherExpense.setVisibility(View.VISIBLE);
 
         } else {
             mTIEtAmount.append(AppUtil.getStringAmount(String.valueOf(mExpense.getAmount())));
             mTIEtAmount.requestFocus();
             AppUtil.toggleKeyboard(true);
+            mCbAddAnotherExpense.setVisibility(View.GONE);
             //DecimalFormat df = new DecimalFormat("0.00"); df.format(mExpense.getAmount());
 
             mTIEtNote.setText(mExpense.getNote());
@@ -374,25 +377,61 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
             }
 
         } else {
-            String amount = AppUtil.getStringAmount(mTIEtAmount.getText().toString());
-            if (!mExpense.getAmount().equals(amount)) {
-                mExpense.setAmount(Float.valueOf(amount));
+            Float amount = AppUtil.getFloatAmount(mTIEtAmount.getText().toString());
+            if (Float.compare(mExpense.getAmount(), amount) != 0) {
+                mExpense.setAmount(amount);
             }
 
-            if (null != mExpenseDate) {
+            if (null != mExpenseDate && !mExpenseDate.isSameExpenseDate(mExpense.getExpenseDate())) {
                 mExpense.setExpenseDate(mExpenseDate.getTimeInMillis());
             }
 
             if (!mExpense.getNote().equals(mTIEtNote.getText().toString())) {
-                mExpense.setNote(mTIEtNote.getText().toString().trim().length() == 0 ? AppConstants.BLANK_NOTE_TEMPLATE : mTIEtNote.getText().toString().trim());
+                mExpense.setNote(mTIEtNote.getText().toString().trim().length() == 0 ? "" : mTIEtNote.getText().toString().trim());
             }
 
             //TODO: change for flat db changes
-            /*if (mSelectedTypeKey != -1 && mExpense.getPaymentTypePriId() != mSelectedTypeKey) {
-                mExpense.setPaymentTypePriId(mSelectedTypeKey);
+            if (null != mSelectedTypeKey && !mExpense.getPaymentTypeKey().equals(mSelectedTypeKey)) {
+                mExpense.setPaymentTypeKey(mSelectedTypeKey);
             }
 
-            int updateCount = DBManager.updateExpense(mExpense);
+            mExpense.setUpdatedOn(System.currentTimeMillis());
+            AppLog.d("NewExpense", "Edited expense:" + mExpense.getId() + ":" + mExpense.getPaymentTypeKey()
+            + ":" + mExpense.getExpenseDate() + ":" + mExpense.getCreatedOn() + ":" + mExpense.getNote() + ":"
+            + mExpense.getAmount() + ":" + mExpense.getUpdatedOn());
+
+            if (AppUtil.isConnected()) {
+                if (AppUtil.isUserLoggedIn()) {
+                    mPbLoading.setVisibility(View.VISIBLE);
+                    FirebaseDB.initDb().updateExpense(mExpense, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            AppLog.d("NewExpense", "Edit: onComplete 1");
+                            mPbLoading.setVisibility(View.GONE);
+                            if (null == databaseError) {
+                                AppLog.d("NewExpense", "Edit: onComplete 2");
+                                AppUtil.showToast("Expense updated!");
+                                AppUtil.toggleKeyboard(false);
+                                mOkStatus = RESULT_OK;
+                                Intent backIntent = new Intent();
+                                backIntent.putExtra(AppConstants.Bundle.EXPENSE, mExpense);
+                                setResult(RESULT_OK, backIntent);
+                                finish();
+                                /*if (!mCbAddAnotherExpense.isChecked()) {
+                                    AppUtil.toggleKeyboard(false);
+                                    setResult(RESULT_OK);
+                                    finish();
+
+                                } else {
+                                    resetAll();
+                                }*/
+                            }
+                        }
+                    });
+                }
+            }
+
+            /*int updateCount = DBManager.updateExpense(mExpense);
             if (updateCount == 1) {
                 AppUtil.showToast("Expense updated!");
                 AppUtil.toggleKeyboard(false);

@@ -6,6 +6,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.model.PaymentType;
@@ -91,5 +93,17 @@ public final class FirebaseDB {
 
     public void getAllPaymentTypes(ChildEventListener allPaymentTypeListener) {
         paymentTypeRef.addChildEventListener(allPaymentTypeListener);
+    }
+
+    public void updateExpense(NewExpense editedExpense, DatabaseReference.CompletionListener completionListener) {
+        /*HashMap<String, Object> values = new HashMap<>();
+        values.put("amount", editedExpense.getAmount());
+        values.put("createdOn", editedExpense.getCreatedOn());
+        values.put("expenseDate", editedExpense.getExpenseDate());
+        values.put("note", editedExpense.getNote());
+        values.put("paymentTypeKey", editedExpense.getPaymentTypeKey());
+        values.put("updatedOn", editedExpense.getUpdatedOn());*/
+        spendsRef.child(editedExpense.getId()).setValue(editedExpense, completionListener);
+        //updateChildren(values, completionListener);
     }
 }

@@ -190,7 +190,11 @@ public class ViewExpenseActivity extends BaseActivity {
         if (requestCode == AppConstants.EDIT_EXPENSE_CODE) {
             if (resultCode == RESULT_OK) {
                 mResultCode = RESULT_OK;
-                //getParticularExpense();
+                if (null != data && data.hasExtra(AppConstants.Bundle.EXPENSE) &&
+                        null != data.getParcelableExtra(AppConstants.Bundle.EXPENSE)) {
+                    mExpense = data.getParcelableExtra(AppConstants.Bundle.EXPENSE);
+                    viewExpense();
+                }
             }
         }
     }

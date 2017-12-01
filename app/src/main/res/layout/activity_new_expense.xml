@@ -60,7 +60,8 @@
                 android:text="@string/add_another_expense"
                 android:textColor="@color/primary_text"
                 android:layout_marginBottom="10dp"
-                android:layout_gravity="right" />
+                android:layout_gravity="right"
+                android:visibility="gone"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"

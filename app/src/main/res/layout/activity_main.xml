@@ -78,9 +78,8 @@
                 android:divider="@null"
                 android:scrollbars="vertical"
                 android:cacheColorHint="@android:color/transparent"
-                android:focusableInTouchMode="false"
                 android:smoothScrollbar="true"
-                android:fadingEdge="none"/>
+                android:listSelector="@android:color/transparent"/>
         </LinearLayout>
 
     <ProgressBar

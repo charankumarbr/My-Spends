@@ -263,14 +263,21 @@ public final class AppUtil {
         snackbar.show();
     }
 
-    public static ExpenseDate getFirstDayOfMonth() {
+    public static long getFirstDayOfMonth() {
         Calendar calendar = Calendar.getInstance();
-        return new ExpenseDate(1, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar.getTimeInMillis();
     }
 
-    public static ExpenseDate getCurrentDayOfMonth() {
+    public static long getCurrentDayOfMonth() {
         Calendar calendar = Calendar.getInstance();
-        return new ExpenseDate(calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        return calendar.getTimeInMillis();
     }
 
     public static boolean isUserLoggedIn() {

@@ -52,7 +52,8 @@ import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
-public class MainActivity extends BaseActivity implements AddExpenseFragment.OnAddExpenseListener, LoaderManager.LoaderCallbacks<Cursor>,SpendsParser.SpendsParserListener {
+public class MainActivity extends BaseActivity implements AddExpenseFragment.OnAddExpenseListener,
+        LoaderManager.LoaderCallbacks<Cursor>, SpendsParser.SpendsParserListener, NewExpenseAdapter.OnLoadingListener {
 
     //private CalendarView mCalendarDate;
 
@@ -74,6 +75,10 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
     private ButteryProgressBar mBpbLoading = null;
     private boolean isRefresh = false;
+
+    private String mLastKey = null;
+
+    private View mCTvNoSpends = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +123,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
         mBpbLoading = findViewById(R.id.am_bpb_loading);
         mPbLoading = findViewById(R.id.am_pb_loading);
+        mCTvNoSpends = findViewById(R.id.am_ctv_no_spends);
         getExpenses();
     }
 
@@ -126,10 +132,11 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         if (null == mExpenseAdapter) {
             mPbLoading.setVisibility(View.VISIBLE);
 
-        } else {
+        } else if (isRefresh) {
             mBpbLoading.setVisibility(View.VISIBLE);
         }
-        FirebaseDB.initDb().getSpends(0, new ValueEventListener() {
+
+        FirebaseDB.initDb().getSpends(mLastKey, new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (null != dataSnapshot) {
@@ -140,25 +147,47 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
                     AppLog.d("MainActivity", "Spends:: Snapshot Child Count: " + dataSnapshot.getChildrenCount());
 
                     if (dataSnapshot.getChildrenCount() > 0 && null != dataSnapshot.getChildren()) {
-                        new SpendsParser(MainActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
+                        new SpendsParser(MainActivity.this, mLastKey).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
 
                     } else {
+                        AppLog.d("MainActivity", "Spends: No spends ::" + "Count: ZERO");
+                        mPbLoading.setVisibility(View.GONE);
+                        mBpbLoading.setVisibility(View.INVISIBLE);
 
                         if (isRefresh) {
                             isRefresh = false;
 
+                            AppUtil.showToast("No Spends tracked!");
+
                             if (null != mExpenseAdapter) {
                                 mExpenseAdapter = null;
                                 mLvExpense.setAdapter(null);
-                                //mLvExpense.setVisibility(View.GONE);
                             }
-                        }
 
-                        mPbLoading.setVisibility(View.GONE);
-                        mBpbLoading.setVisibility(View.INVISIBLE);
-                        AppUtil.showToast("No Spends tracked!");
-                        AppLog.d("MainActivity", "Spends: No spends ::" + "Count: ZERO");
+                            mLvExpense.setVisibility(View.GONE);
+                            mCTvNoSpends.setVisibility(View.VISIBLE);
+
+                        } else if (null != mExpenseAdapter) {
+                            if (mExpenseAdapter.isLoading()) {
+                                mExpenseAdapter.setIsLoading(false);
+                                mExpenseAdapter.setIsLoadingRequired(false);
+                                mExpenseAdapter.notifyDataSetChanged();
+
+                            } else {
+                                AppUtil.showToast("No Spends tracked!");
+                                mExpenseAdapter = null;
+                                mLvExpense.setAdapter(null);
+                                mLvExpense.setVisibility(View.GONE);
+                                mCTvNoSpends.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            AppUtil.showToast("No Spends tracked!");
+                            mLvExpense.setVisibility(View.GONE);
+                            mCTvNoSpends.setVisibility(View.VISIBLE);
+                        }
                     }
+                } else {
+                    AppLog.d("MainActivity", "Spends:: NULL dataSnapshot");
                 }
             }
 
@@ -471,8 +500,23 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
     @Override
     public void onSpendsParsed(ArrayList<NewExpense> spends) {
+        mLastKey = null;
         if (null != spends && spends.size() > 0) {
             setSpends(spends);
+        }
+
+        if (isRefresh) {
+            isRefresh = false;
+            mBpbLoading.setVisibility(View.INVISIBLE);
+        }
+
+        AppLog.d("MainActivity", "onSpendsParsed:" + spends.size());
+        if (null != spends && spends.size() == 0) {
+            if (null != mExpenseAdapter && mExpenseAdapter.isLoading()) {
+                mExpenseAdapter.setIsLoading(false);
+                mExpenseAdapter.setIsLoadingRequired(false);
+                mExpenseAdapter.notifyDataSetChanged();
+            }
         }
     }
 
@@ -487,9 +531,22 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
                 mExpenseAdapter.setData(spends);
                 mExpenseAdapter.notifyDataSetChanged();
                 AppLog.d("MainActivity", "Spends: Refresh Done");
+
+            } else if (mExpenseAdapter.isLoading()) {
+                mExpenseAdapter.addSpends(spends);
             }
         }
         mPbLoading.setVisibility(View.GONE);
         mBpbLoading.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onLoading(String lastKey) {
+        AppLog.d("MainActivity", "onLoading: Key:" + lastKey);
+        if (null != lastKey) {
+            mLastKey = lastKey;
+            AppLog.d("MainActivity", "onLoading: Key:" + lastKey);
+            getExpenses();
+        }
     }
 }

@@ -23,10 +23,9 @@
         android:layout_below="@+id/lt_toolbar"
         android:visibility="invisible"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
         android:layout_below="@+id/am_bpb_loading">
 
         <RelativeLayout
@@ -86,8 +85,23 @@
             android:scrollbars="vertical"
             android:cacheColorHint="@android:color/transparent"
             android:smoothScrollbar="true"
-            android:listSelector="@android:color/transparent"/>
-    </LinearLayout>
+            android:listSelector="@android:color/transparent"
+            android:layout_below="@+id/am_layout_month_expense"/>
+
+        <in.phoenix.myspends.customview.CustomTextView
+            android:id="@+id/am_ctv_no_spends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No expenses tracked!\n\nAdd your spends to track."
+            android:layout_centerInParent="true"
+            android:textSize="21sp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"
+            app:fontName="@string/font_noto_sans"
+            android:visibility="gone"/>
+    </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/am_pb_loading"

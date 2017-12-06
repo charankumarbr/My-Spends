@@ -549,7 +549,7 @@ class DBAdapter {
 
         SQLiteDatabase database = mySpendsDBHelper.getReadableDatabase();
 
-        if (null != database) {
+        if (null != database && null != fromDate && null != toDate) {
             StringBuilder builder = new StringBuilder();
             builder.append("SELECT * FROM ");
             builder.append(DBConstants.TableName.EXPENSE);

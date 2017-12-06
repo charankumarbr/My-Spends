@@ -42,8 +42,11 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
     private TextInputEditText mTietFromDate;
     private TextInputEditText mTietToDate;
 
-    private ExpenseDate mFromDate;
-    private ExpenseDate mToDate;
+    private long mFromMillis = 0;
+    private long mToMillis = 0;
+
+    private ExpenseDate mFromExpenseDate;
+    private ExpenseDate mToExpenseDate;
 
     private ImageView mIvToDate;
 
@@ -57,12 +60,12 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
      *
      * @return A new instance of fragment DatePickerFragment.
      */
-    public static DatePickerFragment newInstance(ExpenseDate fromDate, ExpenseDate toDate) {
+    public static DatePickerFragment newInstance(long fromDate, long toDate) {
         DatePickerFragment datePickerFragment = new DatePickerFragment();
-        if (null != fromDate && null != toDate) {
+        if (0 != fromDate && 0 != toDate) {
             Bundle arguments = new Bundle();
-            arguments.putParcelable("fromDate", fromDate);
-            arguments.putParcelable("toDate", toDate);
+            arguments.putLong("fromDate", fromDate);
+            arguments.putLong("toDate", toDate);
             datePickerFragment.setArguments(arguments);
         }
         return datePickerFragment;
@@ -80,8 +83,8 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (null != getArguments()) {
-            mFromDate = getArguments().getParcelable("fromDate");
-            mToDate = getArguments().getParcelable("toDate");
+            mFromMillis = getArguments().getLong("fromDate");
+            mToMillis = getArguments().getLong("toDate");
         }
     }
 
@@ -105,12 +108,14 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
         mTilFromDate = (TextInputLayout) datePickerView.findViewById(R.id.fdp_til_from_date);
         mTilToDate = (TextInputLayout) datePickerView.findViewById(R.id.fdp_til_to_date);
 
-        if (mFromDate == null || mToDate == null) {
+        if (mFromMillis != 0 || mToMillis != 0) {
             mIvToDate.setEnabled(false);
 
         } else {
-            mTietFromDate.setText(mFromDate.getFormattedDate());
-            mTietToDate.setText(mToDate.getFormattedDate());
+            mFromExpenseDate = new ExpenseDate(mFromMillis);
+            mToExpenseDate = new ExpenseDate(mToMillis);
+            mTietFromDate.setText(mFromExpenseDate.getFormattedDate());
+            mTietToDate.setText(mToExpenseDate.getFormattedDate());
         }
 
         return datePickerView;
@@ -139,7 +144,7 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
         if (v.getId() == R.id.fdp_abutton_view_spends) {
             if (isDateSelected()) {
                 if (null != mListener) {
-                    mListener.onDatePicked(mFromDate, mToDate);
+                    mListener.onDatePicked(mFromMillis, mToMillis);
                     dismissAllowingStateLoss();
                 }
             }
@@ -151,11 +156,7 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         AppLog.d("Date", "From::Y:" + year + "::M:" + month + "::D:" + dayOfMonth);
-                        mFromDate = new ExpenseDate(dayOfMonth, month, year);
-                        mIvToDate.setEnabled(true);
-                        mTietFromDate.setText(mFromDate.getFormattedDate());
-                        mTietToDate.setText("");
-                        mToDate = null;
+                        getFromDateMillis(dayOfMonth, month, year);
                     }
                 });
 
@@ -165,11 +166,7 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         AppLog.d("Date", "From::Y:" + year + "::M:" + month + "::D:" + dayOfMonth);
-                        mFromDate = new ExpenseDate(dayOfMonth, month, year);
-                        mTietFromDate.setText(mFromDate.getFormattedDate());
-                        mIvToDate.setEnabled(true);
-                        mTietToDate.setText("");
-                        mToDate = null;
+                        getFromDateMillis(dayOfMonth, month, year);
                     }
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
             }
@@ -187,8 +184,7 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         AppLog.d("Date", "To::Y:" + year + "::M:" + month + "::D:" + dayOfMonth);
-                        mToDate = new ExpenseDate(dayOfMonth, month, year);
-                        mTietToDate.setText(mToDate.getFormattedDate());
+                        getToDateMillis(dayOfMonth, month, year);
                     }
                 });
 
@@ -198,13 +194,14 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         AppLog.d("Date", "To::Y:" + year + "::M:" + month + "::D:" + dayOfMonth);
-                        mToDate = new ExpenseDate(dayOfMonth, month, year);
-                        mTietToDate.setText(mToDate.getFormattedDate());
+                        getToDateMillis(dayOfMonth, month, year);
                     }
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
             }
-            datePickerDialog.getDatePicker().setMinDate(mFromDate.getTimeInMillis());
-            datePickerDialog.getDatePicker().setMaxDate(mFromDate.reportToDateTimeInMillis());
+            datePickerDialog.getDatePicker().setMinDate(mFromMillis);
+            long currentMillis = System.currentTimeMillis();
+            datePickerDialog.getDatePicker().setMaxDate((currentMillis < mFromExpenseDate.reportToDateTimeInMillis())
+                    ? currentMillis : mFromExpenseDate.reportToDateTimeInMillis());
             LayoutInflater inflater = LayoutInflater.from(mContext);
             View customTitleView = inflater.inflate(R.layout.layout_date_title, null);
             ((CustomTextView) customTitleView).setText(R.string.select_to_date);
@@ -213,11 +210,51 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
         }
     }
 
+    private void getToDateMillis(int dayOfMonth, int month, int year) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        mToMillis = calendar.getTimeInMillis();
+        if (null == mToExpenseDate) {
+            mToExpenseDate = new ExpenseDate(dayOfMonth, month, year);
+
+        } else {
+            mToExpenseDate.changeDate(mToMillis);
+        }
+        mTietToDate.setText(mToExpenseDate.getFormattedDate());
+    }
+
+    private void getFromDateMillis(int dayOfMonth, int month, int year) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        mFromMillis = calendar.getTimeInMillis();
+        if (null == mFromExpenseDate) {
+            mFromExpenseDate = new ExpenseDate(dayOfMonth, month, year);
+
+        } else {
+            mFromExpenseDate.changeDate(mFromMillis);
+        }
+        mIvToDate.setEnabled(true);
+        mTietFromDate.setText(mFromExpenseDate.getFormattedDate());
+        mTietToDate.setText("");
+        mToMillis = 0;
+        mToExpenseDate = null;
+    }
+
     private boolean isDateSelected() {
 
         boolean isValid = true;
 
-        if (null == mFromDate) {
+        if (mFromMillis == 0) {
             mTilFromDate.setErrorEnabled(true);
             mTilFromDate.setError("From date is required");
             isValid = false;
@@ -226,7 +263,7 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
             mTilFromDate.setErrorEnabled(false);
         }
 
-        if (null == mToDate) {
+        if (mToMillis == 0) {
             mTilToDate.setErrorEnabled(true);
             mTilToDate.setError("To date is required");
             isValid = false;
@@ -249,6 +286,6 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnDatePickedListener {
-        void onDatePicked(ExpenseDate fromDate, ExpenseDate toDate);
+        void onDatePicked(long fromDate, long toDate);
     }
 }

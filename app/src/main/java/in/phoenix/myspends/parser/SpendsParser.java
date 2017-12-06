@@ -20,8 +20,11 @@ public final class SpendsParser extends AsyncTask<Iterable<DataSnapshot>, Void, 
 
     private ArrayList<NewExpense> mSpends = null;
 
-    public SpendsParser(SpendsParserListener listener) {
+    private String mLastKey = null;
+
+    public SpendsParser(SpendsParserListener listener, String lastKey) {
         this.mListener = listener;
+        this.mLastKey = lastKey;
     }
 
     @Override
@@ -31,10 +34,17 @@ public final class SpendsParser extends AsyncTask<Iterable<DataSnapshot>, Void, 
         if (null != values) {
             mSpends = new ArrayList<>();
             for (DataSnapshot aValue : values) {
-                NewExpense newExpense = aValue.getValue(NewExpense.class);
-                newExpense.setId(aValue.getKey());
-                AppLog.d("SpendsParser", "Spend:" + newExpense.toString());
-                mSpends.add(newExpense);
+                String key = aValue.getKey();
+                String timeMillis = String.valueOf(aValue.child("expenseDate").getValue());
+                if (null != mLastKey && mLastKey.equals(timeMillis)) {
+                    //-- do not add this --//
+
+                } else {
+                    NewExpense newExpense = aValue.getValue(NewExpense.class);
+                    newExpense.setId(key);
+                    AppLog.d("SpendsParser", "Spend:" + newExpense.toString());
+                    mSpends.add(newExpense);
+                }
             }
         }
 
@@ -45,6 +55,7 @@ public final class SpendsParser extends AsyncTask<Iterable<DataSnapshot>, Void, 
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         if (null != mListener) {
+            AppLog.d("SpendsParser", "onPostExecute" + (null != mSpends ? mSpends.size() : 0));
             mListener.onSpendsParsed(mSpends);
         }
     }

@@ -14,6 +14,7 @@ import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.util.AppConstants;
+import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
@@ -34,6 +35,10 @@ public final class NewExpenseAdapter extends BaseAdapter {
 
     private View.OnClickListener mClickListener;
 
+    private boolean mIsLoading = false;
+    private boolean mIsLoadingRequired = true;
+    private OnLoadingListener mListener = null;
+
     public NewExpenseAdapter(Context context, ArrayList<NewExpense> spends, View.OnClickListener clickListener) {
         mContext = context;
         mCurrencySymbol = AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY);
@@ -41,6 +46,9 @@ public final class NewExpenseAdapter extends BaseAdapter {
             mSpends = new ArrayList<>(spends);
         }
         mClickListener = clickListener;
+        if (context instanceof OnLoadingListener) {
+            mListener = (OnLoadingListener) context;
+        }
     }
 
     @Override
@@ -48,6 +56,11 @@ public final class NewExpenseAdapter extends BaseAdapter {
         if (null == mSpends) {
             return 0;
         }
+
+        if (mIsLoadingRequired) {
+            return mSpends.size() + 1;
+        }
+
         return mSpends.size();
     }
 
@@ -75,6 +88,8 @@ public final class NewExpenseAdapter extends BaseAdapter {
             holder.tvExpenseDate = (CustomTextView) view.findViewById(R.id.le_textview_date);
             holder.tvMonth = view.findViewById(R.id.le_tv_month);
             holder.vLayoutExpense = view.findViewById(R.id.le_layout_expense);
+            holder.vRLayoutExpense = view.findViewById(R.id.le_rlayout_expense);
+            holder.vPbLoading = view.findViewById(R.id.le_layout_loading);
 
             view.setTag(holder);
 
@@ -82,45 +97,62 @@ public final class NewExpenseAdapter extends BaseAdapter {
             holder = (ExpenseHolder) view.getTag();
         }
 
-        NewExpense expense = getItem(position);
-        holder.tvAmount.setText(mCurrencySymbol + " " + AppUtil.getStringAmount(String.valueOf(expense.getAmount())));
-        holder.tvNote.setText(TextUtils.isEmpty(expense.getNote()) ? AppConstants.BLANK_NOTE_TEMPLATE : expense.getNote());
-        holder.tvPaymentTypeName.setText(mContext.getString(R.string.paid_by) + " " + AppUtil.getPaidByForKey(expense.getPaymentTypeKey()));
-        holder.tvAmount.setTag(expense.getId());
+        if (position < mSpends.size()) {
+            holder.vPbLoading.setVisibility(View.GONE);
+            holder.vRLayoutExpense.setVisibility(View.VISIBLE);
 
-        if (null == mExpenseDate) {
-            mExpenseDate = new ExpenseDate(expense.getExpenseDate());
+            NewExpense expense = getItem(position);
+            holder.tvAmount.setText(mCurrencySymbol + " " + AppUtil.getStringAmount(String.valueOf(expense.getAmount())));
+            holder.tvNote.setText(TextUtils.isEmpty(expense.getNote()) ? AppConstants.BLANK_NOTE_TEMPLATE : expense.getNote());
+            holder.tvPaymentTypeName.setText(mContext.getString(R.string.paid_by) + " " + AppUtil.getPaidByForKey(expense.getPaymentTypeKey()));
+            holder.tvAmount.setTag(expense.getId());
 
-        } else {
-            mExpenseDate.changeDate(expense.getExpenseDate());
-        }
-        holder.tvExpenseDate.setText(mExpenseDate.getListDate());
-        holder.tvExpenseDate.setVisibility(View.VISIBLE);
-
-        if (position == 0) {
-            holder.tvMonth.setVisibility(View.VISIBLE);
-            holder.tvMonth.setText(AppUtil.getMonth(mExpenseDate.getMonth()));
-
-        } else {
-            if (null == mPrevExpenseDate) {
-                mPrevExpenseDate = new ExpenseDate(getItem(position - 1).getExpenseDate());
+            if (null == mExpenseDate) {
+                mExpenseDate = new ExpenseDate(expense.getExpenseDate());
 
             } else {
-                mPrevExpenseDate.changeDate(getItem(position - 1).getExpenseDate());
+                mExpenseDate.changeDate(expense.getExpenseDate());
             }
+            holder.tvExpenseDate.setText(mExpenseDate.getListDate());
+            holder.tvExpenseDate.setVisibility(View.VISIBLE);
 
-            if (mExpenseDate.getMonth() != mPrevExpenseDate.getMonth()) {
+            if (position == 0) {
                 holder.tvMonth.setVisibility(View.VISIBLE);
                 holder.tvMonth.setText(AppUtil.getMonth(mExpenseDate.getMonth()));
 
             } else {
-                holder.tvMonth.setVisibility(View.GONE);
-            }
-        }
+                if (null == mPrevExpenseDate) {
+                    mPrevExpenseDate = new ExpenseDate(getItem(position - 1).getExpenseDate());
 
-        if (null != mClickListener) {
-            holder.vLayoutExpense.setTag(position);
-            holder.vLayoutExpense.setOnClickListener(mClickListener);
+                } else {
+                    mPrevExpenseDate.changeDate(getItem(position - 1).getExpenseDate());
+                }
+
+                if (mExpenseDate.getMonth() != mPrevExpenseDate.getMonth()) {
+                    holder.tvMonth.setVisibility(View.VISIBLE);
+                    holder.tvMonth.setText(AppUtil.getMonth(mExpenseDate.getMonth()));
+
+                } else {
+                    holder.tvMonth.setVisibility(View.GONE);
+                }
+            }
+
+            if (null != mClickListener) {
+                holder.vLayoutExpense.setTag(position);
+                holder.vLayoutExpense.setOnClickListener(mClickListener);
+            }
+        } else {
+            holder.vPbLoading.setVisibility(View.VISIBLE);
+            holder.vRLayoutExpense.setVisibility(View.GONE);
+            AppLog.d("NewExpenseAdapter", "1");
+            if (!mIsLoading && mIsLoadingRequired) {
+                AppLog.d("NewExpenseAdapter", "2");
+                if (null != mListener) {
+                    AppLog.d("NewExpenseAdapter", "3");
+                    mIsLoading = true;
+                    mListener.onLoading(String.valueOf(getItem(mSpends.size() - 1).getExpenseDate()));
+                }
+            }
         }
 
         return view;
@@ -138,6 +170,29 @@ public final class NewExpenseAdapter extends BaseAdapter {
         }
     }
 
+    public boolean isLoading() {
+        return mIsLoading;
+    }
+
+    public void setIsLoading(boolean isLoading) {
+        this.mIsLoading = isLoading;
+    }
+
+    public void setIsLoadingRequired(boolean isLoadingRequired) {
+        this.mIsLoadingRequired = isLoadingRequired;
+    }
+
+    public void addSpends(ArrayList<NewExpense> spends) {
+        if (null ==  mSpends) {
+            mSpends = new ArrayList<>(spends);
+
+        } else {
+            mSpends.addAll(spends);
+        }
+        mIsLoading = false;
+        notifyDataSetChanged();
+    }
+
     class ExpenseHolder {
         CustomTextView tvNote;
         CustomTextView tvAmount;
@@ -145,5 +200,11 @@ public final class NewExpenseAdapter extends BaseAdapter {
         CustomTextView tvExpenseDate;
         CustomTextView tvMonth;
         View vLayoutExpense;
+        View vRLayoutExpense;
+        View vPbLoading;
+    }
+
+    public interface OnLoadingListener {
+        void onLoading(String lastKey);
     }
 }

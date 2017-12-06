@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.RadioButton;
 
 import com.google.android.flexbox.FlexboxLayout;
 
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.database.DBManager;
 import in.phoenix.myspends.model.PaymentType;
@@ -37,7 +39,7 @@ public class PaidByFragment extends DialogFragment implements View.OnClickListen
 
     private Context mContext;
 
-    private SortedSet<Integer> mSelectedPaidById = null;
+    private String mSelectedPaymentKey = null;
 
     public PaidByFragment() {
         // Required empty public constructor
@@ -49,15 +51,11 @@ public class PaidByFragment extends DialogFragment implements View.OnClickListen
      *
      * @return A new instance of fragment PaidByFragment.
      */
-    public static PaidByFragment newInstance(Integer[] paidById) {
+    public static PaidByFragment newInstance(String paidById) {
         PaidByFragment fragment = new PaidByFragment();
         if (null != paidById) {
-            int[] iPaidBy = new int[paidById.length];
-            for (int index = 0; index < paidById.length; index++) {
-                iPaidBy[index] = paidById[index];
-            }
             Bundle arguments = new Bundle();
-            arguments.putIntArray("paidBy", iPaidBy);
+            arguments.putString("paidBy", paidById);
             fragment.setArguments(arguments);
         }
         return fragment;
@@ -67,12 +65,9 @@ public class PaidByFragment extends DialogFragment implements View.OnClickListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            int[] iPaidBy = getArguments().getIntArray("paidBy");
+            String iPaidBy = getArguments().getString("paidBy");
             if (null != iPaidBy) {
-                mSelectedPaidById = new TreeSet<>();
-                for (int index = 0; index < iPaidBy.length; index++) {
-                    mSelectedPaidById.add(iPaidBy[index]);
-                }
+                mSelectedPaymentKey = iPaidBy;
             }
         }
     }
@@ -90,6 +85,7 @@ public class PaidByFragment extends DialogFragment implements View.OnClickListen
                              Bundle savedInstanceState) {
         View paidByView = inflater.inflate(R.layout.fragment_paid_by, container, false);
         paidByView.findViewById(R.id.fpb_abutton_done).setOnClickListener(this);
+        paidByView.findViewById(R.id.fpb_abutton_reset).setOnClickListener(this);
 
         mFlexboxLayout = (FlexboxLayout) paidByView.findViewById(R.id.fpb_fblayout_payment_mode);
         paidByView.post(new Runnable() {
@@ -103,22 +99,23 @@ public class PaidByFragment extends DialogFragment implements View.OnClickListen
 
     private void getAllPaymentTypes() {
         mFlexboxLayout.removeAllViews();
-        ArrayList<PaymentType> paymentTypes = DBManager.getPaymentTypes(false);
+        ArrayList<PaymentType> paymentTypes = MySpends.getAllPaymentTypes();
         if (null != paymentTypes) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             for (int index = 0; index < paymentTypes.size(); index++) {
-                CheckBox checkBox = (CheckBox) inflater.inflate(R.layout.layout_checkbox, null);
-                checkBox.setId(index);
-                checkBox.setTag(paymentTypes.get(index).getPaymentModeId());
-                checkBox.setText(paymentTypes.get(index).getName());
-                if (null != mSelectedPaidById && mSelectedPaidById.contains(paymentTypes.get(index).getPaymentModeId())) {
-                    checkBox.setChecked(true);
+                RadioButton radioButton = (RadioButton) inflater.inflate(R.layout.layout_radio_button, null);
+                radioButton.setId(index);
+                radioButton.setTag(paymentTypes.get(index).getKey());
+                radioButton.setText(paymentTypes.get(index).getName());
+                if (null != mSelectedPaymentKey && mSelectedPaymentKey.contains(paymentTypes.get(index).getKey())) {
+                    radioButton.setChecked(true);
 
                 } else {
-                    checkBox.setChecked(false);
+                    radioButton.setChecked(false);
                 }
-                checkBox.setOnCheckedChangeListener(paymentModeSelectedListener);
-                mFlexboxLayout.addView(checkBox);
+                radioButton.setOnCheckedChangeListener(paymentModeSelectedListener);
+                mFlexboxLayout.addView(radioButton);
+
             }
         }
     }
@@ -144,32 +141,36 @@ public class PaidByFragment extends DialogFragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.fpb_abutton_done) {
-            if ((null != mSelectedPaidById) && mSelectedPaidById.size() > 0) {
-                mListener.onPaidBySelected(mSelectedPaidById.toArray(new Integer[mSelectedPaidById.size()]));
-            } else {
-                mListener.onPaidBySelected(null);
-            }
+            mListener.onPaidBySelected(mSelectedPaymentKey);
             dismissAllowingStateLoss();
+
+        } else if (v.getId() == R.id.fpb_abutton_reset) {
+            resetAllPaymentTypes();
+            mSelectedPaymentKey = null;
         }
     }
 
     private final CompoundButton.OnCheckedChangeListener paymentModeSelectedListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            AppLog.d("CheckedChange", "Checked:" + isChecked + "::Title:" + buttonView.getText());
-            if (null == mSelectedPaidById) {
-                mSelectedPaidById = new TreeSet<>();
-            }
-            int selectedTypeId = (int) buttonView.getTag();
-            AppLog.d("PaidByFragment", "TypeId:" + selectedTypeId + "::Title:" + buttonView.getText());
-            if (isChecked) {
-                mSelectedPaidById.add(selectedTypeId);
+            resetAllPaymentTypes();
 
-            } else {
-                mSelectedPaidById.remove(selectedTypeId);
+            AppLog.d("CheckedChange", "Checked:" + isChecked + "::Title:" + buttonView.getText());
+            if (isChecked) {
+                buttonView.setChecked(true);
+                mSelectedPaymentKey = (String) buttonView.getTag();
+                AppLog.d("PaidByFragment", "TypeId:" + mSelectedPaymentKey + "::Title:" + buttonView.getText());
             }
         }
     };
+
+    private void resetAllPaymentTypes() {
+        for (int index = 0; index < mFlexboxLayout.getChildCount(); index++) {
+            if (mFlexboxLayout.getChildAt(index) instanceof RadioButton) {
+                ((RadioButton) mFlexboxLayout.getChildAt(index)).setChecked(false);
+            }
+        }
+    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -182,6 +183,6 @@ public class PaidByFragment extends DialogFragment implements View.OnClickListen
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnPaidBySelectedListener {
-        void onPaidBySelected(Integer[] paidById);
+        void onPaidBySelected(String paidByKey);
     }
 }

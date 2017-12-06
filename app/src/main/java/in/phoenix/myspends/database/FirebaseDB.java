@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
@@ -77,8 +78,12 @@ public final class FirebaseDB {
         spendsRef.push().setValue(newExpense, completionListener);
     }
 
-    public void getSpends(int skip, ValueEventListener spendsListener) {
-        spendsRef.orderByChild("expenseDate").limitToFirst(50).addListenerForSingleValueEvent(spendsListener);
+    public void getSpends(String lastKey, ValueEventListener spendsListener) {
+        Query query = spendsRef.orderByChild("expenseDate");
+        if (null != lastKey) {
+            query.startAt(lastKey);
+        }
+        query.addListenerForSingleValueEvent(spendsListener);
     }
 
     public void addNewPaymentType(PaymentType paymentType, DatabaseReference.CompletionListener completionListener) {
@@ -108,5 +113,9 @@ public final class FirebaseDB {
 
     public void removeExpense(String key, DatabaseReference.CompletionListener completionListener) {
         spendsRef.child(key).removeValue(completionListener);
+    }
+
+    public void getSpends(long fromMillis, long toMillis, String keyToSkip, ValueEventListener valueEventListener) {
+        spendsRef.orderByChild("expenseDate").startAt(fromMillis).endAt(toMillis).limitToFirst(25).addListenerForSingleValueEvent(valueEventListener);
     }
 }

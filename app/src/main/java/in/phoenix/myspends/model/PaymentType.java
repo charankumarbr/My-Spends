@@ -8,6 +8,10 @@ import in.phoenix.myspends.database.DBConstants;
 
 public final class PaymentType {
 
+    public PaymentType() {
+
+    }
+
     private String key;
 
     private int paymentModeId;

@@ -5,4 +5,7 @@
     <color name="colorAccent">#009973</color>
     <color name="secondary_text">#55000000</color>
     <color name="primary_text">#BC000000</color>
+
+    <color name="lighter_gray">#dddddd</color>
+    <color name="darker_gray">#aaaaaa</color>
 </resources>

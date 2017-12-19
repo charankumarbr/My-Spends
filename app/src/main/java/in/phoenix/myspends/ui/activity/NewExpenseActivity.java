@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -24,9 +25,13 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.google.android.flexbox.FlexboxLayout;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentReference;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,9 +40,7 @@ import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.customview.MoneyValueFilter;
-import in.phoenix.myspends.database.DBManager;
 import in.phoenix.myspends.database.FirebaseDB;
-import in.phoenix.myspends.model.Expense;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.model.PaymentType;
@@ -348,7 +351,33 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                     newExpense.setPaymentTypeKey(mSelectedTypeKey);
 
                     mPbLoading.setVisibility(View.VISIBLE);
-                    FirebaseDB.initDb().addNewExpense(newExpense, new DatabaseReference.CompletionListener() {
+                    FirebaseDB.initDb().addFsNewSpend(newExpense, new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            mPbLoading.setVisibility(View.GONE);
+                            AppLog.d("NewExpense", "OnSuccess: Documentreference Id:" + documentReference.getId());
+                            AppLog.d("NewExpense", "OnSuccess: Documentreference Path:" + documentReference.getPath());
+                            AppUtil.showToast("Expense tracked!");
+                            mOkStatus = RESULT_OK;
+                            if (!mCbAddAnotherExpense.isChecked()) {
+                                AppUtil.toggleKeyboard(false);
+                                setResult(RESULT_OK);
+                                finish();
+
+
+                            } else {
+                                resetAll();
+                            }
+                        }
+                    }, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            mPbLoading.setVisibility(View.GONE);
+                            AppUtil.showSnackbar(mViewComplete, "Could not add this Expense!");
+                            AppLog.d("NewExpense", "OnFailure: Exception", e);
+                        }
+                    });
+                    /*FirebaseDB.initDb().addNewExpense(newExpense, new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                             mPbLoading.setVisibility(View.GONE);
@@ -367,7 +396,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                                 AppUtil.showSnackbar(mViewComplete, "Could not add this Expense!");
                             }
                         }
-                    });
+                    });*/
                 } else {
                     AppUtil.showToast("Not logged in");
                 }
@@ -403,47 +432,30 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
             if (AppUtil.isConnected()) {
                 if (AppUtil.isUserLoggedIn()) {
                     mPbLoading.setVisibility(View.VISIBLE);
-                    FirebaseDB.initDb().updateExpense(mExpense, new DatabaseReference.CompletionListener() {
+                    FirebaseDB.initDb().updateFsExpense(mExpense, new OnSuccessListener() {
                         @Override
-                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                            AppLog.d("NewExpense", "Edit: onComplete 1");
+                        public void onSuccess(Object o) {
+                            AppLog.d("NewExpense", "Edit: onSuccess");
                             mPbLoading.setVisibility(View.GONE);
-                            if (null == databaseError) {
-                                AppLog.d("NewExpense", "Edit: onComplete 2");
-                                AppUtil.showToast("Expense updated!");
-                                AppUtil.toggleKeyboard(false);
-                                mOkStatus = RESULT_OK;
-                                Intent backIntent = new Intent();
-                                backIntent.putExtra(AppConstants.Bundle.EXPENSE, mExpense);
-                                setResult(RESULT_OK, backIntent);
-                                finish();
-                                /*if (!mCbAddAnotherExpense.isChecked()) {
-                                    AppUtil.toggleKeyboard(false);
-                                    setResult(RESULT_OK);
-                                    finish();
-
-                                } else {
-                                    resetAll();
-                                }*/
-                            }
+                            AppUtil.showToast("Updated.");
+                            AppUtil.toggleKeyboard(false);
+                            mOkStatus = RESULT_OK;
+                            Intent backIntent = new Intent();
+                            backIntent.putExtra(AppConstants.Bundle.EXPENSE, mExpense);
+                            setResult(RESULT_OK, backIntent);
+                            finish();
+                        }
+                    }, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            mPbLoading.setVisibility(View.GONE);
+                            AppLog.d("NewExpense", "Edit: onFailure");
+                            AppUtil.showToast("Unable to update.");
+                            AppUtil.toggleKeyboard(false);
                         }
                     });
                 }
             }
-
-            /*int updateCount = DBManager.updateExpense(mExpense);
-            if (updateCount == 1) {
-                AppUtil.showToast("Expense updated!");
-                AppUtil.toggleKeyboard(false);
-                mOkStatus = RESULT_OK;
-                if (!mCbAddAnotherExpense.isChecked()) {
-                    setResult(RESULT_OK);
-                    finish();
-
-                } else {
-                    resetAll();
-                }
-            }*/
         }
     }
 

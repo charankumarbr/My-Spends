@@ -92,7 +92,7 @@
             android:id="@+id/am_ctv_no_spends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No expenses tracked!\n\nAdd your spends to track."
+            android:text="@string/unable_fetch_spends"
             android:layout_centerInParent="true"
             android:textSize="21sp"
             android:layout_marginStart="12dp"

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "505136186766",
-    "firebase_url": "https://my-spends.firebaseio.com",
-    "project_id": "my-spends",
-    "storage_bucket": "my-spends.appspot.com"
+    "project_number": "540994788306",
+    "firebase_url": "https://my-spends-d5cde.firebaseio.com",
+    "project_id": "my-spends-d5cde",
+    "storage_bucket": "my-spends-d5cde.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:505136186766:android:5c6d76c18d749811",
+        "mobilesdk_app_id": "1:540994788306:android:5c6d76c18d749811",
         "android_client_info": {
           "package_name": "in.phoenix.myspends"
         }
       },
       "oauth_client": [
         {
-          "client_id": "505136186766-cgv0ud4enqjre8o9noc023t5fav59td9.apps.googleusercontent.com",
+          "client_id": "540994788306-13e2akss9j9v7jkbtmvsmai5bpnbamv6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "in.phoenix.myspends",
@@ -23,13 +23,13 @@
           }
         },
         {
-          "client_id": "505136186766-9s2rv4qdjj3l2vjgt7mv56iao120v993.apps.googleusercontent.com",
+          "client_id": "540994788306-caj72ik5je0n96ejj3067nhlbonu3krc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDihNUm_JZ-NayeJ4nLn3jIupT5YNal3RI"
+          "current_key": "AIzaSyB-8NY1feG8OM6ybvCye9MyMleszzZ8jKI"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "505136186766-9s2rv4qdjj3l2vjgt7mv56iao120v993.apps.googleusercontent.com",
+              "client_id": "540994788306-caj72ik5je0n96ejj3067nhlbonu3krc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

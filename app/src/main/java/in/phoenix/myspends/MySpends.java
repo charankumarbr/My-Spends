@@ -94,10 +94,14 @@ public class MySpends extends Application {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (null != dataSnapshot) {
                     AppLog.d("MySpends", "PaymentType Count:" + dataSnapshot.getChildrenCount());
-                    if (dataSnapshot.getChildrenCount() > 0) {
+                    //if (dataSnapshot.getChildrenCount() > 0) {
                         new PaymentTypeParser(null).executeOnExecutor(
                                 AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
-                    }
+
+                    /*} else {
+                        new PaymentTypeParser(null).executeOnExecutor(
+                                AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
+                    }*/
                 }
             }
 
@@ -130,18 +134,22 @@ public class MySpends extends Application {
     public static void setAllPaymentTypes(ArrayList<PaymentType> listAllPaymentTypes, HashMap<String, PaymentType> mapAllPaymentTypes) {
         if (null == mMapAllPaymentTypes) {
             mMapAllPaymentTypes = new HashMap<>();
+
+        } else {
+            mMapAllPaymentTypes.clear();
+            mMapAllPaymentTypes = null;
         }
 
-        mMapAllPaymentTypes.clear();
-        mMapAllPaymentTypes = null;
         mMapAllPaymentTypes = new HashMap<>(mapAllPaymentTypes);
 
         if (null == mAllPaymentTypes) {
             mAllPaymentTypes = new ArrayList<>();
+
+        } else {
+            mAllPaymentTypes.clear();
+            mAllPaymentTypes = null;
         }
 
-        mAllPaymentTypes.clear();
-        mAllPaymentTypes = null;
         mAllPaymentTypes = new ArrayList<>(listAllPaymentTypes);
     }
 

@@ -38,4 +38,6 @@ public interface AppConstants {
         String NOTIFICATION_HOUR = "notificationHour";
         String NOTIFICATION_MIN = "notificationMin";
     }
+
+    int PAGE_SPENDS_SIZE = 6;
 }

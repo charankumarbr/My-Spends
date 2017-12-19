@@ -1,10 +1,7 @@
 package in.phoenix.myspends.ui.activity;
 
-import android.app.LoaderManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -25,26 +22,26 @@ import android.widget.ProgressBar;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
 import in.phoenix.myspends.BuildConfig;
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.customview.ButteryProgressBar;
-import in.phoenix.myspends.parser.SpendsParser;
-import in.phoenix.myspends.controller.ExpenseCursorLoader;
 import in.phoenix.myspends.controller.NewExpenseAdapter;
+import in.phoenix.myspends.customview.ButteryProgressBar;
 import in.phoenix.myspends.customview.CustomTextView;
-import in.phoenix.myspends.database.DBConstants;
 import in.phoenix.myspends.database.DBManager;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
+import in.phoenix.myspends.parser.FSSpendsParser;
+import in.phoenix.myspends.parser.SpendsParser;
 import in.phoenix.myspends.ui.fragment.AddExpenseFragment;
 import in.phoenix.myspends.ui.fragment.AddPaymentTypeFragment;
 import in.phoenix.myspends.util.AppConstants;
@@ -53,7 +50,7 @@ import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
 public class MainActivity extends BaseActivity implements AddExpenseFragment.OnAddExpenseListener,
-        LoaderManager.LoaderCallbacks<Cursor>, SpendsParser.SpendsParserListener, NewExpenseAdapter.OnLoadingListener {
+        SpendsParser.SpendsParserListener, NewExpenseAdapter.OnLoadingListener {
 
     //private CalendarView mCalendarDate;
 
@@ -78,7 +75,9 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
     private String mLastKey = null;
 
-    private View mCTvNoSpends = null;
+    private CustomTextView mCTvNoSpends = null;
+
+    private DocumentSnapshot mLastSnapshot = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,75 +132,96 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
             mPbLoading.setVisibility(View.VISIBLE);
 
         } else if (isRefresh) {
+            mLastSnapshot = null;
             mBpbLoading.setVisibility(View.VISIBLE);
         }
 
-        FirebaseDB.initDb().getSpends(mLastKey, new ValueEventListener() {
+        FirebaseDB.initDb().getFsSpends(mLastSnapshot, new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (null != dataSnapshot) {
+            public void onSuccess(QuerySnapshot documentSnapshots) {
+                AppLog.d("MainActivity", "Spends Firestore:onSuccess");
 
-                    AppLog.d("MainActivity", "Spends: Snapshot: " + dataSnapshot);
-                    AppLog.d("MainActivity", "Spends:: Snapshot Value: " + dataSnapshot.getValue());
-                    AppLog.d("MainActivity", "Spends:: Snapshot Key: " + dataSnapshot.getKey());
-                    AppLog.d("MainActivity", "Spends:: Snapshot Child Count: " + dataSnapshot.getChildrenCount());
+                boolean isFromCache = documentSnapshots.getMetadata().isFromCache();
 
-                    if (dataSnapshot.getChildrenCount() > 0 && null != dataSnapshot.getChildren()) {
-                        new SpendsParser(MainActivity.this, mLastKey).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
+                if (!documentSnapshots.isEmpty()) {
+                    mLastSnapshot = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
+                    new FSSpendsParser(MainActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+                            documentSnapshots.iterator());
 
-                    } else {
-                        AppLog.d("MainActivity", "Spends: No spends ::" + "Count: ZERO");
-                        mPbLoading.setVisibility(View.GONE);
-                        mBpbLoading.setVisibility(View.INVISIBLE);
+                } else {
+                    AppLog.d("MainActivity", "Spends: Empty! ::" + "Count: ZERO");
 
-                        if (isRefresh) {
-                            isRefresh = false;
+                    hideDialog();
+                    if (isRefresh) {
+                        isRefresh = false;
 
-                            AppUtil.showToast("No Spends tracked!");
+                        if (null != mExpenseAdapter) {
+                            mExpenseAdapter = null;
+                            mLvExpense.setAdapter(null);
+                        }
 
-                            if (null != mExpenseAdapter) {
-                                mExpenseAdapter = null;
-                                mLvExpense.setAdapter(null);
-                            }
+                        mLvExpense.setVisibility(View.GONE);
+                        mCTvNoSpends.setText(R.string.no_spends_tracked);
+                        mCTvNoSpends.setVisibility(View.VISIBLE);
 
-                            mLvExpense.setVisibility(View.GONE);
-                            mCTvNoSpends.setVisibility(View.VISIBLE);
+                    } else if (null != mExpenseAdapter) {
+                        if (mExpenseAdapter.isLoading()) {
+                            AppUtil.showToast("Fetched all your spends.");
+                            mExpenseAdapter.setIsLoading(false);
+                            mExpenseAdapter.setIsLoadingRequired(false);
+                            mExpenseAdapter.notifyDataSetChanged();
 
-                        } else if (null != mExpenseAdapter) {
-                            if (mExpenseAdapter.isLoading()) {
-                                mExpenseAdapter.setIsLoading(false);
-                                mExpenseAdapter.setIsLoadingRequired(false);
-                                mExpenseAdapter.notifyDataSetChanged();
-
-                            } else {
-                                AppUtil.showToast("No Spends tracked!");
-                                mExpenseAdapter = null;
-                                mLvExpense.setAdapter(null);
-                                mLvExpense.setVisibility(View.GONE);
-                                mCTvNoSpends.setVisibility(View.VISIBLE);
-                            }
                         } else {
                             AppUtil.showToast("No Spends tracked!");
+                            mExpenseAdapter = null;
+                            mLvExpense.setAdapter(null);
                             mLvExpense.setVisibility(View.GONE);
+                            mCTvNoSpends.setText(R.string.no_spends_tracked);
                             mCTvNoSpends.setVisibility(View.VISIBLE);
                         }
+                    } else {
+                        AppUtil.showToast("No Spends tracked!");
+                        mLvExpense.setVisibility(View.GONE);
+                        mCTvNoSpends.setText(R.string.no_spends_tracked);
+                        mCTvNoSpends.setVisibility(View.VISIBLE);
                     }
-                } else {
-                    AppLog.d("MainActivity", "Spends:: NULL dataSnapshot");
                 }
             }
-
+        }, new OnFailureListener() {
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                mPbLoading.setVisibility(View.GONE);
-                if (null != databaseError) {
-                    AppLog.d("MainActivity", "Spends:" + databaseError);
+            public void onFailure(@NonNull Exception e) {
+                AppLog.d("MainActivity", "Spends Firestore:onFailure", e);
 
+                hideDialog();
+
+                if (isRefresh) {
+                    isRefresh = false;
+
+                } else if (null != mExpenseAdapter) {
+                    if (mExpenseAdapter.isLoading()) {
+                        mExpenseAdapter.setIsLoading(false);
+                        //mExpenseAdapter.setIsLoadingRequired(false);
+                        mExpenseAdapter.notifyDataSetChanged();
+
+                    } else {
+                        AppUtil.showToast("Unable to refresh your spends.");
+                    }
                 } else {
-                    AppLog.d("MainActivity", "Spends list failed!");
+                    AppUtil.showToast("Unable to fetch your spends.");
+                    mLvExpense.setVisibility(View.GONE);
+                    mCTvNoSpends.setText(R.string.unable_fetch_spends);
+                    mCTvNoSpends.setVisibility(View.VISIBLE);
                 }
             }
         });
+    }
+
+    private void hideDialog() {
+        mPbLoading.setVisibility(View.GONE);
+
+        if (isRefresh) {
+            mBpbLoading.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -406,7 +426,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         }*/
     }
 
-    @Override
+    /*@Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (id == DBConstants.LoaderId.EXPENSE) {
             return new ExpenseCursorLoader(MainActivity.this, mCalendarExpenseDate, AppConstants.LoaderConstants.LOADER_EXPENSE);
@@ -418,7 +438,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (loader.getId() == DBConstants.LoaderId.EXPENSE) {
-            /*if (null != data && data.getCount() > 0) {
+            *//*if (null != data && data.getCount() > 0) {
                 AppLog.d("Height", "::" + bottomSheetBehavior.getPeekHeight() + "::State:" + bottomSheetBehavior.getState());
                 bottomSheetBehavior.setPeekHeight(AppUtil.dpToPx(120));
 
@@ -448,10 +468,10 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
                 mCTvNoExpense.setVisibility(View.VISIBLE);
                 bottomSheetBehavior.setPeekHeight(AppUtil.dpToPx(150));
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            }*/
+            }*//*
             getMonthlyExpense();
         }
-    }
+    }*/
 
     private void getMonthlyExpense() {
         String monthlyExpense = DBManager.getMonthlyExpensesTotal(mCalendarExpenseDate);
@@ -471,14 +491,14 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         }
     }
 
-    @Override
+    /*@Override
     public void onLoaderReset(Loader<Cursor> loader) {
         if (loader.getId() == DBConstants.LoaderId.EXPENSE) {
             if (null != mExpenseAdapter) {
                 //mExpenseAdapter.swapCursor(null);
             }
         }
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -501,7 +521,8 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
     @Override
     public void onSpendsParsed(ArrayList<NewExpense> spends) {
         mLastKey = null;
-        if (null != spends && spends.size() > 0) {
+        AppLog.d("MainActivity", "onSpendsParsed:" + spends.size());
+        if (spends.size() > 0) {
             setSpends(spends);
         }
 
@@ -510,14 +531,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
             mBpbLoading.setVisibility(View.INVISIBLE);
         }
 
-        AppLog.d("MainActivity", "onSpendsParsed:" + spends.size());
-        if (null != spends && spends.size() == 0) {
-            if (null != mExpenseAdapter && mExpenseAdapter.isLoading()) {
-                mExpenseAdapter.setIsLoading(false);
-                mExpenseAdapter.setIsLoadingRequired(false);
-                mExpenseAdapter.notifyDataSetChanged();
-            }
-        }
+        mPbLoading.setVisibility(View.GONE);
     }
 
     private void setSpends(ArrayList<NewExpense> spends) {
@@ -527,17 +541,23 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
         } else {
             if (isRefresh) {
-                isRefresh = false;
                 mExpenseAdapter.setData(spends);
-                mExpenseAdapter.notifyDataSetChanged();
+                mLvExpense.setAdapter(mExpenseAdapter);
+                //mExpenseAdapter.notifyDataSetChanged();
                 AppLog.d("MainActivity", "Spends: Refresh Done");
 
             } else if (mExpenseAdapter.isLoading()) {
                 mExpenseAdapter.addSpends(spends);
             }
         }
-        mPbLoading.setVisibility(View.GONE);
-        mBpbLoading.setVisibility(View.INVISIBLE);
+
+        if (mLvExpense.getVisibility() != View.VISIBLE) {
+            mLvExpense.setVisibility(View.VISIBLE);
+        }
+
+        if (mCTvNoSpends.getVisibility() != View.GONE) {
+            mCTvNoSpends.setVisibility(View.GONE);
+        }
     }
 
     @Override

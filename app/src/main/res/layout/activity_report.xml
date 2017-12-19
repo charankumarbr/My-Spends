@@ -22,35 +22,33 @@
         android:layout_height="?attr/actionBarSize"
         android:orientation="horizontal"
         android:layout_below="@+id/ar_view_sep"
-        android:background="@color/colorPrimary"
+        android:background="@android:color/white"
         android:weightSum="2">
 
         <in.phoenix.myspends.customview.CustomTextView
             android:id="@+id/ar_ctextview_date"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:background="@color/colorPrimary"
             android:text="Date"
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="18sp"
-            app:fontName="@string/font_noto_sans" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white" />
+            app:fontName="@string/font_noto_sans"
+            android:layout_weight="1"/>
 
         <in.phoenix.myspends.customview.CustomTextView
             android:id="@+id/ar_ctextview_paid_by"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:background="@color/darker_gray"
             android:text="Paid by"
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="18sp"
-            app:fontName="@string/font_noto_sans" />
+            app:fontName="@string/font_noto_sans"
+            android:layout_marginStart="1dp"
+            android:layout_weight="1"/>
     </LinearLayout>
 
     <in.phoenix.myspends.customview.CustomTextView
@@ -64,7 +62,7 @@
         android:gravity="center"
         android:textSize="17sp"
         app:fontName="@string/font_noto_sans"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@color/colorPrimary"/>
 
     <ProgressBar
         android:id="@+id/ar_progressbar_loading"
@@ -79,6 +77,11 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/ar_layout_filter_options"
         android:listSelector="@android:color/transparent"
+        android:dividerHeight="2dp"
+        android:divider="@null"
+        android:scrollbars="vertical"
+        android:cacheColorHint="@android:color/transparent"
+        android:smoothScrollbar="true"
         android:visibility="gone" />
 
 </RelativeLayout>

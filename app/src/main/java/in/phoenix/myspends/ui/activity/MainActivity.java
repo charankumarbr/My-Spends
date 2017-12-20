@@ -139,9 +139,9 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         FirebaseDB.initDb().getFsSpends(mLastSnapshot, new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot documentSnapshots) {
-                AppLog.d("MainActivity", "Spends Firestore:onSuccess");
 
                 boolean isFromCache = documentSnapshots.getMetadata().isFromCache();
+                AppLog.d("MainActivity", "Spends Firestore:onSuccess :: isFromCache:" + isFromCache);
 
                 if (!documentSnapshots.isEmpty()) {
                     mLastSnapshot = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
@@ -324,7 +324,8 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
     private void showAboutAppDialog() {
         AlertDialog.Builder aboutappDialog = new AlertDialog.Builder(MainActivity.this);
-        aboutappDialog.setTitle(getString(R.string.about) + " " + getString(R.string.app_name));
+        //aboutappDialog.setTitle(getString(R.string.about) + " " + getString(R.string.app_name));
+        aboutappDialog.setTitle(getString(R.string.app_name));
         aboutappDialog.setMessage("Version: " + BuildConfig.VERSION_NAME + "\n\n"
                 + getString(R.string.app_name) + " " + getString(R.string.about_app_msg));
         aboutappDialog.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {

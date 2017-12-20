@@ -90,6 +90,8 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
                 } else {
                     AppLog.d("PaymentType", "Error!!");
                 }
+                AppUtil.showToast("Unable to fetch payment types.");
+                finish();
             }
         });
     }

@@ -124,6 +124,8 @@ public class MySpends extends Application {
                 } else {
                     AppLog.d("MySpends", "PaymentType Error!!");
                 }
+                new PaymentTypeParser(null).executeOnExecutor(
+                        AsyncTask.THREAD_POOL_EXECUTOR, null);
             }
         });
     }

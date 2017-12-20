@@ -43,13 +43,21 @@ public class LaunchDeciderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login_signup);
-        mPbLoading = findViewById(R.id.asl_pb_loading);
+        mPbLoading = findViewById(R.id.als_pb_loading);
 
         if (AppUtil.isUserLoggedIn()) {
-            getCurrency();
+            findViewById(R.id.als_layout_signin).setVisibility(View.GONE);
+            mPbLoading.setVisibility(View.VISIBLE);
             MySpends.fetchPaymentTypes();
+            mPbLoading.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getCurrency();
+                }
+            }, 750);
 
         } else {
+            findViewById(R.id.als_layout_signin).setVisibility(View.VISIBLE);
             AppCompatButton btnLogin = findViewById(R.id.als_abtn_login);
             btnLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,11 +87,11 @@ public class LaunchDeciderActivity extends AppCompatActivity {
 
             if (null != response) {
                 if (resultCode == RESULT_OK) {
-                    // Successfully signed in
 
+                    //-- Successfully signed in --//
                     if (!FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
                         AppLog.d("Login", "Email not verified.");
-                        FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
+                        //FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
 
                     } else {
                         AppLog.d("Login", "Email is verified!");
@@ -95,6 +103,7 @@ public class LaunchDeciderActivity extends AppCompatActivity {
                 } else {
                     // Sign in failed, check response for error code
                     AppLog.d("Login", "Failed:" + response.getErrorCode());
+                    AppUtil.showToast("Unable to login. Please try again later.");
                 }
             }
         }

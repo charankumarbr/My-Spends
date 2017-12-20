@@ -1,11 +1,15 @@
 package in.phoenix.myspends.ui.activity;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -40,6 +44,7 @@ import in.phoenix.myspends.ui.fragment.DatePickerFragment;
 import in.phoenix.myspends.ui.fragment.PaidByFragment;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
+import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
 public class ReportActivity extends BaseActivity implements DatePickerFragment.OnDatePickedListener,
@@ -160,6 +165,8 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
 
                             boolean isFromCache = documentSnapshots.getMetadata().isFromCache();
 
+                            mMiGetTotal.setVisible(false);
+
                             if (!documentSnapshots.isEmpty()) {
                                 if (null != mLastSnapshot) {
                                     mLastSnapshot = null;
@@ -186,6 +193,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                                         mExpenseAdapter.setIsLoading(false);
                                         mExpenseAdapter.setIsLoadingRequired(false);
                                         mExpenseAdapter.notifyDataSetChanged();
+                                        mMiGetTotal.setVisible(true);
 
                                     } else {
                                         //-- refresh data --//
@@ -201,6 +209,8 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                     }, new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+
+                            mMiGetTotal.setVisible(false);
 
                             AppLog.d("ReportActivity", "Spends Firestore:onFailure", e);
 
@@ -265,6 +275,11 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
+
+        } else if (item.getItemId() == R.id.menu_get_total) {
+            if ((null != mExpenseAdapter) && !mExpenseAdapter.isLoading()) {
+                new CalculateTotal().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -307,6 +322,64 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
             mLastKey = lastKey;
             AppLog.d("ReportActivity", "onLoading: Key:" + lastKey);
             getExpenses();
+        }
+    }
+
+    private MenuItem mMiGetTotal = null;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_reports, menu);
+        mMiGetTotal = menu.findItem(R.id.menu_get_total);
+        return true;
+    }
+
+    class CalculateTotal extends AsyncTask<Void, Void, Void> {
+
+        ProgressDialog pdLoading;
+
+        String totalAmount = "0.00";
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pdLoading = new ProgressDialog(ReportActivity.this);
+            pdLoading.setCancelable(false);
+            pdLoading.setCanceledOnTouchOutside(false);
+            pdLoading.setMessage("Calculating Total...");
+            pdLoading.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if ((null != mExpenseAdapter) && !mExpenseAdapter.isLoading()) {
+
+                Float amount = mExpenseAdapter.calculateTotal();
+                totalAmount = AppUtil.getStringAmount(String.valueOf(amount));
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (!isFinishing()) {
+                AlertDialog.Builder totalDialog = new AlertDialog.Builder(ReportActivity.this);
+                totalDialog.setTitle("Total Spends");
+                totalDialog.setMessage("Total of spends is: " + AppPref.getInstance().getString
+                        (AppConstants.PrefConstants.CURRENCY) + " " + totalAmount);
+                totalDialog.setCancelable(true);
+                totalDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                pdLoading.dismiss();
+                pdLoading = null;
+                totalDialog.create().show();
+            }
         }
     }
 }

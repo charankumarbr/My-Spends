@@ -55,4 +55,5 @@
     <string name="no_spends_tracked">No spends tracked!\n\nAdd your spends to track.</string>
     <string name="unable_fetch_spends">Unable to fetch your spends.\n\nPlease check your internet connection.</string>
     <string name="no_spends_tracked_tune_filters">No spends tracked!\n\nFine tune your filters.</string>
+    <string name="get_total">Get Total</string>
 </resources>

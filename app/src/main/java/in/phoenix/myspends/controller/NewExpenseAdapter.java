@@ -193,6 +193,16 @@ public final class NewExpenseAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public Float calculateTotal() {
+        Float totalAmount = 0f;
+        if (null != mSpends) {
+            for (int index = 0; index < mSpends.size(); index++) {
+                totalAmount += mSpends.get(index).getAmount();
+            }
+        }
+        return totalAmount;
+    }
+
     class ExpenseHolder {
         CustomTextView tvNote;
         CustomTextView tvAmount;

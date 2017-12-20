@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.model.NewExpense;
@@ -144,8 +145,17 @@ public final class FirebaseDB {
 
     //-- firestore method --//
     public void addFsNewSpend(NewExpense newExpense, OnSuccessListener successListener, OnFailureListener failureListener) {
+
+        Map<String, Object> values = new HashMap<>();
+        values.put("amount", newExpense.getAmount());
+        values.put("createdOn", newExpense.getCreatedOn());
+        values.put("expenseDate", newExpense.getExpenseDate());
+        values.put("note", newExpense.getNote());
+        values.put("paymentTypeKey", newExpense.getPaymentTypeKey());
+        values.put("updatedOn", newExpense.getUpdatedOn());
+
         firebaseFirestore.collection("my-spends").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .collection("spends").add(newExpense)
+                .collection("spends").add(values)
                 .addOnSuccessListener(successListener).addOnFailureListener(failureListener);
     }
 
@@ -154,6 +164,18 @@ public final class FirebaseDB {
         com.google.firebase.firestore.Query query = fsSpendsRef.orderBy("expenseDate", com.google.firebase.firestore.Query.Direction.DESCENDING);
 
         if (null != lastVisible) {
+            query = query.startAfter(lastVisible);
+        }
+
+        query.limit(AppConstants.PAGE_SPENDS_SIZE).get().addOnSuccessListener(successListener).addOnFailureListener(failureListener);
+    }
+
+    public void getFsSpends(long lastVisible, OnSuccessListener successListener, OnFailureListener failureListener) {
+
+        com.google.firebase.firestore.Query query = fsSpendsRef.orderBy("expenseDate", com.google.firebase.firestore.Query.Direction.DESCENDING);
+
+        if (-1 != lastVisible) {
+            //query = query.startAfter(lastVisible);
             query = query.startAfter(lastVisible);
         }
 

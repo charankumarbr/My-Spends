@@ -77,7 +77,8 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
     private CustomTextView mCTvNoSpends = null;
 
-    private DocumentSnapshot mLastSnapshot = null;
+    //private DocumentSnapshot mLastSnapshot = null;
+    private long mLastExpense = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,11 +133,11 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
             mPbLoading.setVisibility(View.VISIBLE);
 
         } else if (isRefresh) {
-            mLastSnapshot = null;
+            mLastExpense = -1;
             mBpbLoading.setVisibility(View.VISIBLE);
         }
 
-        FirebaseDB.initDb().getFsSpends(mLastSnapshot, new OnSuccessListener<QuerySnapshot>() {
+        FirebaseDB.initDb().getFsSpends(mLastExpense, new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot documentSnapshots) {
 
@@ -144,7 +145,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
                 AppLog.d("MainActivity", "Spends Firestore:onSuccess :: isFromCache:" + isFromCache);
 
                 if (!documentSnapshots.isEmpty()) {
-                    mLastSnapshot = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
+                    //mLastSnapshot = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
                     new FSSpendsParser(MainActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
                             documentSnapshots.iterator());
 
@@ -562,11 +563,12 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
     }
 
     @Override
-    public void onLoading(String lastKey) {
-        AppLog.d("MainActivity", "onLoading: Key:" + lastKey);
-        if (null != lastKey) {
-            mLastKey = lastKey;
-            AppLog.d("MainActivity", "onLoading: Key:" + lastKey);
+    public void onLoading(long lastExpenseDate) {
+        AppLog.d("MainActivity", "onLoading: Expense Date:" + lastExpenseDate);
+        if (-1 != lastExpenseDate) {
+            //mLastKey = lastKey;
+            AppLog.d("MainActivity", "onLoading: Key:" + lastExpenseDate);
+            mLastExpense = lastExpenseDate;
             getExpenses();
         }
     }

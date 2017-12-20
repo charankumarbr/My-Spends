@@ -316,10 +316,10 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
     }
 
     @Override
-    public void onLoading(String lastKey) {
+    public void onLoading(long lastKey) {
         AppLog.d("ReportActivity", "onLoading: Key:" + lastKey);
-        if (null != lastKey) {
-            mLastKey = lastKey;
+        if (-1 != lastKey) {
+            //mLastKey = lastKey;
             AppLog.d("ReportActivity", "onLoading: Key:" + lastKey);
             getExpenses();
         }

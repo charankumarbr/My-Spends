@@ -150,7 +150,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
                 if (null != mListener) {
                     AppLog.d("NewExpenseAdapter", "3");
                     mIsLoading = true;
-                    mListener.onLoading(String.valueOf(getItem(mSpends.size() - 1).getExpenseDate()));
+                    mListener.onLoading(getItem(mSpends.size() - 1).getExpenseDate());
                 }
             }
         }
@@ -215,6 +215,6 @@ public final class NewExpenseAdapter extends BaseAdapter {
     }
 
     public interface OnLoadingListener {
-        void onLoading(String lastKey);
+        void onLoading(long lastExpenseDate);
     }
 }

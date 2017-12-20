@@ -63,29 +63,40 @@ public class MySpends extends Application {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 AppLog.d("MySpends", "onChildAdded:");
                 AppLog.d("MySpends", "Snapshot:" + dataSnapshot);
-                AppLog.d("MySpends", "s:" + s);
-                AppLog.d("MySpends", "Key:" + dataSnapshot.getKey());
-                AppLog.d("MySpends", "Value:" + dataSnapshot.getValue());
+                AppLog.d("MySpends", "String:" + s);
+                AppLog.d("MySpends", "DataSnapshot: Key:" + dataSnapshot.getKey());
+                AppLog.d("MySpends", "DataSnapshot: Value:" + dataSnapshot.getValue());
+                PaymentType newPaymentType = dataSnapshot.getValue(PaymentType.class);
+                newPaymentType.setKey(dataSnapshot.getKey());
+                addNewPaymentType(newPaymentType);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                AppLog.d("MySpends", "PaymentTypes: onChildChanged: String" + s);
+                AppLog.d("MySpends", "PaymentTypes: onChildChanged: DataSnapshot: Key:" + dataSnapshot.getKey());
+                AppLog.d("MySpends", "PaymentTypes: onChildChanged: DataSnapshot: Value:" + dataSnapshot.getValue());
+                PaymentType editedPaymentType = dataSnapshot.getValue(PaymentType.class);
+                editedPaymentType.setKey(dataSnapshot.getKey());
+                editPaymentType(editedPaymentType);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                AppLog.d("MySpends", "PaymentTypes: onChildRemoved: DataSnapshot: Key:" + dataSnapshot.getKey());
+                AppLog.d("MySpends", "PaymentTypes: onChildRemoved: DataSnapshot: Value:" + dataSnapshot.getValue());
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+                AppLog.d("MySpends", "PaymentTypes: onChildMoved: String" + s);
+                AppLog.d("MySpends", "PaymentTypes: onChildMoved: DataSnapshot: Key:" + dataSnapshot.getKey());
+                AppLog.d("MySpends", "PaymentTypes: onChildMoved: DataSnapshot: Value:" + dataSnapshot.getValue());
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                AppLog.d("MySpends", "onCancelled:" + databaseError.getDetails());
+                AppLog.d("MySpends", "PaymentTypes: onCancelled:" + databaseError.getDetails());
             }
         });
 
@@ -118,6 +129,7 @@ public class MySpends extends Application {
     }
 
     public static void addCashPaymentType(ArrayList<PaymentType> listpaymentTypes, HashMap<String, PaymentType> mapPaymentTypes) {
+        AppLog.d("MySpends", "addCashPaymentType");
         if (null == mapPaymentTypes) {
             mapPaymentTypes = new HashMap<>();
         }
@@ -132,6 +144,7 @@ public class MySpends extends Application {
     }
 
     public static void setAllPaymentTypes(ArrayList<PaymentType> listAllPaymentTypes, HashMap<String, PaymentType> mapAllPaymentTypes) {
+        AppLog.d("MySpends", "setAllPaymentTypes");
         if (null == mMapAllPaymentTypes) {
             mMapAllPaymentTypes = new HashMap<>();
 
@@ -154,6 +167,7 @@ public class MySpends extends Application {
     }
 
     public static ArrayList<PaymentType> getAllPaymentTypes() {
+        AppLog.d("MySpends", "getAllPaymentTypes");
         return mAllPaymentTypes;
     }
 
@@ -164,4 +178,44 @@ public class MySpends extends Application {
 
         return null;
     }
+
+    private static void addNewPaymentType(PaymentType newPaymentType) {
+        if (null == mMapAllPaymentTypes) {
+            mMapAllPaymentTypes = new HashMap<>();
+            mMapAllPaymentTypes.put("0", PaymentType.getCashPaymentType());
+        }
+        mMapAllPaymentTypes.put(newPaymentType.getKey(), newPaymentType);
+
+        if (null == mAllPaymentTypes) {
+            mAllPaymentTypes = new ArrayList<>();
+            mAllPaymentTypes.add(0, PaymentType.getCashPaymentType());
+        }
+
+        mAllPaymentTypes.add(newPaymentType);
+    }
+
+    private static void editPaymentType(PaymentType editedPaymentType) {
+        if (null == mMapAllPaymentTypes) {
+            mMapAllPaymentTypes = new HashMap<>();
+        }
+        mMapAllPaymentTypes.put(editedPaymentType.getKey(), editedPaymentType);
+
+        if (null == mAllPaymentTypes) {
+            mAllPaymentTypes = new ArrayList<>();
+            mAllPaymentTypes.add(0, PaymentType.getCashPaymentType());
+            mAllPaymentTypes.add(editedPaymentType);
+
+        } else {
+            for (int index = 0; index < mAllPaymentTypes.size(); index++) {
+                AppLog.d("MySpends", "editPaymentType: Index:" + index);
+                AppLog.d("MySpends", "editPaymentType: Key:" + mAllPaymentTypes.get(index).getKey());
+                AppLog.d("MySpends", "editPaymentType: Name:" + mAllPaymentTypes.get(index).getName());
+                if (mAllPaymentTypes.get(index).getKey().equals(editedPaymentType.getKey())) {
+                    mAllPaymentTypes.set(index, editedPaymentType);
+                    break;
+                }
+            }
+        }
+    }
 }
+

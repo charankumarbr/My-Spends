@@ -77,23 +77,25 @@ public class LaunchDeciderActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
-            if (resultCode == RESULT_OK) {
-                // Successfully signed in
+            if (null != response) {
+                if (resultCode == RESULT_OK) {
+                    // Successfully signed in
 
-                if (!FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
-                    AppLog.d("Login", "Email not verified.");
-                    FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
+                    if (!FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
+                        AppLog.d("Login", "Email not verified.");
+                        FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
+
+                    } else {
+                        AppLog.d("Login", "Email is verified!");
+                    }
+
+                    getCurrency();
+                    MySpends.fetchPaymentTypes();
 
                 } else {
-                    AppLog.d("Login", "Email is verified!");
+                    // Sign in failed, check response for error code
+                    AppLog.d("Login", "Failed:" + response.getErrorCode());
                 }
-
-                getCurrency();
-                MySpends.fetchPaymentTypes();
-
-            } else {
-                // Sign in failed, check response for error code
-                AppLog.d("Login", "Failed:" + response.getErrorCode());
             }
         }
     }

@@ -1,8 +1,10 @@
 package in.phoenix.myspends.ui.activity;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +14,7 @@ import android.widget.ProgressBar;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -141,9 +144,42 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
         addPaymentTypeFragment.show(getSupportFragmentManager(), "AddPaymentTFragment");
     }
 
+    private ProgressDialog mDialog = null;
     @Override
-    public void onStatusChanged() {
+    public void onStatusChanged(String paymentTypeKey, boolean isChecked) {
         //getLoaderManager().restartLoader(DBConstants.LoaderId.PAYMENT_TYPE, null, this);
+
+        AppLog.d("PaymentActivity", "onStatusChanged Key:" + paymentTypeKey + " :: isChecked:" + isChecked);
+        if (null == mDialog) {
+            mDialog = new ProgressDialog(PaymentActivity.this);
+            mDialog.setCancelable(false);
+            mDialog.setCanceledOnTouchOutside(false);
+            mDialog.setMessage("Changing status...");
+            mDialog.show();
+            AppLog.d("PaymentActivity", "onStatusChanged 1");
+            FirebaseDB.initDb().togglePaymentType(paymentTypeKey, isChecked, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    AppLog.d("PaymentActivity", "onStatusChanged 2");
+                    if (null == databaseError) {
+                        AppLog.d("PaymentActivity", "onStatusChanged 3");
+                        onPaymentTypesParsed(MySpends.getAllPaymentTypes(), true);
+                        AppLog.d("PaymentActivity", "onStatusChanged 4");
+
+                    } else {
+                        AppLog.d("PaymentActivity", "onStatusChanged 5 : Error:" + databaseError.getDetails());
+                        AppUtil.showToast("Unable to change the status.");
+                    }
+
+                    if (!isFinishing()) {
+                        if (null != mDialog) {
+                            mDialog.dismiss();
+                        }
+                        mDialog = null;
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -153,9 +189,14 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
         mViewComplete.postDelayed(new Runnable() {
             @Override
             public void run() {
+                Fragment dialogFragment = getSupportFragmentManager().findFragmentByTag("AddPaymentTFragment");
+                if (dialogFragment instanceof AddPaymentTypeFragment) {
+                    ((AddPaymentTypeFragment) dialogFragment).dismissAllowingStateLoss();
+                }
+
                 onPaymentTypesParsed(MySpends.getAllPaymentTypes(), true);
             }
-        }, 500);
+        }, 600);
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
@@ -171,18 +172,20 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         if (null != paymentTypes && paymentTypes.size() > 0) {
             LayoutInflater inflater = LayoutInflater.from(NewExpenseActivity.this);
             for (int index = 0; index < paymentTypes.size(); index++) {
-                RadioButton radioButton = (RadioButton) inflater.inflate(R.layout.layout_radio_button, null);
-                radioButton.setId(index);
-                radioButton.setTag(paymentTypes.get(index).getKey());
-                radioButton.setText(paymentTypes.get(index).getName());
-                if (!isNew && paymentTypes.get(index).getKey().equals(mExpense.getPaymentTypeKey())) {
-                    radioButton.setChecked(true);
+                if (paymentTypes.get(index).isActive()) {
+                    RadioButton radioButton = (RadioButton) inflater.inflate(R.layout.layout_radio_button, null);
+                    radioButton.setId(index);
+                    radioButton.setTag(paymentTypes.get(index).getKey());
+                    radioButton.setText(paymentTypes.get(index).getName());
+                    if (!isNew && paymentTypes.get(index).getKey().equals(mExpense.getPaymentTypeKey())) {
+                        radioButton.setChecked(true);
 
-                } else {
-                    radioButton.setChecked(false);
+                    } else {
+                        radioButton.setChecked(false);
+                    }
+                    radioButton.setOnCheckedChangeListener(paymentModeSelectedListener);
+                    mFlexboxLayout.addView(radioButton);
                 }
-                radioButton.setOnCheckedChangeListener(paymentModeSelectedListener);
-                mFlexboxLayout.addView(radioButton);
             }
         }
     }
@@ -573,6 +576,18 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
     @Override
     public void onPaymentTypeAdded() {
-        getPaymentTypes();
+        AppUtil.showSnackbar(mViewComplete, "Payment type added!");
+        //getPaymentTypes();
+        mViewComplete.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Fragment dialogFragment = getSupportFragmentManager().findFragmentByTag("AddPaymentTFragment");
+                if (dialogFragment instanceof AddPaymentTypeFragment) {
+                    ((AddPaymentTypeFragment) dialogFragment).dismissAllowingStateLoss();
+                }
+
+                getPaymentTypes();
+            }
+        }, 600);
     }
 }

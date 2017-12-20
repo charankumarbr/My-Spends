@@ -196,4 +196,10 @@ public final class FirebaseDB {
         query.limit(AppConstants.PAGE_SPENDS_SIZE).get().addOnSuccessListener(successListener).addOnFailureListener(failureListener);
 
     }
+
+    public void togglePaymentType(String paymentTypeKey, boolean isChecked, DatabaseReference.CompletionListener completionListener) {
+        HashMap<String, Object> values = new HashMap<>();
+        values.put("active", isChecked);
+        paymentTypeRef.child(paymentTypeKey).updateChildren(values, completionListener);
+    }
 }

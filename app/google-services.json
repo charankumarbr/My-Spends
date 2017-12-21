@@ -1,21 +1,29 @@
 {
   "project_info": {
-    "project_number": "540994788306",
-    "firebase_url": "https://my-spends-d5cde.firebaseio.com",
-    "project_id": "my-spends-d5cde",
-    "storage_bucket": "my-spends-d5cde.appspot.com"
+    "project_number": "434217671470",
+    "firebase_url": "https://phoenix-my-spends.firebaseio.com",
+    "project_id": "phoenix-my-spends",
+    "storage_bucket": "phoenix-my-spends.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:540994788306:android:5c6d76c18d749811",
+        "mobilesdk_app_id": "1:434217671470:android:5c6d76c18d749811",
         "android_client_info": {
           "package_name": "in.phoenix.myspends"
         }
       },
       "oauth_client": [
         {
-          "client_id": "540994788306-13e2akss9j9v7jkbtmvsmai5bpnbamv6.apps.googleusercontent.com",
+          "client_id": "434217671470-73fkgilkjr9k1aotp8esj5r4i0vof8i5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.phoenix.myspends",
+            "certificate_hash": "8ff5971ab3960bca8c47dd9ac1b26cd6e00ebf0d"
+          }
+        },
+        {
+          "client_id": "434217671470-v1defa6gpoq43h6baf96nt3lpkjbol1u.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "in.phoenix.myspends",
@@ -23,13 +31,13 @@
           }
         },
         {
-          "client_id": "540994788306-caj72ik5je0n96ejj3067nhlbonu3krc.apps.googleusercontent.com",
+          "client_id": "434217671470-j8k51nmmfoib5uj7ljg75m2eso31hr1a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB-8NY1feG8OM6ybvCye9MyMleszzZ8jKI"
+          "current_key": "AIzaSyDdlP_TB4vBD-HNlCiWafUsVfZS_BmtsJs"
         }
       ],
       "services": {
@@ -40,7 +48,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "540994788306-caj72ik5je0n96ejj3067nhlbonu3krc.apps.googleusercontent.com",
+              "client_id": "434217671470-j8k51nmmfoib5uj7ljg75m2eso31hr1a.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

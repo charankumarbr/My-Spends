@@ -32,7 +32,7 @@ import in.phoenix.myspends.util.AppUtil;
  * Created by Charan.Br on 4/10/2017.
  */
 
-public class LaunchDeciderActivity extends AppCompatActivity {
+public class LaunchDeciderActivity extends BaseActivity {
 
     private static final int RC_SIGN_IN = 123;
 

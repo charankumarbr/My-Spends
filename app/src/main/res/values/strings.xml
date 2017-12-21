@@ -38,8 +38,8 @@
     <string name="reports">Reports</string>
     <string name="about">About</string>
     <string name="about_app">About App</string>
-    <string name="about_app_msg">is an app to track all your spends. And first of it\'s kind to not to read your personal data.\n\n
-        ->This app keeps track of your spends when you add them.\n\n <!--This app DOES NOT need internet to work.-->
+    <string name="about_app_msg">is an app to track all your spends. And, first of it\'s kind to not to read your personal data.\n\n
+        My Spends keeps track of your spends when you add them.\n\n <!--This app DOES NOT need internet to work.-->
         <!--All the data will be saved on the phone.\n\n
         ->Having said this, We DON\'T read your personal data, your spends/expenditures.\n-->
     </string>

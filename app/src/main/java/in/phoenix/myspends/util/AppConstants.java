@@ -40,4 +40,7 @@ public interface AppConstants {
     }
 
     int PAGE_SPENDS_SIZE = 6;
+
+    //-- 128 bit key --//
+    String dummy = "iVuNaNKaRcHuGaLu";
 }

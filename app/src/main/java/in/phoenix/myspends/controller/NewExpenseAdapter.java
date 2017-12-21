@@ -90,6 +90,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
             holder.vLayoutExpense = view.findViewById(R.id.le_layout_expense);
             holder.vRLayoutExpense = view.findViewById(R.id.le_rlayout_expense);
             holder.vPbLoading = view.findViewById(R.id.le_layout_loading);
+            holder.vSpendsEnd = view.findViewById(R.id.le_tv_spends_end);
 
             view.setTag(holder);
 
@@ -100,6 +101,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
         if (position < mSpends.size()) {
             holder.vPbLoading.setVisibility(View.GONE);
             holder.vRLayoutExpense.setVisibility(View.VISIBLE);
+            holder.vSpendsEnd.setVisibility(View.GONE);
 
             NewExpense expense = getItem(position);
             holder.tvAmount.setText(mCurrencySymbol + " " + AppUtil.getStringAmount(String.valueOf(expense.getAmount())));
@@ -148,9 +150,15 @@ public final class NewExpenseAdapter extends BaseAdapter {
                 holder.vLayoutExpense.setTag(position);
                 holder.vLayoutExpense.setOnClickListener(mClickListener);
             }
+
+            if (!mIsLoadingRequired) {
+                holder.vSpendsEnd.setVisibility(View.VISIBLE);
+            }
         } else {
             holder.vPbLoading.setVisibility(View.VISIBLE);
             holder.vRLayoutExpense.setVisibility(View.GONE);
+            holder.vSpendsEnd.setVisibility(View.GONE);
+
             AppLog.d("NewExpenseAdapter", "1");
             if (!mIsLoading && mIsLoadingRequired) {
                 AppLog.d("NewExpenseAdapter", "2");
@@ -219,6 +227,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
         View vLayoutExpense;
         View vRLayoutExpense;
         View vPbLoading;
+        View vSpendsEnd;
     }
 
     public interface OnLoadingListener {

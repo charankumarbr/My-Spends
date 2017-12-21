@@ -167,7 +167,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
                     } else if (null != mExpenseAdapter) {
                         if (mExpenseAdapter.isLoading()) {
-                            AppUtil.showToast("Fetched all your spends.");
+                            //AppUtil.showToast("Fetched all your spends.");
                             mExpenseAdapter.setIsLoading(false);
                             mExpenseAdapter.setIsLoadingRequired(false);
                             mExpenseAdapter.notifyDataSetChanged();

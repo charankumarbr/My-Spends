@@ -17,13 +17,12 @@
             android:maxLines="1"
             android:textSize="23sp"
             android:layout_alignParentTop="true"
-            android:text="November 2017"
             android:layout_marginStart="12dp"
             android:layout_marginLeft="12dp"
             android:textColor="@color/colorAccent"
             app:fontName="@string/font_noto_sans"
             android:layout_marginTop="10dp"
-            android:visibility="visible" />
+            android:visibility="visible"/>
 
         <RelativeLayout
             android:id="@+id/le_layout_expense"
@@ -52,8 +51,7 @@
                     android:maxLines="1"
                     android:ellipsize="end"
                     app:fontName="@string/font_noto_sans"
-                    android:textColor="@color/primary_text"
-                    android:text="This is a very long description for an expense. Have you seen like this?"/>
+                    android:textColor="@color/primary_text"/>
 
                 <in.phoenix.myspends.customview.CustomTextView
                     android:id="@+id/le_textview_payment_type"
@@ -63,7 +61,6 @@
                     app:fontName="@string/font_noto_sans"
                     android:textSize="14sp"
                     android:textColor="@color/secondary_text"
-                    android:text="Payment using a credit card, which belongs to some other person actually."
                     android:ellipsize="end"/>
             </LinearLayout>
 
@@ -85,8 +82,7 @@
                     android:textSize="17sp"
                     android:textColor="@color/colorPrimary"
                     app:fontName="@string/font_noto_sans"
-                    android:layout_gravity="right"
-                    android:text="30000.00"/>
+                    android:layout_gravity="right"/>
 
                 <in.phoenix.myspends.customview.CustomTextView
                     android:id="@+id/le_textview_date"
@@ -96,8 +92,7 @@
                     android:textColor="@color/colorAccent"
                     android:layout_marginTop="8dp"
                     app:fontName="@string/font_noto_sans"
-                    android:layout_gravity="right"
-                    android:text="28 Nov"/>
+                    android:layout_gravity="right"/>
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
@@ -109,7 +104,8 @@
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
         android:paddingTop="16dp"
-        android:paddingBottom="16dp">
+        android:paddingBottom="16dp"
+        android:visibility="gone">
 
         <ProgressBar
             android:layout_width="36dp"
@@ -125,5 +121,21 @@
             app:fontName="@string/font_noto_sans"
             android:textColor="@color/colorPrimary"/>
     </LinearLayout>
+
+    <in.phoenix.myspends.customview.CustomTextView
+        android:id="@+id/le_tv_spends_end"
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:text="Light at the end of tunnel."
+        android:gravity="center"
+        android:textColor="@color/colorPrimary"
+        android:layout_centerHorizontal="true"
+        android:textSize="15sp"
+        android:drawableStart="@drawable/ic_light_bulb"
+        android:drawableLeft="@drawable/ic_light_bulb"
+        android:drawablePadding="16dp"
+        android:layout_below="@+id/le_rlayout_expense"
+        app:fontName="@string/font_noto_sans"
+        android:visibility="gone"/>
 
 </RelativeLayout>

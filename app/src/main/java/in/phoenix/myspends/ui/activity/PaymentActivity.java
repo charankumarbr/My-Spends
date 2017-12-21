@@ -186,8 +186,6 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
 
     @Override
     public void onPaymentTypeAdded() {
-        AppUtil.showSnackbar(mViewComplete, "Payment type added!");
-        //getPaymentTypes();
         mViewComplete.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -196,6 +194,7 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
                     ((AddPaymentTypeFragment) dialogFragment).dismissAllowingStateLoss();
                 }
 
+                AppUtil.showSnackbar(mViewComplete, "Payment type added!");
                 onPaymentTypesParsed(MySpends.getAllPaymentTypes(), true);
             }
         }, 600);

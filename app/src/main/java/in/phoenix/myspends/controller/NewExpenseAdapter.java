@@ -128,9 +128,16 @@ public final class NewExpenseAdapter extends BaseAdapter {
                     mPrevExpenseDate.changeDate(getItem(position - 1).getExpenseDate());
                 }
 
-                if (mExpenseDate.getMonth() != mPrevExpenseDate.getMonth()) {
-                    holder.tvMonth.setVisibility(View.VISIBLE);
-                    holder.tvMonth.setText(AppUtil.getMonth(mExpenseDate.getMonth()));
+                if ((mExpenseDate.getMonth() != mPrevExpenseDate.getMonth()) || mExpenseDate.getYear() != mPrevExpenseDate.getYear()) {
+
+                    if (mExpenseDate.getYear() != mPrevExpenseDate.getYear()) {
+                        holder.tvMonth.setVisibility(View.VISIBLE);
+                        holder.tvMonth.setText(AppUtil.getShortMonth(mExpenseDate.getMonth()) + " " + mExpenseDate.getYear());
+
+                    } else {
+                        holder.tvMonth.setVisibility(View.VISIBLE);
+                        holder.tvMonth.setText(AppUtil.getMonth(mExpenseDate.getMonth()));
+                    }
 
                 } else {
                     holder.tvMonth.setVisibility(View.GONE);

@@ -224,6 +224,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                 View customTitleView = inflater.inflate(R.layout.layout_date_title, null);
                 datePickerDialog.setCustomTitle(customTitleView);
                 datePickerDialog.show();
+                AppUtil.toggleKeyboard(false);
 
             } else if (v.getId() == R.id.ane_ctextview_add_new_payment) {
                 showPaymentTypeDialog();
@@ -326,6 +327,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         mTIEtAmount.setText("");
         mTIEtNote.setText("");
         mTIEtAmount.requestFocus();
+        resetAllPaymentTypes();
     }
 
     private void resetAllPaymentTypes() {
@@ -334,6 +336,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                 ((RadioButton) mFlexboxLayout.getChildAt(index)).setChecked(false);
             }
         }
+        mSelectedTypeKey = null;
     }
 
     private void saveChanges() {

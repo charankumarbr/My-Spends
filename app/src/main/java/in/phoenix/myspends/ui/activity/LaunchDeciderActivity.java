@@ -49,12 +49,7 @@ public class LaunchDeciderActivity extends BaseActivity {
             findViewById(R.id.als_layout_signin).setVisibility(View.GONE);
             mPbLoading.setVisibility(View.VISIBLE);
             MySpends.fetchPaymentTypes();
-            mPbLoading.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getCurrency();
-                }
-            }, 750);
+            getCurrency();
 
         } else {
             findViewById(R.id.als_layout_signin).setVisibility(View.VISIBLE);

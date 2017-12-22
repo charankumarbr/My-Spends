@@ -181,7 +181,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
                             mCTvNoSpends.setVisibility(View.VISIBLE);
                         }
                     } else {
-                        AppUtil.showToast("No Spends tracked!");
+                        //AppUtil.showToast("No Spends tracked!");
                         mLvExpense.setVisibility(View.GONE);
                         mCTvNoSpends.setText(R.string.no_spends_tracked);
                         mCTvNoSpends.setVisibility(View.VISIBLE);

@@ -43,4 +43,7 @@ public interface AppConstants {
 
     //-- 128 bit key --//
     String dummy = "iVuNaNKaRcHuGaLu";
+
+    //-- including 1 Payment Type for cash --//
+    int MAX_PAYMENT_TYPE_COUNT = 10;
 }

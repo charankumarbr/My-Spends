@@ -151,7 +151,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
                 holder.vLayoutExpense.setOnClickListener(mClickListener);
             }
 
-            if (!mIsLoadingRequired) {
+            if (!mIsLoadingRequired && position == (getCount() - 1)) {
                 holder.vSpendsEnd.setVisibility(View.VISIBLE);
             }
         } else {

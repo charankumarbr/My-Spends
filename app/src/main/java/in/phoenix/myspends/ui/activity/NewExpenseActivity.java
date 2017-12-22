@@ -3,10 +3,13 @@ package in.phoenix.myspends.ui.activity;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
@@ -30,8 +33,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.util.ArrayList;
@@ -45,6 +50,7 @@ import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.model.PaymentType;
+import in.phoenix.myspends.parser.PaymentTypeParser;
 import in.phoenix.myspends.ui.fragment.AddPaymentTypeFragment;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
@@ -55,7 +61,7 @@ import in.phoenix.myspends.util.AppUtil;
  * Created by Charan.Br on 4/11/2017.
  */
 
-public final class NewExpenseActivity extends BaseActivity implements AddPaymentTypeFragment.OnPaymentTypeListener {
+public final class NewExpenseActivity extends BaseActivity implements AddPaymentTypeFragment.OnPaymentTypeListener, PaymentTypeParser.PaymentTypeParserListener {
 
     private NewExpense mExpense = null;
 
@@ -81,15 +87,17 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
     private ProgressBar mPbLoading = null;
 
+    private int mPaymentTypeCount = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) {
+        /*if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) {
             startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
             finish();
 
-        } else {
+        } else {*/
             if (getIntent().hasExtra(AppConstants.Bundle.EXPENSE)) {
                 mExpense = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE);
                 isNew = false;
@@ -107,7 +115,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
             setContentView(R.layout.activity_new_expense);
             init();
-        }
+        //}
     }
 
     private void init() {
@@ -168,26 +176,34 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
     private void getPaymentTypes() {
         mFlexboxLayout.removeAllViews();
-        ArrayList<PaymentType> paymentTypes = MySpends.getAllPaymentTypes();
-        if (null != paymentTypes && paymentTypes.size() > 0) {
-            LayoutInflater inflater = LayoutInflater.from(NewExpenseActivity.this);
-            for (int index = 0; index < paymentTypes.size(); index++) {
-                if (paymentTypes.get(index).isActive()) {
-                    RadioButton radioButton = (RadioButton) inflater.inflate(R.layout.layout_radio_button, null);
-                    radioButton.setId(index);
-                    radioButton.setTag(paymentTypes.get(index).getKey());
-                    radioButton.setText(paymentTypes.get(index).getName());
-                    if (!isNew && paymentTypes.get(index).getKey().equals(mExpense.getPaymentTypeKey())) {
-                        radioButton.setChecked(true);
+        FirebaseDB.initDb().getPaymentTypes(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (null != dataSnapshot) {
+                    AppLog.d("NewExpenseActivity", "Count:" + dataSnapshot.getChildrenCount());
+                    if (dataSnapshot.getChildrenCount() > 0) {
+                        new PaymentTypeParser(NewExpenseActivity.this).executeOnExecutor(
+                                AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
 
                     } else {
-                        radioButton.setChecked(false);
+                        onPaymentTypesParsed(null, false);
                     }
-                    radioButton.setOnCheckedChangeListener(paymentModeSelectedListener);
-                    mFlexboxLayout.addView(radioButton);
                 }
             }
-        }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                mPaymentTypeCount = -1;
+                if (null != databaseError) {
+                    AppLog.d("NewExpenseActivity", "Payment Types Error:" + databaseError.getDetails() + "::" + databaseError.getMessage());
+
+                } else {
+                    AppLog.d("NewExpenseActivity", "Payment Types Error!");
+                }
+                AppUtil.showToast("Unable to fetch payment types.");
+                finish();
+            }
+        });
     }
 
     private final View.OnClickListener clickListener = new View.OnClickListener() {
@@ -227,7 +243,16 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                 AppUtil.toggleKeyboard(false);
 
             } else if (v.getId() == R.id.ane_ctextview_add_new_payment) {
-                showPaymentTypeDialog();
+
+                if (mPaymentTypeCount <= 0) {
+                    AppUtil.showToast("Unable to add new Payment Types. Please try later.");
+
+                } else if (mPaymentTypeCount == AppConstants.MAX_PAYMENT_TYPE_COUNT) {
+                    AppUtil.showToast("Reached maximum count of Payment Types.");
+
+                } else {
+                    showPaymentTypeDialog();
+                }
             }
         }
     };
@@ -247,7 +272,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
+            closeActivity();
             return true;
 
         } else if (item.getItemId() == R.id.menu_done) {
@@ -270,11 +295,11 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     private void closeActivity() {
         AppUtil.toggleKeyboard(false);
         if (mViaNotification) {
-            /*Intent upIntent = NavUtils.getParentActivityIntent(this);
+            Intent upIntent = NavUtils.getParentActivityIntent(this);
             TaskStackBuilder.create(this)
                     .addNextIntentWithParentStack(upIntent)
-                    .startActivities();*/
-            startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
+                    .startActivities();
+            //startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
 
         } else {
             setResult(mOkStatus);
@@ -367,9 +392,9 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                             mOkStatus = RESULT_OK;
                             if (!mCbAddAnotherExpense.isChecked()) {
                                 AppUtil.toggleKeyboard(false);
-                                setResult(RESULT_OK);
-                                finish();
-
+                                /*setResult(RESULT_OK);
+                                finish();*/
+                                closeActivity();
 
                             } else {
                                 resetAll();
@@ -592,5 +617,40 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                 getPaymentTypes();
             }
         }, 600);
+    }
+
+    @Override
+    public void onPaymentTypesParsed(ArrayList<PaymentType> paymentTypes, boolean isCashPaymentTypeAdded) {
+
+        if (null == paymentTypes) {
+            paymentTypes = new ArrayList<>();
+        }
+
+        if (!isCashPaymentTypeAdded) {
+            paymentTypes.add(0, PaymentType.getCashPaymentType());
+        }
+
+        if (null != paymentTypes && paymentTypes.size() > 0) {
+            mPaymentTypeCount = paymentTypes.size();
+            LayoutInflater inflater = LayoutInflater.from(NewExpenseActivity.this);
+            for (int index = 0; index < paymentTypes.size(); index++) {
+                if (paymentTypes.get(index).isActive()) {
+                    RadioButton radioButton = (RadioButton) inflater.inflate(R.layout.layout_radio_button, null);
+                    radioButton.setId(index);
+                    radioButton.setTag(paymentTypes.get(index).getKey());
+                    radioButton.setText(paymentTypes.get(index).getName());
+                    if (!isNew && paymentTypes.get(index).getKey().equals(mExpense.getPaymentTypeKey())) {
+                        radioButton.setChecked(true);
+
+                    } else {
+                        radioButton.setChecked(false);
+                    }
+                    radioButton.setOnCheckedChangeListener(paymentModeSelectedListener);
+                    mFlexboxLayout.addView(radioButton);
+                }
+            }
+        } else {
+            mPaymentTypeCount = -1;
+        }
     }
 }

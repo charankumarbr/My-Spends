@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="in.phoenix.myspends">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
     <application
         android:name=".MySpends"
         android:allowBackup="true"
@@ -38,14 +43,14 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ui.activity.NewExpenseActivity"
-            android:parentActivityName=".ui.activity.MainActivity"
+            android:parentActivityName="in.phoenix.myspends.ui.activity.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activity.MainActivity" />
+                android:value="in.phoenix.myspends.ui.activity.MainActivity" />
         </activity>
         <activity
             android:name=".ui.activity.ExpensesListActivity"
@@ -63,6 +68,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activity.MainActivity" />
         </activity>
+
+        <receiver
+            android:name=".controller.BootCompletedReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <data android:scheme="package"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

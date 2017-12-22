@@ -85,7 +85,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.lt_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.am_toolbar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             toolbar.setTitleTextColor(getResources().getColor(android.R.color.white, null));
 
@@ -278,6 +278,15 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         } else if (item.getItemId() == R.id.menu_logout) {
             confirmLogout();
             return true;
+
+        } else if (item.getItemId() == R.id.menu_profile) {
+            if (AppUtil.isUserLoggedIn()) {
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+
+            } else {
+                AppUtil.showToast("User not logged in.");
+            }
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -328,7 +337,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         //aboutappDialog.setTitle(getString(R.string.about) + " " + getString(R.string.app_name));
         aboutappDialog.setTitle(getString(R.string.app_name));
         aboutappDialog.setMessage("Version: " + BuildConfig.VERSION_NAME + "\n\n"
-                + getString(R.string.app_name) + " " + getString(R.string.about_app_msg));
+                + getString(R.string.about_app_msg));
         aboutappDialog.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

@@ -7,7 +7,7 @@
     android:background="#FAFAFA">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/lt_toolbar"
+        android:id="@+id/am_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:minHeight="?attr/actionBarSize"
@@ -20,7 +20,7 @@
         android:id="@+id/am_bpb_loading"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/lt_toolbar"
+        android:layout_below="@+id/am_toolbar"
         android:visibility="invisible"/>
 
     <RelativeLayout

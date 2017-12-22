@@ -7,6 +7,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.crashlytics.android.Crashlytics;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
@@ -91,6 +92,7 @@ public class LaunchDeciderActivity extends BaseActivity {
                     } else {
                         AppLog.d("Login", "Email is verified!");
                     }
+                    Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
                     getCurrency();
                     MySpends.fetchPaymentTypes();

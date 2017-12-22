@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.flexbox.FlexboxLayout;
 
 import java.util.ArrayList;
@@ -188,7 +189,8 @@ public class AddExpenseFragment extends DialogFragment {
                 return false;
             }
         } catch (NumberFormatException e) {
-            AppUtil.showToast("DIGITS Oops!!!");
+            AppUtil.showToast("Amount can be only number!!");
+            Crashlytics.logException(e);
             return false;
         }
 
@@ -231,7 +233,8 @@ public class AddExpenseFragment extends DialogFragment {
                 AppUtil.showToast("Could not add this Expense!");
             }
         } catch (NumberFormatException e) {
-            AppUtil.showToast("DIGITS Oops!!!");
+            AppUtil.showToast("Amount can be only number!!");
+            Crashlytics.logException(e);
         }
     }
 

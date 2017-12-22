@@ -28,6 +28,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -511,7 +512,8 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                 return false;
             }
         } catch (NumberFormatException e) {
-            AppUtil.showSnackbar(mViewComplete, "DIGITS Oopssss!!!");
+            AppUtil.showSnackbar(mViewComplete, "Amount can be only number!!");
+            Crashlytics.logException(e);
             return false;
         }
 

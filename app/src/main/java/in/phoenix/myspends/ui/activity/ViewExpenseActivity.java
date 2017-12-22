@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseError;
@@ -126,6 +127,7 @@ public class ViewExpenseActivity extends BaseActivity {
                     mCTvAddedOn.setVisibility(View.VISIBLE);
 
                 } catch (ParseException e) {
+                    Crashlytics.logException(e);
                     e.printStackTrace();
                     mCTvAddedOn.setVisibility(View.GONE);
                 }
@@ -137,6 +139,7 @@ public class ViewExpenseActivity extends BaseActivity {
                     mCTvLastUpdatedOn.setVisibility(View.VISIBLE);
 
                 } catch (ParseException e) {
+                    Crashlytics.logException(e);
                     e.printStackTrace();
                     mCTvLastUpdatedOn.setVisibility(View.GONE);
                 }

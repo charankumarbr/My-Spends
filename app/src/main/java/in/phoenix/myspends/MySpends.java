@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
+import com.crashlytics.android.Crashlytics;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,6 +43,13 @@ public class MySpends extends Application {
         super.onCreate();
         APP_CONTEXT = this;
 
+        if (AppUtil.isUserLoggedIn()) {
+            Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        }
+        initNotification();
+    }
+
+    private void initNotification() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, AppPref.getInstance().getInt(AppConstants.PrefConstants.NOTIFICATION_HOUR)
                 == -1 ? 20 : AppPref.getInstance().getInt(AppConstants.PrefConstants.NOTIFICATION_HOUR));

@@ -34,6 +34,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,6 +54,7 @@ import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.parser.PaymentTypeParser;
 import in.phoenix.myspends.ui.fragment.AddPaymentTypeFragment;
+import in.phoenix.myspends.util.AppAnalytics;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
@@ -374,7 +376,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         if (isNew) {
             if (AppUtil.isConnected()) {
                 if (AppUtil.isUserLoggedIn()) {
-                    NewExpense newExpense = new NewExpense();
+                    final NewExpense newExpense = new NewExpense();
                     newExpense.setAmount(AppUtil.getFloatAmount(mTIEtAmount.getText().toString()));
                     newExpense.setCreatedOn(System.currentTimeMillis());
                     newExpense.setExpenseDate(mExpenseDate.getTimeInMillis());
@@ -391,6 +393,11 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                             AppLog.d("NewExpense", "OnSuccess: Documentreference Path:" + documentReference.getPath());
                             AppUtil.showToast("Expense tracked!");
                             mOkStatus = RESULT_OK;
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString("user_uid", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            AppAnalytics.init().logEvent("added_expense", bundle);
+
                             if (!mCbAddAnotherExpense.isChecked()) {
                                 AppUtil.toggleKeyboard(false);
                                 /*setResult(RESULT_OK);
@@ -451,7 +458,6 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                 mExpense.setNote(mTIEtNote.getText().toString().trim().length() == 0 ? "" : mTIEtNote.getText().toString().trim());
             }
 
-            //TODO: change for flat db changes
             if (null != mSelectedTypeKey && !mExpense.getPaymentTypeKey().equals(mSelectedTypeKey)) {
                 mExpense.setPaymentTypeKey(mSelectedTypeKey);
             }

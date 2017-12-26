@@ -100,16 +100,15 @@
     <LinearLayout
         android:id="@+id/le_layout_loading"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
         android:visibility="gone">
 
         <ProgressBar
             android:layout_width="36dp"
-            android:layout_height="36dp"/>
+            android:layout_height="36dp"
+            android:layout_gravity="center_vertical"/>
 
         <in.phoenix.myspends.customview.CustomTextView
             android:layout_width="wrap_content"
@@ -133,9 +132,11 @@
         android:textSize="15sp"
         android:drawableStart="@drawable/ic_light_bulb"
         android:drawableLeft="@drawable/ic_light_bulb"
+        android:drawableEnd="@drawable/ic_light_bulb"
+        android:drawableRight="@drawable/ic_light_bulb"
         android:drawablePadding="16dp"
         android:layout_below="@+id/le_rlayout_expense"
         app:fontName="@string/font_noto_sans"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
 </RelativeLayout>

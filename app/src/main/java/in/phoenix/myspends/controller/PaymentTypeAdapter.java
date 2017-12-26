@@ -50,10 +50,12 @@ public class PaymentTypeAdapter extends BaseAdapter {
                         mListener.onStatusChanged(primaryKey, isChecked);
                     }
                 } else {
-                    //TODO:
+                    AppUtil.showToast("Unable to recognise!");
+                    buttonView.toggle();
                 }
             } else {
                 AppUtil.showToast(R.string.no_internet);
+                buttonView.toggle();
             }
         }
     };
@@ -110,6 +112,7 @@ public class PaymentTypeAdapter extends BaseAdapter {
             holder.swToggleActive.setOnCheckedChangeListener(null);
             holder.swToggleActive.setChecked(isActive);
             holder.swToggleActive.setOnCheckedChangeListener(togglePaymentType);
+            //holder.swToggleActive.setOnClickListener();
         }
 
         holder.tvPaymentTypeName.setText(paymentType.getName());
@@ -129,6 +132,15 @@ public class PaymentTypeAdapter extends BaseAdapter {
             notifyDataSetChanged();
         }
     }
+
+    /*private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (view.getId() == R.id.lpt_switch_active) {
+
+            }
+        }
+    };*/
 
     class ViewHolder {
         CustomTextView tvPaymentTypeName;

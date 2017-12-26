@@ -144,6 +144,8 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
                 boolean isFromCache = documentSnapshots.getMetadata().isFromCache();
                 AppLog.d("MainActivity", "Spends Firestore:onSuccess :: isFromCache:" + isFromCache);
 
+                //FirebaseDB.initDb().listenSpends();
+
                 if (!documentSnapshots.isEmpty()) {
                     //mLastSnapshot = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
                     new FSSpendsParser(MainActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
@@ -435,6 +437,8 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         } else {
             super.onBackPressed();
         }*/
+        FirebaseDB.initDb().detachPaymentTypes();
+        FirebaseDB.initDb().detachSpendsListener();
     }
 
     /*@Override

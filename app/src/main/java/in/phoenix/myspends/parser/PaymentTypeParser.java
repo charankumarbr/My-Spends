@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import in.phoenix.myspends.MySpends;
+import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.util.AppLog;
 
@@ -71,6 +72,7 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
         super.onPostExecute(aVoid);
         if (null != mListener) {
             mListener.onPaymentTypesParsed(mPaymentTypes, false);
+            MySpends.updatePaymentTypes(mPaymentTypes);
 
         } else {
             MySpends.addCashPaymentType(mPaymentTypes, mAllPaymentTypes);
@@ -78,6 +80,6 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
     }
 
     public interface PaymentTypeParserListener {
-        void onPaymentTypesParsed(ArrayList<PaymentType> spends, boolean isCashPaymentTypeAdded);
+        void onPaymentTypesParsed(ArrayList<PaymentType> paymentTypes, boolean isCashPaymentTypeAdded);
     }
 }

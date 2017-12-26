@@ -130,7 +130,8 @@
                     android:gravity="center_vertical"
                     app:fontName="@string/font_noto_sans"
                     android:textSize="16sp"
-                    android:textColor="@color/primary_text" />
+                    android:textColor="@color/primary_text"
+                    android:visibility="gone"/>
             </RelativeLayout>
 
             <RadioGroup

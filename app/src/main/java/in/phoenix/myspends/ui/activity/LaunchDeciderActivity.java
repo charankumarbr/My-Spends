@@ -49,7 +49,8 @@ public class LaunchDeciderActivity extends BaseActivity {
         if (AppUtil.isUserLoggedIn()) {
             findViewById(R.id.als_layout_signin).setVisibility(View.GONE);
             mPbLoading.setVisibility(View.VISIBLE);
-            MySpends.fetchPaymentTypes();
+            //MySpends.fetchPaymentTypes();
+            FirebaseDB.initDb().listenPaymentTypes();
             getCurrency();
 
         } else {
@@ -95,7 +96,8 @@ public class LaunchDeciderActivity extends BaseActivity {
                     Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
                     getCurrency();
-                    MySpends.fetchPaymentTypes();
+                    //MySpends.fetchPaymentTypes();
+                    FirebaseDB.initDb().listenPaymentTypes();
 
                 } else {
                     // Sign in failed, check response for error code
@@ -107,8 +109,6 @@ public class LaunchDeciderActivity extends BaseActivity {
     }
 
     private void getCurrency() {
-
-        AppLog.d("User", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
         final String currency = AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY);
         if (null == currency) {

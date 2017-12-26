@@ -1,25 +1,29 @@
 package in.phoenix.myspends.database;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.model.PaymentType;
@@ -34,16 +38,15 @@ public final class FirebaseDB {
 
     private static FirebaseDB mFirebaseDB;
 
-    //private FirebaseDatabase firebaseDatabase;
-
-    //private DatabaseReference databaseReference;
-
     private DatabaseReference currencyRef;
-    //private DatabaseReference spendsRef;
+
     private DatabaseReference paymentTypeRef;
+    private ChildEventListener mPaymentTypeListener;
 
     private FirebaseFirestore firebaseFirestore;
     private CollectionReference fsSpendsRef;
+    private EventListener mSpendsListener = null;
+    private ListenerRegistration mSpendsListenerRegistration = null;
 
     private FirebaseDB() {
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
@@ -53,11 +56,6 @@ public final class FirebaseDB {
 
         currencyRef = databaseReference.child("currency").child(FirebaseAuth.getInstance().getCurrentUser()
                 .getUid());
-
-        /*spendsRef = databaseReference.child("spends").child(FirebaseAuth.getInstance().getCurrentUser()
-                .getUid());
-        spendsRef.goOffline();
-        spendsRef.keepSynced(true);*/
 
         paymentTypeRef = databaseReference.child("paymentType").child(FirebaseAuth.getInstance().getCurrentUser()
                 .getUid());
@@ -72,6 +70,80 @@ public final class FirebaseDB {
 
         fsSpendsRef = firebaseFirestore.collection("my-spends").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .collection("spends");
+        //initSpendsListener();
+    }
+
+    private void initSpendsListener() {
+        mSpendsListener = new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                if (null != e) {
+                    AppLog.d("FirebaseDB", "initSpendsListener", e);
+                    mSpendsListener = null;
+                    return;
+                }
+
+                for (DocumentChange dc : documentSnapshots.getDocumentChanges()) {
+                    switch (dc.getType()) {
+                        case ADDED:
+                            AppLog.d("FirebaseDB", "initSpendsListener: New Spend: " + dc.getDocument().getData());
+                            break;
+
+                        case MODIFIED:
+                            AppLog.d("FirebaseDB", "initSpendsListener: Modified Spend: " + dc.getDocument().getData());
+                            break;
+
+                        case REMOVED:
+                            AppLog.d("FirebaseDB", "initSpendsListener: Removed Spend: " + dc.getDocument().getData());
+                            break;
+                    }
+                }
+            }
+        };
+    }
+
+    private void initPaymentTypeListener() {
+        mPaymentTypeListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                AppLog.d("FirebaseDB", "PaymentTypes: onChildAdded:");
+                AppLog.d("FirebaseDB", "PaymentTypes: onChildAdded: Snapshot:" + dataSnapshot);
+                AppLog.d("FirebaseDB", "PaymentTypes: onChildAdded: String:" + s);
+                AppLog.d("FirebaseDB", "PaymentTypes: onChildAdded: DataSnapshot: Key:" + dataSnapshot.getKey());
+                AppLog.d("FirebaseDB", "PaymentTypes: onChildAdded: DataSnapshot: Value:" + dataSnapshot.getValue());
+                PaymentType newPaymentType = dataSnapshot.getValue(PaymentType.class);
+                newPaymentType.setKey(dataSnapshot.getKey());
+                MySpends.addNewPaymentType(newPaymentType);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                AppLog.d("FirebaseDB", "PaymentTypes: onChildChanged: String" + s);
+                AppLog.d("FirebaseDB", "PaymentTypes: onChildChanged: DataSnapshot: Key:" + dataSnapshot.getKey());
+                AppLog.d("FirebaseDB", "PaymentTypes: onChildChanged: DataSnapshot: Value:" + dataSnapshot.getValue());
+                PaymentType editedPaymentType = dataSnapshot.getValue(PaymentType.class);
+                editedPaymentType.setKey(dataSnapshot.getKey());
+                MySpends.editPaymentType(editedPaymentType);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                AppLog.d("FirebaseDB", "PaymentTypes: onChildRemoved: DataSnapshot: Key:" + dataSnapshot.getKey());
+                AppLog.d("FirebaseDB", "PaymentTypes: onChildRemoved: DataSnapshot: Value:" + dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                AppLog.d("FirebaseDB", "PaymentTypes: onChildMoved: String" + s);
+                AppLog.d("FirebaseDB", "PaymentTypes: onChildMoved: DataSnapshot: Key:" + dataSnapshot.getKey());
+                AppLog.d("FirebaseDB", "PaymentTypes: onChildMoved: DataSnapshot: Value:" + dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                AppLog.d("FirebaseDB", "PaymentTypes: onCancelled:" + databaseError.getDetails());
+            }
+        };
     }
 
     public static FirebaseDB initDb() {
@@ -81,10 +153,6 @@ public final class FirebaseDB {
 
         return mFirebaseDB;
     }
-
-    /*public DatabaseReference getDatabaseReference() {
-        return databaseReference;
-    }*/
 
     public void setCurrency(Currency selectedCurrency) {
         currencyRef.setValue(selectedCurrency);
@@ -120,8 +188,17 @@ public final class FirebaseDB {
         paymentTypeRef.addListenerForSingleValueEvent(paymentTypeListener);
     }
 
-    public void getAllPaymentTypes(ChildEventListener allPaymentTypeListener) {
-        paymentTypeRef.addChildEventListener(allPaymentTypeListener);
+    public void listenPaymentTypes() {
+        if (null == mPaymentTypeListener) {
+            initPaymentTypeListener();
+        }
+        paymentTypeRef.addChildEventListener(mPaymentTypeListener);
+    }
+
+    public void detachPaymentTypes() {
+        if (null != mPaymentTypeListener) {
+            paymentTypeRef.removeEventListener(mPaymentTypeListener);
+        }
     }
 
     public void updateExpense(NewExpense editedExpense, DatabaseReference.CompletionListener completionListener) {
@@ -223,5 +300,21 @@ public final class FirebaseDB {
         HashMap<String, Object> values = new HashMap<>();
         values.put("active", isChecked);
         paymentTypeRef.child(paymentTypeKey).updateChildren(values, completionListener);
+    }
+
+    public void listenSpends() {
+
+        if (null != mSpendsListener && null == mSpendsListenerRegistration) {
+            mSpendsListenerRegistration = fsSpendsRef.addSnapshotListener(mSpendsListener);
+
+        } else {
+            AppLog.d("FirebaseDB", "listenSpends: NULL listener");
+        }
+    }
+
+    public void detachSpendsListener() {
+        if (null != mSpendsListenerRegistration) {
+            mSpendsListenerRegistration.remove();
+        }
     }
 }

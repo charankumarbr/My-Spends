@@ -177,7 +177,8 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
                     AppLog.d("PaymentActivity", "onStatusChanged 2");
                     if (null == databaseError) {
                         AppLog.d("PaymentActivity", "onStatusChanged 3");
-                        onPaymentTypesParsed(MySpends.getAllPaymentTypes(), true);
+                        //onPaymentTypesParsed(MySpends.getAllPaymentTypes(), true);
+                        getPaymentTypes();
                         AppLog.d("PaymentActivity", "onStatusChanged 4");
 
                     } else {
@@ -207,7 +208,8 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
                 }
 
                 AppUtil.showSnackbar(mViewComplete, "Payment type added!");
-                onPaymentTypesParsed(MySpends.getAllPaymentTypes(), true);
+                //onPaymentTypesParsed(MySpends.getAllPaymentTypes(), true);
+                getPaymentTypes();
             }
         }, 600);
     }

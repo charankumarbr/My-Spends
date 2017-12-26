@@ -68,48 +68,6 @@ public class MySpends extends Application {
 
     public static void fetchPaymentTypes() {
 
-        FirebaseDB.initDb().getAllPaymentTypes(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                AppLog.d("MySpends", "onChildAdded:");
-                AppLog.d("MySpends", "Snapshot:" + dataSnapshot);
-                AppLog.d("MySpends", "String:" + s);
-                AppLog.d("MySpends", "DataSnapshot: Key:" + dataSnapshot.getKey());
-                AppLog.d("MySpends", "DataSnapshot: Value:" + dataSnapshot.getValue());
-                PaymentType newPaymentType = dataSnapshot.getValue(PaymentType.class);
-                newPaymentType.setKey(dataSnapshot.getKey());
-                addNewPaymentType(newPaymentType);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                AppLog.d("MySpends", "PaymentTypes: onChildChanged: String" + s);
-                AppLog.d("MySpends", "PaymentTypes: onChildChanged: DataSnapshot: Key:" + dataSnapshot.getKey());
-                AppLog.d("MySpends", "PaymentTypes: onChildChanged: DataSnapshot: Value:" + dataSnapshot.getValue());
-                PaymentType editedPaymentType = dataSnapshot.getValue(PaymentType.class);
-                editedPaymentType.setKey(dataSnapshot.getKey());
-                editPaymentType(editedPaymentType);
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                AppLog.d("MySpends", "PaymentTypes: onChildRemoved: DataSnapshot: Key:" + dataSnapshot.getKey());
-                AppLog.d("MySpends", "PaymentTypes: onChildRemoved: DataSnapshot: Value:" + dataSnapshot.getValue());
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                AppLog.d("MySpends", "PaymentTypes: onChildMoved: String" + s);
-                AppLog.d("MySpends", "PaymentTypes: onChildMoved: DataSnapshot: Key:" + dataSnapshot.getKey());
-                AppLog.d("MySpends", "PaymentTypes: onChildMoved: DataSnapshot: Value:" + dataSnapshot.getValue());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                AppLog.d("MySpends", "PaymentTypes: onCancelled:" + databaseError.getDetails());
-            }
-        });
-
         FirebaseDB.initDb().getPaymentTypes(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -147,10 +105,11 @@ public class MySpends extends Application {
         }
         mapPaymentTypes.put("0", PaymentType.getCashPaymentType());
 
-        if (null == listpaymentTypes) {
+        //-- removed list of payment types --//
+        /*if (null == listpaymentTypes) {
             listpaymentTypes = new ArrayList<>();
         }
-        listpaymentTypes.add(0, PaymentType.getCashPaymentType());
+        listpaymentTypes.add(0, PaymentType.getCashPaymentType());*/
 
         setAllPaymentTypes(listpaymentTypes, mapPaymentTypes);
     }
@@ -167,7 +126,8 @@ public class MySpends extends Application {
 
         mMapAllPaymentTypes = new HashMap<>(mapAllPaymentTypes);
 
-        if (null == mAllPaymentTypes) {
+        //-- removed list of payment types --//
+        /*if (null == mAllPaymentTypes) {
             mAllPaymentTypes = new ArrayList<>();
 
         } else {
@@ -175,13 +135,14 @@ public class MySpends extends Application {
             mAllPaymentTypes = null;
         }
 
-        mAllPaymentTypes = new ArrayList<>(listAllPaymentTypes);
+        mAllPaymentTypes = new ArrayList<>(listAllPaymentTypes);*/
     }
 
-    public static ArrayList<PaymentType> getAllPaymentTypes() {
-        AppLog.d("MySpends", "getAllPaymentTypes");
+    //-- removed list of payment types --//
+    /*public static ArrayList<PaymentType> getAllPaymentTypes() {
+        AppLog.d("MySpends", "listenPaymentTypes");
         return mAllPaymentTypes;
-    }
+    }*/
 
     public static PaymentType getPaymentTypeForKey(String key) {
         if (null != mMapAllPaymentTypes) {
@@ -191,28 +152,30 @@ public class MySpends extends Application {
         return null;
     }
 
-    private static void addNewPaymentType(PaymentType newPaymentType) {
+    public static void addNewPaymentType(PaymentType newPaymentType) {
         if (null == mMapAllPaymentTypes) {
             mMapAllPaymentTypes = new HashMap<>();
             mMapAllPaymentTypes.put("0", PaymentType.getCashPaymentType());
         }
         mMapAllPaymentTypes.put(newPaymentType.getKey(), newPaymentType);
 
-        if (null == mAllPaymentTypes) {
+        //-- removed list of payment types --//
+        /*if (null == mAllPaymentTypes) {
             mAllPaymentTypes = new ArrayList<>();
             mAllPaymentTypes.add(0, PaymentType.getCashPaymentType());
         }
 
-        mAllPaymentTypes.add(newPaymentType);
+        mAllPaymentTypes.add(newPaymentType);*/
     }
 
-    private static void editPaymentType(PaymentType editedPaymentType) {
+    public static void editPaymentType(PaymentType editedPaymentType) {
         if (null == mMapAllPaymentTypes) {
             mMapAllPaymentTypes = new HashMap<>();
         }
         mMapAllPaymentTypes.put(editedPaymentType.getKey(), editedPaymentType);
 
-        if (null == mAllPaymentTypes) {
+        //-- removed list of payment types --//
+        /*if (null == mAllPaymentTypes) {
             mAllPaymentTypes = new ArrayList<>();
             mAllPaymentTypes.add(0, PaymentType.getCashPaymentType());
             mAllPaymentTypes.add(editedPaymentType);
@@ -227,7 +190,17 @@ public class MySpends extends Application {
                     break;
                 }
             }
+        }*/
+    }
+
+    public static void updatePaymentTypes(ArrayList<PaymentType> paymentTypes) {
+        if (null != paymentTypes && paymentTypes.size() > 0) {
+            if (null == mMapAllPaymentTypes) {
+                mMapAllPaymentTypes = new HashMap<>();
+            }
+            for (PaymentType paymentType : paymentTypes) {
+                mMapAllPaymentTypes.put(paymentType.getKey(), paymentType);
+            }
         }
     }
 }
-

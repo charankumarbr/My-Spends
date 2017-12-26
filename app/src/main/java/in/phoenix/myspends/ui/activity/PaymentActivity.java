@@ -19,7 +19,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.PaymentTypeAdapter;
 import in.phoenix.myspends.database.FirebaseDB;

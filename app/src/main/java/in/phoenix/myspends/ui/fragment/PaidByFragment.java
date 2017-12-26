@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
@@ -18,16 +17,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
-import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.database.DBManager;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.parser.PaymentTypeParser;
-import in.phoenix.myspends.ui.activity.NewExpenseActivity;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppUtil;
 

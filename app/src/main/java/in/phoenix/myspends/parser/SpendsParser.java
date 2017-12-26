@@ -6,7 +6,6 @@ import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
 
-import in.phoenix.myspends.model.Expense;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.util.AppLog;
 

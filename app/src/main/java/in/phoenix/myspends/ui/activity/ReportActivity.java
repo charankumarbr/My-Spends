@@ -3,7 +3,6 @@ package in.phoenix.myspends.ui.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,23 +19,16 @@ import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.controller.ExpenseAdapter;
 import in.phoenix.myspends.controller.NewExpenseAdapter;
 import in.phoenix.myspends.customview.CustomTextView;
-import in.phoenix.myspends.database.DBManager;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Expense;
-import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.parser.FSSpendsParser;
 import in.phoenix.myspends.parser.SpendsParser;

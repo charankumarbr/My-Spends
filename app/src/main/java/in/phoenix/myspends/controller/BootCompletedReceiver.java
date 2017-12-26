@@ -9,7 +9,6 @@ import android.content.Intent;
 import java.util.Calendar;
 
 import in.phoenix.myspends.BuildConfig;
-import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;

@@ -5,10 +5,10 @@ import android.os.AsyncTask;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.util.AppLog;
-import java.util.Iterator;
 
 /**
  * Created by Charan.Br on 12/19/2017.

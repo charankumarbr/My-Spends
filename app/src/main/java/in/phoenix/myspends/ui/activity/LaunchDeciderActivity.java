@@ -2,7 +2,6 @@ package in.phoenix.myspends.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -20,7 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import in.phoenix.myspends.BuildConfig;
-import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;

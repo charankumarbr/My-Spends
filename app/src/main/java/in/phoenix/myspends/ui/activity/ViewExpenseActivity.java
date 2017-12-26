@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -16,15 +15,11 @@ import android.widget.ProgressBar;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 
 import java.text.ParseException;
 
-import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
-import in.phoenix.myspends.database.DBManager;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import in.phoenix.myspends.MySpends;
-import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.util.AppLog;
 

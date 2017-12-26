@@ -1,7 +1,6 @@
 package in.phoenix.myspends.controller;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
-import in.phoenix.myspends.database.DBManager;
 import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppUtil;

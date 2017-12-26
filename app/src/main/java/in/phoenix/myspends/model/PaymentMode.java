@@ -1,7 +1,5 @@
 package in.phoenix.myspends.model;
 
-import android.content.ContentValues;
-
 import java.util.ArrayList;
 
 import in.phoenix.myspends.database.DBConstants;

@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.customview.MoneyValueFilter;
-import in.phoenix.myspends.database.DBManager;
 import in.phoenix.myspends.model.Expense;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.PaymentType;
@@ -115,7 +114,7 @@ public class AddExpenseFragment extends DialogFragment {
         mTIEtAmount.setFilters(new InputFilter[]{new MoneyValueFilter()});
         mTIEtNote = (TextInputEditText) addView.findViewById(R.id.fae_tiedittext_expense_note);
 
-        ArrayList<PaymentType> paymentTypes = DBManager.getPaymentTypes(true);
+        ArrayList<PaymentType> paymentTypes = null; // DBManager.getPaymentTypes(true);
         if (null != paymentTypes) {
             mFlexboxLayout = (FlexboxLayout) addView.findViewById(R.id.fae_fblayout_payment_mode);
             for (int index = 0; index < paymentTypes.size(); index++) {
@@ -221,7 +220,8 @@ public class AddExpenseFragment extends DialogFragment {
             expense.setNote(mTIEtNote.getText().toString());
             expense.setPaymentTypePriId(mSelectedTypeId);
 
-            if (DBManager.addExpense(expense) != -1) {
+            //-- TODO changes for remote db --//
+            /*if (DBManager.addExpense(expense) != -1) {
                 AppUtil.showToast("Expense tracked!");
                 if (null != mListener) {
                     mListener.onExpenseAdded();
@@ -231,7 +231,7 @@ public class AddExpenseFragment extends DialogFragment {
 
             } else {
                 AppUtil.showToast("Could not add this Expense!");
-            }
+            }*/
         } catch (NumberFormatException e) {
             AppUtil.showToast("Amount can be only number!!");
             Crashlytics.logException(e);

@@ -22,7 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.database.DBManager;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.PaymentMode;
 import in.phoenix.myspends.model.PaymentType;
@@ -121,7 +120,7 @@ public class AddPaymentTypeFragment extends DialogFragment {
         }
 
         private boolean isDuplicate() {
-            return DBManager.checkPaymentTypeName(mTIETTypeName.getText().toString(), mSelectedPaymentModeId);
+            return false; //-- DBManager.checkPaymentTypeName(mTIETTypeName.getText().toString(), mSelectedPaymentModeId);
         }
 
         private void addPaymentType() {

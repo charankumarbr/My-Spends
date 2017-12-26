@@ -47,10 +47,10 @@ public class LaunchDeciderActivity extends BaseActivity {
         mPbLoading = findViewById(R.id.als_pb_loading);
 
         if (AppUtil.isUserLoggedIn()) {
-            findViewById(R.id.als_layout_signin).setVisibility(View.GONE);
-            mPbLoading.setVisibility(View.VISIBLE);
             //MySpends.fetchPaymentTypes();
             FirebaseDB.initDb().listenPaymentTypes();
+            findViewById(R.id.als_layout_signin).setVisibility(View.GONE);
+            mPbLoading.setVisibility(View.VISIBLE);
             getCurrency();
 
         } else {

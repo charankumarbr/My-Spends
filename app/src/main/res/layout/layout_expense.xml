@@ -7,8 +7,7 @@
     <RelativeLayout
         android:id="@+id/le_rlayout_expense"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="8dp">
+        android:layout_height="wrap_content">
 
         <in.phoenix.myspends.customview.CustomTextView
             android:id="@+id/le_tv_month"
@@ -19,82 +18,97 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="12dp"
             android:layout_marginLeft="12dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="4dp"
             android:textColor="@color/colorAccent"
             app:fontName="@string/font_noto_sans"
-            android:layout_marginTop="10dp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
-        <RelativeLayout
+        <android.support.v7.widget.CardView
             android:id="@+id/le_layout_expense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/le_tv_month"
-            android:paddingTop="16dp">
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="2dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardElevation="3dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_toLeftOf="@+id/le_layout_end"
-                android:layout_alignParentLeft="true"
-                android:layout_marginStart="12dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginEnd="12dp"
-                android:layout_marginRight="12dp">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp">
 
-                <in.phoenix.myspends.customview.CustomTextView
-                    android:id="@+id/le_textview_payment_note"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="17sp"
-                    android:layout_marginBottom="8dp"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    app:fontName="@string/font_noto_sans"
-                    android:textColor="@color/primary_text"/>
+                    android:orientation="vertical"
+                    android:layout_toLeftOf="@+id/le_layout_end"
+                    android:layout_alignParentLeft="true">
 
-                <in.phoenix.myspends.customview.CustomTextView
-                    android:id="@+id/le_textview_payment_type"
+                    <in.phoenix.myspends.customview.CustomTextView
+                        android:id="@+id/le_textview_payment_note"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="17sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        app:fontName="@string/font_noto_sans"
+                        android:textColor="@color/primary_text"/>
+
+                    <in.phoenix.myspends.customview.CustomTextView
+                        android:id="@+id/le_textview_payment_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:layout_marginTop="8dp"
+                        app:fontName="@string/font_noto_sans"
+                        android:textSize="14sp"
+                        android:textColor="@color/secondary_text"
+                        android:ellipsize="end"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/le_layout_end"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    app:fontName="@string/font_noto_sans"
-                    android:textSize="14sp"
-                    android:textColor="@color/secondary_text"
-                    android:ellipsize="end"/>
-            </LinearLayout>
+                    android:orientation="vertical"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp">
 
-            <LinearLayout
-                android:id="@+id/le_layout_end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="12dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                android:layout_marginEnd="12dp">
+                    <in.phoenix.myspends.customview.CustomTextView
+                        android:id="@+id/le_textview_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="17sp"
+                        android:textColor="@color/colorPrimary"
+                        app:fontName="@string/font_noto_sans"
+                        android:layout_gravity="right"/>
 
-                <in.phoenix.myspends.customview.CustomTextView
-                    android:id="@+id/le_textview_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="17sp"
-                    android:textColor="@color/colorPrimary"
-                    app:fontName="@string/font_noto_sans"
-                    android:layout_gravity="right"/>
+                    <in.phoenix.myspends.customview.CustomTextView
+                        android:id="@+id/le_textview_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="@color/colorAccent"
+                        android:layout_marginTop="8dp"
+                        app:fontName="@string/font_noto_sans"
+                        android:layout_gravity="right"/>
+                </LinearLayout>
+            </RelativeLayout>
 
-                <in.phoenix.myspends.customview.CustomTextView
-                    android:id="@+id/le_textview_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorAccent"
-                    android:layout_marginTop="8dp"
-                    app:fontName="@string/font_noto_sans"
-                    android:layout_gravity="right"/>
-            </LinearLayout>
-        </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
     </RelativeLayout>
 
     <LinearLayout
@@ -137,6 +151,6 @@
         android:drawablePadding="16dp"
         android:layout_below="@+id/le_rlayout_expense"
         app:fontName="@string/font_noto_sans"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
 </RelativeLayout>

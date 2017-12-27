@@ -390,9 +390,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                             AppUtil.showToast("Expense tracked!");
                             mOkStatus = RESULT_OK;
 
-                            Bundle bundle = new Bundle();
-                            bundle.putString("user_uid", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                            AppAnalytics.init().logEvent("added_expense", bundle);
+                            AppAnalytics.init().logEvent("added_expense", new Bundle());
 
                             if (!mCbAddAnotherExpense.isChecked()) {
                                 AppUtil.toggleKeyboard(false);

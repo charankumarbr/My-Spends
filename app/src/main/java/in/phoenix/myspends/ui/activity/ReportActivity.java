@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import in.phoenix.myspends.R;
@@ -29,10 +32,12 @@ import in.phoenix.myspends.controller.NewExpenseAdapter;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Expense;
+import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.parser.FSSpendsParser;
 import in.phoenix.myspends.parser.SpendsParser;
 import in.phoenix.myspends.ui.fragment.DatePickerFragment;
+import in.phoenix.myspends.ui.fragment.FilterFragment;
 import in.phoenix.myspends.ui.fragment.PaidByFragment;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
@@ -40,18 +45,18 @@ import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
 public class ReportActivity extends BaseActivity implements DatePickerFragment.OnDatePickedListener,
-        PaidByFragment.OnPaidBySelectedListener, SpendsParser.SpendsParserListener, NewExpenseAdapter.OnLoadingListener {
+        PaidByFragment.OnPaidBySelectedListener, SpendsParser.SpendsParserListener, NewExpenseAdapter.OnLoadingListener,
+        FilterFragment.OnFilterListener{
 
     private long mFromMillis = 0;
     private long mToMillis = 0;
     private String mPaidBy = null;
 
-    private ArrayList<Expense> mExpenseReport = null;
-
     private ProgressBar mPbLoading = null;
 
     private ListView mLvExpenses = null;
 
+    private CustomTextView mCTvFilter = null;
     private CustomTextView mCTvMsg = null;
     private CustomTextView mCTvPaidBy = null;
 
@@ -91,6 +96,8 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         mFromMillis = AppUtil.getFirstDayOfMonth();
         mToMillis = AppUtil.getCurrentDayOfMonth();
         AppLog.d("ReportActivity", "From:" + mFromMillis + ":: To:" + mToMillis);
+        mCTvFilter = (CustomTextView) findViewById(R.id.ar_layout_filter);
+        mCTvFilter.setOnClickListener(clickListener);
         //getExpenses();
     }
 
@@ -104,6 +111,10 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
             } else if (view.getId() == R.id.ar_ctextview_paid_by) {
                 PaidByFragment paidByFragment = PaidByFragment.newInstance(mPaidBy);
                 paidByFragment.show(getSupportFragmentManager(), "PaidByFragment");
+
+            } else if (view.getId() == R.id.ar_layout_filter) {
+                FilterFragment paidByFragment = FilterFragment.newInstance();
+                paidByFragment.show(getSupportFragmentManager(), "FilterFragment");
             }
         }
     };
@@ -141,93 +152,91 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
     private void getExpenses() {
         if ((0 != mFromMillis && 0 != mToMillis)) {
 
-            if (AppUtil.isConnected()) {
-                if (AppUtil.isUserLoggedIn()) {
+            if (null == mExpenseAdapter) {
+                mPbLoading.setVisibility(View.VISIBLE);
+            }
 
-                    if (null == mExpenseAdapter) {
-                        mPbLoading.setVisibility(View.VISIBLE);
+            mCTvMsg.setVisibility(View.GONE);
+
+            FirebaseDB.initDb().getFsSpends(mFromMillis, mToMillis, mPaidBy, mLastSnapshot, new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot documentSnapshots) {
+
+                    boolean isFromCache = documentSnapshots.getMetadata().isFromCache();
+                    AppLog.d("ReportActivity", "Spends Firestore:onSuccess :: isCache:" + isFromCache);
+
+                    mMiGetTotal.setVisible(false);
+
+                    if (isFromCache || !AppUtil.isConnected()) {
+                        mCTvFilter.setText("Filters (Offline)");
+
+                    } else {
+                        mCTvFilter.setText("Filters");
                     }
 
-                    mCTvMsg.setVisibility(View.GONE);
+                    if (!documentSnapshots.isEmpty()) {
+                        if (null != mLastSnapshot) {
+                            mLastSnapshot = null;
+                        }
+                        mLastSnapshot = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
 
-                    FirebaseDB.initDb().getFsSpends(mFromMillis, mToMillis, mPaidBy, mLastSnapshot, new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot documentSnapshots) {
-                            AppLog.d("ReportActivity", "Spends Firestore:onSuccess");
+                        new FSSpendsParser(ReportActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+                                documentSnapshots.iterator());
 
-                            boolean isFromCache = documentSnapshots.getMetadata().isFromCache();
+                    } else {
+                        AppLog.d("ReportActivity", "Spends: Empty! ::" + "Count: ZERO");
 
-                            mMiGetTotal.setVisible(false);
+                        mPbLoading.setVisibility(View.GONE);
 
-                            if (!documentSnapshots.isEmpty()) {
-                                if (null != mLastSnapshot) {
-                                    mLastSnapshot = null;
-                                }
-                                mLastSnapshot = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
+                        if (null == mExpenseAdapter) {
+                            AppUtil.showToast("No Spends tracked!");
+                            mLvExpenses.setVisibility(View.GONE);
+                            mCTvMsg.setText(R.string.no_spends_tracked_tune_filters);
+                            mCTvMsg.setVisibility(View.VISIBLE);
 
-                                new FSSpendsParser(ReportActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-                                        documentSnapshots.iterator());
+                        } else {
+                            if (mExpenseAdapter.isLoading()) {
+                                AppUtil.showToast("Fetched all your spends.");
+                                mExpenseAdapter.setIsLoading(false);
+                                mExpenseAdapter.setIsLoadingRequired(false);
+                                mExpenseAdapter.notifyDataSetChanged();
+                                mMiGetTotal.setVisible(true);
 
                             } else {
-                                AppLog.d("ReportActivity", "Spends: Empty! ::" + "Count: ZERO");
-
-                                mPbLoading.setVisibility(View.GONE);
-
-                                if (null == mExpenseAdapter) {
-                                    AppUtil.showToast("No Spends tracked!");
-                                    mLvExpenses.setVisibility(View.GONE);
-                                    mCTvMsg.setText(R.string.no_spends_tracked_tune_filters);
-                                    mCTvMsg.setVisibility(View.VISIBLE);
-
-                                } else {
-                                    if (mExpenseAdapter.isLoading()) {
-                                        AppUtil.showToast("Fetched all your spends.");
-                                        mExpenseAdapter.setIsLoading(false);
-                                        mExpenseAdapter.setIsLoadingRequired(false);
-                                        mExpenseAdapter.notifyDataSetChanged();
-                                        mMiGetTotal.setVisible(true);
-
-                                    } else {
-                                        //-- refresh data --//
-                                        mExpenseAdapter = null;
-                                        mLvExpenses.setAdapter(null);
-                                        mLvExpenses.setVisibility(View.GONE);
-                                        mCTvMsg.setText(R.string.no_spends_tracked_tune_filters);
-                                        mCTvMsg.setVisibility(View.VISIBLE);
-                                    }
-                                }
-                            }
-                        }
-                    }, new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-
-                            mMiGetTotal.setVisible(false);
-
-                            AppLog.d("ReportActivity", "Spends Firestore:onFailure", e);
-
-                            AppUtil.showToast(R.string.unable_fetch_spends);
-
-                            if (null == mExpenseAdapter) {
+                                //-- refresh data --//
+                                mExpenseAdapter = null;
+                                mLvExpenses.setAdapter(null);
                                 mLvExpenses.setVisibility(View.GONE);
+                                mCTvMsg.setText(R.string.no_spends_tracked_tune_filters);
                                 mCTvMsg.setVisibility(View.VISIBLE);
-                                mPbLoading.setVisibility(View.GONE);
-
-                            } else {
-                                if (mExpenseAdapter.isLoading()) {
-                                    mExpenseAdapter.setIsLoading(false);
-                                    //mExpenseAdapter.setIsLoadingRequired(false);
-                                    mExpenseAdapter.notifyDataSetChanged();
-                                }
                             }
                         }
-                    });
-                } else {
-                    AppUtil.showToast("User not logged in.");
+                    }
                 }
-            } else {
-                AppUtil.showSnackbar(mViewComplete, getString(R.string.no_internet));
-            }
+            }, new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                    mMiGetTotal.setVisible(false);
+
+                    AppLog.d("ReportActivity", "Spends Firestore:onFailure", e);
+
+                    AppUtil.showToast(R.string.unable_fetch_spends);
+
+                    if (null == mExpenseAdapter) {
+                        mLvExpenses.setVisibility(View.GONE);
+                        mCTvMsg.setVisibility(View.VISIBLE);
+                        mPbLoading.setVisibility(View.GONE);
+
+                    } else {
+                        if (mExpenseAdapter.isLoading()) {
+                            mExpenseAdapter.setIsLoading(false);
+                            //mExpenseAdapter.setIsLoadingRequired(false);
+                            mExpenseAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            });
         } else {
             AppUtil.showSnackbar(mViewComplete, "Please select the dates...");
         }
@@ -324,6 +333,41 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         getMenuInflater().inflate(R.menu.menu_reports, menu);
         mMiGetTotal = menu.findItem(R.id.menu_get_total);
         return true;
+    }
+
+    @Override
+    public void onFilterChanged(long fromDate, long toDate, String paidByKey) {
+        AppLog.d("ReportActivity", "onFilterChanged: FromDate:" + fromDate + " :: To Date:" + toDate + " :: Paidby:" + paidByKey);
+        if (0 != fromDate && 0 != toDate) {
+            boolean isChanged = false;
+
+            ExpenseDate checkerFromDate = new ExpenseDate(mFromMillis);
+            ExpenseDate checkerToDate = new ExpenseDate(mToMillis);
+            if (!checkerFromDate.isSameExpenseDate(fromDate) || !checkerToDate.isSameExpenseDate(toDate)) {
+                mFromMillis = fromDate;
+                mToMillis = toDate;
+                isChanged = true;
+            }
+
+            if ((null == mPaidBy) || (!TextUtils.isEmpty(mPaidBy) && !mPaidBy.equals(paidByKey))) {
+                mPaidBy = paidByKey;
+                isChanged = true;
+            }
+
+            if (isChanged) {
+                mLastSnapshot = null;
+                mLastKey = null;
+
+                if (null != mExpenseAdapter) {
+                    mExpenseAdapter = null;
+                    mLvExpenses.setAdapter(null);
+                }
+                getExpenses();
+
+            } else {
+                AppUtil.showToast("Filter not changed!");
+            }
+        }
     }
 
     class CalculateTotal extends AsyncTask<Void, Void, Void> {

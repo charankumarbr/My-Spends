@@ -104,6 +104,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
         super.onStart();
         if (getDialog() != null) {
             getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            getDialog().setTitle("Filters");
         }
     }
 

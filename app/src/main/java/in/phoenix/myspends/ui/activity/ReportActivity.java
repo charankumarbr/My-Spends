@@ -104,7 +104,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (view.getId() == R.id.ar_ctextview_date) {
+            /*if (view.getId() == R.id.ar_ctextview_date) {
                 DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(mFromMillis, mToMillis);
                 datePickerFragment.show(getSupportFragmentManager(), "DatePickerFragment");
 
@@ -112,7 +112,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                 PaidByFragment paidByFragment = PaidByFragment.newInstance(mPaidBy);
                 paidByFragment.show(getSupportFragmentManager(), "PaidByFragment");
 
-            } else if (view.getId() == R.id.ar_layout_filter) {
+            } else*/ if (view.getId() == R.id.ar_layout_filter) {
                 FilterFragment paidByFragment = FilterFragment.newInstance();
                 paidByFragment.show(getSupportFragmentManager(), "FilterFragment");
             }

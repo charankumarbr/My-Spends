@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
@@ -52,9 +53,11 @@ public class LaunchDeciderActivity extends BaseActivity {
             FirebaseDB.initDb().listenPaymentTypes();
             findViewById(R.id.als_layout_signin).setVisibility(View.GONE);
             mPbLoading.setVisibility(View.VISIBLE);
+            AppUtil.addDynamicShortcut();
             getCurrency();
 
         } else {
+            AppUtil.removeDynamicShortcut();
             findViewById(R.id.als_layout_signin).setVisibility(View.VISIBLE);
             AppCompatButton btnLogin = findViewById(R.id.als_abtn_login);
             btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -96,11 +99,11 @@ public class LaunchDeciderActivity extends BaseActivity {
                     }
                     Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
+                    AppUtil.addDynamicShortcut();
+
                     getCurrency();
                     //MySpends.fetchPaymentTypes();
                     FirebaseDB.initDb().listenPaymentTypes();
-
-                    addDynamicShortcut();
 
                 } else {
                     // Sign in failed, check response for error code
@@ -109,25 +112,6 @@ public class LaunchDeciderActivity extends BaseActivity {
                 }
             }
         }
-    }
-
-    private void addDynamicShortcut() {
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
-            ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
-            if (shortcutManager.getDynamicShortcuts().size() == 0) {
-                // Application restored or no shortcut added yet. Need to re-publish dynamic shortcuts. --//
-                /*ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "id1")
-                        .setShortLabel("Web site")
-                        .setLongLabel("Open the web site")
-                        .setIcon(Icon.createWithResource(LaunchDeciderActivity.this, R.drawable.ic_add_white_24dp))
-                        .setIntent(new Intent())
-                        .build();
-
-                shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut));*/
-            }
-        }
-
     }
 
     private void getCurrency() {

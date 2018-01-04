@@ -3,7 +3,7 @@
     <include
         domain="sharedpref"
         path="MySpendsPrefs" />
-    <include
+    <!--<include
         domain="database"
-        path="in_phoenix_myspends.db" />
+        path="in_phoenix_myspends.db" />-->
 </full-backup-content>

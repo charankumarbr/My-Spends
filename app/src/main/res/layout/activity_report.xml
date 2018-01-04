@@ -71,7 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Please apply filters to view your spends."
+        android:text="Apply filters to view your spends."
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:gravity="center"

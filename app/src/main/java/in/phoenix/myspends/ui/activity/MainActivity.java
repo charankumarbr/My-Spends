@@ -269,6 +269,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 AppPref.getInstance().clearAll();
+                                                AppUtil.removeDynamicShortcut();
                                                 Intent newIntent = new Intent(MainActivity.this, LaunchDeciderActivity.class);
                                                 newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                 startActivity(newIntent);

@@ -106,11 +106,16 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                 isNew = true;
 
             } else {
-                finish();
+                if (AppUtil.isUserLoggedIn()) {
+                    mExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());
+                    isNew = true;
+
+                } else {
+                    finish();
+                }
             }
 
             mViaNotification = getIntent().getBooleanExtra(AppConstants.Bundle.VIA_NOTIFICATION, false);
-            AppLog.d("TimeInMillis", getIntent().getLongExtra("check", 100L) + ":: millisCheck");
 
             setContentView(R.layout.activity_new_expense);
             init();

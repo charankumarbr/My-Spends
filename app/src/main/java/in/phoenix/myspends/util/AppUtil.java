@@ -4,6 +4,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -28,6 +31,7 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -348,7 +352,6 @@ public final class AppUtil {
         } else {
             notificationIntent = new Intent(context, NewExpenseActivity.class);
             notificationIntent.putExtra(AppConstants.Bundle.EXPENSE_DATE, expenseDate);
-            notificationIntent.putExtra("check", Calendar.getInstance().getTimeInMillis());
             //taskStackBuilder.addParentStack(NewExpenseActivity.class);
         }
 
@@ -376,5 +379,39 @@ public final class AppUtil {
                 .setVibrate(new long[]{1000, 1000, 1000});
 
         notificationManager.notify(20332, builder.build());
+    }
+
+    public static void addDynamicShortcut() {
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
+            ShortcutManager shortcutManager = MySpends.APP_CONTEXT.getSystemService(ShortcutManager.class);
+            AppLog.d("LaunchDecider", "add: Shortcut Count:" + shortcutManager.getDynamicShortcuts().size());
+            if (shortcutManager.getDynamicShortcuts().size() == 0) {
+                //-- Application restored or no shortcut added. Need to re-publish dynamic shortcuts. --//
+                Intent shortcutIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("myspends://www.myspends.co.in/addSpend"));
+                shortcutIntent.putExtra(AppConstants.Bundle.VIA_NOTIFICATION, true);
+                //shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                ShortcutInfo shortcut = new ShortcutInfo.Builder(MySpends.APP_CONTEXT, "as1")
+                        .setShortLabel("New Spend")
+                        .setLongLabel("New Spend")
+                        .setIcon(Icon.createWithResource(MySpends.APP_CONTEXT, R.drawable.ic_new_shortcut_24dp))
+                        .setIntent(shortcutIntent)
+                        .build();
+
+                shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut));
+            }
+        }
+
+    }
+
+    public static void removeDynamicShortcut() {
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
+            ShortcutManager shortcutManager = MySpends.APP_CONTEXT.getSystemService(ShortcutManager.class);
+            AppLog.d("LaunchDecider", "remove: Shortcut Count:" + shortcutManager.getDynamicShortcuts().size());
+            if (shortcutManager.getDynamicShortcuts().size() > 0) {
+                shortcutManager.removeAllDynamicShortcuts();
+            }
+        }
     }
 }

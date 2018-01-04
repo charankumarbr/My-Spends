@@ -23,8 +23,7 @@
                 android:layout_height="wrap_content"
                 android:text="Select the dates to view your spends"
                 android:layout_marginTop="16dp"
-                android:layout_centerHorizontal="true"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 android:textColor="@color/colorPrimary"
                 app:fontName="@string/font_noto_sans" />
 
@@ -92,8 +91,7 @@
                 android:layout_height="wrap_content"
                 android:text="Select the paid by to filter your spends"
                 android:layout_marginTop="20dp"
-                android:layout_centerHorizontal="true"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 android:textColor="@color/colorPrimary"
                 app:fontName="@string/font_noto_sans"
                 android:layout_below="@+id/ff_imageview_to_date"/>
@@ -116,11 +114,12 @@
                 android:layout_marginTop="16dp"
                 android:text="Reset"
                 android:textAllCaps="true"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorAccent"
                 android:layout_marginEnd="12dp"
                 android:layout_marginBottom="16dp"
                 android:layout_below="@+id/ff_fblayout_payment_mode"
-                android:layout_toStartOf="@+id/ff_abutton_view_spends"/>
+                android:layout_toStartOf="@+id/ff_abutton_view_spends"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/ff_abutton_view_spends"
@@ -131,8 +130,9 @@
                 android:layout_marginTop="16dp"
                 android:text="View My Spends"
                 android:textAllCaps="true"
-                android:textColor="@android:color/white"
-                android:layout_marginBottom="16dp" />
+                android:textColor="@color/colorAccent"
+                android:layout_marginBottom="16dp"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
         </RelativeLayout>
     </ScrollView>
 </FrameLayout>

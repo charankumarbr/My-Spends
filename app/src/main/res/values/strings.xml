@@ -14,7 +14,8 @@
     <string name="enter_valid_payment_name">Enter a valid Payment Name</string>
     <string name="Rs">\u20B9</string>
     <string name="font_noto_sans">fontNotoSans</string>
-    <string name="paid_by">Paid by:</string>
+    <string name="paid_by_">Paid by:</string>
+    <string name="paid_by">Paid by</string>
     <string name="note">Note</string>
     <string name="value">default</string>
     <string name="done_caps">DONE</string>

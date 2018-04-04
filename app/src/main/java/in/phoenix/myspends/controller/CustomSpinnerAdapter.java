@@ -79,7 +79,6 @@ public final class CustomSpinnerAdapter extends ArrayAdapter<String> {
 
     private View createItemView(int position, View convertView, ViewGroup parent, Boolean isDropdown){
 
-        AppLog.d("Adapter", "Position:" + position);
         if (position == 0) {
             View view;
             if (isDropdown) {

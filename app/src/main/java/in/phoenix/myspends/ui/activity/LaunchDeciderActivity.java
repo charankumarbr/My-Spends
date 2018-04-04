@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.firebase.ui.auth.AuthUI;
@@ -47,6 +48,8 @@ public class LaunchDeciderActivity extends BaseActivity {
 
         setContentView(R.layout.activity_login_signup);
         mPbLoading = findViewById(R.id.als_pb_loading);
+        TextView tvVersion = findViewById(R.id.als_tv_version);
+        tvVersion.setText("v " + BuildConfig.VERSION_NAME);
 
         if (AppUtil.isUserLoggedIn()) {
             //MySpends.fetchPaymentTypes();

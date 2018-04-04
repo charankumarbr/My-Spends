@@ -29,9 +29,9 @@
         android:id="@+id/als_layout_signin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/als_tv_version"
         android:visibility="gone">
 
         <in.phoenix.myspends.customview.CustomTextView
@@ -63,5 +63,16 @@
             android:paddingStart="32dp"
             android:paddingEnd="32dp"/>
     </LinearLayout>
+
+    <in.phoenix.myspends.customview.CustomTextView
+        android:id="@+id/als_tv_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="12dp"
+        android:textSize="13sp"
+        android:textColor="@android:color/white"
+        app:fontName="@string/font_noto_sans"/>
 
 </RelativeLayout>

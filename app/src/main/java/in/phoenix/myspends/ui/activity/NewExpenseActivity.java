@@ -63,7 +63,8 @@ import in.phoenix.myspends.util.AppUtil;
  * Created by Charan.Br on 4/11/2017.
  */
 
-public final class NewExpenseActivity extends BaseActivity implements AddPaymentTypeFragment.OnPaymentTypeListener, PaymentTypeParser.PaymentTypeParserListener {
+public final class NewExpenseActivity extends BaseActivity implements AddPaymentTypeFragment.
+        OnPaymentTypeListener, PaymentTypeParser.PaymentTypeParserListener {
 
     private NewExpense mExpense = null;
 
@@ -167,12 +168,13 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
         getPaymentTypes();
 
+        setCategories();
+
         if (isNew) {
             mCTvExpenseDate.setText(/*getString(R.string.expense_on) + " " + */mExpenseDate.getFormattedDate());
             //mVEditDate.setVisibility(View.VISIBLE);
             //mVEditDate.setOnClickListener(clickListener);
             mCbAddAnotherExpense.setVisibility(View.VISIBLE);
-            setCategories();
 
         } else {
             mTIEtAmount.append(AppUtil.getStringAmount(String.valueOf(mExpense.getAmount())));
@@ -187,7 +189,12 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
             /*mVEditDate.setVisibility(View.VISIBLE);
             mVEditDate.setOnClickListener(clickListener);*/
+
+            mSpnrCategory.setSelection(mExpense.getCategoryId());
         }
+
+        mSpnrCategory.setOnItemSelectedListener(mCategoryListener);
+
         mCTvExpenseDate.setOnClickListener(clickListener);
     }
 
@@ -195,7 +202,6 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         CustomSpinnerAdapter categoryAdapter = new CustomSpinnerAdapter(NewExpenseActivity.this,
                 R.layout.layout_spinner_selected, MySpends.getCategories());
         categoryAdapter.setSelectionText("Select Category");
-        mSpnrCategory.setOnItemSelectedListener(mCategoryListener);
         mSpnrCategory.setAdapter(categoryAdapter);
     }
 
@@ -466,31 +472,38 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
             }
 
         } else {
+            boolean status = false;
             Float amount = AppUtil.getFloatAmount(mTIEtAmount.getText().toString());
             if (Float.compare(mExpense.getAmount(), amount) != 0) {
                 mExpense.setAmount(amount);
+                status = true;
             }
 
             if (null != mExpenseDate && !mExpenseDate.isSameExpenseDate(mExpense.getExpenseDate())) {
                 mExpense.setExpenseDate(mExpenseDate.getTimeInMillis());
+                status = true;
             }
 
             if (!mExpense.getNote().equals(mTIEtNote.getText().toString())) {
                 mExpense.setNote(mTIEtNote.getText().toString().trim().length() == 0 ? "" : mTIEtNote.getText().toString().trim());
+                status = true;
             }
 
             if (null != mSelectedTypeKey && !mExpense.getPaymentTypeKey().equals(mSelectedTypeKey)) {
                 mExpense.setPaymentTypeKey(mSelectedTypeKey);
+                status = true;
             }
 
             if (mSelectedCategoryId != -1 && mExpense.getCategoryId() != mSelectedCategoryId) {
                 mExpense.setCategoryId(mSelectedCategoryId);
             }
 
-            mExpense.setUpdatedOn(System.currentTimeMillis());
+            if (status) {
+                mExpense.setUpdatedOn(System.currentTimeMillis());
+            }
             AppLog.d("NewExpense", "Edited expense:" + mExpense.getId() + ":" + mExpense.getPaymentTypeKey()
             + ":" + mExpense.getExpenseDate() + ":" + mExpense.getCreatedOn() + ":" + mExpense.getNote() + ":"
-            + mExpense.getAmount() + ":" + mExpense.getUpdatedOn());
+            + mExpense.getAmount() + ":" + mExpense.getUpdatedOn() + ":" + mExpense.getCategoryId());
 
             if (AppUtil.isConnected()) {
                 if (AppUtil.isUserLoggedIn()) {
@@ -600,6 +613,10 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                 return true;
             }
 
+            if (mSelectedCategoryId != -1) {
+                return true;
+            }
+
             if (!TextUtils.isEmpty(mTIEtNote.getText())) {
                 return true;
             }
@@ -627,6 +644,10 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                 }
 
                 if (null != mSelectedTypeKey && !mExpense.getPaymentTypeKey().equals(mSelectedTypeKey)) {
+                    return true;
+                }
+
+                if (mSelectedCategoryId != -1 && mExpense.getCategoryId() != mSelectedCategoryId) {
                     return true;
                 }
 
@@ -670,11 +691,22 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
         if (null != paymentTypes && paymentTypes.size() > 0) {
             mPaymentTypeCount = paymentTypes.size();
-            mSpnrPaidBy.setOnItemSelectedListener(mPaidBySelectedListener);
             CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(NewExpenseActivity.this,
                     R.layout.layout_spinner_selected, paymentTypes);
             adapter.setSelectionText("Select Paid by");
             mSpnrPaidBy.setAdapter(adapter);
+
+            if (!isNew) {
+                for (int index = 0; index < paymentTypes.size(); index++) {
+                    PaymentType paymentType = paymentTypes.get(index);
+                    if (paymentType.getKey().equals(mExpense.getPaymentTypeKey())) {
+                        mSpnrPaidBy.setSelection(index + 1);
+                        break;
+                    }
+                }
+            }
+
+            mSpnrPaidBy.setOnItemSelectedListener(mPaidBySelectedListener);
             /*LayoutInflater inflater = LayoutInflater.from(NewExpenseActivity.this);
             for (int index = 0; index < paymentTypes.size(); index++) {
                 if (paymentTypes.get(index).isActive()) {
@@ -700,7 +732,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     private AdapterView.OnItemSelectedListener mPaidBySelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            AppLog.d("Paid By Listener", "onItemSeleceted:");
+            AppLog.d("Paid By Listener", "onItemSelected:");
             mSelectedTypeKey = (String) view.getTag();
             AppLog.d("AddExpense", "TypeId Key:" + mSelectedTypeKey);
         }

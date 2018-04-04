@@ -33,7 +33,7 @@ public interface AppConstants {
         String NOTIFICATION_MIN = "notificationMin";
     }
 
-    int PAGE_SPENDS_SIZE = 10;
+    int PAGE_SPENDS_SIZE = 30;
 
     //-- 128 bit key --//
     String dummy = "iVuNaNKaRcHuGaLu";

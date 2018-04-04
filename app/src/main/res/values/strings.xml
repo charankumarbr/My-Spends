@@ -54,4 +54,5 @@
     <string name="no_spends_tracked_tune_filters">No spends tracked!\n\nFine tune your filters.</string>
     <string name="get_total">Get Total</string>
     <string name="profile">Profile</string>
+    <string name="category">Category</string>
 </resources>

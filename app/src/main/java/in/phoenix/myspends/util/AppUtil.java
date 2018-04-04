@@ -361,7 +361,7 @@ public final class AppUtil {
         //taskStackBuilder.addNextIntent(notificationIntent);
         taskStackBuilder.addNextIntentWithParentStack(notificationIntent);
 
-        int random = new Random().nextInt(500);
+        //int random = new Random().nextInt(500);
         PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -414,4 +414,17 @@ public final class AppUtil {
             }
         }
     }
+
+    public static boolean doesContainRestrictedChar(String note) {
+
+        String[] restrictedChars = {":", "\"", "\\", "*", "%"};
+        for (String restrictedChar : restrictedChars) {
+            if (note.contains(restrictedChar)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

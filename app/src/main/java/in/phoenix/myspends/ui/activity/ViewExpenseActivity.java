@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.text.ParseException;
 
+import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
@@ -46,6 +47,7 @@ public class ViewExpenseActivity extends BaseActivity {
     private CustomTextView mCTvLastUpdatedOn;
     private CustomTextView mCTvPaidBy;
     private CustomTextView mCTvNote;
+    private CustomTextView mCTvCategory;
 
     private int mResultCode = RESULT_CANCELED;
 
@@ -95,6 +97,7 @@ public class ViewExpenseActivity extends BaseActivity {
         mCTvLastUpdatedOn = (CustomTextView) findViewById(R.id.ave_ctextview_updated_on);
         mCTvPaidBy = (CustomTextView) findViewById(R.id.ave_cTextView_paid_by);
         mCTvNote = (CustomTextView) findViewById(R.id.ave_cTextView_note);
+        mCTvCategory = findViewById(R.id.ave_cTextView_category);
 
         mPbLoading = findViewById(R.id.ave_pb_loading);
     }
@@ -141,6 +144,7 @@ public class ViewExpenseActivity extends BaseActivity {
             }
 
             mCTvPaidBy.setText(AppUtil.getPaidByForKey(mExpense.getPaymentTypeKey()));
+            mCTvCategory.setText(MySpends.getCategoryName(mExpense.getCategoryId()));
         }
     }
 

@@ -20,10 +20,12 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import in.phoenix.myspends.MySpends;
+import in.phoenix.myspends.model.Category;
 import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.model.PaymentType;
@@ -43,6 +45,8 @@ public final class FirebaseDB {
     private DatabaseReference paymentTypeRef;
     private ChildEventListener mPaymentTypeListener;
 
+    private DatabaseReference categoryRef;
+
     private FirebaseFirestore firebaseFirestore;
     private CollectionReference fsSpendsRef;
     private EventListener mSpendsListener = null;
@@ -61,6 +65,10 @@ public final class FirebaseDB {
                 .getUid());
         paymentTypeRef.goOffline();
         paymentTypeRef.keepSynced(true);
+
+        categoryRef = databaseReference.child("category");
+        categoryRef.goOffline();
+        categoryRef.keepSynced(true);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
@@ -230,6 +238,7 @@ public final class FirebaseDB {
         values.put("note", newExpense.getNote());
         values.put("paymentTypeKey", newExpense.getPaymentTypeKey());
         values.put("updatedOn", newExpense.getUpdatedOn());
+        values.put("categoryId", newExpense.getCategoryId());
 
         firebaseFirestore.collection("my-spends").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .collection("spends").add(values)
@@ -267,6 +276,7 @@ public final class FirebaseDB {
         values.put("note", editedExpense.getNote());
         values.put("paymentTypeKey", editedExpense.getPaymentTypeKey());
         values.put("updatedOn", editedExpense.getUpdatedOn());
+        values.put("categoryId", editedExpense.getCategoryId());
 
         DocumentReference aSpendRef = fsSpendsRef.document(editedExpense.getId());
         aSpendRef.update(values).addOnSuccessListener(successListener).addOnFailureListener(failureListener);
@@ -316,5 +326,41 @@ public final class FirebaseDB {
         if (null != mSpendsListenerRegistration) {
             mSpendsListenerRegistration.remove();
         }
+    }
+
+    public void fetchCategories(ValueEventListener valueEventListener) {
+        categoryRef.addListenerForSingleValueEvent(valueEventListener);
+    }
+
+    private void addNewCategory(DatabaseReference.CompletionListener completionListener) {
+        ArrayList<Category> categories = prepareCategories();
+        for (int index = 0; index < categories.size(); index++) {
+            String categoryKey = categoryRef.push().getKey();
+            AppLog.d("AddNewCategory", "Key:" + categoryKey + " :: Name:" + categories.get(index).getName());
+            if (null != completionListener) {
+                categoryRef.child(categoryKey).setValue(categories.get(index), completionListener);
+
+            } else {
+                categoryRef.child(categoryKey).setValue(categories.get(index));
+            }
+        }
+    }
+
+    private ArrayList<Category> prepareCategories() {
+        String[] categoryNames = {"Beauty & Fitness", "Bills & Payments", "Books & Stationery",
+        "Clothing", "Donation", "EMI", "Entertainment", "Food & Beverages", "Gifts", "Grocery",
+        "Home", "Insurance", "Investments", "Maintenance", "Medical", "Miscellaneous", "Purchases",
+        "Rent", "Service & Repairs", "Shopping", "Transport", "Travel", "Utility", "Vacation"};
+
+        //Beauty & Fitness, EMI, Entertainment, Grocery, Investments, Shopping, Travel, Medical (instead of Healthcare)
+
+        ArrayList<Category> categories = new ArrayList<>();
+        Category category;
+        for (int index = 0; index < categoryNames.length; index++) {
+            category = new Category((index + 1), categoryNames[index]);
+            categories.add(category);
+        }
+
+        return categories;
     }
 }

@@ -19,12 +19,15 @@ import java.util.HashMap;
 
 import in.phoenix.myspends.controller.HourTimeReceiver;
 import in.phoenix.myspends.database.FirebaseDB;
+import in.phoenix.myspends.model.Category;
 import in.phoenix.myspends.model.PaymentType;
+import in.phoenix.myspends.parser.CategoryParser;
 import in.phoenix.myspends.parser.PaymentTypeParser;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
+import io.fabric.sdk.android.services.common.Crash;
 
 /**
  * Created by Charan.Br on 2/11/2017.
@@ -37,15 +40,23 @@ public class MySpends extends Application {
     private static HashMap<String, PaymentType> mMapAllPaymentTypes;
     private static ArrayList<PaymentType> mAllPaymentTypes;
 
+    private static ArrayList<Category> mAllCategories;
+    private static HashMap<Integer, String> mMapAllCategories;
+
     @Override
     public void onCreate() {
         super.onCreate();
         APP_CONTEXT = this;
 
         if (AppUtil.isUserLoggedIn()) {
+            fetchCategories();
             Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
         }
         initNotification();
+    }
+
+    private void fetchCategories() {
+        FirebaseDB.initDb().fetchCategories(mCategoryListener);
     }
 
     private void initNotification() {
@@ -73,8 +84,8 @@ public class MySpends extends Application {
                 if (null != dataSnapshot) {
                     AppLog.d("MySpends", "PaymentType Count:" + dataSnapshot.getChildrenCount());
                     //if (dataSnapshot.getChildrenCount() > 0) {
-                        new PaymentTypeParser(null).executeOnExecutor(
-                                AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
+                    new PaymentTypeParser(null).executeOnExecutor(
+                            AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
 
                     /*} else {
                         new PaymentTypeParser(null).executeOnExecutor(
@@ -201,5 +212,55 @@ public class MySpends extends Application {
                 mMapAllPaymentTypes.put(paymentType.getKey(), paymentType);
             }
         }
+    }
+
+    private ValueEventListener mCategoryListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            if (dataSnapshot.getChildrenCount() > 0) {
+                new CategoryParser().executeOnExecutor(
+                        AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
+
+            } else {
+                AppLog.d("MySpends", "ZERO Categories");
+                updateCategories(null, null);
+                //FirebaseDB.initDb().addNewCategory(null);
+            }
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
+
+    public static void updateCategories(ArrayList<Category> allCategories, HashMap<Integer, String> mapAllCategories) {
+        if (null != allCategories && null != mapAllCategories) {
+            AppLog.d("MySpends", "Category :: List Size:" + allCategories.size() + " :: Map Size:" + mapAllCategories.size());
+
+            if (null != mAllCategories) {
+                mAllCategories.clear();
+                mAllCategories = null;
+            }
+            mAllCategories = new ArrayList<>(allCategories);
+
+            if (null != mMapAllCategories) {
+                mMapAllCategories.clear();
+                mMapAllCategories = null;
+            }
+            mMapAllCategories = new HashMap<>(mapAllCategories);
+        }
+    }
+
+    public static ArrayList<Category> getCategories() {
+        return mAllCategories;
+    }
+
+    public static String getCategoryName(int categoryId) {
+        if (null != mMapAllCategories && mMapAllCategories.containsKey(categoryId)) {
+            return mMapAllCategories.get(categoryId);
+        }
+
+        return AppConstants.BLANK_NOTE_TEMPLATE;
     }
 }

@@ -10,13 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.model.Category;
 import in.phoenix.myspends.model.PaymentType;
-import in.phoenix.myspends.util.AppLog;
 
 /**
  * Created by Charan.Br on 4/2/2018.

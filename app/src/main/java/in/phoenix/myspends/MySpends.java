@@ -27,7 +27,6 @@ import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
-import io.fabric.sdk.android.services.common.Crash;
 
 /**
  * Created by Charan.Br on 2/11/2017.

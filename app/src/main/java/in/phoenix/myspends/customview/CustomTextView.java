@@ -7,7 +7,6 @@ import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.util.AppLog;
 
 /**
  * Created by Charan.Br on 2/28/2017.

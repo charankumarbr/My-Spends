@@ -1,27 +1,29 @@
 package in.phoenix.myspends.ui.fragment;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
-import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.database.DBManager;
+import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.PaymentType;
+import in.phoenix.myspends.parser.PaymentTypeParser;
 import in.phoenix.myspends.util.AppLog;
+import in.phoenix.myspends.util.AppUtil;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,7 +33,7 @@ import in.phoenix.myspends.util.AppLog;
  * Use the {@link PaidByFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PaidByFragment extends DialogFragment implements View.OnClickListener {
+public class PaidByFragment extends DialogFragment implements View.OnClickListener, PaymentTypeParser.PaymentTypeParserListener {
 
     private OnPaidBySelectedListener mListener;
 
@@ -99,25 +101,33 @@ public class PaidByFragment extends DialogFragment implements View.OnClickListen
 
     private void getAllPaymentTypes() {
         mFlexboxLayout.removeAllViews();
-        ArrayList<PaymentType> paymentTypes = MySpends.getAllPaymentTypes();
-        if (null != paymentTypes) {
-            LayoutInflater inflater = LayoutInflater.from(mContext);
-            for (int index = 0; index < paymentTypes.size(); index++) {
-                RadioButton radioButton = (RadioButton) inflater.inflate(R.layout.layout_radio_button, null);
-                radioButton.setId(index);
-                radioButton.setTag(paymentTypes.get(index).getKey());
-                radioButton.setText(paymentTypes.get(index).getName());
-                if (null != mSelectedPaymentKey && mSelectedPaymentKey.contains(paymentTypes.get(index).getKey())) {
-                    radioButton.setChecked(true);
+        FirebaseDB.initDb().getPaymentTypes(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (null != dataSnapshot) {
+                    AppLog.d("PaidByFragment", "Count:" + dataSnapshot.getChildrenCount());
+                    if (dataSnapshot.getChildrenCount() > 0) {
+                        new PaymentTypeParser(PaidByFragment.this).executeOnExecutor(
+                                AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
+
+                    } else {
+                        onPaymentTypesParsed(null, false);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                if (null != databaseError) {
+                    AppLog.d("PaidByFragment", "Payment Types Error:" + databaseError.getDetails() + "::" + databaseError.getMessage());
 
                 } else {
-                    radioButton.setChecked(false);
+                    AppLog.d("PaidByFragment", "Payment Types Error!");
                 }
-                radioButton.setOnCheckedChangeListener(paymentModeSelectedListener);
-                mFlexboxLayout.addView(radioButton);
-
+                AppUtil.showToast("Unable to fetch payment types.");
+                dismissAllowingStateLoss();
             }
-        }
+        });
     }
 
     @Override
@@ -168,6 +178,35 @@ public class PaidByFragment extends DialogFragment implements View.OnClickListen
         for (int index = 0; index < mFlexboxLayout.getChildCount(); index++) {
             if (mFlexboxLayout.getChildAt(index) instanceof RadioButton) {
                 ((RadioButton) mFlexboxLayout.getChildAt(index)).setChecked(false);
+            }
+        }
+    }
+
+    @Override
+    public void onPaymentTypesParsed(ArrayList<PaymentType> paymentTypes, boolean isCashPaymentTypeAdded) {
+        if (null == paymentTypes) {
+            paymentTypes = new ArrayList<>();
+        }
+
+        if (!isCashPaymentTypeAdded) {
+            paymentTypes.add(0, PaymentType.getCashPaymentType());
+        }
+
+        if (null != paymentTypes && paymentTypes.size() > 0) {
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            for (int index = 0; index < paymentTypes.size(); index++) {
+                RadioButton radioButton = (RadioButton) inflater.inflate(R.layout.layout_radio_button, null);
+                radioButton.setId(index);
+                radioButton.setTag(paymentTypes.get(index).getKey());
+                radioButton.setText(paymentTypes.get(index).getName());
+                if (null != mSelectedPaymentKey && mSelectedPaymentKey.contains(paymentTypes.get(index).getKey())) {
+                    radioButton.setChecked(true);
+
+                } else {
+                    radioButton.setChecked(false);
+                }
+                radioButton.setOnCheckedChangeListener(paymentModeSelectedListener);
+                mFlexboxLayout.addView(radioButton);
             }
         }
     }

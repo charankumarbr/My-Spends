@@ -22,7 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.database.DBManager;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.PaymentMode;
 import in.phoenix.myspends.model.PaymentType;
@@ -121,7 +120,7 @@ public class AddPaymentTypeFragment extends DialogFragment {
         }
 
         private boolean isDuplicate() {
-            return DBManager.checkPaymentTypeName(mTIETTypeName.getText().toString(), mSelectedPaymentModeId);
+            return false; //-- DBManager.checkPaymentTypeName(mTIETTypeName.getText().toString(), mSelectedPaymentModeId);
         }
 
         private void addPaymentType() {
@@ -150,10 +149,10 @@ public class AddPaymentTypeFragment extends DialogFragment {
                                     AppLog.d("AddNew", "onComplete 4");
                                     mListener.onPaymentTypeAdded();
                                 }
-                                dismissAllowingStateLoss();
 
                             } else {
                                 AppLog.d("AddNew", "onComplete 5");
+                                AppUtil.showToast("Unable to add. Please try again.");
                             }
                         }
                     }
@@ -162,17 +161,6 @@ public class AddPaymentTypeFragment extends DialogFragment {
             } else {
 
             }
-
-            /*if (DBManager.addPaymentType(paymentType) != -1) {
-                if (null != mListener) {
-                    mListener.onPaymentTypeAdded();
-                }
-                dismissAllowingStateLoss();
-                AppUtil.toggleKeyboard(false);
-
-            } else {
-                AppUtil.showToast("Could not add Payment type!");
-            }*/
         }
 
         private String getTypeId(String paymentTypeName) {

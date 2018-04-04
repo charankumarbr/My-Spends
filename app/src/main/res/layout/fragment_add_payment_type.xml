@@ -30,14 +30,15 @@
                 android:inputType="textCapWords" />
         </android.support.design.widget.TextInputLayout>
 
-        <TextView
+        <in.phoenix.myspends.customview.CustomTextView
             android:id="@+id/fapt_tv_type_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Type:"
             android:textSize="15sp"
             android:layout_marginTop="16dp"
-            android:layout_below="@+id/fapt_til_type_name"/>
+            android:layout_below="@+id/fapt_til_type_name"
+            app:fontName="@string/font_noto_sans"/>
 
         <RadioGroup
             android:id="@+id/fapt_radiogroup_type"

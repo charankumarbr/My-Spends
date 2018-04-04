@@ -1,8 +1,10 @@
 package in.phoenix.myspends.ui.activity;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,17 +14,18 @@ import android.widget.ProgressBar;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.PaymentTypeAdapter;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.parser.PaymentTypeParser;
 import in.phoenix.myspends.ui.fragment.AddPaymentTypeFragment;
+import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppUtil;
 
@@ -34,6 +37,10 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
     private PaymentTypeAdapter mPaymentAdapter = null;
 
     private ProgressBar mPbLoading = null;
+
+    private ProgressDialog mDialog = null;
+
+    private int mPaymentTypeCount = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,12 +88,15 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 mPbLoading.setVisibility(View.GONE);
+                mPaymentTypeCount = -1;
                 if (null != databaseError) {
-                    AppLog.d("PaymentType", "Error:" + databaseError.getDetails() + "::" + databaseError.getMessage());
+                    AppLog.d("PaymentType", "Payment Types Error:" + databaseError.getDetails() + "::" + databaseError.getMessage());
 
                 } else {
-                    AppLog.d("PaymentType", "Error!!");
+                    AppLog.d("PaymentType", "Payment Types Error!");
                 }
+                AppUtil.showToast("Unable to fetch payment types.");
+                finish();
             }
         });
     }
@@ -130,7 +140,15 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
             return true;
 
         } else if (item.getItemId() == R.id.menu_add_payment_type) {
-            showPaymentTypeDialog();
+            if (mPaymentTypeCount <= 0) {
+                AppUtil.showToast("Unable to add new Payment Types. Please try later.");
+
+            } else if (mPaymentTypeCount == AppConstants.MAX_PAYMENT_TYPE_COUNT) {
+                AppUtil.showToast("Reached maximum count of Payment Types.");
+
+            } else {
+                showPaymentTypeDialog();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -142,20 +160,57 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
     }
 
     @Override
-    public void onStatusChanged() {
-        //getLoaderManager().restartLoader(DBConstants.LoaderId.PAYMENT_TYPE, null, this);
+    public void onStatusChanged(String paymentTypeKey, boolean isChecked) {
+
+        AppLog.d("PaymentActivity", "onStatusChanged Key:" + paymentTypeKey + " :: isChecked:" + isChecked);
+        if (null == mDialog) {
+            mDialog = new ProgressDialog(PaymentActivity.this);
+            mDialog.setCancelable(false);
+            mDialog.setCanceledOnTouchOutside(false);
+            mDialog.setMessage("Changing status...");
+            mDialog.show();
+            AppLog.d("PaymentActivity", "onStatusChanged 1");
+            FirebaseDB.initDb().togglePaymentType(paymentTypeKey, isChecked, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    AppLog.d("PaymentActivity", "onStatusChanged 2");
+                    if (null == databaseError) {
+                        AppLog.d("PaymentActivity", "onStatusChanged 3");
+                        //onPaymentTypesParsed(MySpends.getAllPaymentTypes(), true);
+                        getPaymentTypes();
+                        AppLog.d("PaymentActivity", "onStatusChanged 4");
+
+                    } else {
+                        AppLog.d("PaymentActivity", "onStatusChanged 5 : Error:" + databaseError.getDetails());
+                        AppUtil.showToast("Unable to change the status.");
+                    }
+
+                    if (!isFinishing()) {
+                        if (null != mDialog) {
+                            mDialog.dismiss();
+                        }
+                        mDialog = null;
+                    }
+                }
+            });
+        }
     }
 
     @Override
     public void onPaymentTypeAdded() {
-        AppUtil.showSnackbar(mViewComplete, "Payment type added!");
-        //getPaymentTypes();
         mViewComplete.postDelayed(new Runnable() {
             @Override
             public void run() {
-                onPaymentTypesParsed(MySpends.getAllPaymentTypes(), true);
+                Fragment dialogFragment = getSupportFragmentManager().findFragmentByTag("AddPaymentTFragment");
+                if (dialogFragment instanceof AddPaymentTypeFragment) {
+                    ((AddPaymentTypeFragment) dialogFragment).dismissAllowingStateLoss();
+                }
+
+                AppUtil.showSnackbar(mViewComplete, "Payment type added!");
+                //onPaymentTypesParsed(MySpends.getAllPaymentTypes(), true);
+                getPaymentTypes();
             }
-        }, 500);
+        }, 600);
     }
 
     @Override
@@ -168,6 +223,8 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
         if (!isCashPaymentTypeAdded) {
             spends.add(0, PaymentType.getCashPaymentType());
         }
+
+        mPaymentTypeCount = spends.size();
 
         if (null == mPaymentAdapter) {
             mPaymentAdapter = new PaymentTypeAdapter(PaymentActivity.this, spends);

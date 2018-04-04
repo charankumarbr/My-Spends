@@ -1,17 +1,19 @@
 package in.phoenix.myspends.ui.activity;
 
 import android.content.Intent;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.crashlytics.android.Crashlytics;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
-import com.firebase.ui.auth.ResultCodes;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import in.phoenix.myspends.BuildConfig;
-import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;
@@ -34,7 +35,7 @@ import in.phoenix.myspends.util.AppUtil;
  * Created by Charan.Br on 4/10/2017.
  */
 
-public class LaunchDeciderActivity extends AppCompatActivity {
+public class LaunchDeciderActivity extends BaseActivity {
 
     private static final int RC_SIGN_IN = 123;
 
@@ -45,13 +46,19 @@ public class LaunchDeciderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login_signup);
-        mPbLoading = findViewById(R.id.asl_pb_loading);
+        mPbLoading = findViewById(R.id.als_pb_loading);
 
         if (AppUtil.isUserLoggedIn()) {
+            //MySpends.fetchPaymentTypes();
+            FirebaseDB.initDb().listenPaymentTypes();
+            findViewById(R.id.als_layout_signin).setVisibility(View.GONE);
+            mPbLoading.setVisibility(View.VISIBLE);
+            AppUtil.addDynamicShortcut();
             getCurrency();
-            MySpends.fetchPaymentTypes();
 
         } else {
+            AppUtil.removeDynamicShortcut();
+            findViewById(R.id.als_layout_signin).setVisibility(View.VISIBLE);
             AppCompatButton btnLogin = findViewById(R.id.als_abtn_login);
             btnLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,29 +86,35 @@ public class LaunchDeciderActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
-            if (resultCode == RESULT_OK) {
-                // Successfully signed in
+            if (null != response) {
+                if (resultCode == RESULT_OK) {
 
-                if (!FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
-                    AppLog.d("Login", "Email not verified.");
-                    FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
+                    //-- Successfully signed in --//
+                    if (!FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
+                        AppLog.d("Login", "Email not verified.");
+                        //FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
+
+                    } else {
+                        AppLog.d("Login", "Email is verified!");
+                    }
+                    Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                    AppUtil.addDynamicShortcut();
+
+                    getCurrency();
+                    //MySpends.fetchPaymentTypes();
+                    FirebaseDB.initDb().listenPaymentTypes();
 
                 } else {
-                    AppLog.d("Login", "Email is verified!");
+                    // Sign in failed, check response for error code
+                    AppLog.d("Login", "Failed:" + response.getErrorCode());
+                    AppUtil.showToast("Unable to login. Please try again later.");
                 }
-
-                getCurrency();
-
-            } else {
-                // Sign in failed, check response for error code
-                AppLog.d("Login", "Failed:" + response.getErrorCode());
             }
         }
     }
 
     private void getCurrency() {
-
-        AppLog.d("User", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
         final String currency = AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY);
         if (null == currency) {
@@ -138,6 +151,7 @@ public class LaunchDeciderActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
+                    AppLog.d("LaunchDecider", "Currency: DatabaseError" + databaseError.getMessage());
                     mPbLoading.setVisibility(View.GONE);
                     startActivity(new Intent(LaunchDeciderActivity.this, AppSetupActivity.class));
                     finish();
@@ -145,6 +159,7 @@ public class LaunchDeciderActivity extends AppCompatActivity {
             });
 
         } else {
+            AppLog.d("LaunchDecider", "Currency:" + currency);
             startActivity(new Intent(LaunchDeciderActivity.this, MainActivity.class));
             finish();
         }

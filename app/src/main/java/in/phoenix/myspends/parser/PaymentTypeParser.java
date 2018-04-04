@@ -30,33 +30,37 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
     @Override
     protected Void doInBackground(Iterable<DataSnapshot>... iterables) {
 
-        Iterable<DataSnapshot> values = iterables[0];
+        if (null != iterables && iterables.length > 0) {
 
-        AppLog.d("PaymentType", "Zero");
-        if (null != values) {
-            mPaymentTypes = new ArrayList<>();
-            if (null != mListener) {
-                AppLog.d("PaymentType", "One");
-                AppLog.d("PaymentType", "Two");
-                for (DataSnapshot aValue : values) {
-                    AppLog.d("PaymentType", "Key:" + aValue.getKey());
-                    AppLog.d("PaymentType", "Value:" + aValue.getValue());
-                    PaymentType paymentType = aValue.getValue(PaymentType.class);
-                    paymentType.setKey(aValue.getKey());
-                    mPaymentTypes.add(paymentType);
-                }
-            } else {
-                //-- for the application --//
-                mAllPaymentTypes = new HashMap<>();
-                for (DataSnapshot aValue : values) {
-                    AppLog.d("PaymentType", "Key:" + aValue.getKey());
-                    AppLog.d("PaymentType", "Value:" + aValue.getValue());
-                    PaymentType paymentType = aValue.getValue(PaymentType.class);
-                    paymentType.setKey(aValue.getKey());
-                    mPaymentTypes.add(paymentType);
-                    mAllPaymentTypes.put(aValue.getKey(), paymentType);
+            Iterable<DataSnapshot> values = iterables[0];
+
+            AppLog.d("PaymentType", "Zero");
+            if (null != values) {
+                mPaymentTypes = new ArrayList<>();
+                if (null != mListener) {
+                    AppLog.d("PaymentType", "One");
+                    AppLog.d("PaymentType", "Two");
+                    for (DataSnapshot aValue : values) {
+                        AppLog.d("PaymentType", "Key:" + aValue.getKey());
+                        AppLog.d("PaymentType", "Value:" + aValue.getValue());
+                        PaymentType paymentType = aValue.getValue(PaymentType.class);
+                        paymentType.setKey(aValue.getKey());
+                        mPaymentTypes.add(paymentType);
+                    }
+                } else {
+                    //-- for the application --//
+                    mAllPaymentTypes = new HashMap<>();
+                    for (DataSnapshot aValue : values) {
+                        AppLog.d("PaymentType", "Key:" + aValue.getKey());
+                        AppLog.d("PaymentType", "Value:" + aValue.getValue());
+                        PaymentType paymentType = aValue.getValue(PaymentType.class);
+                        paymentType.setKey(aValue.getKey());
+                        mPaymentTypes.add(paymentType);
+                        mAllPaymentTypes.put(aValue.getKey(), paymentType);
+                    }
                 }
             }
+
         }
 
         return null;
@@ -67,6 +71,7 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
         super.onPostExecute(aVoid);
         if (null != mListener) {
             mListener.onPaymentTypesParsed(mPaymentTypes, false);
+            MySpends.updatePaymentTypes(mPaymentTypes);
 
         } else {
             MySpends.addCashPaymentType(mPaymentTypes, mAllPaymentTypes);
@@ -74,6 +79,6 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
     }
 
     public interface PaymentTypeParserListener {
-        void onPaymentTypesParsed(ArrayList<PaymentType> spends, boolean isCashPaymentTypeAdded);
+        void onPaymentTypesParsed(ArrayList<PaymentType> paymentTypes, boolean isCashPaymentTypeAdded);
     }
 }

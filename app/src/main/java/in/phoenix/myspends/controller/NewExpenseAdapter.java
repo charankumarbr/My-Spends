@@ -90,6 +90,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
             holder.vLayoutExpense = view.findViewById(R.id.le_layout_expense);
             holder.vRLayoutExpense = view.findViewById(R.id.le_rlayout_expense);
             holder.vPbLoading = view.findViewById(R.id.le_layout_loading);
+            holder.vSpendsEnd = view.findViewById(R.id.le_tv_spends_end);
 
             view.setTag(holder);
 
@@ -100,6 +101,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
         if (position < mSpends.size()) {
             holder.vPbLoading.setVisibility(View.GONE);
             holder.vRLayoutExpense.setVisibility(View.VISIBLE);
+            holder.vSpendsEnd.setVisibility(View.GONE);
 
             NewExpense expense = getItem(position);
             holder.tvAmount.setText(mCurrencySymbol + " " + AppUtil.getStringAmount(String.valueOf(expense.getAmount())));
@@ -128,9 +130,16 @@ public final class NewExpenseAdapter extends BaseAdapter {
                     mPrevExpenseDate.changeDate(getItem(position - 1).getExpenseDate());
                 }
 
-                if (mExpenseDate.getMonth() != mPrevExpenseDate.getMonth()) {
-                    holder.tvMonth.setVisibility(View.VISIBLE);
-                    holder.tvMonth.setText(AppUtil.getMonth(mExpenseDate.getMonth()));
+                if ((mExpenseDate.getMonth() != mPrevExpenseDate.getMonth()) || mExpenseDate.getYear() != mPrevExpenseDate.getYear()) {
+
+                    if (mExpenseDate.getYear() != mPrevExpenseDate.getYear()) {
+                        holder.tvMonth.setVisibility(View.VISIBLE);
+                        holder.tvMonth.setText(AppUtil.getShortMonth(mExpenseDate.getMonth()) + " " + mExpenseDate.getYear());
+
+                    } else {
+                        holder.tvMonth.setVisibility(View.VISIBLE);
+                        holder.tvMonth.setText(AppUtil.getMonth(mExpenseDate.getMonth()));
+                    }
 
                 } else {
                     holder.tvMonth.setVisibility(View.GONE);
@@ -141,16 +150,22 @@ public final class NewExpenseAdapter extends BaseAdapter {
                 holder.vLayoutExpense.setTag(position);
                 holder.vLayoutExpense.setOnClickListener(mClickListener);
             }
+
+            if (!mIsLoadingRequired && position == (getCount() - 1)) {
+                holder.vSpendsEnd.setVisibility(View.VISIBLE);
+            }
         } else {
             holder.vPbLoading.setVisibility(View.VISIBLE);
             holder.vRLayoutExpense.setVisibility(View.GONE);
+            holder.vSpendsEnd.setVisibility(View.GONE);
+
             AppLog.d("NewExpenseAdapter", "1");
             if (!mIsLoading && mIsLoadingRequired) {
                 AppLog.d("NewExpenseAdapter", "2");
                 if (null != mListener) {
                     AppLog.d("NewExpenseAdapter", "3");
                     mIsLoading = true;
-                    mListener.onLoading(String.valueOf(getItem(mSpends.size() - 1).getExpenseDate()));
+                    mListener.onLoading(getItem(mSpends.size() - 1).getExpenseDate());
                 }
             }
         }
@@ -193,6 +208,16 @@ public final class NewExpenseAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public Float calculateTotal() {
+        Float totalAmount = 0f;
+        if (null != mSpends) {
+            for (int index = 0; index < mSpends.size(); index++) {
+                totalAmount += mSpends.get(index).getAmount();
+            }
+        }
+        return totalAmount;
+    }
+
     class ExpenseHolder {
         CustomTextView tvNote;
         CustomTextView tvAmount;
@@ -202,9 +227,10 @@ public final class NewExpenseAdapter extends BaseAdapter {
         View vLayoutExpense;
         View vRLayoutExpense;
         View vPbLoading;
+        View vSpendsEnd;
     }
 
     public interface OnLoadingListener {
-        void onLoading(String lastKey);
+        void onLoading(long lastExpenseDate);
     }
 }

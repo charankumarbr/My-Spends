@@ -1,7 +1,6 @@
 package in.phoenix.myspends.controller;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,9 @@ import java.util.ArrayList;
 
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
-import in.phoenix.myspends.database.DBManager;
 import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.util.AppLog;
+import in.phoenix.myspends.util.AppUtil;
 
 /**
  * Created by Charan.Br on 4/7/2017.
@@ -41,10 +40,20 @@ public class PaymentTypeAdapter extends BaseAdapter {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             AppLog.d("onCheckedChange", buttonView.getText().toString() + isChecked);
-            int primaryKey = (int) buttonView.getTag();
-            DBManager.togglePaymentType(primaryKey, isChecked);
-            if (null != mListener) {
-                mListener.onStatusChanged();
+            if (AppUtil.isConnected()) {
+                if (AppUtil.isUserLoggedIn()) {
+                    if (null != mListener) {
+                        String primaryKey = (String) buttonView.getTag();
+                        //DBManager.togglePaymentType(primaryKey, isChecked);
+                        mListener.onStatusChanged(primaryKey, isChecked);
+                    }
+                } else {
+                    AppUtil.showToast("Unable to recognise!");
+                    buttonView.toggle();
+                }
+            } else {
+                AppUtil.showToast(R.string.no_internet);
+                buttonView.toggle();
             }
         }
     };
@@ -54,6 +63,8 @@ public class PaymentTypeAdapter extends BaseAdapter {
         if (null == mPaymentTypes) {
             return 0;
         }
+
+        AppLog.d("PaymentTypeAdapter", "getCount:" + mPaymentTypes.size());
         return mPaymentTypes.size();
     }
 
@@ -96,8 +107,10 @@ public class PaymentTypeAdapter extends BaseAdapter {
         } else {
             holder.swToggleActive.setEnabled(true);
             holder.swToggleActive.setTag(paymentType.getKey());
+            holder.swToggleActive.setOnCheckedChangeListener(null);
             holder.swToggleActive.setChecked(isActive);
             holder.swToggleActive.setOnCheckedChangeListener(togglePaymentType);
+            //holder.swToggleActive.setOnClickListener();
         }
 
         holder.tvPaymentTypeName.setText(paymentType.getName());
@@ -118,12 +131,21 @@ public class PaymentTypeAdapter extends BaseAdapter {
         }
     }
 
+    /*private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (view.getId() == R.id.lpt_switch_active) {
+
+            }
+        }
+    };*/
+
     class ViewHolder {
         CustomTextView tvPaymentTypeName;
         Switch swToggleActive;
     }
 
     public interface OnStatusChangedListener {
-        void onStatusChanged();
+        void onStatusChanged(String paymentTypeKey, boolean isChecked);
     }
 }

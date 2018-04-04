@@ -1,9 +1,19 @@
 package in.phoenix.myspends.util;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -21,18 +31,23 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 import java.util.UnknownFormatConversionException;
 
 import in.phoenix.myspends.MySpends;
+import in.phoenix.myspends.R;
 import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.PaymentMode;
 import in.phoenix.myspends.model.PaymentType;
+import in.phoenix.myspends.ui.activity.LaunchDeciderActivity;
+import in.phoenix.myspends.ui.activity.NewExpenseActivity;
 
 /**
  * Created by Charan.Br on 2/10/2017.
@@ -322,4 +337,94 @@ public final class AppUtil {
 
         return "";
     }
+
+    public static void createNotification(Context context, ExpenseDate expenseDate) {
+        long when = System.currentTimeMillis();
+        NotificationManager notificationManager = (NotificationManager) context
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Intent notificationIntent = null;
+        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(MySpends.APP_CONTEXT);
+        if (null == AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)) {
+            //-- no currency setup, get it first --//
+            notificationIntent = new Intent(context, LaunchDeciderActivity.class);
+
+        } else {
+            notificationIntent = new Intent(context, NewExpenseActivity.class);
+            notificationIntent.putExtra(AppConstants.Bundle.EXPENSE_DATE, expenseDate);
+            //taskStackBuilder.addParentStack(NewExpenseActivity.class);
+        }
+
+        notificationIntent.putExtra(AppConstants.Bundle.VIA_NOTIFICATION, true);
+        //notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        //taskStackBuilder.addNextIntent(notificationIntent);
+        taskStackBuilder.addNextIntentWithParentStack(notificationIntent);
+
+        //int random = new Random().nextInt(500);
+        PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(context.getString(R.string.app_name))
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setContentText("Track your today's expenses!")
+                .setSound(alarmSound)
+                .setAutoCancel(true)
+                .setWhen(when)
+                .setContentIntent(pendingIntent)
+                .setVibrate(new long[]{1000, 1000, 1000});
+
+        notificationManager.notify(20332, builder.build());
+    }
+
+    public static void addDynamicShortcut() {
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
+            ShortcutManager shortcutManager = MySpends.APP_CONTEXT.getSystemService(ShortcutManager.class);
+            AppLog.d("LaunchDecider", "add: Shortcut Count:" + shortcutManager.getDynamicShortcuts().size());
+            if (shortcutManager.getDynamicShortcuts().size() == 0) {
+                //-- Application restored or no shortcut added. Need to re-publish dynamic shortcuts. --//
+                Intent shortcutIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("myspends://www.myspends.co.in/addSpend"));
+                shortcutIntent.putExtra(AppConstants.Bundle.VIA_NOTIFICATION, true);
+                //shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                ShortcutInfo shortcut = new ShortcutInfo.Builder(MySpends.APP_CONTEXT, "as1")
+                        .setShortLabel("New Spend")
+                        .setLongLabel("New Spend")
+                        .setIcon(Icon.createWithResource(MySpends.APP_CONTEXT, R.drawable.ic_new_shortcut_24dp))
+                        .setIntent(shortcutIntent)
+                        .build();
+
+                shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut));
+            }
+        }
+
+    }
+
+    public static void removeDynamicShortcut() {
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
+            ShortcutManager shortcutManager = MySpends.APP_CONTEXT.getSystemService(ShortcutManager.class);
+            AppLog.d("LaunchDecider", "remove: Shortcut Count:" + shortcutManager.getDynamicShortcuts().size());
+            if (shortcutManager.getDynamicShortcuts().size() > 0) {
+                shortcutManager.removeAllDynamicShortcuts();
+            }
+        }
+    }
+
+    public static boolean doesContainRestrictedChar(String note) {
+
+        String[] restrictedChars = {":", "\"", "\\", "*", "%"};
+        for (String restrictedChar : restrictedChars) {
+            if (note.contains(restrictedChar)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

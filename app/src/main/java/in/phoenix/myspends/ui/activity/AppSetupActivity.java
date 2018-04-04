@@ -13,6 +13,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -69,9 +71,11 @@ public class AppSetupActivity extends BaseActivity {
                     currencyHandler.sendEmptyMessage(AppConstants.CURRENCY_HANDLER_SUCCESS);
 
                 } catch (IOException e) {
+                    Crashlytics.logException(e);
                     e.printStackTrace();
                     currencyHandler.sendEmptyMessage(AppConstants.CURRENCY_HANDLER_FAILURE);
                 } catch (JSONException e) {
+                    Crashlytics.logException(e);
                     e.printStackTrace();
                     currencyHandler.sendEmptyMessage(AppConstants.CURRENCY_HANDLER_FAILURE);
                 }

@@ -7,6 +7,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.util.AppLog;
 
 /**
  * Created by Charan.Br on 2/28/2017.
@@ -32,6 +33,9 @@ public final class CustomTextView extends AppCompatTextView {
         if (null != typedArray) {
 
             String fontName = typedArray.getString(R.styleable.CustomTextView_fontName);
+            if (null == fontName) {
+                fontName = "fontNotoSans";
+            }
             int textStyle = Typeface.NORMAL;
             if (null != attributeSet) {
                 textStyle = attributeSet.getAttributeIntValue("http://schemas.android.com/apk/res/android",

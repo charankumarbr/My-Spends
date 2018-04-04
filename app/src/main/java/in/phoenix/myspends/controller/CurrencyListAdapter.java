@@ -68,15 +68,26 @@ public final class CurrencyListAdapter extends BaseAdapter {
         if (mSelectedPosition == position) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 convertView.setBackgroundColor(MySpends.APP_CONTEXT.getResources().getColor(R.color.colorAccent, null));
+                holder.cTvCurrencyName.setTextColor(mContext.getResources().getColor(android.R.color.white, null));
+                holder.cTvCurrencyCode.setTextColor(mContext.getResources().getColor(android.R.color.white, null));
+
             } else {
                 convertView.setBackgroundColor(MySpends.APP_CONTEXT.getResources().getColor(R.color.colorAccent));
+                holder.cTvCurrencyName.setTextColor(mContext.getResources().getColor(android.R.color.white));
+                holder.cTvCurrencyCode.setTextColor(mContext.getResources().getColor(android.R.color.white));
             }
+
 
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 convertView.setBackgroundColor(MySpends.APP_CONTEXT.getResources().getColor(android.R.color.white, null));
+                holder.cTvCurrencyName.setTextColor(mContext.getResources().getColor(R.color.primary_text, null));
+                holder.cTvCurrencyCode.setTextColor(mContext.getResources().getColor(R.color.primary_text, null));
+
             } else {
                 convertView.setBackgroundColor(MySpends.APP_CONTEXT.getResources().getColor(android.R.color.white));
+                holder.cTvCurrencyName.setTextColor(mContext.getResources().getColor(R.color.primary_text));
+                holder.cTvCurrencyCode.setTextColor(mContext.getResources().getColor(R.color.primary_text));
             }
         }
 

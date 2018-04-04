@@ -3,15 +3,15 @@ package in.phoenix.myspends.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.firebase.database.Exclude;
+import com.google.firebase.firestore.IgnoreExtraProperties;
 
 /**
  * Created by Charan.Br on 11/26/2017.
  */
 
+@IgnoreExtraProperties
 public final class NewExpense implements Parcelable {
 
-    @Exclude
     private String id;
 
     private long expenseDate;
@@ -26,6 +26,8 @@ public final class NewExpense implements Parcelable {
 
     private long updatedOn;
 
+    private int categoryId;
+
     public NewExpense() {
 
     }
@@ -38,6 +40,7 @@ public final class NewExpense implements Parcelable {
         paymentTypeKey = in.readString();
         createdOn = in.readLong();
         updatedOn = in.readLong();
+        categoryId = in.readInt();
     }
 
     public static final Creator<NewExpense> CREATOR = new Creator<NewExpense>() {
@@ -108,6 +111,14 @@ public final class NewExpense implements Parcelable {
         this.updatedOn = updatedOn;
     }
 
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -122,12 +133,13 @@ public final class NewExpense implements Parcelable {
         parcel.writeString(paymentTypeKey);
         parcel.writeLong(createdOn);
         parcel.writeLong(updatedOn);
+        parcel.writeInt(categoryId);
     }
 
     @Override
     public String toString() {
         return getId() + ":" + getNote()
                 + ":" + getAmount() + ":" + getCreatedOn() + ":"
-                + getExpenseDate() + ":" + getPaymentTypeKey() + ":" + getUpdatedOn();
+                + getExpenseDate() + ":" + getPaymentTypeKey() + ":" + getUpdatedOn() + ":" + getCategoryId();
     }
 }

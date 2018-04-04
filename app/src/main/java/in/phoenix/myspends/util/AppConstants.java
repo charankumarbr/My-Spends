@@ -26,16 +26,18 @@ public interface AppConstants {
     int CURRENCY_HANDLER_FAILURE = 3745;
     String CURRENCY_LIST_FILE_NAME = "countries_json.txt";
 
-    interface LoaderConstants {
-        int LOADER_EXPENSE = 9932;
-        int LOADER_PAYMENT = 9901;
-        int LOADER_EXPENSES_LIST = 3282;
-    }
-
     interface PrefConstants {
         String APP_SETUP = "appSetup";
         String CURRENCY = "currency";
         String NOTIFICATION_HOUR = "notificationHour";
         String NOTIFICATION_MIN = "notificationMin";
     }
+
+    int PAGE_SPENDS_SIZE = 30;
+
+    //-- 128 bit key --//
+    String dummy = "iVuNaNKaRcHuGaLu";
+
+    //-- including 1 Payment Type for cash --//
+    int MAX_PAYMENT_TYPE_COUNT = 10;
 }

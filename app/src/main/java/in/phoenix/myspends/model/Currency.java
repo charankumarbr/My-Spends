@@ -15,6 +15,10 @@ public class Currency {
 
     private String currencySymbol;
 
+    public Currency() {
+
+    }
+
     public String getCurrencyCode() {
         return currencyCode;
     }

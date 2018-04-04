@@ -1,10 +1,7 @@
 package in.phoenix.myspends.ui.activity;
 
-import android.app.LoaderManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -25,26 +22,26 @@ import android.widget.ProgressBar;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
 import in.phoenix.myspends.BuildConfig;
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.customview.ButteryProgressBar;
-import in.phoenix.myspends.parser.SpendsParser;
-import in.phoenix.myspends.controller.ExpenseCursorLoader;
 import in.phoenix.myspends.controller.NewExpenseAdapter;
+import in.phoenix.myspends.customview.ButteryProgressBar;
 import in.phoenix.myspends.customview.CustomTextView;
-import in.phoenix.myspends.database.DBConstants;
-import in.phoenix.myspends.database.DBManager;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
+import in.phoenix.myspends.parser.FSSpendsParser;
+import in.phoenix.myspends.parser.SpendsParser;
 import in.phoenix.myspends.ui.fragment.AddExpenseFragment;
 import in.phoenix.myspends.ui.fragment.AddPaymentTypeFragment;
 import in.phoenix.myspends.util.AppConstants;
@@ -53,23 +50,13 @@ import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
 public class MainActivity extends BaseActivity implements AddExpenseFragment.OnAddExpenseListener,
-        LoaderManager.LoaderCallbacks<Cursor>, SpendsParser.SpendsParserListener, NewExpenseAdapter.OnLoadingListener {
-
-    //private CalendarView mCalendarDate;
+        SpendsParser.SpendsParserListener, NewExpenseAdapter.OnLoadingListener {
 
     private ExpenseDate mCalendarExpenseDate;
 
     private ListView mLvExpense;
 
     private NewExpenseAdapter mExpenseAdapter;
-
-    private CustomTextView mCTvMonthlyExpenseInfo = null;
-    private CustomTextView mCTvMonthlyExpense = null;
-    private CustomTextView mCTvTotalExpense = null;
-    private CustomTextView mCTvNoExpense = null;
-    private CustomTextView mCTvExpenseHeader = null;
-
-    //private BottomSheetBehavior bottomSheetBehavior = null;
 
     private ProgressBar mPbLoading;
 
@@ -78,14 +65,16 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
     private String mLastKey = null;
 
-    private View mCTvNoSpends = null;
+    private CustomTextView mCTvNoSpends = null;
+
+    private long mLastExpense = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.lt_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.am_toolbar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             toolbar.setTitleTextColor(getResources().getColor(android.R.color.white, null));
 
@@ -95,24 +84,9 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
 
-        //CalendarView mCalendarDate = (CalendarView) findViewById(R.id.am_calendar_date);
-        //mCalendarDate.setOnDateChangeListener(onDateChangeListener);
         mCalendarExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());
 
         mLvExpense = (ListView) findViewById(R.id.am_lv_spends);
-
-        mCTvMonthlyExpenseInfo = (CustomTextView) findViewById(R.id.am_ctextview_month_info);
-        mCTvMonthlyExpense = (CustomTextView) findViewById(R.id.am_ctextview_month_expense);
-        //mCTvTotalExpense = (CustomTextView) findViewById(R.id.am_textview_total_expense);
-        //mCTvNoExpense = (CustomTextView) findViewById(R.id.am_textview_no_expense);
-        //mCTvExpenseHeader = (CustomTextView) findViewById(R.id.am_textview_expense_header);
-
-        findViewById(R.id.am_layout_month_expense).setOnClickListener(clickListener);
-
-        //bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.am_card_layout_bottom));
-
-        //getLoaderManager().initLoader(DBConstants.LoaderId.EXPENSE, null, this);
-        //mLvExpense.setOnItemClickListener(itemClickListener);
 
         Float dimen = getResources().getDimension(R.dimen.title_text_size);
         String value = getString(R.string.value);
@@ -128,80 +102,101 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
     }
 
     private void getExpenses() {
-        //getLoaderManager().restartLoader(DBConstants.LoaderId.EXPENSE, null, this);
         if (null == mExpenseAdapter) {
             mPbLoading.setVisibility(View.VISIBLE);
 
         } else if (isRefresh) {
+            mLastExpense = -1;
             mBpbLoading.setVisibility(View.VISIBLE);
         }
 
-        FirebaseDB.initDb().getSpends(mLastKey, new ValueEventListener() {
+        FirebaseDB.initDb().getFsSpends(mLastExpense, new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (null != dataSnapshot) {
+            public void onSuccess(QuerySnapshot documentSnapshots) {
 
-                    AppLog.d("MainActivity", "Spends: Snapshot: " + dataSnapshot);
-                    AppLog.d("MainActivity", "Spends:: Snapshot Value: " + dataSnapshot.getValue());
-                    AppLog.d("MainActivity", "Spends:: Snapshot Key: " + dataSnapshot.getKey());
-                    AppLog.d("MainActivity", "Spends:: Snapshot Child Count: " + dataSnapshot.getChildrenCount());
+                boolean isFromCache = documentSnapshots.getMetadata().isFromCache();
+                AppLog.d("MainActivity", "Spends Firestore:onSuccess :: isFromCache:" + isFromCache);
 
-                    if (dataSnapshot.getChildrenCount() > 0 && null != dataSnapshot.getChildren()) {
-                        new SpendsParser(MainActivity.this, mLastKey).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
+                //FirebaseDB.initDb().listenSpends();
 
-                    } else {
-                        AppLog.d("MainActivity", "Spends: No spends ::" + "Count: ZERO");
-                        mPbLoading.setVisibility(View.GONE);
-                        mBpbLoading.setVisibility(View.INVISIBLE);
+                if (!documentSnapshots.isEmpty()) {
+                    new FSSpendsParser(MainActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+                            documentSnapshots.iterator());
 
-                        if (isRefresh) {
-                            isRefresh = false;
+                } else {
+                    AppLog.d("MainActivity", "Spends: Empty! ::" + "Count: ZERO");
 
-                            AppUtil.showToast("No Spends tracked!");
+                    hideDialog();
+                    if (isRefresh) {
+                        isRefresh = false;
 
-                            if (null != mExpenseAdapter) {
-                                mExpenseAdapter = null;
-                                mLvExpense.setAdapter(null);
-                            }
+                        if (null != mExpenseAdapter) {
+                            mExpenseAdapter = null;
+                            mLvExpense.setAdapter(null);
+                        }
 
-                            mLvExpense.setVisibility(View.GONE);
-                            mCTvNoSpends.setVisibility(View.VISIBLE);
+                        mLvExpense.setVisibility(View.GONE);
+                        mCTvNoSpends.setText(R.string.no_spends_tracked);
+                        mCTvNoSpends.setVisibility(View.VISIBLE);
 
-                        } else if (null != mExpenseAdapter) {
-                            if (mExpenseAdapter.isLoading()) {
-                                mExpenseAdapter.setIsLoading(false);
-                                mExpenseAdapter.setIsLoadingRequired(false);
-                                mExpenseAdapter.notifyDataSetChanged();
+                    } else if (null != mExpenseAdapter) {
+                        if (mExpenseAdapter.isLoading()) {
+                            //AppUtil.showToast("Fetched all your spends.");
+                            mExpenseAdapter.setIsLoading(false);
+                            mExpenseAdapter.setIsLoadingRequired(false);
+                            mExpenseAdapter.notifyDataSetChanged();
 
-                            } else {
-                                AppUtil.showToast("No Spends tracked!");
-                                mExpenseAdapter = null;
-                                mLvExpense.setAdapter(null);
-                                mLvExpense.setVisibility(View.GONE);
-                                mCTvNoSpends.setVisibility(View.VISIBLE);
-                            }
                         } else {
                             AppUtil.showToast("No Spends tracked!");
+                            mExpenseAdapter = null;
+                            mLvExpense.setAdapter(null);
                             mLvExpense.setVisibility(View.GONE);
+                            mCTvNoSpends.setText(R.string.no_spends_tracked);
                             mCTvNoSpends.setVisibility(View.VISIBLE);
                         }
+                    } else {
+                        //AppUtil.showToast("No Spends tracked!");
+                        mLvExpense.setVisibility(View.GONE);
+                        mCTvNoSpends.setText(R.string.no_spends_tracked);
+                        mCTvNoSpends.setVisibility(View.VISIBLE);
                     }
-                } else {
-                    AppLog.d("MainActivity", "Spends:: NULL dataSnapshot");
                 }
             }
-
+        }, new OnFailureListener() {
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                mPbLoading.setVisibility(View.GONE);
-                if (null != databaseError) {
-                    AppLog.d("MainActivity", "Spends:" + databaseError);
+            public void onFailure(@NonNull Exception e) {
+                AppLog.d("MainActivity", "Spends Firestore:onFailure", e);
 
+                hideDialog();
+
+                if (isRefresh) {
+                    isRefresh = false;
+
+                } else if (null != mExpenseAdapter) {
+                    if (mExpenseAdapter.isLoading()) {
+                        mExpenseAdapter.setIsLoading(false);
+                        //mExpenseAdapter.setIsLoadingRequired(false);
+                        mExpenseAdapter.notifyDataSetChanged();
+
+                    } else {
+                        AppUtil.showToast("Unable to refresh your spends.");
+                    }
                 } else {
-                    AppLog.d("MainActivity", "Spends list failed!");
+                    AppUtil.showToast("Unable to fetch your spends.");
+                    mLvExpense.setVisibility(View.GONE);
+                    mCTvNoSpends.setText(R.string.unable_fetch_spends);
+                    mCTvNoSpends.setVisibility(View.VISIBLE);
                 }
             }
         });
+    }
+
+    private void hideDialog() {
+        mPbLoading.setVisibility(View.GONE);
+
+        if (isRefresh) {
+            mBpbLoading.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -213,18 +208,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
     private final View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (v.getId() == R.id.am_layout_month_expense) {
-                boolean status = (boolean) mCTvMonthlyExpense.getTag();
-                if (status) {
-                    Intent monthlyExpenseIntent = new Intent(MainActivity.this, ExpensesListActivity.class);
-                    monthlyExpenseIntent.putExtra(AppConstants.Bundle.EXPENSE_DATE, mCalendarExpenseDate);
-                    startActivityForResult(monthlyExpenseIntent, AppConstants.EXPENSE_LIST_CODE);
-
-                } else {
-                    AppUtil.showSnackbar(findViewById(R.id.activity_main), "No expenses tracked in this month!");
-                }
-
-            } else if (v.getId() == R.id.le_layout_expense) {
+            if (v.getId() == R.id.le_layout_expense) {
                 int position = (int) v.getTag();
                 navigateToViewExpense(position, v);
             }
@@ -257,6 +241,15 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         } else if (item.getItemId() == R.id.menu_logout) {
             confirmLogout();
             return true;
+
+        } else if (item.getItemId() == R.id.menu_profile) {
+            if (AppUtil.isUserLoggedIn()) {
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+
+            } else {
+                AppUtil.showToast("User not logged in.");
+            }
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -278,6 +271,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 AppPref.getInstance().clearAll();
+                                                AppUtil.removeDynamicShortcut();
                                                 Intent newIntent = new Intent(MainActivity.this, LaunchDeciderActivity.class);
                                                 newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                 startActivity(newIntent);
@@ -304,9 +298,10 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
     private void showAboutAppDialog() {
         AlertDialog.Builder aboutappDialog = new AlertDialog.Builder(MainActivity.this);
-        aboutappDialog.setTitle(getString(R.string.about) + " " + getString(R.string.app_name));
+        //aboutappDialog.setTitle(getString(R.string.about) + " " + getString(R.string.app_name));
+        aboutappDialog.setTitle(getString(R.string.app_name));
         aboutappDialog.setMessage("Version: " + BuildConfig.VERSION_NAME + "\n\n"
-                + getString(R.string.app_name) + " " + getString(R.string.about_app_msg));
+                + getString(R.string.about_app_msg));
         aboutappDialog.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -351,10 +346,10 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         }
     };*/
 
-    private void showAddExpenseDialog() {
+    /*private void showAddExpenseDialog() {
         AddExpenseFragment expenseFragment = AddExpenseFragment.newInstance(mCalendarExpenseDate);
         expenseFragment.show(getSupportFragmentManager(), "AddExpenseDFragment");
-    }
+    }*/
 
     @Override
     public void onExpenseAdded() {
@@ -404,80 +399,8 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         } else {
             super.onBackPressed();
         }*/
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if (id == DBConstants.LoaderId.EXPENSE) {
-            return new ExpenseCursorLoader(MainActivity.this, mCalendarExpenseDate, AppConstants.LoaderConstants.LOADER_EXPENSE);
-        }
-
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (loader.getId() == DBConstants.LoaderId.EXPENSE) {
-            /*if (null != data && data.getCount() > 0) {
-                AppLog.d("Height", "::" + bottomSheetBehavior.getPeekHeight() + "::State:" + bottomSheetBehavior.getState());
-                bottomSheetBehavior.setPeekHeight(AppUtil.dpToPx(120));
-
-                mLvExpense.setVisibility(View.VISIBLE);
-                mCTvNoExpense.setVisibility(View.GONE);
-
-                if (null == mLvExpense.getAdapter()) {
-                    mExpenseAdapter = new ExpenseAdapter(MainActivity.this, data, false);
-
-                } else {
-                    mExpenseAdapter.swapCursor(data);
-                }
-                mLvExpense.setAdapter(mExpenseAdapter);
-                Float totalAmount = DBManager.getTotalExpenses(mCalendarExpenseDate);
-                if (null != totalAmount) {
-                    mCTvTotalExpense.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)
-                            + " " + String.format(Locale.ENGLISH, AppConstants.FLOAT_FORMAT, totalAmount));
-
-                } else {
-                    mCTvTotalExpense.setText("");
-                }
-
-            } else {
-                mLvExpense.setVisibility(View.GONE);
-                mCTvTotalExpense.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)
-                        + " " + "0.00");
-                mCTvNoExpense.setVisibility(View.VISIBLE);
-                bottomSheetBehavior.setPeekHeight(AppUtil.dpToPx(150));
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            }*/
-            getMonthlyExpense();
-        }
-    }
-
-    private void getMonthlyExpense() {
-        String monthlyExpense = DBManager.getMonthlyExpensesTotal(mCalendarExpenseDate);
-        /*mCTvMonthlyExpenseInfo.setText("Expense for " + AppUtil.getShortMonth(mCalendarExpenseDate.getMonth())
-                + " " + mCalendarExpenseDate.getYear());*/
-        mCTvMonthlyExpenseInfo.setText(String.format(getString(R.string.value_month_expenses), AppUtil.getShortMonth(mCalendarExpenseDate.getMonth())));
-
-        if (null != monthlyExpense) {
-            mCTvMonthlyExpense.setText(String.format("%s %s",
-                    AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY),
-                    AppUtil.getStringAmount(monthlyExpense)));
-            mCTvMonthlyExpense.setTag(Boolean.TRUE);
-
-        } else {
-            mCTvMonthlyExpense.setText(String.format("%s 0.00", AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)));
-            mCTvMonthlyExpense.setTag(Boolean.FALSE);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        if (loader.getId() == DBConstants.LoaderId.EXPENSE) {
-            if (null != mExpenseAdapter) {
-                //mExpenseAdapter.swapCursor(null);
-            }
-        }
+        FirebaseDB.initDb().detachPaymentTypes();
+        FirebaseDB.initDb().detachSpendsListener();
     }
 
     @Override
@@ -501,7 +424,8 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
     @Override
     public void onSpendsParsed(ArrayList<NewExpense> spends) {
         mLastKey = null;
-        if (null != spends && spends.size() > 0) {
+        AppLog.d("MainActivity", "onSpendsParsed:" + spends.size());
+        if (spends.size() > 0) {
             setSpends(spends);
         }
 
@@ -510,14 +434,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
             mBpbLoading.setVisibility(View.INVISIBLE);
         }
 
-        AppLog.d("MainActivity", "onSpendsParsed:" + spends.size());
-        if (null != spends && spends.size() == 0) {
-            if (null != mExpenseAdapter && mExpenseAdapter.isLoading()) {
-                mExpenseAdapter.setIsLoading(false);
-                mExpenseAdapter.setIsLoadingRequired(false);
-                mExpenseAdapter.notifyDataSetChanged();
-            }
-        }
+        mPbLoading.setVisibility(View.GONE);
     }
 
     private void setSpends(ArrayList<NewExpense> spends) {
@@ -527,25 +444,32 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
         } else {
             if (isRefresh) {
-                isRefresh = false;
                 mExpenseAdapter.setData(spends);
-                mExpenseAdapter.notifyDataSetChanged();
+                mLvExpense.setAdapter(mExpenseAdapter);
+                //mExpenseAdapter.notifyDataSetChanged();
                 AppLog.d("MainActivity", "Spends: Refresh Done");
 
             } else if (mExpenseAdapter.isLoading()) {
                 mExpenseAdapter.addSpends(spends);
             }
         }
-        mPbLoading.setVisibility(View.GONE);
-        mBpbLoading.setVisibility(View.INVISIBLE);
+
+        if (mLvExpense.getVisibility() != View.VISIBLE) {
+            mLvExpense.setVisibility(View.VISIBLE);
+        }
+
+        if (mCTvNoSpends.getVisibility() != View.GONE) {
+            mCTvNoSpends.setVisibility(View.GONE);
+        }
     }
 
     @Override
-    public void onLoading(String lastKey) {
-        AppLog.d("MainActivity", "onLoading: Key:" + lastKey);
-        if (null != lastKey) {
-            mLastKey = lastKey;
-            AppLog.d("MainActivity", "onLoading: Key:" + lastKey);
+    public void onLoading(long lastExpenseDate) {
+        AppLog.d("MainActivity", "onLoading: Expense Date:" + lastExpenseDate);
+        if (-1 != lastExpenseDate) {
+            //mLastKey = lastKey;
+            AppLog.d("MainActivity", "onLoading: Key:" + lastExpenseDate);
+            mLastExpense = lastExpenseDate;
             getExpenses();
         }
     }

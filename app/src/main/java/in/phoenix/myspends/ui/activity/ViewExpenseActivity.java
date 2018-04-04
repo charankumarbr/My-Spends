@@ -3,7 +3,7 @@ package in.phoenix.myspends.ui.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.ContentLoadingProgressBar;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -12,15 +12,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
+import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.text.ParseException;
 
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
-import in.phoenix.myspends.database.DBManager;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
@@ -47,6 +47,7 @@ public class ViewExpenseActivity extends BaseActivity {
     private CustomTextView mCTvLastUpdatedOn;
     private CustomTextView mCTvPaidBy;
     private CustomTextView mCTvNote;
+    private CustomTextView mCTvCategory;
 
     private int mResultCode = RESULT_CANCELED;
 
@@ -96,6 +97,7 @@ public class ViewExpenseActivity extends BaseActivity {
         mCTvLastUpdatedOn = (CustomTextView) findViewById(R.id.ave_ctextview_updated_on);
         mCTvPaidBy = (CustomTextView) findViewById(R.id.ave_cTextView_paid_by);
         mCTvNote = (CustomTextView) findViewById(R.id.ave_cTextView_note);
+        mCTvCategory = findViewById(R.id.ave_cTextView_category);
 
         mPbLoading = findViewById(R.id.ave_pb_loading);
     }
@@ -123,6 +125,7 @@ public class ViewExpenseActivity extends BaseActivity {
                     mCTvAddedOn.setVisibility(View.VISIBLE);
 
                 } catch (ParseException e) {
+                    Crashlytics.logException(e);
                     e.printStackTrace();
                     mCTvAddedOn.setVisibility(View.GONE);
                 }
@@ -134,12 +137,14 @@ public class ViewExpenseActivity extends BaseActivity {
                     mCTvLastUpdatedOn.setVisibility(View.VISIBLE);
 
                 } catch (ParseException e) {
+                    Crashlytics.logException(e);
                     e.printStackTrace();
                     mCTvLastUpdatedOn.setVisibility(View.GONE);
                 }
             }
 
             mCTvPaidBy.setText(AppUtil.getPaidByForKey(mExpense.getPaymentTypeKey()));
+            mCTvCategory.setText(MySpends.getCategoryName(mExpense.getCategoryId()));
         }
     }
 
@@ -197,18 +202,19 @@ public class ViewExpenseActivity extends BaseActivity {
 
     private void deleteExpense(String key) {
         mPbLoading.setVisibility(View.VISIBLE);
-        FirebaseDB.initDb().removeExpense(key, new DatabaseReference.CompletionListener() {
+        FirebaseDB.initDb().deleteFsExpense(key, new OnSuccessListener() {
             @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+            public void onSuccess(Object o) {
                 mPbLoading.setVisibility(View.GONE);
-                if (null == databaseError) {
-                    AppUtil.showToast(R.string.expense_deleted_successfully);
-                    setResult(RESULT_OK);
-                    finish();
-
-                } else {
-                    AppUtil.showSnackbar(mViewComplete, "Unable to delete the expense.");
-                }
+                AppUtil.showToast(R.string.expense_deleted_successfully);
+                setResult(RESULT_OK);
+                finish();
+            }
+        }, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mPbLoading.setVisibility(View.GONE);
+                AppUtil.showSnackbar(mViewComplete, "Unable to delete.");
             }
         });
     }

@@ -213,7 +213,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                 if (null != dataSnapshot) {
                     AppLog.d("NewExpenseActivity", "Count:" + dataSnapshot.getChildrenCount());
                     if (dataSnapshot.getChildrenCount() > 0) {
-                        new PaymentTypeParser(NewExpenseActivity.this).executeOnExecutor(
+                        new PaymentTypeParser(NewExpenseActivity.this, true).executeOnExecutor(
                                 AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
 
                     } else {

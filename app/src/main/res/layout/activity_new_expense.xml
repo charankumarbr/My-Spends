@@ -60,14 +60,13 @@
                 android:text="@string/add_another_expense"
                 android:textColor="@color/primary_text"
                 android:layout_gravity="right"
-                android:visibility="visible"
-                android:layout_marginTop="12dp"/>
+                android:layout_marginTop="8dp"/>
 
             <in.phoenix.myspends.customview.CustomTextView
                 android:id="@+id/ane_tv_expense_date"
-                android:layout_width="match_parent"
+                android:layout_width="230dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:drawableStart="@drawable/ic_date_range_30dp"
                 android:text="31st Apr 2018"
                 android:gravity="center_vertical"
@@ -76,10 +75,20 @@
                 android:textColor="@color/primary_text"
                 app:fontName="@string/font_noto_sans"/>
 
+            <!--android:drawableEnd="@drawable/ic_mode_edit_white_24dp"
+            android:drawableTint="@color/colorAccent"-->
+
+            <View
+                android:layout_width="193dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="37dp"
+                android:background="@color/secondary_text"
+                android:layout_marginTop="-5dp"/>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="12dp">
 
                 <in.phoenix.myspends.customview.CustomTextView
                     android:id="@+id/ane_ctextview_currency"

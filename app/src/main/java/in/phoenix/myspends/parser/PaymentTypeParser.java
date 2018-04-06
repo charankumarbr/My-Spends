@@ -20,11 +20,19 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
     private PaymentTypeParserListener mListener;
 
     private ArrayList<PaymentType> mPaymentTypes = null;
+    private ArrayList<PaymentType> mActivePaymentTypes = null;
 
     private HashMap<String, PaymentType> mAllPaymentTypes = null;
 
-    public PaymentTypeParser(PaymentTypeParserListener listener ) {
+    private boolean mIsActiveOnly = false;
+
+    public PaymentTypeParser(PaymentTypeParserListener listener) {
         mListener = listener;
+    }
+
+    public PaymentTypeParser(PaymentTypeParserListener listener, boolean isActiveOnly) {
+        mListener = listener;
+        mIsActiveOnly = isActiveOnly;
     }
 
     @Override
@@ -38,6 +46,11 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
             if (null != values) {
                 mPaymentTypes = new ArrayList<>();
                 if (null != mListener) {
+
+                    if (mIsActiveOnly) {
+                        mActivePaymentTypes = new ArrayList<>();
+                    }
+
                     AppLog.d("PaymentType", "One");
                     AppLog.d("PaymentType", "Two");
                     for (DataSnapshot aValue : values) {
@@ -46,6 +59,9 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
                         PaymentType paymentType = aValue.getValue(PaymentType.class);
                         paymentType.setKey(aValue.getKey());
                         mPaymentTypes.add(paymentType);
+                        if (mIsActiveOnly && paymentType.isActive()) {
+                            mActivePaymentTypes.add(paymentType);
+                        }
                     }
                 } else {
                     //-- for the application --//
@@ -70,7 +86,7 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         if (null != mListener) {
-            mListener.onPaymentTypesParsed(mPaymentTypes, false);
+            mListener.onPaymentTypesParsed((mIsActiveOnly) ? mActivePaymentTypes : mPaymentTypes, false);
             MySpends.updatePaymentTypes(mPaymentTypes);
 
         } else {

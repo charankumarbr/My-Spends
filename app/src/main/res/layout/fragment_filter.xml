@@ -96,7 +96,7 @@
                 app:fontName="@string/font_noto_sans"
                 android:layout_below="@+id/ff_imageview_to_date"/>
 
-            <com.google.android.flexbox.FlexboxLayout
+            <!--<com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/ff_fblayout_payment_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -105,6 +105,15 @@
                 app:flexWrap="wrap"
                 app:alignContent="center"
                 android:layout_marginTop="16dp"
+                android:layout_below="@+id/ff_ctextview_paidby_header"/>-->
+
+            <Spinner
+                android:id="@+id/ff_spnr_paid_by"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="12dp"
+                android:dropDownSelector="@color/colorAccent"
+                android:spinnerMode="dialog"
                 android:layout_below="@+id/ff_ctextview_paidby_header"/>
 
             <android.support.v7.widget.AppCompatButton
@@ -117,7 +126,7 @@
                 android:textColor="@color/colorAccent"
                 android:layout_marginEnd="12dp"
                 android:layout_marginBottom="16dp"
-                android:layout_below="@+id/ff_fblayout_payment_mode"
+                android:layout_below="@+id/ff_spnr_paid_by"
                 android:layout_toStartOf="@+id/ff_abutton_view_spends"
                 style="@style/Widget.AppCompat.Button.Borderless"/>
 
@@ -125,7 +134,7 @@
                 android:id="@+id/ff_abutton_view_spends"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ff_fblayout_payment_mode"
+                android:layout_below="@+id/ff_spnr_paid_by"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="16dp"
                 android:text="View My Spends"

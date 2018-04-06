@@ -84,6 +84,7 @@ public class AddPaymentTypeFragment extends DialogFragment {
         // Inflate the layout for this fragment
         View addPaymentTypeView = inflater.inflate(R.layout.fragment_add_payment_type, container, false);
         mFlexboxLayoutTypes = (FlexboxLayout) addPaymentTypeView.findViewById(R.id.fapt_fblayout_payment_type);
+        mTILTypeName = addPaymentTypeView.findViewById(R.id.fapt_til_type_name);
         mTIETTypeName = (TextInputEditText) addPaymentTypeView.findViewById(R.id.fapt_tiedittext_type_name);
 
         AppCompatButton buttonAdd = (AppCompatButton) addPaymentTypeView.findViewById(R.id.fapt_acbutton_add);
@@ -159,7 +160,7 @@ public class AddPaymentTypeFragment extends DialogFragment {
                 });
 
             } else {
-
+                AppUtil.showToast(R.string.no_internet);
             }
         }
 
@@ -200,23 +201,31 @@ public class AddPaymentTypeFragment extends DialogFragment {
 
         String paymentModeName = mTIETTypeName.getText().toString();
         if (TextUtils.isEmpty(paymentModeName)) {
-            AppUtil.showToast(R.string.enter_payment_name);
+            //AppUtil.showToast(R.string.enter_payment_name);
+            mTILTypeName.setError(getString(R.string.enter_payment_name));
+            mTILTypeName.setErrorEnabled(true);
             return false;
         }
 
         String[] restrictedChars = {":", "$", "'", "\"", "\\", "(", ")", "*", "%", "!"};
         for (String restrictedChar : restrictedChars) {
             if (paymentModeName.contains(restrictedChar)) {
-                AppUtil.showToast(R.string.enter_valid_payment_name);
+                //AppUtil.showToast(R.string.enter_valid_payment_name);
+                mTILTypeName.setError(getString(R.string.enter_valid_payment_name));
+                mTILTypeName.setErrorEnabled(true);
                 return false;
             }
         }
 
         if (mSelectedPaymentModeId == -1) {
-            AppUtil.showToast(R.string.please_select_payment_type);
+            //AppUtil.showToast(R.string.please_select_payment_type);
+            mTILTypeName.setError(getString(R.string.please_select_payment_type));
+            mTILTypeName.setErrorEnabled(true);
             return false;
         }
 
+        mTILTypeName.setError(null);
+        mTILTypeName.setErrorEnabled(false);
         return true;
     }
 

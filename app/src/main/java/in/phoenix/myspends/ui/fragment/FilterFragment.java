@@ -13,12 +13,12 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.RadioButton;
+import android.widget.Spinner;
 
-import com.google.android.flexbox.FlexboxLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.controller.CustomSpinnerAdapter;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.ExpenseDate;
@@ -60,9 +61,11 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
 
     private ImageView mIvToDate;
 
-    private FlexboxLayout mFlexboxLayout = null;
+    //private FlexboxLayout mFlexboxLayout = null;
 
     private String mSelectedPaymentKey = null;
+
+    private Spinner mSpnrPaidBy = null;
 
     public FilterFragment() {
         // Required empty public constructor
@@ -138,7 +141,8 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
             mTietToDate.setText(mToExpenseDate.getFormattedDate());
         }
 
-        mFlexboxLayout = (FlexboxLayout) filterView.findViewById(R.id.ff_fblayout_payment_mode);
+        //mFlexboxLayout = (FlexboxLayout) filterView.findViewById(R.id.ff_fblayout_payment_mode);
+        mSpnrPaidBy = filterView.findViewById(R.id.ff_spnr_paid_by);
         filterView.post(new Runnable() {
             @Override
             public void run() {
@@ -150,7 +154,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
     }
 
     private void getAllPaymentTypes() {
-        mFlexboxLayout.removeAllViews();
+        //mFlexboxLayout.removeAllViews();
         FirebaseDB.initDb().getPaymentTypes(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -343,24 +347,42 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
             paymentTypes.add(0, PaymentType.getCashPaymentType());
         }
 
-        if (null != paymentTypes && paymentTypes.size() > 0) {
-            LayoutInflater inflater = LayoutInflater.from(mContext);
-            for (int index = 0; index < paymentTypes.size(); index++) {
-                RadioButton radioButton = (RadioButton) inflater.inflate(R.layout.layout_radio_button, null);
-                radioButton.setId(index);
-                radioButton.setTag(paymentTypes.get(index).getKey());
-                radioButton.setText(paymentTypes.get(index).getName());
-                if (null != mSelectedPaymentKey && mSelectedPaymentKey.contains(paymentTypes.get(index).getKey())) {
-                    radioButton.setChecked(true);
+        CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(mContext,
+                R.layout.layout_spinner_selected, paymentTypes);
+        adapter.setSelectionText("Select Paid by");
+        mSpnrPaidBy.setAdapter(adapter);
+        mSpnrPaidBy.setOnItemSelectedListener(mPaidBySelectedListener);
 
-                } else {
-                    radioButton.setChecked(false);
-                }
-                radioButton.setOnCheckedChangeListener(paymentModeSelectedListener);
-                mFlexboxLayout.addView(radioButton);
+        /*LayoutInflater inflater = LayoutInflater.from(mContext);
+        for (int index = 0; index < paymentTypes.size(); index++) {
+            RadioButton radioButton = (RadioButton) inflater.inflate(R.layout.layout_radio_button, null);
+            radioButton.setId(index);
+            radioButton.setTag(paymentTypes.get(index).getKey());
+            radioButton.setText(paymentTypes.get(index).getName());
+            if (null != mSelectedPaymentKey && mSelectedPaymentKey.contains(paymentTypes.get(index).getKey())) {
+                radioButton.setChecked(true);
+
+            } else {
+                radioButton.setChecked(false);
             }
-        }
+            radioButton.setOnCheckedChangeListener(paymentModeSelectedListener);
+            mFlexboxLayout.addView(radioButton);
+        }*/
     }
+
+    private AdapterView.OnItemSelectedListener mPaidBySelectedListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            mSelectedPaymentKey = (String) view.getTag();
+            AppLog.d("PaidByFragment", "TypeId:" + mSelectedPaymentKey);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+            AppLog.d("Paid By Listener", "onNothing:");
+            mSelectedPaymentKey = null;
+        }
+    };
 
     private final CompoundButton.OnCheckedChangeListener paymentModeSelectedListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
@@ -377,11 +399,13 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
     };
 
     private void resetPaymentTypes() {
-        for (int index = 0; index < mFlexboxLayout.getChildCount(); index++) {
+        /*for (int index = 0; index < mFlexboxLayout.getChildCount(); index++) {
             if (mFlexboxLayout.getChildAt(index) instanceof RadioButton) {
                 ((RadioButton) mFlexboxLayout.getChildAt(index)).setChecked(false);
             }
-        }
+        }*/
+        mSpnrPaidBy.setSelection(0);
+        mSelectedPaymentKey = null;
     }
 
     /**

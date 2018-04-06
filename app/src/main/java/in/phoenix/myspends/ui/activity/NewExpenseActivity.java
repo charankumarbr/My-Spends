@@ -26,12 +26,10 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -70,7 +68,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
     private ExpenseDate mExpenseDate;
 
-    private FlexboxLayout mFlexboxLayout = null;
+    //private FlexboxLayout mFlexboxLayout = null;
 
     private CustomTextView mCTvExpenseDate = null;
 
@@ -159,7 +157,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
         mVEditDate = findViewById(R.id.ane_imageview_edit_date);
 
-        mFlexboxLayout = (FlexboxLayout) findViewById(R.id.ane_fblayout_payment_mode);
+        //mFlexboxLayout = (FlexboxLayout) findViewById(R.id.ane_fblayout_payment_mode);
 
         mPbLoading = findViewById(R.id.ane_pb_loading);
 
@@ -206,7 +204,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     }
 
     private void getPaymentTypes() {
-        mFlexboxLayout.removeAllViews();
+        //mFlexboxLayout.removeAllViews();
         FirebaseDB.initDb().getPaymentTypes(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -387,12 +385,15 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     }
 
     private void resetAllPaymentTypes() {
-        for (int index = 0; index < mFlexboxLayout.getChildCount(); index++) {
+        /*for (int index = 0; index < mFlexboxLayout.getChildCount(); index++) {
             if (mFlexboxLayout.getChildAt(index) instanceof RadioButton) {
                 ((RadioButton) mFlexboxLayout.getChildAt(index)).setChecked(false);
             }
-        }
+        }*/
+        mSpnrPaidBy.setSelection(0);
         mSelectedTypeKey = null;
+        mSpnrCategory.setSelection(0);
+        mSelectedCategoryId = -1;
     }
 
     private void saveChanges() {

@@ -166,7 +166,7 @@
                 android:dropDownSelector="@color/colorAccent"
                 android:spinnerMode="dialog"/>
 
-            <RadioGroup
+            <!--<RadioGroup
                 android:id="@+id/ane_radio_group_payment_mode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -182,7 +182,7 @@
                     app:flexDirection="row"
                     app:flexWrap="wrap"
                     android:visibility="gone"/>
-            </RadioGroup>
+            </RadioGroup>-->
 
             <in.phoenix.myspends.customview.CustomTextView
                 android:layout_width="wrap_content"

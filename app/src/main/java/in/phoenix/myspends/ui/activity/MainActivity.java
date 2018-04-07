@@ -80,6 +80,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
             toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         }
         toolbar.setTitle(getString(R.string.app_name));
+        toolbar.setSubtitle(AppUtil.getUserShortName());
         setSupportActionBar(toolbar);
 
         mCalendarExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());

@@ -23,7 +23,7 @@ import in.phoenix.myspends.model.PaymentType;
 public final class CustomSpinnerAdapter extends ArrayAdapter<String> {
 
     private final LayoutInflater mInflater;
-    private final Context mContext;
+    //private final Context mContext;
     private final List<?> items;
     private final int mResource;
 
@@ -33,7 +33,7 @@ public final class CustomSpinnerAdapter extends ArrayAdapter<String> {
                                 @NonNull List objects) {
         super(context, resource, 0, objects);
 
-        mContext = context;
+        //mContext = context;
         mInflater = LayoutInflater.from(context);
         mResource = resource;
         items = objects;

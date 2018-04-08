@@ -34,12 +34,7 @@ import in.phoenix.myspends.util.AppUtil;
  */
 public class ViewExpenseActivity extends BaseActivity {
 
-    private boolean isNew = false;
-
-    //private int mExpensePrimaryKey = -1;
-
     private NewExpense mExpense = null;
-    private ExpenseDate mExpenseDate = null;
 
     private CustomTextView mCTvAmount;
     private CustomTextView mCTvExpenseOn;
@@ -85,7 +80,7 @@ public class ViewExpenseActivity extends BaseActivity {
     private void init() {
         initLayout();
         Toolbar toolbar = (Toolbar) findViewById(R.id.ave_toolbar);
-        toolbar.setTitle(isNew ? "New Expense" : "Tracked Expense");
+        toolbar.setTitle("Tracked Expense");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -113,12 +108,12 @@ public class ViewExpenseActivity extends BaseActivity {
             mCTvAmount.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)
                     + " " + AppUtil.getStringAmount(String.valueOf(mExpense.getAmount())));
             mCTvNote.setText(TextUtils.isEmpty(mExpense.getNote()) ? AppConstants.BLANK_NOTE_TEMPLATE : mExpense.getNote());
-            mExpenseDate = new ExpenseDate(mExpense.getExpenseDate());
-            boolean isAddedOnDiffDate = mExpenseDate.isSameExpenseDate(mExpense.getCreatedOn());
+            ExpenseDate expenseDate = new ExpenseDate(mExpense.getExpenseDate());
+            boolean isAddedOnDiffDate = expenseDate.isSameExpenseDate(mExpense.getCreatedOn());
             boolean isUpdated = mExpense.getCreatedOn() != mExpense.getUpdatedOn();
 
-            mCTvExpenseOn.setText(getString(R.string.expense_on) + " " + mExpenseDate.getFormattedDate());
-            AppLog.d("ViewExpense", "ExpenseDate:" + mExpenseDate.getTimeInMillis() + ":: Created Date:" + mExpense.getCreatedOn() + ":: Expense:" + mExpense.getExpenseDate());
+            mCTvExpenseOn.setText(getString(R.string.expense_on) + " " + expenseDate.getFormattedDate());
+            AppLog.d("ViewExpense", "ExpenseDate:" + expenseDate.getTimeInMillis() + ":: Created Date:" + mExpense.getCreatedOn() + ":: Expense:" + mExpense.getExpenseDate());
             if (!isAddedOnDiffDate) {
                 try {
                     mCTvAddedOn.setText(getString(R.string.added_on) + " " + AppUtil.dateDBToString(mExpense.getCreatedOn()));

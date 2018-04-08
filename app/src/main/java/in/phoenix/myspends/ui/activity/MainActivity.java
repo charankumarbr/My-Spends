@@ -40,14 +40,13 @@ import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.parser.FSSpendsParser;
 import in.phoenix.myspends.parser.SpendsParser;
-import in.phoenix.myspends.ui.fragment.AddExpenseFragment;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
-public class MainActivity extends BaseActivity implements AddExpenseFragment.OnAddExpenseListener,
-        SpendsParser.SpendsParserListener, NewExpenseAdapter.OnLoadingListener {
+public class MainActivity extends BaseActivity implements SpendsParser.SpendsParserListener,
+        NewExpenseAdapter.OnLoadingListener {
 
     private ExpenseDate mCalendarExpenseDate;
 
@@ -60,7 +59,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
     private ButteryProgressBar mBpbLoading = null;
     private boolean isRefresh = false;
 
-    private String mLastKey = null;
+    //private String mLastKey = null;
 
     private CustomTextView mCTvNoSpends = null;
 
@@ -325,18 +324,18 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         }
     }
 
-    @Override
+    /*@Override
     public void onExpenseAdded() {
         getExpenses();
-    }
+    }*/
 
-    private final AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+    /*private final AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             //final int expensePrimaryKey = (int) view.findViewById(R.id.le_textview_amount).getTag();
             navigateToViewExpense(position, view);
         }
-    };
+    };*/
 
     private void navigateToViewExpense(final int position, View view) {
         Animation animation1 = new AlphaAnimation(0.3f, 1.0f);
@@ -389,7 +388,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
     @Override
     public void onSpendsParsed(ArrayList<NewExpense> spends) {
-        mLastKey = null;
+        //mLastKey = null;
         AppLog.d("MainActivity", "onSpendsParsed:" + spends.size());
         if (spends.size() > 0) {
             setSpends(spends);

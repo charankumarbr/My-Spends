@@ -59,7 +59,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
 
     private NewExpenseAdapter mExpenseAdapter = null;
 
-    private String mLastKey = null;
+    //private String mLastKey = null;
     private DocumentSnapshot mLastSnapshot = null;
 
     @Override
@@ -354,7 +354,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
 
             if (isChanged) {
                 mLastSnapshot = null;
-                mLastKey = null;
+                //mLastKey = null;
 
                 if (null != mExpenseAdapter) {
                     mExpenseAdapter = null;

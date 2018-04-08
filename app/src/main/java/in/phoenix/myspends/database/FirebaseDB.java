@@ -53,8 +53,8 @@ public final class FirebaseDB {
     private ListenerRegistration mSpendsListenerRegistration = null;
 
     private FirebaseDB() {
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseDatabase.setPersistenceEnabled(true);
 
         DatabaseReference databaseReference = firebaseDatabase.getReference();
 

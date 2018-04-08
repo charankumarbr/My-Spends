@@ -14,12 +14,12 @@ public class MoneyValueFilter extends DigitsKeyListener {
         super(false, true);
     }
 
-    private int digits = 2;
-
     @Override
     public CharSequence filter(CharSequence source, int start, int end,
                                Spanned dest, int dstart, int dend) {
         CharSequence out = super.filter(source, start, end, dest, dstart, dend);
+
+        int digits = 2;
 
         // if changed, replace the source
         if (out != null) {

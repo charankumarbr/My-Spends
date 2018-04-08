@@ -61,7 +61,7 @@ public final class AppSecurity {
         byte[] plainText = cipher.doFinal(decrypted);
         value = new String(plainText, charset);
         AppLog.d("AppSecurity", "decrypt: Byte[] Length:" + decrypted.length);
-        AppLog.d("AppSecurity", "decrypt: Value:"  + value + " :: Length:" + value.length());
+        AppLog.d("AppSecurity", "decrypt: Value:" + value + " :: Length:" + value.length());
 
         return value;
     }

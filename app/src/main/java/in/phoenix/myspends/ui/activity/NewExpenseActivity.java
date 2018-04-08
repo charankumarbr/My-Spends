@@ -100,34 +100,28 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) {
-            startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
-            finish();
+        if (getIntent().hasExtra(AppConstants.Bundle.EXPENSE)) {
+            mExpense = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE);
+            isNew = false;
 
-        } else {*/
-            if (getIntent().hasExtra(AppConstants.Bundle.EXPENSE)) {
-                mExpense = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE);
-                isNew = false;
+        } else if (getIntent().hasExtra(AppConstants.Bundle.EXPENSE_DATE)) {
+            mExpenseDate = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE_DATE);
+            isNew = true;
 
-            } else if (getIntent().hasExtra(AppConstants.Bundle.EXPENSE_DATE)) {
-                mExpenseDate = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE_DATE);
+        } else {
+            if (AppUtil.isUserLoggedIn()) {
+                mExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());
                 isNew = true;
 
             } else {
-                if (AppUtil.isUserLoggedIn()) {
-                    mExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());
-                    isNew = true;
-
-                } else {
-                    finish();
-                }
+                finish();
             }
+        }
 
-            mViaNotification = getIntent().getBooleanExtra(AppConstants.Bundle.VIA_NOTIFICATION, false);
+        mViaNotification = getIntent().getBooleanExtra(AppConstants.Bundle.VIA_NOTIFICATION, false);
 
-            setContentView(R.layout.activity_new_expense);
-            init();
-        //}
+        setContentView(R.layout.activity_new_expense);
+        init();
     }
 
     private void init() {
@@ -489,8 +483,8 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                 mExpense.setUpdatedOn(System.currentTimeMillis());
             }
             AppLog.d("NewExpense", "Edited expense:" + mExpense.getId() + ":" + mExpense.getPaymentTypeKey()
-            + ":" + mExpense.getExpenseDate() + ":" + mExpense.getCreatedOn() + ":" + mExpense.getNote() + ":"
-            + mExpense.getAmount() + ":" + mExpense.getUpdatedOn() + ":" + mExpense.getCategoryId());
+                    + ":" + mExpense.getExpenseDate() + ":" + mExpense.getCreatedOn() + ":" + mExpense.getNote() + ":"
+                    + mExpense.getAmount() + ":" + mExpense.getUpdatedOn() + ":" + mExpense.getCategoryId());
 
             if (AppUtil.isConnected()) {
                 if (AppUtil.isUserLoggedIn()) {

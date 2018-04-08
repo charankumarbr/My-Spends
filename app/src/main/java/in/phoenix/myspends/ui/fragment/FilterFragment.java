@@ -44,9 +44,9 @@ import in.phoenix.myspends.util.AppUtil;
 public class FilterFragment extends DialogFragment implements PaymentTypeParser.PaymentTypeParserListener {
 
     private Context mContext;
-    
+
     private OnFilterListener mListener;
-    
+
     private TextInputLayout mTilFromDate;
     private TextInputLayout mTilToDate;
 
@@ -86,7 +86,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
         super.onAttach(context);
         if (context instanceof OnFilterListener) {
             mListener = (OnFilterListener) context;
-            
+
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFilterListener");
@@ -149,7 +149,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
                 getAllPaymentTypes();
             }
         });
-        
+
         return filterView;
     }
 
@@ -183,7 +183,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
             }
         });
     }
-    
+
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

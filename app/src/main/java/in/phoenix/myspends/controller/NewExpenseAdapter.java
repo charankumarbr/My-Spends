@@ -198,7 +198,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
     }
 
     public void addSpends(ArrayList<NewExpense> spends) {
-        if (null ==  mSpends) {
+        if (null == mSpends) {
             mSpends = new ArrayList<>(spends);
 
         } else {

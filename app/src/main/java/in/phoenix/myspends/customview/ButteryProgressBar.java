@@ -92,7 +92,7 @@ public final class ButteryProgressBar extends View {
         mPaint.setColor(mBarColor);
 
         mShadow = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
-                new int[] { (mBarColor & 0x00ffffff) | 0x22000000, 0 });
+                new int[]{(mBarColor & 0x00ffffff) | 0x22000000, 0});
     }
 
     @Override

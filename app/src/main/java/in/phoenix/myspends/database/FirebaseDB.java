@@ -348,9 +348,9 @@ public final class FirebaseDB {
 
     private ArrayList<Category> prepareCategories() {
         String[] categoryNames = {"Beauty & Fitness", "Bills & Payments", "Books & Stationery",
-        "Clothing", "Donation", "EMI", "Entertainment", "Food & Beverages", "Gifts", "Grocery",
-        "Home", "Insurance", "Investments", "Maintenance", "Medical", "Miscellaneous", "Purchases",
-        "Rent", "Service & Repairs", "Shopping", "Transport", "Travel", "Utility", "Vacation"};
+                "Clothing", "Donation", "EMI", "Entertainment", "Food & Beverages", "Gifts", "Grocery",
+                "Home", "Insurance", "Investments", "Maintenance", "Medical", "Miscellaneous", "Purchases",
+                "Rent", "Service & Repairs", "Shopping", "Transport", "Travel", "Utility", "Vacation"};
 
         //Beauty & Fitness, EMI, Entertainment, Grocery, Investments, Shopping, Travel, Medical (instead of Healthcare)
 

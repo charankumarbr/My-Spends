@@ -30,7 +30,7 @@ public final class CustomSpinnerAdapter extends ArrayAdapter<String> {
     private String mSelectionText = null;
 
     public CustomSpinnerAdapter(@NonNull Context context, @LayoutRes int resource,
-                              @NonNull List objects) {
+                                @NonNull List objects) {
         super(context, resource, 0, objects);
 
         mContext = context;
@@ -71,11 +71,12 @@ public final class CustomSpinnerAdapter extends ArrayAdapter<String> {
     }
 
     @Override
-    public @NonNull View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public @NonNull
+    View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         return createItemView(position, convertView, parent, Boolean.FALSE);
     }
 
-    private View createItemView(int position, View convertView, ViewGroup parent, Boolean isDropdown){
+    private View createItemView(int position, View convertView, ViewGroup parent, Boolean isDropdown) {
 
         if (position == 0) {
             View view;

@@ -42,8 +42,8 @@ import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
 public class ReportActivity extends BaseActivity implements DatePickerFragment.OnDatePickedListener,
-        PaidByFragment.OnPaidBySelectedListener, SpendsParser.SpendsParserListener, NewExpenseAdapter.OnLoadingListener,
-        FilterFragment.OnFilterListener{
+        PaidByFragment.OnPaidBySelectedListener, SpendsParser.SpendsParserListener,
+        NewExpenseAdapter.OnLoadingListener, FilterFragment.OnFilterListener {
 
     private long mFromMillis = 0;
     private long mToMillis = 0;
@@ -109,7 +109,8 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                 PaidByFragment paidByFragment = PaidByFragment.newInstance(mPaidBy);
                 paidByFragment.show(getSupportFragmentManager(), "PaidByFragment");
 
-            } else*/ if (view.getId() == R.id.ar_layout_filter) {
+            } else*/
+            if (view.getId() == R.id.ar_layout_filter) {
                 FilterFragment paidByFragment = FilterFragment.newInstance();
                 paidByFragment.show(getSupportFragmentManager(), "FilterFragment");
             }

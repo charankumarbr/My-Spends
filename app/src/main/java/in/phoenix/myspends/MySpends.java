@@ -55,7 +55,7 @@ public class MySpends extends Application {
     }
 
     private void fetchCategories() {
-        FirebaseDB.initDb().fetchCategories(mCategoryListener);
+        FirebaseDB.initDb().getExpenseCategories(mCategoryListener);
     }
 
     private void initNotification() {
@@ -217,7 +217,7 @@ public class MySpends extends Application {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             if (dataSnapshot.getChildrenCount() > 0) {
-                new CategoryParser().executeOnExecutor(
+                new CategoryParser(null).executeOnExecutor(
                         AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
 
             } else {

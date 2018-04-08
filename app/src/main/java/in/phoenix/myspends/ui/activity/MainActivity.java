@@ -41,7 +41,6 @@ import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.parser.FSSpendsParser;
 import in.phoenix.myspends.parser.SpendsParser;
 import in.phoenix.myspends.ui.fragment.AddExpenseFragment;
-import in.phoenix.myspends.ui.fragment.AddPaymentTypeFragment;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
@@ -79,6 +78,7 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         } else {
             toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         }
+
         toolbar.setTitle(getString(R.string.app_name));
         toolbar.setSubtitle(AppUtil.getUserShortName());
         setSupportActionBar(toolbar);
@@ -115,8 +115,6 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
 
                 boolean isFromCache = documentSnapshots.getMetadata().isFromCache();
                 AppLog.d("MainActivity", "Spends Firestore:onSuccess :: isFromCache:" + isFromCache);
-
-                //FirebaseDB.initDb().listenSpends();
 
                 if (!documentSnapshots.isEmpty()) {
                     new FSSpendsParser(MainActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
@@ -327,29 +325,6 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
         }
     }
 
-    private void showPaymentDialog() {
-        AddPaymentTypeFragment addPaymentTypeFragment = AddPaymentTypeFragment.newInstance();
-        addPaymentTypeFragment.show(getSupportFragmentManager(), "AddPaymentTFragment");
-    }
-
-    /*private final CalendarView.OnDateChangeListener onDateChangeListener = new CalendarView.OnDateChangeListener() {
-        @Override
-        public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-            AppLog.d("Calendar Click", "DoM:" + dayOfMonth + "::Month:" + month + "::Year:" + year);
-            mCalendarExpenseDate = new ExpenseDate(dayOfMonth, month, year);
-            AppLog.d("State", " " + bottomSheetBehavior.getState());
-            if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED) {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            }
-            getExpenses();
-        }
-    };*/
-
-    /*private void showAddExpenseDialog() {
-        AddExpenseFragment expenseFragment = AddExpenseFragment.newInstance(mCalendarExpenseDate);
-        expenseFragment.show(getSupportFragmentManager(), "AddExpenseDFragment");
-    }*/
-
     @Override
     public void onExpenseAdded() {
         getExpenses();
@@ -390,14 +365,6 @@ public class MainActivity extends BaseActivity implements AddExpenseFragment.OnA
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        /*AppLog.d("onBackPressed", "State::" + bottomSheetBehavior.getState());
-        if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED
-                && mCTvNoExpense.getVisibility() == View.GONE) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-
-        } else {
-            super.onBackPressed();
-        }*/
         FirebaseDB.initDb().detachPaymentTypes();
         FirebaseDB.initDb().detachSpendsListener();
     }

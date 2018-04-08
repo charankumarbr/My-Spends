@@ -40,15 +40,16 @@ import com.google.firebase.firestore.DocumentReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.CustomSpinnerAdapter;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.customview.MoneyValueFilter;
 import in.phoenix.myspends.database.FirebaseDB;
+import in.phoenix.myspends.model.Category;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.model.PaymentType;
+import in.phoenix.myspends.parser.CategoryParser;
 import in.phoenix.myspends.parser.PaymentTypeParser;
 import in.phoenix.myspends.ui.fragment.AddPaymentTypeFragment;
 import in.phoenix.myspends.util.AppAnalytics;
@@ -62,7 +63,7 @@ import in.phoenix.myspends.util.AppUtil;
  */
 
 public final class NewExpenseActivity extends BaseActivity implements AddPaymentTypeFragment.
-        OnPaymentTypeListener, PaymentTypeParser.PaymentTypeParserListener {
+        OnPaymentTypeListener, PaymentTypeParser.PaymentTypeParserListener, CategoryParser.CategoryParserListener {
 
     private NewExpense mExpense = null;
 
@@ -82,7 +83,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
     private boolean isNew = false;
 
-    private View mVEditDate = null;
+    //private View mVEditDate = null;
 
     private boolean mViaNotification = false;
 
@@ -155,7 +156,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
         mCbAddAnotherExpense = (CheckBox) findViewById(R.id.ane_checkbox_add_another);
 
-        mVEditDate = findViewById(R.id.ane_imageview_edit_date);
+        //mVEditDate = findViewById(R.id.ane_imageview_edit_date);
 
         //mFlexboxLayout = (FlexboxLayout) findViewById(R.id.ane_fblayout_payment_mode);
 
@@ -165,8 +166,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         mSpnrCategory = findViewById(R.id.ane_spnr_category);
 
         getPaymentTypes();
-
-        setCategories();
+        getCategories();
 
         if (isNew) {
             mCTvExpenseDate.setText(/*getString(R.string.expense_on) + " " + */mExpenseDate.getFormattedDate());
@@ -187,20 +187,30 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
             /*mVEditDate.setVisibility(View.VISIBLE);
             mVEditDate.setOnClickListener(clickListener);*/
-
-            mSpnrCategory.setSelection(mExpense.getCategoryId());
         }
-
-        mSpnrCategory.setOnItemSelectedListener(mCategoryListener);
 
         mCTvExpenseDate.setOnClickListener(clickListener);
     }
 
-    private void setCategories() {
-        CustomSpinnerAdapter categoryAdapter = new CustomSpinnerAdapter(NewExpenseActivity.this,
-                R.layout.layout_spinner_selected, MySpends.getCategories());
-        categoryAdapter.setSelectionText("Select Category");
-        mSpnrCategory.setAdapter(categoryAdapter);
+    private void getCategories() {
+        FirebaseDB.initDb().getExpenseCategories(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildrenCount() > 0) {
+                    new CategoryParser(NewExpenseActivity.this).executeOnExecutor(
+                            AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
+
+                } else {
+                    AppLog.d("NewExpense", "ZERO Categories");
+                    onCategoriesParsed(null);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                onCategoriesParsed(null);
+            }
+        });
     }
 
     private void getPaymentTypes() {
@@ -385,11 +395,6 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     }
 
     private void resetAllPaymentTypes() {
-        /*for (int index = 0; index < mFlexboxLayout.getChildCount(); index++) {
-            if (mFlexboxLayout.getChildAt(index) instanceof RadioButton) {
-                ((RadioButton) mFlexboxLayout.getChildAt(index)).setChecked(false);
-            }
-        }*/
         mSpnrPaidBy.setSelection(0);
         mSelectedTypeKey = null;
         mSpnrCategory.setSelection(0);
@@ -444,26 +449,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                             AppLog.d("NewExpense", "OnFailure: Exception", e);
                         }
                     });
-                    /*FirebaseDB.initDb().addNewExpense(newExpense, new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                            mPbLoading.setVisibility(View.GONE);
-                            if (null == databaseError) {
-                                AppUtil.showToast("Expense tracked!");
-                                mOkStatus = RESULT_OK;
-                                if (!mCbAddAnotherExpense.isChecked()) {
-                                    AppUtil.toggleKeyboard(false);
-                                    setResult(RESULT_OK);
-                                    finish();
 
-                                } else {
-                                    resetAll();
-                                }
-                            } else {
-                                AppUtil.showSnackbar(mViewComplete, "Could not add this Expense!");
-                            }
-                        }
-                    });*/
                 } else {
                     AppUtil.showToast("Not logged in");
                 }
@@ -708,23 +694,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
             }
 
             mSpnrPaidBy.setOnItemSelectedListener(mPaidBySelectedListener);
-            /*LayoutInflater inflater = LayoutInflater.from(NewExpenseActivity.this);
-            for (int index = 0; index < paymentTypes.size(); index++) {
-                if (paymentTypes.get(index).isActive()) {
-                    RadioButton radioButton = (RadioButton) inflater.inflate(R.layout.layout_radio_button, null);
-                    radioButton.setId(index);
-                    radioButton.setTag(paymentTypes.get(index).getKey());
-                    radioButton.setText(paymentTypes.get(index).getName());
-                    if (!isNew && paymentTypes.get(index).getKey().equals(mExpense.getPaymentTypeKey())) {
-                        radioButton.setChecked(true);
 
-                    } else {
-                        radioButton.setChecked(false);
-                    }
-                    radioButton.setOnCheckedChangeListener(paymentModeSelectedListener);
-                    mFlexboxLayout.addView(radioButton);
-                }
-            }*/
         } else {
             mPaymentTypeCount = -1;
         }
@@ -757,4 +727,18 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         }
     };
 
+    @Override
+    public void onCategoriesParsed(ArrayList<Category> allCategories) {
+        if (null != allCategories && allCategories.size() > 0) {
+            CustomSpinnerAdapter categoryAdapter = new CustomSpinnerAdapter(NewExpenseActivity.this,
+                    R.layout.layout_spinner_selected, allCategories);
+            categoryAdapter.setSelectionText("Select Category");
+            mSpnrCategory.setAdapter(categoryAdapter);
+
+            if (!isNew) {
+                mSpnrCategory.setSelection(mExpense.getCategoryId());
+            }
+            mSpnrCategory.setOnItemSelectedListener(mCategoryListener);
+        }
+    }
 }

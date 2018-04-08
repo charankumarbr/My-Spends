@@ -328,7 +328,7 @@ public final class FirebaseDB {
         }
     }
 
-    public void fetchCategories(ValueEventListener valueEventListener) {
+    public void getExpenseCategories(ValueEventListener valueEventListener) {
         categoryRef.addListenerForSingleValueEvent(valueEventListener);
     }
 

@@ -21,6 +21,12 @@ public final class CategoryParser extends AsyncTask<Iterable<DataSnapshot>, Void
 
     private HashMap<Integer, String> mMapAllCategories = null;
 
+    private CategoryParserListener mListener = null;
+
+    public CategoryParser(CategoryParserListener listener) {
+        mListener = listener;
+    }
+
     @Override
     protected Void doInBackground(Iterable<DataSnapshot>[] iterables) {
 
@@ -52,10 +58,13 @@ public final class CategoryParser extends AsyncTask<Iterable<DataSnapshot>, Void
         super.onPostExecute(aVoid);
         if (null != mAllCategories) {
             MySpends.updateCategories(mAllCategories, mMapAllCategories);
+            if (null != mListener) {
+                mListener.onCategoriesParsed(mAllCategories);
+            }
         }
     }
 
-    /*public interface CategoryParserListener {
-        void onCategoriesParsed(ArrayList<Category> allCategories, HashMap<Integer, String> mapAllCategories);
-    }*/
+    public interface CategoryParserListener {
+        void onCategoriesParsed(ArrayList<Category> allCategories);
+    }
 }

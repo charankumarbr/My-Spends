@@ -79,7 +79,12 @@ public class ExpenseDate implements Parcelable {
     }
 
     public String getListDate() {
-        return getDayOfMonth() + " " + AppUtil.getShortMonth(getMonth());
+        int dayOfMonth = getDayOfMonth();
+        if (dayOfMonth <= 9) {
+            return "0" + dayOfMonth + " " + AppUtil.getShortMonth(getMonth());
+        }
+
+        return dayOfMonth + " " + AppUtil.getShortMonth(getMonth());
     }
 
     public String getDisplayableDate() {

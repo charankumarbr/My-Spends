@@ -24,11 +24,16 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
+import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.NewExpenseAdapter;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
+import in.phoenix.myspends.model.CategoryChart;
+import in.phoenix.myspends.model.CategoryChartData;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.parser.FSSpendsParser;
@@ -163,7 +168,8 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                     boolean isFromCache = documentSnapshots.getMetadata().isFromCache();
                     AppLog.d("ReportActivity", "Spends Firestore:onSuccess :: isCache:" + isFromCache);
 
-                    mMiGetTotal.setVisible(false);
+                    mMiTotal.setVisible(false);
+                    mMiSpendsChart.setVisible(false);
 
                     if (isFromCache || !AppUtil.isConnected()) {
                         mCTvFilter.setText("Filters (Offline)");
@@ -198,7 +204,8 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                                 mExpenseAdapter.setIsLoading(false);
                                 mExpenseAdapter.setIsLoadingRequired(false);
                                 mExpenseAdapter.notifyDataSetChanged();
-                                mMiGetTotal.setVisible(true);
+                                mMiTotal.setVisible(true);
+                                mMiSpendsChart.setVisible(true);
 
                             } else {
                                 //-- refresh data --//
@@ -215,7 +222,8 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                 @Override
                 public void onFailure(@NonNull Exception e) {
 
-                    mMiGetTotal.setVisible(false);
+                    mMiTotal.setVisible(false);
+                    mMiSpendsChart.setVisible(false);
 
                     AppLog.d("ReportActivity", "Spends Firestore:onFailure", e);
 
@@ -279,6 +287,13 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
             if ((null != mExpenseAdapter) && !mExpenseAdapter.isLoading()) {
                 new CalculateTotal().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
             }
+            return true;
+
+        } else if (item.getItemId() == R.id.menu_spends_chart) {
+            if ((null != mExpenseAdapter) && !mExpenseAdapter.isLoading()) {
+                new SpendsChart().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
+            }
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -324,12 +339,14 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         }
     }
 
-    private MenuItem mMiGetTotal = null;
+    private MenuItem mMiTotal = null;
+    private MenuItem mMiSpendsChart = null;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_reports, menu);
-        mMiGetTotal = menu.findItem(R.id.menu_get_total);
+        mMiTotal = menu.findItem(R.id.menu_get_total);
+        mMiSpendsChart = menu.findItem(R.id.menu_spends_chart);
         return true;
     }
 
@@ -387,10 +404,8 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         @Override
         protected Void doInBackground(Void... voids) {
             if ((null != mExpenseAdapter) && !mExpenseAdapter.isLoading()) {
-
                 Float amount = mExpenseAdapter.calculateTotal();
                 totalAmount = AppUtil.getStringAmount(String.valueOf(amount));
-
             }
             return null;
         }
@@ -413,6 +428,106 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                 pdLoading.dismiss();
                 pdLoading = null;
                 totalDialog.create().show();
+            }
+        }
+    }
+
+    private class SpendsChart extends AsyncTask<Void, Void, Void> {
+
+        private ProgressDialog pdLoading;
+
+        private CategoryChart categoryChart;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pdLoading = new ProgressDialog(ReportActivity.this);
+            pdLoading.setCancelable(false);
+            pdLoading.setCanceledOnTouchOutside(false);
+            pdLoading.setMessage("Preparing Spends Chart...");
+            pdLoading.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            //totalAmount = mExpenseAdapter.calculateTotal();
+            int maxIndex = mExpenseAdapter.getExpensesSize();
+            if (maxIndex > 0) {
+                HashMap<Integer, ArrayList<NewExpense>> categoryExpense = new HashMap<>();
+                HashMap<Integer, Float> categoryTotal = new HashMap<>();
+                Float grandTotal = 0f;
+                for (int index = 0; index < maxIndex; index++) {
+                    NewExpense anExpense = mExpenseAdapter.getItem(index);
+                    int categoryId = anExpense.getCategoryId();
+
+                    ArrayList<NewExpense> expenses;
+                    if (categoryExpense.containsKey(categoryId)) {
+                        expenses = categoryExpense.get(categoryId);
+
+                    } else {
+                        expenses = new ArrayList<>();
+                    }
+                    expenses.add(anExpense);
+                    categoryExpense.put(categoryId, expenses);
+
+                    Float total;
+                    if (categoryTotal.containsKey(categoryId)) {
+                        total = categoryTotal.get(categoryId);
+
+                    } else {
+                        total = 0f;
+                    }
+                    total += anExpense.getAmount();
+                    categoryTotal.put(categoryId, total);
+
+                    grandTotal += anExpense.getAmount();
+                }
+
+                if (grandTotal > 0F) {
+                    Iterator<Integer> keyIter = categoryExpense.keySet().iterator();
+                    ArrayList<CategoryChartData> chartData = new ArrayList<>();
+                    do {
+                        CategoryChartData categoryChartData = new CategoryChartData();
+                        Integer categoryId = keyIter.next();
+
+                        categoryChartData.setCategoryId(categoryId);
+                        categoryChartData.setCategoryName(MySpends.getCategoryName(categoryId));
+                        categoryChartData.setCategoryTotal(categoryTotal.get(categoryId));
+                        categoryChartData.setExpenses(categoryExpense.get(categoryId));
+
+                        chartData.add(categoryChartData);
+
+                    } while (keyIter.hasNext());
+
+                    if (chartData.size() > 0) {
+                        categoryChart = new CategoryChart();
+                        categoryChart.setGrandTotal(grandTotal);
+                        categoryChart.setCategoryChartData(chartData);
+                    }
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (!isFinishing()) {
+                if (null != categoryChart) {
+                    AppLog.d("Report", "CategoryChart::Total Size:" + categoryChart.getGrandTotal());
+
+                    if (null != mExpenseAdapter) {
+                        mExpenseAdapter.setSpendsChartData(categoryChart);
+                        pdLoading.dismiss();
+                        pdLoading = null;
+                        mLvExpenses.smoothScrollToPosition(mExpenseAdapter.getExpensesSize());
+
+                    } else {
+                        pdLoading.dismiss();
+                        pdLoading = null;
+                        AppUtil.showToast("Unable to prepare your Spends Chart!");
+                    }
+                }
             }
         }
     }

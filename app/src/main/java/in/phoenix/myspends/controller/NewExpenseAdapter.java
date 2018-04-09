@@ -8,9 +8,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
+import in.phoenix.myspends.model.CategoryChart;
+import in.phoenix.myspends.model.CategoryChartData;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.util.AppConstants;
@@ -39,9 +42,14 @@ public final class NewExpenseAdapter extends BaseAdapter {
     private boolean mIsLoadingRequired = true;
     private OnLoadingListener mListener = null;
 
+    private boolean mIsSpendsChartEnabled = false;
+    private int mSpendsChartCount = 0;
+    private CategoryChart mCategoryChart;
+    private Float mGrandTotal;
+
     public NewExpenseAdapter(Context context, ArrayList<NewExpense> spends, View.OnClickListener clickListener) {
         mContext = context;
-        mCurrencySymbol = AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY);
+        mCurrencySymbol = AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY) + " ";
         if (null != spends && spends.size() > 0) {
             mSpends = new ArrayList<>(spends);
         }
@@ -59,6 +67,10 @@ public final class NewExpenseAdapter extends BaseAdapter {
 
         if (mIsLoadingRequired) {
             return mSpends.size() + 1;
+        }
+
+        if (mIsSpendsChartEnabled) {
+            return mSpends.size() + mSpendsChartCount;
         }
 
         return mSpends.size();
@@ -92,6 +104,13 @@ public final class NewExpenseAdapter extends BaseAdapter {
             holder.vPbLoading = view.findViewById(R.id.le_layout_loading);
             holder.vSpendsEnd = view.findViewById(R.id.le_tv_spends_end);
 
+            holder.vSpends = view.findViewById(R.id.le_layout_chart);
+            holder.tvCategoryName = view.findViewById(R.id.le_tv_category_name);
+            holder.tvCategoryTotal = view.findViewById(R.id.le_tv_category_total);
+            holder.tvCategoryPercentage = view.findViewById(R.id.le_tv_category_percentage);
+            holder.vSpendPercentage = view.findViewById(R.id.le_v_percent);
+            holder.tvGrandTotal = view.findViewById(R.id.le_tv_grand_total);
+
             view.setTag(holder);
 
         } else {
@@ -101,10 +120,13 @@ public final class NewExpenseAdapter extends BaseAdapter {
         if (position < mSpends.size()) {
             holder.vPbLoading.setVisibility(View.GONE);
             holder.vRLayoutExpense.setVisibility(View.VISIBLE);
+            holder.vLayoutExpense.setVisibility(View.VISIBLE);
             holder.vSpendsEnd.setVisibility(View.GONE);
+            holder.vSpends.setVisibility(View.GONE);
+            holder.tvGrandTotal.setVisibility(View.GONE);
 
             NewExpense expense = getItem(position);
-            holder.tvAmount.setText(mCurrencySymbol + " " + AppUtil.getStringAmount(String.valueOf(expense.getAmount())));
+            holder.tvAmount.setText(mCurrencySymbol + AppUtil.getStringAmount(String.valueOf(expense.getAmount())));
             holder.tvNote.setText(TextUtils.isEmpty(expense.getNote()) ? AppConstants.BLANK_NOTE_TEMPLATE : expense.getNote());
             holder.tvPaymentTypeName.setText(mContext.getString(R.string.paid_by_) + " " + AppUtil.getPaidByForKey(expense.getPaymentTypeKey()));
             holder.tvAmount.setTag(expense.getId());
@@ -155,22 +177,58 @@ public final class NewExpenseAdapter extends BaseAdapter {
                 holder.vSpendsEnd.setVisibility(View.VISIBLE);
             }
         } else {
-            holder.vPbLoading.setVisibility(View.VISIBLE);
-            holder.vRLayoutExpense.setVisibility(View.GONE);
+            holder.vLayoutExpense.setVisibility(View.GONE);
             holder.vSpendsEnd.setVisibility(View.GONE);
 
             AppLog.d("NewExpenseAdapter", "1");
             if (!mIsLoading && mIsLoadingRequired) {
+                //-- loading view --//
+                holder.vSpends.setVisibility(View.GONE);
+                holder.vRLayoutExpense.setVisibility(View.GONE);
+                holder.vPbLoading.setVisibility(View.VISIBLE);
+                holder.tvGrandTotal.setVisibility(View.GONE);
+
                 AppLog.d("NewExpenseAdapter", "2");
                 if (null != mListener) {
                     AppLog.d("NewExpenseAdapter", "3");
                     mIsLoading = true;
                     mListener.onLoading(getItem(mSpends.size() - 1).getExpenseDate());
                 }
+
+            } else if (!mIsLoading && !mIsLoadingRequired && mIsSpendsChartEnabled) {
+
+                //-- spends chart view --//
+                holder.vSpends.setVisibility(View.VISIBLE);
+                holder.vPbLoading.setVisibility(View.GONE);
+                holder.vRLayoutExpense.setVisibility(View.VISIBLE);
+
+                int chartPos = position - getExpensesSize();
+                AppLog.d("NewExpenseAdapter", "ChartPos:" + chartPos + " ::Expense Size:" + getExpensesSize() + " ::Pos:" + position);
+                if (chartPos == 0) {
+                    holder.tvMonth.setVisibility(View.VISIBLE);
+                    holder.tvMonth.setText(R.string.spends_chart);
+                    holder.tvGrandTotal.setVisibility(View.VISIBLE);
+                    holder.tvGrandTotal.setText(mCurrencySymbol + AppUtil.getStringAmount(String.valueOf(mCategoryChart.getGrandTotal())));
+
+                } else {
+                    holder.tvMonth.setVisibility(View.GONE);
+                    holder.tvGrandTotal.setVisibility(View.GONE);
+                }
+
+                CategoryChartData chartData = mCategoryChart.getCategoryChartData().get(chartPos);
+                holder.tvCategoryName.setText(chartData.getCategoryName().equals(AppConstants.BLANK_NOTE_TEMPLATE) ? "Uncategorised" : chartData.getCategoryName());
+                holder.tvCategoryTotal.setText(mCurrencySymbol + AppUtil.getStringAmount(String.valueOf(chartData.getCategoryTotal())));
+
+                Float categoryPercentage = getCategoryPercentage(chartData.getCategoryTotal());
+                holder.tvCategoryPercentage.setText(AppUtil.getStringAmount(String.valueOf(categoryPercentage)) + " % of Spends");
             }
         }
 
         return view;
+    }
+
+    private Float getCategoryPercentage(Float categoryTotal) {
+        return (categoryTotal / mGrandTotal) * 100;
     }
 
     public void setData(ArrayList<NewExpense> spends) {
@@ -228,6 +286,32 @@ public final class NewExpenseAdapter extends BaseAdapter {
         View vRLayoutExpense;
         View vPbLoading;
         View vSpendsEnd;
+
+        View vSpends;
+        CustomTextView tvCategoryName;
+        CustomTextView tvCategoryTotal;
+        View vSpendPercentage;
+        CustomTextView tvCategoryPercentage;
+        CustomTextView tvGrandTotal;
+    }
+
+    public int getExpensesSize() {
+        if (null != mSpends) {
+            return mSpends.size();
+        }
+
+        return 0;
+    }
+
+    public void setSpendsChartData(CategoryChart categoryChart) {
+        if (null != categoryChart && null != categoryChart.getCategoryChartData()) {
+            mSpendsChartCount = categoryChart.getCategoryChartData().size();
+            mGrandTotal = categoryChart.getGrandTotal();
+            mCategoryChart = categoryChart;
+            mIsSpendsChartEnabled = true;
+
+            notifyDataSetChanged();
+        }
     }
 
     public interface OnLoadingListener {

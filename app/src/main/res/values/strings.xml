@@ -56,4 +56,6 @@
     <string name="get_total">Get Total</string>
     <string name="profile">Profile</string>
     <string name="category">Category</string>
+    <string name="spends_chart">Spends Chart</string>
+    <string name="total">Total</string>
 </resources>

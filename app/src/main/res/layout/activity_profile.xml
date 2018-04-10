@@ -57,4 +57,24 @@
         app:fontName="@string/font_noto_sans"
         android:textColor="@color/colorPrimary"/>
 
+    <in.phoenix.myspends.customview.CustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Currency:"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:textSize="15sp"
+        app:fontName="@string/font_noto_sans"
+        android:textColor="@color/primary_text"/>
+
+    <in.phoenix.myspends.customview.CustomTextView
+        android:id="@+id/ap_tv_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="16dp"
+        android:textSize="17sp"
+        app:fontName="@string/font_noto_sans"
+        android:textColor="@color/colorPrimary"/>
+
 </LinearLayout>

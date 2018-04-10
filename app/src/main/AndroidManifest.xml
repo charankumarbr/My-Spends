@@ -2,20 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="in.phoenix.myspends">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".MySpends"
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backupscheme"
         android:icon="@mipmap/ic_launcher_round"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:fullBackupContent="@xml/backupscheme">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".ui.activity.MainActivity"
             android:screenOrientation="portrait"
@@ -33,6 +33,7 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,22 +43,25 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ui.activity.NewExpenseActivity"
-            android:parentActivityName="in.phoenix.myspends.ui.activity.MainActivity"
+            android:parentActivityName=".ui.activity.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="in.phoenix.myspends.ui.activity.MainActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="www.myspends.co.in"
-                    android:scheme="myspends"
-                    android:path="/addSpend"/>
+                    android:path="/addSpend"
+                    android:scheme="myspends" />
             </intent-filter>
         </activity>
 
@@ -65,8 +69,9 @@
 
         <activity
             android:name=".ui.activity.ReportActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".ui.activity.MainActivity">
+            android:parentActivityName=".ui.activity.MainActivity"
+            android:screenOrientation="portrait">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -77,23 +82,37 @@
             android:name=".controller.BootCompletedReceiver"
             android:enabled="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REPLACED"/>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
-                <data android:scheme="package"/>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+
+                <data android:scheme="package" />
             </intent-filter>
         </receiver>
 
         <activity
             android:name=".ui.activity.ProfileActivity"
+            android:parentActivityName=".ui.activity.MainActivity"
+            android:screenOrientation="portrait">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activity.MainActivity" />
+        </activity>
+        <activity android:name=".ui.activity.MessageBoardActivity"
+            android:parentActivityName=".ui.activity.MainActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName=".ui.activity.MainActivity">
+            android:windowSoftInputMode="adjustResize">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activity.MainActivity" />
         </activity>
     </application>
+
 </manifest>

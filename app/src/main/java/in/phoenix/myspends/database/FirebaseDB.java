@@ -27,6 +27,7 @@ import java.util.Map;
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.model.Category;
 import in.phoenix.myspends.model.Currency;
+import in.phoenix.myspends.model.MessageBoard;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.util.AppConstants;
@@ -47,6 +48,8 @@ public final class FirebaseDB {
 
     private DatabaseReference categoryRef;
 
+    private DatabaseReference messageBoardRef;
+
     private FirebaseFirestore firebaseFirestore;
     private CollectionReference fsSpendsRef;
     private EventListener mSpendsListener = null;
@@ -58,11 +61,13 @@ public final class FirebaseDB {
 
         DatabaseReference databaseReference = firebaseDatabase.getReference();
 
-        currencyRef = databaseReference.child("currency").child(FirebaseAuth.getInstance().getCurrentUser()
-                .getUid());
+        String firebaseUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        paymentTypeRef = databaseReference.child("paymentType").child(FirebaseAuth.getInstance().getCurrentUser()
-                .getUid());
+        currencyRef = databaseReference.child("currency").child(firebaseUserId);
+        currencyRef.goOffline();
+        currencyRef.keepSynced(true);
+
+        paymentTypeRef = databaseReference.child("paymentType").child(firebaseUserId);
         paymentTypeRef.goOffline();
         paymentTypeRef.keepSynced(true);
 
@@ -70,13 +75,17 @@ public final class FirebaseDB {
         categoryRef.goOffline();
         categoryRef.keepSynced(true);
 
+        messageBoardRef = databaseReference.child("messageBoard").child(firebaseUserId);
+        messageBoardRef.goOffline();
+        messageBoardRef.keepSynced(true);
+
         firebaseFirestore = FirebaseFirestore.getInstance();
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
                 .build();
         firebaseFirestore.setFirestoreSettings(settings);
 
-        fsSpendsRef = firebaseFirestore.collection("my-spends").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+        fsSpendsRef = firebaseFirestore.collection("my-spends").document(firebaseUserId)
                 .collection("spends");
         //initSpendsListener();
     }
@@ -362,5 +371,19 @@ public final class FirebaseDB {
         }
 
         return categories;
+    }
+
+    public DatabaseReference getMessageBoardRef() {
+        return messageBoardRef;
+    }
+
+    public void saveMessage(MessageBoard messageBoard, DatabaseReference.CompletionListener completionListener) {
+        String key = messageBoard.getKey();
+        if (null == key) {
+            key = messageBoardRef.push().getKey();
+            AppLog.d("FirebaseDB", "saveMessage: Message Board:Push Key:" + key);
+            messageBoard.setKey(key);
+        }
+        messageBoardRef.child(key).setValue(messageBoard, completionListener);
     }
 }

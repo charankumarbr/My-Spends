@@ -7,15 +7,24 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
+import in.phoenix.myspends.database.FirebaseDB;
+import in.phoenix.myspends.model.Currency;
+import in.phoenix.myspends.util.AppConstants;
+import in.phoenix.myspends.util.AppPref;
 
 /**
  * Created by Charan.Br on 12/22/2017.
  */
 
 public class ProfileActivity extends BaseActivity {
+
+    private CustomTextView cTvData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +46,41 @@ public class ProfileActivity extends BaseActivity {
         toolbar.setTitle("Profile");
         setSupportActionBar(toolbar);
 
-        setSupportActionBar(toolbar);
-
         if (null != getSupportActionBar()) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
 
-        CustomTextView cTvData = findViewById(R.id.ap_tv_name);
+        cTvData = findViewById(R.id.ap_tv_name);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         cTvData.setText(user.getDisplayName());
         cTvData = null;
         cTvData = findViewById(R.id.ap_tv_email);
         cTvData.setText(user.getEmail());
+        cTvData = findViewById(R.id.ap_tv_currency);
+
+        getCurrency();
+    }
+
+    private void getCurrency() {
+
+        FirebaseDB.initDb().getCurrencyReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!isFinishing()) {
+                    if (null != dataSnapshot.getValue() && dataSnapshot.getChildrenCount() == 3) {
+                        Currency currencyData = dataSnapshot.getValue(Currency.class);
+                        cTvData.setText(currencyData.getCurrencySymbol() + " - " + currencyData.getCurrencyName() + " (" + currencyData.getCurrencyCode() + ")");
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override

@@ -20,6 +20,12 @@
         app:showAsAction="never|withText" />
 
     <item
+        android:id="@+id/menu_message_board"
+        android:title="@string/message_board"
+        android:titleCondensed="@string/board"
+        app:showAsAction="never|withText" />
+
+    <item
         android:id="@+id/menu_reports"
         android:title="@string/reports"
         app:showAsAction="never|withText" />

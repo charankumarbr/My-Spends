@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -432,7 +435,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         }
     }
 
-    private class SpendsChart extends AsyncTask<Void, Void, Void> {
+    private class SpendsChart extends AsyncTask<Void, Void, Void> implements Comparator<CategoryChartData>{
 
         private ProgressDialog pdLoading;
 
@@ -500,6 +503,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                     } while (keyIter.hasNext());
 
                     if (chartData.size() > 0) {
+                        Collections.sort(chartData, this);
                         categoryChart = new CategoryChart();
                         categoryChart.setGrandTotal(grandTotal);
                         categoryChart.setCategoryChartData(chartData);
@@ -514,21 +518,35 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
             super.onPostExecute(aVoid);
             if (!isFinishing()) {
                 if (null != categoryChart) {
-                    AppLog.d("Report", "CategoryChart::Total Size:" + categoryChart.getGrandTotal());
+                    AppLog.d("ReportActivity", "CategoryChart::Total Size:" + categoryChart.getGrandTotal());
 
                     if (null != mExpenseAdapter) {
-                        mExpenseAdapter.setSpendsChartData(categoryChart);
+                        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+                        int dp20 = AppUtil.dpToPx(20);
+                        AppLog.d("ReportActivity", "Width:" + displayMetrics.widthPixels + "::20 dp:" + dp20);
+
+                        mExpenseAdapter.setSpendsChartData(categoryChart, displayMetrics.widthPixels - dp20);
                         pdLoading.dismiss();
                         pdLoading = null;
                         mLvExpenses.smoothScrollToPosition(mExpenseAdapter.getExpensesSize());
+                        displayMetrics = null;
 
                     } else {
                         pdLoading.dismiss();
                         pdLoading = null;
                         AppUtil.showToast("Unable to prepare your Spends Chart!");
                     }
+                } else {
+                    pdLoading.dismiss();
+                    pdLoading = null;
+                    AppUtil.showToast("Unable to prepare your Spends Chart!");
                 }
             }
+        }
+
+        @Override
+        public int compare(CategoryChartData chartData1, CategoryChartData chartData2) {
+            return chartData1.getCategoryTotal() < chartData2.getCategoryTotal() ? 1 : -1;
         }
     }
 }

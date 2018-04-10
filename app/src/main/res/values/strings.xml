@@ -58,4 +58,7 @@
     <string name="category">Category</string>
     <string name="spends_chart">Spends Chart</string>
     <string name="total">Total</string>
+    <string name="message_board">Message Board</string>
+    <string name="scribble">Scribble</string>
+    <string name="board">Board</string>
 </resources>

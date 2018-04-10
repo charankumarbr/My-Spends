@@ -92,6 +92,8 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
         AppLog.d("TestDensity", "Dimen:" + dimen + "::value:" + value + "::Density:" + displayMetrics.density + "::ScaledDensity:" + displayMetrics.scaledDensity);
         Float typedValue = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 19, displayMetrics);
         AppLog.d("TestDensity", "TypedValue:" + typedValue);
+        int dp20 = AppUtil.dpToPx(20);
+        AppLog.d("TestDensity", "Width:" + displayMetrics.widthPixels + "::20 dp:" + dp20);
 
         mBpbLoading = findViewById(R.id.am_bpb_loading);
         mPbLoading = findViewById(R.id.am_pb_loading);
@@ -245,6 +247,10 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             } else {
                 AppUtil.showToast("User not logged in.");
             }
+            return true;
+
+        } else if (item.getItemId() == R.id.menu_message_board) {
+            startActivity(new Intent(MainActivity.this, MessageBoardActivity.class));
             return true;
         }
 

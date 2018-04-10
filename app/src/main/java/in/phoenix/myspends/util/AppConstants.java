@@ -40,4 +40,6 @@ public interface AppConstants {
 
     //-- including 1 Payment Type for cash --//
     int MAX_PAYMENT_TYPE_COUNT = 10;
+
+    String[] RESTRICTED_CHARS = {":", "\"", "\\", "*", "%"};
 }

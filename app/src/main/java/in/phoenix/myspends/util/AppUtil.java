@@ -416,8 +416,7 @@ public final class AppUtil {
 
     public static boolean doesContainRestrictedChar(String note) {
 
-        String[] restrictedChars = {":", "\"", "\\", "*", "%"};
-        for (String restrictedChar : restrictedChars) {
+        for (String restrictedChar : AppConstants.RESTRICTED_CHARS) {
             if (note.contains(restrictedChar)) {
                 return true;
             }

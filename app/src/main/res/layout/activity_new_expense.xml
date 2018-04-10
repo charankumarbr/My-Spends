@@ -64,7 +64,7 @@
 
             <in.phoenix.myspends.customview.CustomTextView
                 android:id="@+id/ane_tv_expense_date"
-                android:layout_width="200dp"
+                android:layout_width="180dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:drawableStart="@drawable/ic_date_range_30dp"
@@ -76,7 +76,7 @@
                 app:fontName="@string/font_noto_sans"/>
 
             <View
-                android:layout_width="163dp"
+                android:layout_width="143dp"
                 android:layout_height="1dp"
                 android:layout_marginStart="37dp"
                 android:background="@color/secondary_text"
@@ -162,24 +162,6 @@
                 android:layout_marginTop="12dp"
                 android:dropDownSelector="@color/colorAccent"
                 android:spinnerMode="dialog"/>
-
-            <!--<RadioGroup
-                android:id="@+id/ane_radio_group_payment_mode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <com.google.android.flexbox.FlexboxLayout
-                    android:id="@+id/ane_fblayout_payment_mode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:alignContent="center"
-                    app:alignItems="center"
-                    app:flexDirection="row"
-                    app:flexWrap="wrap"
-                    android:visibility="gone"/>
-            </RadioGroup>-->
 
             <in.phoenix.myspends.customview.CustomTextView
                 android:layout_width="wrap_content"

@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
@@ -46,6 +46,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
     private int mSpendsChartCount = 0;
     private CategoryChart mCategoryChart;
     private Float mGrandTotal;
+    private Float mPixel1Percent = 0F;
 
     public NewExpenseAdapter(Context context, ArrayList<NewExpense> spends, View.OnClickListener clickListener) {
         mContext = context;
@@ -220,11 +221,24 @@ public final class NewExpenseAdapter extends BaseAdapter {
                 holder.tvCategoryTotal.setText(mCurrencySymbol + AppUtil.getStringAmount(String.valueOf(chartData.getCategoryTotal())));
 
                 Float categoryPercentage = getCategoryPercentage(chartData.getCategoryTotal());
-                holder.tvCategoryPercentage.setText(AppUtil.getStringAmount(String.valueOf(categoryPercentage)) + " % of Spends");
+                holder.tvCategoryPercentage.setText(AppUtil.getStringAmount(String.valueOf(categoryPercentage)) + " % of Total Spends");
+                int percentPixel = getSpendsPercent(categoryPercentage);
+                AppLog.d("NewExpenseAdapter", "Percent Pixel:" + percentPixel + ":: Name:" + chartData.getCategoryName());
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.vSpendPercentage.getLayoutParams();
+                params.width = percentPixel;
+                holder.vSpendPercentage.setLayoutParams(params);
             }
         }
 
         return view;
+    }
+
+    private int getSpendsPercent(Float categoryPercentage) {
+        Float percentWidth = mPixel1Percent * categoryPercentage;
+        if (percentWidth < 1f) {
+            return 1;
+        }
+        return (int) (percentWidth + 0.5);
     }
 
     private Float getCategoryPercentage(Float categoryTotal) {
@@ -303,11 +317,13 @@ public final class NewExpenseAdapter extends BaseAdapter {
         return 0;
     }
 
-    public void setSpendsChartData(CategoryChart categoryChart) {
+    public void setSpendsChartData(CategoryChart categoryChart, int pixelHundredPercent) {
         if (null != categoryChart && null != categoryChart.getCategoryChartData()) {
             mSpendsChartCount = categoryChart.getCategoryChartData().size();
             mGrandTotal = categoryChart.getGrandTotal();
             mCategoryChart = categoryChart;
+            mPixel1Percent = pixelHundredPercent / 100f;
+            AppLog.d("NewExpenseAdapter", "1% pixel:" + mPixel1Percent);
             mIsSpendsChartEnabled = true;
 
             notifyDataSetChanged();

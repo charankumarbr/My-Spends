@@ -1,5 +1,7 @@
 package in.phoenix.myspends.model;
 
+import com.google.firebase.database.Exclude;
+
 /**
  * Created by Charan.Br on 4/10/2018.
  */
@@ -8,6 +10,7 @@ public final class MessageBoard {
 
     private String message;
 
+    @Exclude
     private String key;
 
     private long createdOn;
@@ -44,5 +47,10 @@ public final class MessageBoard {
 
     public void setUpdatedOn(long updatedOn) {
         this.updatedOn = updatedOn;
+    }
+
+    @Override
+    public String toString() {
+        return message + ":" + key + ":" + createdOn + ":" + updatedOn;
     }
 }

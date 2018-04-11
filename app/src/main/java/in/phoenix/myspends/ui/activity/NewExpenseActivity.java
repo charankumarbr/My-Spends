@@ -171,7 +171,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         } else {
             mTIEtAmount.append(AppUtil.getStringAmount(String.valueOf(mExpense.getAmount())));
             mTIEtAmount.requestFocus();
-            AppUtil.toggleKeyboard(true);
+            AppUtil.toggleKeyboard(mViewComplete, true);
             mCbAddAnotherExpense.setVisibility(View.GONE);
             //DecimalFormat df = new DecimalFormat("0.00"); df.format(mExpense.getAmount());
 
@@ -273,7 +273,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                 View customTitleView = inflater.inflate(R.layout.layout_date_title, null);
                 datePickerDialog.setCustomTitle(customTitleView);
                 datePickerDialog.show();
-                AppUtil.toggleKeyboard(false);
+                AppUtil.toggleKeyboard(mViewComplete,false);
 
             } else if (v.getId() == R.id.ane_ctextview_add_new_payment) {
 
@@ -291,7 +291,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     };
 
     private void showPaymentTypeDialog() {
-        AppUtil.toggleKeyboard(false);
+        AppUtil.toggleKeyboard(mViewComplete, false);
         AddPaymentTypeFragment addPaymentTypeFragment = AddPaymentTypeFragment.newInstance();
         addPaymentTypeFragment.show(getSupportFragmentManager(), "AddPaymentTFragment");
     }
@@ -326,7 +326,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     }
 
     private void closeActivity() {
-        AppUtil.toggleKeyboard(false);
+        AppUtil.toggleKeyboard(mViewComplete, false);
         if (mViaNotification) {
             Intent upIntent = NavUtils.getParentActivityIntent(this);
             TaskStackBuilder.create(this)
@@ -426,7 +426,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                             AppAnalytics.init().logEvent("added_expense", new Bundle());
 
                             if (!mCbAddAnotherExpense.isChecked()) {
-                                AppUtil.toggleKeyboard(false);
+                                AppUtil.toggleKeyboard(mViewComplete, false);
                                 /*setResult(RESULT_OK);
                                 finish();*/
                                 closeActivity();
@@ -495,7 +495,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                             AppLog.d("NewExpense", "Edit: onSuccess");
                             mPbLoading.setVisibility(View.GONE);
                             AppUtil.showToast("Updated.");
-                            AppUtil.toggleKeyboard(false);
+                            AppUtil.toggleKeyboard(mViewComplete, false);
                             mOkStatus = RESULT_OK;
                             Intent backIntent = new Intent();
                             backIntent.putExtra(AppConstants.Bundle.EXPENSE, mExpense);
@@ -509,7 +509,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                             mPbLoading.setVisibility(View.GONE);
                             AppLog.d("NewExpense", "Edit: onFailure");
                             AppUtil.showToast("Unable to update.");
-                            AppUtil.toggleKeyboard(false);
+                            AppUtil.toggleKeyboard(mViewComplete, false);
                         }
                     });
                 }

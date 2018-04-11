@@ -203,12 +203,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
 
                         } else {
                             if (mExpenseAdapter.isLoading()) {
-                                AppUtil.showToast("Fetched all your spends.");
-                                mExpenseAdapter.setIsLoading(false);
-                                mExpenseAdapter.setIsLoadingRequired(false);
-                                mExpenseAdapter.notifyDataSetChanged();
-                                mMiTotal.setVisible(true);
-                                mMiSpendsChart.setVisible(true);
+                                endLoading();
 
                             } else {
                                 //-- refresh data --//
@@ -249,6 +244,15 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         } else {
             AppUtil.showSnackbar(mViewComplete, "Please select the dates...");
         }
+    }
+
+    private void endLoading() {
+        AppUtil.showToast("Fetched all your spends.");
+        mExpenseAdapter.setIsLoading(false);
+        mExpenseAdapter.setIsLoadingRequired(false);
+        mExpenseAdapter.notifyDataSetChanged();
+        mMiTotal.setVisible(true);
+        mMiSpendsChart.setVisible(true);
     }
 
     private final AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
@@ -329,6 +333,10 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                 mExpenseAdapter.setData(spends);
                 mLvExpenses.setAdapter(mExpenseAdapter);
             }
+        }
+
+        if (spends.size() < AppConstants.PAGE_SPENDS_SIZE) {
+            endLoading();
         }
     }
 

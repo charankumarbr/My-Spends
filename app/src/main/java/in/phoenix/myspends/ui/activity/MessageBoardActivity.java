@@ -13,6 +13,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Iterator;
+
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
@@ -65,11 +67,22 @@ public class MessageBoardActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if (null == dataSnapshot.getValue()) {
+                    AppLog.d("MessageBoard", "Value: NULL");
                     mMessageBoard = new MessageBoard();
 
                 } else {
                     AppLog.d("MessageBoard", "Value:" + dataSnapshot.getValue());
-                    mMessageBoard = dataSnapshot.getValue(MessageBoard.class);
+                    AppLog.d("MessageBoard", "Key:" + dataSnapshot.getKey());
+                    AppLog.d("MessageBoard", "Children count:" + dataSnapshot.getChildrenCount());
+                    if (dataSnapshot.getChildrenCount() >= 1) {
+                        Iterator<DataSnapshot> iter = dataSnapshot.getChildren().iterator();
+                        DataSnapshot ds = iter.next();
+                        AppLog.d("MessageBoard", "--------------");
+                        AppLog.d("MessageBoard", "DS Value:" + ds.getValue());
+                        AppLog.d("MessageBoard", "DS Key:" + ds.getKey());
+                        mMessageBoard = ds.getValue(MessageBoard.class);
+                        mMessageBoard.setKey(ds.getKey());
+                    }
                 }
 
                 mCTvMessage.postDelayed(new Runnable() {
@@ -100,6 +113,7 @@ public class MessageBoardActivity extends BaseActivity {
         }
 
         canEdit(Boolean.FALSE);
+        AppLog.d("MessageBoard", "Message:" + mMessageBoard.toString());
         mCTvMessage.setText(mMessageBoard.getMessage());
     }
 
@@ -124,7 +138,7 @@ public class MessageBoardActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_edit) {
             canEdit(Boolean.TRUE);
-            mEtMessage.setText(mMessageBoard.getMessage());
+            mEtMessage.append(mMessageBoard.getMessage());
             return true;
 
         } else if (item.getItemId() == android.R.id.home) {
@@ -154,8 +168,8 @@ public class MessageBoardActivity extends BaseActivity {
                         AppLog.d("MessageBoard", "Local Key:" + mMessageBoard.getKey());
                         if (null == mMessageBoard.getKey()) {
                             String key = databaseReference.getKey();
-                            mMessageBoard.setKey(key);
                             AppLog.d("MessageBoard", "Ref Key:" + key);
+                            mMessageBoard.setKey(key);
                         }
                         canEdit(Boolean.FALSE);
                         mCTvMessage.setText(mMessageBoard.getMessage());
@@ -166,7 +180,7 @@ public class MessageBoardActivity extends BaseActivity {
                     }
                 }
             });
-            AppUtil.toggleKeyboard(false);
+            AppUtil.toggleKeyboard(mViewComplete,false);
 
         } else {
             AppUtil.showToast(R.string.no_internet);

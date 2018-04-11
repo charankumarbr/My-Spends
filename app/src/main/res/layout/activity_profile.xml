@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -14,9 +14,11 @@
         android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:layout_alignParentTop="true"/>
 
     <in.phoenix.myspends.customview.CustomTextView
+        android:id="@+id/ap_tv_name_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Name:"
@@ -24,7 +26,8 @@
         android:layout_marginStart="16dp"
         android:textSize="15sp"
         app:fontName="@string/font_noto_sans"
-        android:textColor="@color/primary_text"/>
+        android:textColor="@color/primary_text"
+        android:layout_below="@+id/ap_toolbar"/>
 
     <in.phoenix.myspends.customview.CustomTextView
         android:id="@+id/ap_tv_name"
@@ -35,9 +38,11 @@
         android:textSize="17sp"
         app:fontName="@string/font_noto_sans"
         android:textColor="@color/colorPrimary"
-        android:maxLines="2"/>
+        android:maxLines="2"
+        android:layout_below="@+id/ap_tv_name_header"/>
 
     <in.phoenix.myspends.customview.CustomTextView
+        android:id="@+id/ap_tv_email_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Email:"
@@ -45,7 +50,8 @@
         android:layout_marginStart="16dp"
         android:textSize="15sp"
         app:fontName="@string/font_noto_sans"
-        android:textColor="@color/primary_text"/>
+        android:textColor="@color/primary_text"
+        android:layout_below="@+id/ap_tv_name"/>
 
     <in.phoenix.myspends.customview.CustomTextView
         android:id="@+id/ap_tv_email"
@@ -55,9 +61,11 @@
         android:layout_marginStart="16dp"
         android:textSize="17sp"
         app:fontName="@string/font_noto_sans"
-        android:textColor="@color/colorPrimary"/>
+        android:textColor="@color/colorPrimary"
+        android:layout_below="@+id/ap_tv_email_header"/>
 
     <in.phoenix.myspends.customview.CustomTextView
+        android:id="@+id/ap_tv_currency_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Currency:"
@@ -65,7 +73,8 @@
         android:layout_marginStart="16dp"
         android:textSize="15sp"
         app:fontName="@string/font_noto_sans"
-        android:textColor="@color/primary_text"/>
+        android:textColor="@color/primary_text"
+        android:layout_below="@+id/ap_tv_email"/>
 
     <in.phoenix.myspends.customview.CustomTextView
         android:id="@+id/ap_tv_currency"
@@ -75,6 +84,38 @@
         android:layout_marginStart="16dp"
         android:textSize="17sp"
         app:fontName="@string/font_noto_sans"
-        android:textColor="@color/colorPrimary"/>
+        android:textColor="@color/colorPrimary"
+        android:layout_below="@+id/ap_tv_currency_header"/>
 
-</LinearLayout>
+    <in.phoenix.myspends.customview.CustomTextView
+        android:id="@+id/ap_tv_logout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:text="@string/logout"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textSize="15sp"
+        android:layout_marginTop="20dp"
+        app:fontName="@string/font_noto_sans"
+        android:textColor="@color/primary_text"
+        android:gravity="center_vertical"
+        android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
+        android:drawableTint="@color/primary_text"
+        android:layout_above="@+id/ap_tv_version"
+        android:background="#F5F5F5"
+        android:layout_alignParentBottom="true"/>
+
+    <!--<in.phoenix.myspends.customview.CustomTextView
+        android:id="@+id/ap_tv_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="6dp"
+        android:textSize="13sp"
+        android:textColor="@color/primary_text"
+        app:fontName="@string/font_noto_sans"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="2dp"
+        android:visibility="gone"/>-->
+
+</RelativeLayout>

@@ -1,22 +1,31 @@
 package in.phoenix.myspends.ui.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import in.phoenix.myspends.BuildConfig;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;
-import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppPref;
+import in.phoenix.myspends.util.AppUtil;
 
 /**
  * Created by Charan.Br on 12/22/2017.
@@ -57,6 +66,16 @@ public class ProfileActivity extends BaseActivity {
         cTvData = null;
         cTvData = findViewById(R.id.ap_tv_email);
         cTvData.setText(user.getEmail());
+        /*cTvData = findViewById(R.id.ap_tv_version);
+        cTvData.setText("v " + BuildConfig.VERSION_NAME);*/
+
+        findViewById(R.id.ap_tv_logout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                confirmLogout();
+            }
+        });
+
         cTvData = findViewById(R.id.ap_tv_currency);
 
         getCurrency();
@@ -92,6 +111,47 @@ public class ProfileActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void confirmLogout() {
+        AlertDialog.Builder logoutBuilder = new AlertDialog.Builder(ProfileActivity.this)
+                .setTitle("Confirm Logout")
+                .setMessage("Are you sure you want to logout?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        if (AppUtil.isConnected()) {
+                            AuthUI.getInstance()
+                                    .signOut(ProfileActivity.this)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                AppPref.getInstance().clearAll();
+                                                AppUtil.removeDynamicShortcut();
+                                                Intent newIntent = new Intent(ProfileActivity.this, LaunchDeciderActivity.class);
+                                                newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                startActivity(newIntent);
+                                                finish();
+
+                                            } else {
+                                                AppUtil.showToast("Unable to logout.");
+                                            }
+                                        }
+                                    });
+                        } else {
+                            AppUtil.showToast(R.string.no_internet);
+                        }
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+        logoutBuilder.create().show();
     }
 
     @Override

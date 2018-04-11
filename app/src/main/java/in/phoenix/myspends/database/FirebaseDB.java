@@ -382,8 +382,13 @@ public final class FirebaseDB {
         if (null == key) {
             key = messageBoardRef.push().getKey();
             AppLog.d("FirebaseDB", "saveMessage: Message Board:Push Key:" + key);
-            messageBoard.setKey(key);
         }
-        messageBoardRef.child(key).setValue(messageBoard, completionListener);
+
+        //messageBoardRef.child(key).setValue(messageBoard, completionListener);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("message", messageBoard.getMessage());
+        map.put("createdOn", messageBoard.getCreatedOn());
+        map.put("updatedOn", messageBoard.getUpdatedOn());
+        messageBoardRef.child(key).setValue(map, completionListener);
     }
 }

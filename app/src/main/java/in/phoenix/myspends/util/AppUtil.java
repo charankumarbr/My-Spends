@@ -103,6 +103,16 @@ public final class AppUtil {
         }
     }
 
+    public static void toggleKeyboard(View view, boolean toShow) {
+        InputMethodManager imm = (InputMethodManager) MySpends.APP_CONTEXT.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (toShow) {
+            imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
+
+        } else {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
     public static String dateDBToString(String dateInString) throws ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy h:mm:ss a");
         Date strDate = simpleDateFormat.parse(dateInString);

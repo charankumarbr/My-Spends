@@ -19,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
@@ -128,6 +129,8 @@ public class ProfileActivity extends BaseActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 AppPref.getInstance().clearAll();
+                                                MySpends.clearAll();
+                                                FirebaseDB.onLogout();
                                                 AppUtil.removeDynamicShortcut();
                                                 Intent newIntent = new Intent(ProfileActivity.this, LaunchDeciderActivity.class);
                                                 newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

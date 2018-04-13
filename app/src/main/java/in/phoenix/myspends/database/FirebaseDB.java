@@ -55,40 +55,50 @@ public final class FirebaseDB {
     private EventListener mSpendsListener = null;
     private ListenerRegistration mSpendsListenerRegistration = null;
 
+    private Boolean mIsLoggedOut = Boolean.FALSE;
+
     private FirebaseDB() {
+        AppLog.d("FirebaseDB", "constructor");
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseDatabase.setPersistenceEnabled(true);
 
         DatabaseReference.goOffline();
-        DatabaseReference databaseReference = firebaseDatabase.getReference();
 
-        String firebaseUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        currencyRef = databaseReference.child("currency").child(firebaseUserId);
-        currencyRef.goOffline();
-        currencyRef.keepSynced(true);
-
-        paymentTypeRef = databaseReference.child("paymentType").child(firebaseUserId);
-        paymentTypeRef.goOffline();
-        paymentTypeRef.keepSynced(true);
-
-        categoryRef = databaseReference.child("category");
-        categoryRef.goOffline();
-        categoryRef.keepSynced(true);
-
-        messageBoardRef = databaseReference.child("messageBoard").child(firebaseUserId);
-        messageBoardRef.goOffline();
-        messageBoardRef.keepSynced(true);
-
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(true)
-                .build();
-        firebaseFirestore.setFirestoreSettings(settings);
-
-        fsSpendsRef = firebaseFirestore.collection("my-spends").document(firebaseUserId)
-                .collection("spends");
+        initDBPaths();
         //initSpendsListener();
+    }
+
+    private void initDBPaths() {
+
+        if (null != FirebaseAuth.getInstance() && null != FirebaseAuth.getInstance().getCurrentUser()) {
+            String firebaseUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+            currencyRef = databaseReference.child("currency").child(firebaseUserId);
+            currencyRef.goOffline();
+            currencyRef.keepSynced(true);
+
+            paymentTypeRef = databaseReference.child("paymentType").child(firebaseUserId);
+            paymentTypeRef.goOffline();
+            paymentTypeRef.keepSynced(true);
+
+            categoryRef = databaseReference.child("category");
+            categoryRef.goOffline();
+            categoryRef.keepSynced(true);
+
+            messageBoardRef = databaseReference.child("messageBoard").child(firebaseUserId);
+            messageBoardRef.goOffline();
+            messageBoardRef.keepSynced(true);
+
+            firebaseFirestore = FirebaseFirestore.getInstance();
+            FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                    .setPersistenceEnabled(true)
+                    .build();
+            firebaseFirestore.setFirestoreSettings(settings);
+
+            fsSpendsRef = firebaseFirestore.collection("my-spends").document(firebaseUserId)
+                    .collection("spends");
+        }
     }
 
     private void initSpendsListener() {
@@ -165,8 +175,13 @@ public final class FirebaseDB {
     }
 
     public static FirebaseDB initDb() {
+        AppLog.d("FirebaseDB", "initDb");
         if (null == mFirebaseDB) {
             mFirebaseDB = new FirebaseDB();
+
+        } else if (mFirebaseDB.mIsLoggedOut) {
+            mFirebaseDB.initDBPaths();
+            mFirebaseDB.mIsLoggedOut = Boolean.FALSE;
         }
 
         return mFirebaseDB;
@@ -391,5 +406,21 @@ public final class FirebaseDB {
         map.put("createdOn", messageBoard.getCreatedOn());
         map.put("updatedOn", messageBoard.getUpdatedOn());
         messageBoardRef.child(key).setValue(map, completionListener);
+    }
+
+    public void clearAll() {
+        AppLog.d("FirebaseDB", "clearAll");
+        currencyRef = null;
+        paymentTypeRef = null;
+        categoryRef = null;
+        messageBoardRef = null;
+        firebaseFirestore = null;
+        fsSpendsRef = null;
+    }
+
+    public static void onLogout() {
+        mFirebaseDB.clearAll();
+        mFirebaseDB.mIsLoggedOut = Boolean.TRUE;
+        AppLog.d("FirebaseDB", "onLogout");
     }
 }

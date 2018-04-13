@@ -56,7 +56,7 @@ public class MySpends extends Application {
         initNotification();
     }
 
-    private void fetchCategories() {
+    public static void fetchCategories() {
         FirebaseDB.initDb().getExpenseCategories(mCategoryListener);
     }
 
@@ -215,7 +215,7 @@ public class MySpends extends Application {
         }
     }
 
-    private ValueEventListener mCategoryListener = new ValueEventListener() {
+    private static ValueEventListener mCategoryListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             if (dataSnapshot.getChildrenCount() > 0) {
@@ -263,5 +263,27 @@ public class MySpends extends Application {
         }
 
         return AppConstants.BLANK_NOTE_TEMPLATE;
+    }
+
+    public static void clearAll() {
+        if (null != mMapAllPaymentTypes) {
+            mMapAllPaymentTypes.clear();
+        }
+        mMapAllPaymentTypes = null;
+
+        if (null != mAllPaymentTypes) {
+            mAllPaymentTypes.clear();
+        }
+        mAllPaymentTypes = null;
+
+        if (null != mAllCategories) {
+            mAllCategories.clear();
+        }
+        mAllCategories = null;
+
+        if (null != mMapAllCategories) {
+            mMapAllCategories.clear();
+        }
+        mMapAllCategories = null;
     }
 }

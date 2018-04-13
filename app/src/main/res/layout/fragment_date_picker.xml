@@ -3,7 +3,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:focusableInTouchMode="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:background="@android:color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"

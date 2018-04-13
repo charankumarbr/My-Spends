@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/lfn_layout_complete">
+    android:id="@+id/lfn_layout_complete"
+    android:background="@color/bg_screen">
 
     <include layout="@layout/layout_toolbar"
         android:id="@+id/ap_toolbar"/>

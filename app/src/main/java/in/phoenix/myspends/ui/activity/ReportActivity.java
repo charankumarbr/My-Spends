@@ -536,7 +536,12 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                         mExpenseAdapter.setSpendsChartData(categoryChart, displayMetrics.widthPixels - dp20);
                         pdLoading.dismiss();
                         pdLoading = null;
-                        mLvExpenses.smoothScrollToPosition(mExpenseAdapter.getExpensesSize());
+                        if (categoryChart.getCategoryChartData().size() > 3) {
+                            mLvExpenses.smoothScrollToPosition(mExpenseAdapter.getExpensesSize() + 2);
+
+                        } else {
+                            mLvExpenses.smoothScrollToPosition(mExpenseAdapter.getExpensesSize());
+                        }
                         displayMetrics = null;
 
                     } else {

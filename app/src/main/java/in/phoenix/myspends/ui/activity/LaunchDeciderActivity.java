@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import in.phoenix.myspends.BuildConfig;
+import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;
@@ -96,6 +97,10 @@ public class LaunchDeciderActivity extends BaseActivity {
                     } else {
                         AppLog.d("Login", "Email is verified!");
                     }
+
+                    //-- move fetch categories to FirebaseDB class --//
+                    MySpends.fetchCategories();
+
                     Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
                     AppUtil.addDynamicShortcut();

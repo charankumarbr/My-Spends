@@ -376,11 +376,37 @@ public final class AppUtil {
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
+        long prevAppOpenTime = AppPref.getInstance().getLong(AppConstants.PrefConstants.LAST_APP_OPENED_ON);
+        String contentTitle = context.getString(R.string.app_name);
+        String contentText = "Track your today's expenses!";
+        if (prevAppOpenTime > 0) {
+            boolean isRequired = false;
+            long diffMillis = System.currentTimeMillis() - prevAppOpenTime;
+
+            int diffInDays = (int) (diffMillis / (1000 * 60 * 60 * 24));
+            AppLog.d("AppUtil", "createNotification: Days:" + diffInDays);
+            if (diffInDays >= AppConstants.MINIMUM_DAY_GAP) {
+                isRequired = true;
+
+            } else {
+                long diffInHours = diffMillis / (60 * 60 * 1000);
+                AppLog.d("AppUtil", "createNotification: Hours:" + diffInHours);
+                if (diffInHours > AppConstants.MINIMUM_HOUR_GAP) {
+                    isRequired = true;
+                }
+            }
+
+            if (isRequired) {
+                contentText = "Take a time to keep track of your spends.";
+                contentTitle = "We miss you! " + getEmojiByUnicode(/*0x1F622*/0x1F625);
+            }
+        }
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(context.getString(R.string.app_name))
+                .setContentTitle(contentTitle)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setContentText("Track your today's expenses!")
+                .setContentText(contentText)
                 .setSound(alarmSound)
                 .setAutoCancel(true)
                 .setWhen(when)
@@ -388,6 +414,10 @@ public final class AppUtil {
                 .setVibrate(new long[]{1000, 1000, 1000});
 
         notificationManager.notify(20332, builder.build());
+    }
+
+    private static String getEmojiByUnicode(int unicode) {
+        return new String(Character.toChars(unicode));
     }
 
     public static void addDynamicShortcut() {

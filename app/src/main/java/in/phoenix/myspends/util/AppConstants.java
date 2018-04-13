@@ -31,6 +31,7 @@ public interface AppConstants {
         String CURRENCY = "currency";
         String NOTIFICATION_HOUR = "notificationHour";
         String NOTIFICATION_MIN = "notificationMin";
+        String LAST_APP_OPENED_ON = "lastAppOpenedOn";
     }
 
     int PAGE_SPENDS_SIZE = 30;
@@ -42,4 +43,7 @@ public interface AppConstants {
     int MAX_PAYMENT_TYPE_COUNT = 10;
 
     String[] RESTRICTED_CHARS = {":", "\"", "\\", "*", "%"};
+
+    int MINIMUM_DAY_GAP = 3;
+    int MINIMUM_HOUR_GAP = 40;
 }

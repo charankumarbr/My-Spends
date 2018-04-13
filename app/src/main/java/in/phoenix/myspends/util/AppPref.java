@@ -47,4 +47,12 @@ public final class AppPref {
     public void clearAll() {
         mSharedPref.edit().clear().apply();
     }
+
+    public void putLong(String key, long value) {
+        mSharedPref.edit().putLong(key, value).apply();
+    }
+
+    public long getLong(String key) {
+        return mSharedPref.getLong(key, 0);
+    }
 }

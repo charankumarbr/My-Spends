@@ -97,16 +97,16 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
 
         datePickerView.findViewById(R.id.fdp_imageview_from_date).setOnClickListener(this);
 
-        mIvToDate = (ImageView) datePickerView.findViewById(R.id.fdp_imageview_to_date);
+        mIvToDate = datePickerView.findViewById(R.id.fdp_imageview_to_date);
         mIvToDate.setOnClickListener(this);
 
-        mTietFromDate = (TextInputEditText) datePickerView.findViewById(R.id.fdp_tiet_from_date);
+        mTietFromDate = datePickerView.findViewById(R.id.fdp_tiet_from_date);
         mTietFromDate.setInputType(InputType.TYPE_NULL);
-        mTietToDate = (TextInputEditText) datePickerView.findViewById(R.id.fdp_tiet_to_date);
+        mTietToDate = datePickerView.findViewById(R.id.fdp_tiet_to_date);
         mTietToDate.setInputType(InputType.TYPE_NULL);
 
-        mTilFromDate = (TextInputLayout) datePickerView.findViewById(R.id.fdp_til_from_date);
-        mTilToDate = (TextInputLayout) datePickerView.findViewById(R.id.fdp_til_to_date);
+        mTilFromDate = datePickerView.findViewById(R.id.fdp_til_from_date);
+        mTilToDate = datePickerView.findViewById(R.id.fdp_til_to_date);
 
         if (mFromMillis != 0 || mToMillis != 0) {
             mIvToDate.setEnabled(false);

@@ -126,7 +126,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
     private void init() {
         initLayout();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.ane_toolbar);
+        Toolbar toolbar = findViewById(R.id.ane_toolbar);
         toolbar.setTitle(isNew ? "Add Expense" : "Edit Expense");
         setSupportActionBar(toolbar);
 
@@ -135,20 +135,20 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
 
-        mCTvExpenseDate = (CustomTextView) findViewById(R.id.ane_tv_expense_date);
-        CustomTextView cTvCurrencySymbol = (CustomTextView) findViewById(R.id.ane_ctextview_currency);
+        mCTvExpenseDate = findViewById(R.id.ane_tv_expense_date);
+        CustomTextView cTvCurrencySymbol = findViewById(R.id.ane_ctextview_currency);
         cTvCurrencySymbol.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY));
 
         findViewById(R.id.ane_ctextview_add_new_payment).setOnClickListener(clickListener);
 
-        mTIEtAmount = (TextInputEditText) findViewById(R.id.ane_tiedittext_expense_amount);
+        mTIEtAmount = findViewById(R.id.ane_tiedittext_expense_amount);
         InputFilter.LengthFilter lengthFilter = new InputFilter.LengthFilter(10);
         mTIEtAmount.setFilters(new InputFilter[]{new MoneyValueFilter(), lengthFilter});
 
-        mTIEtNote = (TextInputEditText) findViewById(R.id.ane_tiedittext_expense_note);
+        mTIEtNote = findViewById(R.id.ane_tiedittext_expense_note);
         mTIEtNote.setOnEditorActionListener(onEditorActionListener);
 
-        mCbAddAnotherExpense = (CheckBox) findViewById(R.id.ane_checkbox_add_another);
+        mCbAddAnotherExpense = findViewById(R.id.ane_checkbox_add_another);
 
         //mVEditDate = findViewById(R.id.ane_imageview_edit_date);
 

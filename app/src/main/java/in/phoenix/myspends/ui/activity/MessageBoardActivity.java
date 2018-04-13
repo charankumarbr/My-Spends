@@ -19,7 +19,6 @@ import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.MessageBoard;
-import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppUtil;
 
@@ -44,7 +43,7 @@ public class MessageBoardActivity extends BaseActivity {
 
     private void init() {
         initLayout();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.amb_in_toolbar);
+        Toolbar toolbar = findViewById(R.id.amb_in_toolbar);
         toolbar.setTitle(R.string.message_board);
         setSupportActionBar(toolbar);
 

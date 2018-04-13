@@ -59,6 +59,7 @@ public final class FirebaseDB {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseDatabase.setPersistenceEnabled(true);
 
+        DatabaseReference.goOffline();
         DatabaseReference databaseReference = firebaseDatabase.getReference();
 
         String firebaseUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();

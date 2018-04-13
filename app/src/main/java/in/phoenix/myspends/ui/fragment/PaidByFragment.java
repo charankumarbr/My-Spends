@@ -89,7 +89,7 @@ public class PaidByFragment extends DialogFragment implements View.OnClickListen
         paidByView.findViewById(R.id.fpb_abutton_done).setOnClickListener(this);
         paidByView.findViewById(R.id.fpb_abutton_reset).setOnClickListener(this);
 
-        mFlexboxLayout = (FlexboxLayout) paidByView.findViewById(R.id.fpb_fblayout_payment_mode);
+        mFlexboxLayout = paidByView.findViewById(R.id.fpb_fblayout_payment_mode);
         paidByView.post(new Runnable() {
             @Override
             public void run() {

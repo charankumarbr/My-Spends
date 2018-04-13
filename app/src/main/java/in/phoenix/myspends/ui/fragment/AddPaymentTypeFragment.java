@@ -83,11 +83,11 @@ public class AddPaymentTypeFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View addPaymentTypeView = inflater.inflate(R.layout.fragment_add_payment_type, container, false);
-        mFlexboxLayoutTypes = (FlexboxLayout) addPaymentTypeView.findViewById(R.id.fapt_fblayout_payment_type);
+        mFlexboxLayoutTypes = addPaymentTypeView.findViewById(R.id.fapt_fblayout_payment_type);
         mTILTypeName = addPaymentTypeView.findViewById(R.id.fapt_til_type_name);
-        mTIETTypeName = (TextInputEditText) addPaymentTypeView.findViewById(R.id.fapt_tiedittext_type_name);
+        mTIETTypeName = addPaymentTypeView.findViewById(R.id.fapt_tiedittext_type_name);
 
-        AppCompatButton buttonAdd = (AppCompatButton) addPaymentTypeView.findViewById(R.id.fapt_acbutton_add);
+        AppCompatButton buttonAdd = addPaymentTypeView.findViewById(R.id.fapt_acbutton_add);
         buttonAdd.setOnClickListener(clickListener);
 
         mPbLoading = addPaymentTypeView.findViewById(R.id.fapt_pb_loading);

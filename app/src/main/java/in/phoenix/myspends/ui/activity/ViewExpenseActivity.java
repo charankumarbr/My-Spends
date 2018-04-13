@@ -79,19 +79,19 @@ public class ViewExpenseActivity extends BaseActivity {
 
     private void init() {
         initLayout();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.ave_toolbar);
+        Toolbar toolbar = findViewById(R.id.ave_toolbar);
         toolbar.setTitle("Tracked Expense");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setElevation(0f);
 
-        mCTvAmount = (CustomTextView) findViewById(R.id.ave_ctextview_amount);
-        mCTvExpenseOn = (CustomTextView) findViewById(R.id.ave_ctextview_expense_on);
-        mCTvAddedOn = (CustomTextView) findViewById(R.id.ave_ctextview_created_on);
-        mCTvLastUpdatedOn = (CustomTextView) findViewById(R.id.ave_ctextview_updated_on);
-        mCTvPaidBy = (CustomTextView) findViewById(R.id.ave_cTextView_paid_by);
-        mCTvNote = (CustomTextView) findViewById(R.id.ave_cTextView_note);
+        mCTvAmount = findViewById(R.id.ave_ctextview_amount);
+        mCTvExpenseOn = findViewById(R.id.ave_ctextview_expense_on);
+        mCTvAddedOn = findViewById(R.id.ave_ctextview_created_on);
+        mCTvLastUpdatedOn = findViewById(R.id.ave_ctextview_updated_on);
+        mCTvPaidBy = findViewById(R.id.ave_cTextView_paid_by);
+        mCTvNote = findViewById(R.id.ave_cTextView_note);
         mCTvCategory = findViewById(R.id.ave_cTextView_category);
 
         mPbLoading = findViewById(R.id.ave_pb_loading);

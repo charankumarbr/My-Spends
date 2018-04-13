@@ -47,7 +47,7 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.ap_toolbar);
+        Toolbar toolbar = findViewById(R.id.ap_toolbar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             toolbar.setTitleTextColor(getResources().getColor(android.R.color.white, null));
 
@@ -61,7 +61,7 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
 
         initLayout();
 
-        mLvPayment = (ListView) findViewById(R.id.ap_listview_payment);
+        mLvPayment = findViewById(R.id.ap_listview_payment);
         mPbLoading = findViewById(R.id.ap_pb_loading);
         //getLoaderManager().initLoader(DBConstants.LoaderId.PAYMENT_TYPE, null, this);
 

@@ -57,8 +57,8 @@ public final class CurrencyListAdapter extends BaseAdapter {
         if (null == convertView) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.layout_currency, parent, false);
             holder = new ViewHolder();
-            holder.cTvCurrencyCode = (CustomTextView) convertView.findViewById(R.id.lc_ctextview_code);
-            holder.cTvCurrencyName = (CustomTextView) convertView.findViewById(R.id.lc_ctextview_name);
+            holder.cTvCurrencyCode = convertView.findViewById(R.id.lc_ctextview_code);
+            holder.cTvCurrencyName = convertView.findViewById(R.id.lc_ctextview_name);
             convertView.setTag(holder);
 
         } else {

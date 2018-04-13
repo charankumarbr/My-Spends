@@ -86,8 +86,8 @@ public class PaymentTypeAdapter extends BaseAdapter {
         if (null == view) {
             view = LayoutInflater.from(mContext).inflate(R.layout.layout_payment_type, parent, false);
             holder = new ViewHolder();
-            holder.tvPaymentTypeName = (CustomTextView) view.findViewById(R.id.lpt_textview_ptype_name);
-            holder.swToggleActive = (Switch) view.findViewById(R.id.lpt_switch_active);
+            holder.tvPaymentTypeName = view.findViewById(R.id.lpt_textview_ptype_name);
+            holder.swToggleActive = view.findViewById(R.id.lpt_switch_active);
             view.setTag(holder);
 
         } else {

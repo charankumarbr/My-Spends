@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -70,7 +69,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.am_toolbar);
+        Toolbar toolbar = findViewById(R.id.am_toolbar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             toolbar.setTitleTextColor(getResources().getColor(android.R.color.white, null));
 
@@ -84,7 +83,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
         mCalendarExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());
 
-        mLvExpense = (ListView) findViewById(R.id.am_lv_spends);
+        mLvExpense = findViewById(R.id.am_lv_spends);
 
         Float dimen = getResources().getDimension(R.dimen.title_text_size);
         String value = getString(R.string.value);

@@ -95,10 +95,10 @@ public final class NewExpenseAdapter extends BaseAdapter {
         if (null == view) {
             view = LayoutInflater.from(mContext).inflate(R.layout.layout_expense, parent, false);
             holder = new ExpenseHolder();
-            holder.tvAmount = (CustomTextView) view.findViewById(R.id.le_textview_amount);
-            holder.tvNote = (CustomTextView) view.findViewById(R.id.le_textview_payment_note);
-            holder.tvPaymentTypeName = (CustomTextView) view.findViewById(R.id.le_textview_payment_type);
-            holder.tvExpenseDate = (CustomTextView) view.findViewById(R.id.le_textview_date);
+            holder.tvAmount = view.findViewById(R.id.le_textview_amount);
+            holder.tvNote = view.findViewById(R.id.le_textview_payment_note);
+            holder.tvPaymentTypeName = view.findViewById(R.id.le_textview_payment_type);
+            holder.tvExpenseDate = view.findViewById(R.id.le_textview_date);
             holder.tvMonth = view.findViewById(R.id.le_tv_month);
             holder.vLayoutExpense = view.findViewById(R.id.le_layout_expense);
             holder.vRLayoutExpense = view.findViewById(R.id.le_rlayout_expense);

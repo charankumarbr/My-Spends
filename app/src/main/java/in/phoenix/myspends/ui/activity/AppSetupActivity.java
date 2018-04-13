@@ -52,13 +52,13 @@ public class AppSetupActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_setup);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.aas_toolbar);
+        Toolbar toolbar = findViewById(R.id.aas_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.select_currency);
         getCurrencyList();
-        mLvCurrencies = (ListView) findViewById(R.id.aas_listview_currency);
-        mCTvStatus = (CustomTextView) findViewById(R.id.aas_ctextview_status);
-        mPbLoading = (ProgressBar) findViewById(R.id.aas_progress_bar_loading);
+        mLvCurrencies = findViewById(R.id.aas_listview_currency);
+        mCTvStatus = findViewById(R.id.aas_ctextview_status);
+        mPbLoading = findViewById(R.id.aas_progress_bar_loading);
         initLayout();
     }
 

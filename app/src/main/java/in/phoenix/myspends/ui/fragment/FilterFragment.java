@@ -120,16 +120,16 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
         filterView.findViewById(R.id.ff_imageview_from_date).setOnClickListener(clickListener);
         filterView.findViewById(R.id.ff_abutton_reset).setOnClickListener(clickListener);
 
-        mIvToDate = (ImageView) filterView.findViewById(R.id.ff_imageview_to_date);
+        mIvToDate = filterView.findViewById(R.id.ff_imageview_to_date);
         mIvToDate.setOnClickListener(clickListener);
 
-        mTietFromDate = (TextInputEditText) filterView.findViewById(R.id.ff_tiet_from_date);
+        mTietFromDate = filterView.findViewById(R.id.ff_tiet_from_date);
         mTietFromDate.setInputType(InputType.TYPE_NULL);
-        mTietToDate = (TextInputEditText) filterView.findViewById(R.id.ff_tiet_to_date);
+        mTietToDate = filterView.findViewById(R.id.ff_tiet_to_date);
         mTietToDate.setInputType(InputType.TYPE_NULL);
 
-        mTilFromDate = (TextInputLayout) filterView.findViewById(R.id.ff_til_from_date);
-        mTilToDate = (TextInputLayout) filterView.findViewById(R.id.ff_til_to_date);
+        mTilFromDate = filterView.findViewById(R.id.ff_til_from_date);
+        mTilToDate = filterView.findViewById(R.id.ff_til_to_date);
 
         if (mFromMillis == 0) {
             mIvToDate.setEnabled(false);

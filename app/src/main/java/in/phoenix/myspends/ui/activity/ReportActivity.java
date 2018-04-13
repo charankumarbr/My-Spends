@@ -80,7 +80,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
 
     private void init() {
         initLayout();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.ar_in_toolbar);
+        Toolbar toolbar = findViewById(R.id.ar_in_toolbar);
         toolbar.setTitle("Reports");
         setSupportActionBar(toolbar);
 
@@ -92,16 +92,16 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
 
         findViewById(R.id.ar_ctextview_date).setOnClickListener(clickListener);
         mCTvPaidBy = findViewById(R.id.ar_ctextview_paid_by);
-        mPbLoading = (ProgressBar) findViewById(R.id.ar_progressbar_loading);
+        mPbLoading = findViewById(R.id.ar_progressbar_loading);
 
-        mLvExpenses = (ListView) findViewById(R.id.ar_listview_expenses);
+        mLvExpenses = findViewById(R.id.ar_listview_expenses);
         //mLvExpenses.setOnItemClickListener(itemClickListener);
 
-        mCTvMsg = (CustomTextView) findViewById(R.id.ar_ctextview_msg);
+        mCTvMsg = findViewById(R.id.ar_ctextview_msg);
         mFromMillis = AppUtil.getFirstDayOfMonth();
         mToMillis = AppUtil.getCurrentDayOfMonth();
         AppLog.d("ReportActivity", "From:" + mFromMillis + ":: To:" + mToMillis);
-        mCTvFilter = (CustomTextView) findViewById(R.id.ar_layout_filter);
+        mCTvFilter = findViewById(R.id.ar_layout_filter);
         mCTvFilter.setOnClickListener(clickListener);
         //getExpenses();
     }

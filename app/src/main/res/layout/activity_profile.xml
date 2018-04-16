@@ -101,7 +101,6 @@
         android:gravity="center_vertical"
         android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
         android:drawableTint="@color/primary_text"
-        android:layout_above="@+id/ap_tv_version"
         android:background="#F5F5F5"
         android:layout_alignParentBottom="true"/>
 

@@ -391,7 +391,7 @@ public final class AppUtil {
             } else {
                 long diffInHours = diffMillis / (60 * 60 * 1000);
                 AppLog.d("AppUtil", "createNotification: Hours:" + diffInHours);
-                if (diffInHours > AppConstants.MINIMUM_HOUR_GAP) {
+                if (diffInHours >= AppConstants.MINIMUM_HOUR_GAP) {
                     isRequired = true;
                 }
             }

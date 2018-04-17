@@ -48,6 +48,10 @@ public final class NewExpenseAdapter extends BaseAdapter {
     private Float mGrandTotal;
     private Float mPixel1Percent = 0F;
 
+    /*private Animation mAnimUp4mBottom;
+    private Animation mAnimDown4mTop;*/
+    private int mLastPos = -1;
+
     public NewExpenseAdapter(Context context, ArrayList<NewExpense> spends, View.OnClickListener clickListener) {
         mContext = context;
         mCurrencySymbol = AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY) + " ";
@@ -58,6 +62,10 @@ public final class NewExpenseAdapter extends BaseAdapter {
         if (context instanceof OnLoadingListener) {
             mListener = (OnLoadingListener) context;
         }
+        /*mAnimUp4mBottom = AnimationUtils.loadAnimation(context, R.anim.up_from_bottom);
+        mAnimDown4mTop = AnimationUtils.loadAnimation(context, R.anim.down_from_top);
+        mAnimUp4mBottom.setDuration(200);
+        mAnimDown4mTop.setDuration(200);*/
     }
 
     @Override
@@ -229,6 +237,12 @@ public final class NewExpenseAdapter extends BaseAdapter {
                 holder.vSpendPercentage.setLayoutParams(params);
             }
         }
+
+        //-- anim view from bottom to up or top to down based on ListView scroll direction --//
+        /*if (position > mLastPos) {
+            view.startAnimation(position > mLastPos ? mAnimUp4mBottom : mAnimDown4mTop);
+        }
+        mLastPos = position;*/
 
         return view;
     }

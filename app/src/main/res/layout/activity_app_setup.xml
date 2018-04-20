@@ -25,7 +25,8 @@
         android:id="@+id/aas_progress_bar_loading"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 
     <in.phoenix.myspends.customview.CustomTextView
         android:id="@+id/aas_ctextview_status"

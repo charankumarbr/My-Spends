@@ -414,11 +414,13 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                     newExpense.setPaymentTypeKey(mSelectedTypeKey);
                     newExpense.setCategoryId(mSelectedCategoryId);
 
-                    mPbLoading.setVisibility(View.VISIBLE);
+                    //mPbLoading.setVisibility(View.VISIBLE);
+                    AppDialog.showDialog(NewExpenseActivity.this, "Adding new spend...");
                     FirebaseDB.initDb().addFsNewSpend(newExpense, new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
-                            mPbLoading.setVisibility(View.GONE);
+                            //mPbLoading.setVisibility(View.GONE);
+                            AppDialog.dismissDialog();
                             AppLog.d("NewExpense", "OnSuccess: Documentreference Id:" + documentReference.getId());
                             AppLog.d("NewExpense", "OnSuccess: Documentreference Path:" + documentReference.getPath());
                             AppUtil.showToast("Expense tracked!");

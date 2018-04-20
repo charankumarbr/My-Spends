@@ -41,7 +41,7 @@ public final class CustomSpinnerAdapter extends ArrayAdapter<String> {
 
     @Override
     public int getCount() {
-        return items.size() + 1;
+        return (null == items ? 0 : items.size() + 1);
     }
 
     @Override

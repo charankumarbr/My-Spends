@@ -259,7 +259,7 @@ public class MySpends extends Application {
     }
 
     public static String getCategoryName(int categoryId) {
-        if (null != mMapAllCategories && mMapAllCategories.containsKey(categoryId)) {
+        if ((null != mMapAllCategories) && mMapAllCategories.containsKey(categoryId)) {
             return mMapAllCategories.get(categoryId);
         }
 

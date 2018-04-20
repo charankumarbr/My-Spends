@@ -26,6 +26,7 @@ import in.phoenix.myspends.controller.CurrencyListAdapter;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;
+import in.phoenix.myspends.ui.dialog.AppDialog;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
@@ -63,6 +64,8 @@ public class AppSetupActivity extends BaseActivity {
     }
 
     private void getCurrencyList() {
+        //mPbLoading.setVisibility(View.VISIBLE);
+        AppDialog.showDialog(AppSetupActivity.this, "Fetching currencies...");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -98,7 +101,8 @@ public class AppSetupActivity extends BaseActivity {
     };
 
     private void displayCurrencyList(boolean status) {
-        mPbLoading.setVisibility(View.GONE);
+        //mPbLoading.setVisibility(View.GONE);
+        AppDialog.dismissDialog();
         if (status && null != mCurrencies && mCurrencies.size() > 0) {
             mLvCurrencies.setVisibility(View.VISIBLE);
             mAdapter = new CurrencyListAdapter(AppSetupActivity.this, mCurrencies);

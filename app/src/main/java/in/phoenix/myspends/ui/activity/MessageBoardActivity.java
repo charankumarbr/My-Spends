@@ -67,7 +67,6 @@ public class MessageBoardActivity extends BaseActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                AppDialog.dismissDialog();
                 if (null == dataSnapshot.getValue()) {
                     AppLog.d("MessageBoard", "Value: NULL");
                     mMessageBoard = new MessageBoard();
@@ -87,13 +86,13 @@ public class MessageBoardActivity extends BaseActivity {
                     }
                 }
 
-                showMessage();
-                /*mCTvMessage.postDelayed(new Runnable() {
+                mCTvMessage.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        AppDialog.dismissDialog();
                         showMessage();
                     }
-                }, 1000);*/
+                }, 1000);
             }
 
             @Override

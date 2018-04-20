@@ -24,6 +24,7 @@ import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
+import in.phoenix.myspends.ui.dialog.AppDialog;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
@@ -196,11 +197,13 @@ public class ViewExpenseActivity extends BaseActivity {
     }
 
     private void deleteExpense(String key) {
-        mPbLoading.setVisibility(View.VISIBLE);
+        //mPbLoading.setVisibility(View.VISIBLE);
+        AppDialog.showDialog(ViewExpenseActivity.this, "Deleting expense...");
         FirebaseDB.initDb().deleteFsExpense(key, new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {
-                mPbLoading.setVisibility(View.GONE);
+                //mPbLoading.setVisibility(View.GONE);
+                AppDialog.dismissDialog();
                 AppUtil.showToast(R.string.expense_deleted_successfully);
                 setResult(RESULT_OK);
                 finish();
@@ -208,7 +211,8 @@ public class ViewExpenseActivity extends BaseActivity {
         }, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                mPbLoading.setVisibility(View.GONE);
+                //mPbLoading.setVisibility(View.GONE);
+                AppDialog.dismissDialog();
                 AppUtil.showSnackbar(mViewComplete, "Unable to delete.");
             }
         });

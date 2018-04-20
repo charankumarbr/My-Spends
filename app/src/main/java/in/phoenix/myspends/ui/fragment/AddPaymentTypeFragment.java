@@ -25,6 +25,7 @@ import in.phoenix.myspends.R;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.PaymentMode;
 import in.phoenix.myspends.model.PaymentType;
+import in.phoenix.myspends.ui.dialog.AppDialog;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppUtil;
 
@@ -134,15 +135,17 @@ public class AddPaymentTypeFragment extends DialogFragment {
             paymentType.setActive(true);
 
             if (AppUtil.isConnected()) {
-                mPbLoading.setVisibility(View.VISIBLE);
+                //mPbLoading.setVisibility(View.VISIBLE);
                 AppUtil.toggleKeyboard(false);
+                AppDialog.showDialog(mContext, "Adding...");
                 FirebaseDB.initDb().addNewPaymentType(paymentType, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                         AppLog.d("AddNew", "onComplete 1");
                         if (null != getActivity() && isAdded()) {
                             AppLog.d("AddNew", "onComplete 2");
-                            mPbLoading.setVisibility(View.GONE);
+                            //mPbLoading.setVisibility(View.GONE);
+                            AppDialog.dismissDialog();
                             if (null == databaseError) {
                                 AppLog.d("AddNew", "onComplete 3");
                                 AppLog.d("AddNew", "Key:" + databaseReference.getKey());

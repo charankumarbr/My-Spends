@@ -24,6 +24,7 @@ import in.phoenix.myspends.controller.PaymentTypeAdapter;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.parser.PaymentTypeParser;
+import in.phoenix.myspends.ui.dialog.AppDialog;
 import in.phoenix.myspends.ui.fragment.AddPaymentTypeFragment;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
@@ -69,7 +70,8 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
     }
 
     private void getPaymentTypes() {
-        mPbLoading.setVisibility(View.VISIBLE);
+        //mPbLoading.setVisibility(View.VISIBLE);
+        AppDialog.showDialog(PaymentActivity.this, "Fetching Payment types...");
         FirebaseDB.initDb().getPaymentTypes(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -87,7 +89,8 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                mPbLoading.setVisibility(View.GONE);
+                //mPbLoading.setVisibility(View.GONE);
+                AppDialog.dismissDialog();
                 mPaymentTypeCount = -1;
                 if (null != databaseError) {
                     AppLog.d("PaymentType", "Payment Types Error:" + databaseError.getDetails() + "::" + databaseError.getMessage());
@@ -215,7 +218,8 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
 
     @Override
     public void onPaymentTypesParsed(ArrayList<PaymentType> paymentTypes, boolean isCashPaymentTypeAdded) {
-        mPbLoading.setVisibility(View.GONE);
+        //mPbLoading.setVisibility(View.GONE);
+        AppDialog.dismissDialog();
         if (null == paymentTypes) {
             paymentTypes = new ArrayList<>();
         }

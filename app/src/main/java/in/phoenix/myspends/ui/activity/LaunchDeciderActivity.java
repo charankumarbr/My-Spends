@@ -2,6 +2,9 @@ package in.phoenix.myspends.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -22,6 +25,7 @@ import java.util.List;
 import in.phoenix.myspends.BuildConfig;
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.controller.ImpsAdapter;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.util.AppConstants;
@@ -44,6 +48,7 @@ public class LaunchDeciderActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login_signup);
+        initLayout();
         mPbLoading = findViewById(R.id.als_pb_loading);
         TextView tvVersion = findViewById(R.id.als_tv_version);
         tvVersion.setText("v " + BuildConfig.VERSION_NAME);
@@ -57,6 +62,13 @@ public class LaunchDeciderActivity extends BaseActivity {
             getCurrency();
 
         } else {
+            ViewPager pager = (ViewPager) findViewById(R.id.als_vp_imps);
+            FragmentPagerAdapter adapter = new ImpsAdapter(LaunchDeciderActivity.this, getSupportFragmentManager());
+            pager.setAdapter(adapter);
+
+            TabLayout tabLayout = (TabLayout) findViewById(R.id.als_tl_dots);
+            tabLayout.setupWithViewPager(pager, true);
+
             AppUtil.removeDynamicShortcut();
             findViewById(R.id.als_layout_signin).setVisibility(View.VISIBLE);
             AppCompatButton btnLogin = findViewById(R.id.als_abtn_login);
@@ -73,7 +85,7 @@ public class LaunchDeciderActivity extends BaseActivity {
                                         .build(),
                                 RC_SIGN_IN);
                     } else {
-                        AppUtil.showSnackbar(findViewById(R.id.als_complete), "No Internet Connection!");
+                        AppUtil.showSnackbar(mViewComplete, "No Internet Connection!");
                     }
                 }
             });
@@ -110,7 +122,7 @@ public class LaunchDeciderActivity extends BaseActivity {
                     FirebaseDB.initDb().listenPaymentTypes();
 
                 } else {
-                    // Sign in failed, check response for error code
+                    //-- Sign in failed, check response for error code --//
                     AppLog.d("Login", "Failed:" + response.getErrorCode());
                     AppUtil.showToast("Unable to login. Please try again later.");
                 }

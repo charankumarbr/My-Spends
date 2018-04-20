@@ -54,6 +54,7 @@ public class MySpends extends Application {
             Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
         }
         initNotification();
+        //AppUtil.createNotification(APP_CONTEXT, AppUtil.convertToDate(Calendar.getInstance().getTimeInMillis()));
     }
 
     public static void fetchCategories() {

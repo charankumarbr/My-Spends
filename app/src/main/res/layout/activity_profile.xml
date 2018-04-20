@@ -26,7 +26,7 @@
         android:layout_marginStart="16dp"
         android:textSize="15sp"
         app:fontName="@string/font_noto_sans"
-        android:textColor="@color/primary_text"
+        android:textColor="@color/secondary_text"
         android:layout_below="@+id/ap_toolbar"/>
 
     <in.phoenix.myspends.customview.CustomTextView
@@ -37,7 +37,7 @@
         android:layout_marginStart="16dp"
         android:textSize="17sp"
         app:fontName="@string/font_noto_sans"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/primary_text"
         android:maxLines="2"
         android:layout_below="@+id/ap_tv_name_header"/>
 
@@ -50,7 +50,7 @@
         android:layout_marginStart="16dp"
         android:textSize="15sp"
         app:fontName="@string/font_noto_sans"
-        android:textColor="@color/primary_text"
+        android:textColor="@color/secondary_text"
         android:layout_below="@+id/ap_tv_name"/>
 
     <in.phoenix.myspends.customview.CustomTextView
@@ -61,7 +61,7 @@
         android:layout_marginStart="16dp"
         android:textSize="17sp"
         app:fontName="@string/font_noto_sans"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/primary_text"
         android:layout_below="@+id/ap_tv_email_header"/>
 
     <in.phoenix.myspends.customview.CustomTextView
@@ -73,7 +73,7 @@
         android:layout_marginStart="16dp"
         android:textSize="15sp"
         app:fontName="@string/font_noto_sans"
-        android:textColor="@color/primary_text"
+        android:textColor="@color/secondary_text"
         android:layout_below="@+id/ap_tv_email"/>
 
     <in.phoenix.myspends.customview.CustomTextView
@@ -84,7 +84,7 @@
         android:layout_marginStart="16dp"
         android:textSize="17sp"
         app:fontName="@string/font_noto_sans"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/primary_text"
         android:layout_below="@+id/ap_tv_currency_header"/>
 
     <in.phoenix.myspends.customview.CustomTextView

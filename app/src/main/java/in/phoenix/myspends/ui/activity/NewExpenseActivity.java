@@ -51,6 +51,7 @@ import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.parser.CategoryParser;
 import in.phoenix.myspends.parser.PaymentTypeParser;
+import in.phoenix.myspends.ui.dialog.AppDialog;
 import in.phoenix.myspends.ui.fragment.AddPaymentTypeFragment;
 import in.phoenix.myspends.util.AppAnalytics;
 import in.phoenix.myspends.util.AppConstants;
@@ -488,12 +489,15 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
             if (AppUtil.isConnected()) {
                 if (AppUtil.isUserLoggedIn()) {
-                    mPbLoading.setVisibility(View.VISIBLE);
+                    //mPbLoading.setVisibility(View.VISIBLE);
+                    AppUtil.toggleKeyboard(mViewComplete, false);
+                    AppDialog.showDialog(NewExpenseActivity.this, "Updating your spend...");
                     FirebaseDB.initDb().updateFsExpense(mExpense, new OnSuccessListener() {
                         @Override
                         public void onSuccess(Object o) {
                             AppLog.d("NewExpense", "Edit: onSuccess");
-                            mPbLoading.setVisibility(View.GONE);
+                            //mPbLoading.setVisibility(View.GONE);
+                            AppDialog.dismissDialog();
                             AppUtil.showToast("Updated.");
                             AppUtil.toggleKeyboard(mViewComplete, false);
                             mOkStatus = RESULT_OK;
@@ -506,7 +510,8 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                     }, new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            mPbLoading.setVisibility(View.GONE);
+                            //mPbLoading.setVisibility(View.GONE);
+                            AppDialog.dismissDialog();
                             AppLog.d("NewExpense", "Edit: onFailure");
                             AppUtil.showToast("Unable to update.");
                             AppUtil.toggleKeyboard(mViewComplete, false);

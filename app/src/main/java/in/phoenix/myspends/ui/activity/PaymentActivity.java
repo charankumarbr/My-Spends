@@ -214,24 +214,24 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
     }
 
     @Override
-    public void onPaymentTypesParsed(ArrayList<PaymentType> spends, boolean isCashPaymentTypeAdded) {
+    public void onPaymentTypesParsed(ArrayList<PaymentType> paymentTypes, boolean isCashPaymentTypeAdded) {
         mPbLoading.setVisibility(View.GONE);
-        if (null == spends) {
-            spends = new ArrayList<>();
+        if (null == paymentTypes) {
+            paymentTypes = new ArrayList<>();
         }
 
         if (!isCashPaymentTypeAdded) {
-            spends.add(0, PaymentType.getCashPaymentType());
+            paymentTypes.add(0, PaymentType.getCashPaymentType());
         }
 
-        mPaymentTypeCount = spends.size();
+        mPaymentTypeCount = paymentTypes.size();
 
         if (null == mPaymentAdapter) {
-            mPaymentAdapter = new PaymentTypeAdapter(PaymentActivity.this, spends);
+            mPaymentAdapter = new PaymentTypeAdapter(PaymentActivity.this, paymentTypes);
             mLvPayment.setAdapter(mPaymentAdapter);
 
         } else {
-            mPaymentAdapter.setData(spends);
+            mPaymentAdapter.setData(paymentTypes);
         }
     }
 }

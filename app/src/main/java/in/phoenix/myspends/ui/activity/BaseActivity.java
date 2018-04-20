@@ -1,10 +1,13 @@
 package in.phoenix.myspends.ui.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.ui.dialog.AppDialog;
+import in.phoenix.myspends.util.AppConstants;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -26,5 +29,9 @@ public class BaseActivity extends AppCompatActivity {
 
     void initLayout() {
         mViewComplete = findViewById(R.id.lfn_layout_complete);
+    }
+
+    protected void display2BtnDialog(Context context, String message, @AppConstants.DialogConstants int action) {
+        AppDialog.display2BtnDialog(context, message, action);
     }
 }

@@ -61,4 +61,11 @@
     <string name="message_board">Message Board</string>
     <string name="scribble">Scribble</string>
     <string name="board">Board</string>
+
+    <string-array name="imps">
+        <item>My Spends is an app to track all your spends.</item>
+        <item>My Spends app is first of it\'s kind to NOT TO READ your personal data.</item>
+        <item>My Spends tracks your spends when you manually add them.</item>
+        <item>All your spends are stored and synced in a remote secured channel.</item>
+    </string-array>
 </resources>

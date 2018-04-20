@@ -403,7 +403,8 @@ public final class AppUtil {
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setColor(context.getResources().getColor(R.color.colorPrimary))
                 .setContentTitle(contentTitle)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setContentText(contentText)

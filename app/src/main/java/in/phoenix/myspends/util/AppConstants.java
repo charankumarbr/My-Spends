@@ -1,5 +1,10 @@
 package in.phoenix.myspends.util;
 
+import android.support.annotation.IntDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * Created by Charan.Br on 3/2/2017.
  */
@@ -40,10 +45,17 @@ public interface AppConstants {
     String dummy = "iVuNaNKaRcHuGaLu";
 
     //-- including 1 Payment Type for cash --//
-    int MAX_PAYMENT_TYPE_COUNT = 10;
+    int MAX_PAYMENT_TYPE_COUNT = 6;
 
     String[] RESTRICTED_CHARS = {":", "\"", "\\", "*", "%"};
 
     int MINIMUM_DAY_GAP = 3;
     int MINIMUM_HOUR_GAP = 40;
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({DialogConstants.NO_ACTION, DialogConstants.FINISH})
+    @interface DialogConstants {
+        int NO_ACTION = -1;
+        int FINISH = 1;
+    }
 }

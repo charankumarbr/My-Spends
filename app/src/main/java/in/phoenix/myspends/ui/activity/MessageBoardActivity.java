@@ -19,6 +19,7 @@ import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.MessageBoard;
+import in.phoenix.myspends.ui.dialog.AppDialog;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppUtil;
 
@@ -61,10 +62,12 @@ public class MessageBoardActivity extends BaseActivity {
     }
 
     private void getMessage() {
+        AppDialog.showDialog(MessageBoardActivity.this, "Fetching Message Board...");
         FirebaseDB.initDb().getMessageBoardRef().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                AppDialog.dismissDialog();
                 if (null == dataSnapshot.getValue()) {
                     AppLog.d("MessageBoard", "Value: NULL");
                     mMessageBoard = new MessageBoard();
@@ -84,16 +87,18 @@ public class MessageBoardActivity extends BaseActivity {
                     }
                 }
 
-                mCTvMessage.postDelayed(new Runnable() {
+                showMessage();
+                /*mCTvMessage.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         showMessage();
                     }
-                }, 1000);
+                }, 1000);*/
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                AppDialog.dismissDialog();
                 AppUtil.showToast("Unable to fetch Message Board.");
                 finish();
             }
@@ -146,8 +151,17 @@ public class MessageBoardActivity extends BaseActivity {
 
         } else if (item.getItemId() == R.id.menu_done) {
             if (!TextUtils.isEmpty(mEtMessage.getText().toString().trim())) {
-                prepareData();
-                saveMessage();
+                if (null == mMessageBoard.getMessage() || ((null != mMessageBoard.getMessage()) &&
+                        !mEtMessage.getText().toString().equals(mMessageBoard.getMessage()))) {
+                    prepareData();
+                    saveMessage();
+
+                } else {
+                    AppLog.d("MessageBoard","Not reqd to save!");
+                    AppUtil.toggleKeyboard(mViewComplete, false);
+                    showMessage();
+                    mEtMessage.setText("");
+                }
 
             } else {
                 AppUtil.showToast("Enter the message to be saved.");
@@ -170,8 +184,7 @@ public class MessageBoardActivity extends BaseActivity {
                             AppLog.d("MessageBoard", "Ref Key:" + key);
                             mMessageBoard.setKey(key);
                         }
-                        canEdit(Boolean.FALSE);
-                        mCTvMessage.setText(mMessageBoard.getMessage());
+                        showMessage();
                         mEtMessage.setText("");
 
                     } else {

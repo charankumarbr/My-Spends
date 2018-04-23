@@ -42,7 +42,7 @@ dependencies {
     //-- firebase --//
     compile "com.google.firebase:firebase-core:$rootProject.firebaseVersion"
     //-- firebase auth --//
-    compile "com.google.android.gms:play-services-auth:$rootProject.firebaseVersion"
+    compile "com.google.android.gms:play-services-auth:$rootProject.gmsVersion"
     compile "com.firebaseui:firebase-ui-auth:$rootProject.firebaseUIVersion"
     //-- firebase realtime database --//
     compile "com.google.firebase:firebase-database:$rootProject.firebaseVersion"

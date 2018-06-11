@@ -87,6 +87,10 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
         super.onPostExecute(aVoid);
         if (null != mListener) {
             mListener.onPaymentTypesParsed((mIsActiveOnly) ? mActivePaymentTypes : mPaymentTypes, false);
+            if (null == mPaymentTypes) {
+                mPaymentTypes = new ArrayList<>();
+            }
+            mPaymentTypes.add(PaymentType.getCashPaymentType());
             MySpends.updatePaymentTypes(mPaymentTypes);
 
         } else {

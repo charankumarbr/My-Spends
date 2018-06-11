@@ -15,15 +15,15 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        overridePendingTransition(R.anim.activity_open_translate,
-                R.anim.activity_close_scale);
+        /*overridePendingTransition(R.anim.activity_open_translate,
+                R.anim.activity_close_scale);*/
         super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void onPause() {
-        overridePendingTransition(R.anim.activity_open_scale,
-                R.anim.activity_close_translate);
+        /*overridePendingTransition(R.anim.activity_open_scale,
+                R.anim.activity_close_translate);*/
         super.onPause();
     }
 

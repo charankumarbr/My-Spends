@@ -6,5 +6,5 @@
         android:toXDelta="0%"
         android:fromYDelta="0%"
         android:toYDelta="0%"
-        android:duration="@integer/splash_obj_time" />
+        android:duration="400" />
 </set>

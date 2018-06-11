@@ -355,6 +355,8 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             public void onAnimationEnd(Animation animation) {
                 Intent viewExpenseIntent = new Intent(MainActivity.this, ViewExpenseActivity.class);
                 viewExpenseIntent.putExtra(AppConstants.Bundle.EXPENSE, mExpenseAdapter.getItem(position));
+                /*ActivityCompat.startActivityForResult(MainActivity.this, viewExpenseIntent, AppConstants.VIEW_EXPENSE_CODE,
+                        ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());*/
                 startActivityForResult(viewExpenseIntent, AppConstants.VIEW_EXPENSE_CODE);
             }
 

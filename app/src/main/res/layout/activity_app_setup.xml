@@ -3,10 +3,12 @@
     android:id="@+id/lfn_layout_complete"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/bg_screen">
 
-    <include android:id="@+id/aas_toolbar"
-        layout="@layout/layout_toolbar"/>
+    <include
+        android:id="@+id/aas_toolbar"
+        layout="@layout/layout_toolbar" />
 
     <ListView
         android:id="@+id/aas_listview_currency"
@@ -17,15 +19,16 @@
         android:visibility="gone"
         android:layout_below="@+id/aas_toolbar"
         android:fastScrollEnabled="true"
-        android:fastScrollStyle="@color/colorAccent"/>
+        android:fastScrollStyle="@color/colorAccent" />
 
     <ProgressBar
         android:id="@+id/aas_progress_bar_loading"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 
-    <in.charanbr.expensetracker.customview.CustomTextView
+    <in.phoenix.myspends.customview.CustomTextView
         android:id="@+id/aas_ctextview_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,5 +38,5 @@
         android:text="Oops! Something went wrong!!"
         android:textSize="19sp"
         app:fontName="@string/font_noto_sans"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </RelativeLayout>

@@ -1,26 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/lfn_layout_complete"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/bg_screen">
 
-    <include layout="@layout/layout_toolbar"/>
+    <include layout="@layout/layout_toolbar"
+        android:id="@+id/ane_toolbar"/>
 
     <RelativeLayout
+        android:id="@+id/ane_layout_expense_date"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ane_toolbar"
+        android:visibility="gone">
 
-        <in.charanbr.expensetracker.customview.CustomTextView
+        <in.phoenix.myspends.customview.CustomTextView
             android:id="@+id/ane_ctextview_expense_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_margin="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
             android:text="Expense on 11 April 2017"
             android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
+            android:textSize="19sp"
             app:fontName="@string/font_noto_sans" />
 
         <ImageView
@@ -31,38 +38,68 @@
             android:layout_toEndOf="@+id/ane_ctextview_expense_date"
             android:foregroundTint="@color/colorAccent"
             android:foregroundTintMode="src_in"
-            android:foreground="@drawable/ic_mode_edit_white_24dp"/>
-
+            android:foreground="@drawable/ic_mode_edit_white_24dp" />
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:layout_below="@+id/ane_layout_expense_date">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical">
-
-            <CheckBox
-                android:id="@+id/ane_checkbox_add_another"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/add_another_expense"
-                android:textColor="@color/primary_text"
-                android:layout_marginBottom="10dp"
-                android:layout_gravity="right"/>
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical"
+            android:focusableInTouchMode="true"
+            android:focusable="true">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
 
-                <in.charanbr.expensetracker.customview.CustomTextView
+                <in.phoenix.myspends.customview.CustomTextView
+                    android:id="@+id/ane_tv_expense_date"
+                    android:layout_width="180dp"
+                    android:layout_height="40dp"
+                    android:drawableStart="@drawable/ic_date_range_30dp"
+                    android:text="31st Apr 2018"
+                    android:gravity="center_vertical"
+                    android:drawablePadding="12dp"
+                    android:textSize="17sp"
+                    android:textColor="@color/primary_text"
+                    app:fontName="@string/font_noto_sans"
+                    android:layout_alignParentStart="true"/>
+
+                <CheckBox
+                    android:id="@+id/ane_checkbox_add_another"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_another"
+                    android:textColor="@color/primary_text"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="143dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="37dp"
+                android:background="@color/secondary_text"
+                android:layout_marginTop="-5dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
+
+                <in.phoenix.myspends.customview.CustomTextView
                     android:id="@+id/ane_ctextview_currency"
+                    android:minWidth="30dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -70,9 +107,9 @@
                     android:background="@color/colorAccent"
                     android:elevation="3dp"
                     android:padding="6dp"
-                    android:text="@string/Rs"
                     android:textColor="@android:color/white"
                     android:textSize="18sp"
+                    android:gravity="center"
                     app:fontName="@string/font_noto_sans" />
 
                 <android.support.design.widget.TextInputLayout
@@ -98,20 +135,21 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
-                <in.charanbr.expensetracker.customview.CustomTextView
+                <in.phoenix.myspends.customview.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:text="@string/paid_by"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/paid_by_"
                     android:textColor="@color/primary_text"
                     android:textSize="17sp"
                     app:fontName="@string/font_noto_sans"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"/>
 
-                <in.charanbr.expensetracker.customview.CustomTextView
+                <in.phoenix.myspends.customview.CustomTextView
                     android:id="@+id/ane_ctextview_add_new_payment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -123,31 +161,44 @@
                     android:gravity="center_vertical"
                     app:fontName="@string/font_noto_sans"
                     android:textSize="16sp"
-                    android:textColor="@color/primary_text"/>
+                    android:textColor="@color/primary_text"
+                    android:visibility="gone"/>
             </RelativeLayout>
 
-            <RadioGroup
-                android:id="@+id/ane_radio_group_payment_mode"
+            <Spinner
+                android:id="@+id/ane_spnr_paid_by"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="40dp"
+                android:layout_marginTop="12dp"
+                android:dropDownSelector="@color/colorAccent"
+                android:spinnerMode="dialog"/>
 
-                <com.google.android.flexbox.FlexboxLayout
-                    android:id="@+id/ane_fblayout_payment_mode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:alignContent="center"
-                    app:alignItems="center"
-                    app:flexDirection="row"
-                    app:flexWrap="wrap"></com.google.android.flexbox.FlexboxLayout>
-            </RadioGroup>
+            <in.phoenix.myspends.customview.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/category"
+                android:textColor="@color/primary_text"
+                android:textSize="17sp"
+                app:fontName="@string/font_noto_sans"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:visibility="gone"/>
+
+            <Spinner
+                android:id="@+id/ane_spnr_category"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="12dp"
+                android:dropDownSelector="@color/colorAccent"
+                android:spinnerMode="dialog"/>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/ane_til_expense_note"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="12dp"
                 android:hint="Note">
 
                 <android.support.design.widget.TextInputEditText
@@ -159,8 +210,15 @@
                     android:maxLength="80"
                     android:minLines="2"
                     android:textColor="@color/primary_text"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/ane_pb_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+</RelativeLayout>

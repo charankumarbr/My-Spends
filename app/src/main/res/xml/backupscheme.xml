@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <include
+        domain="sharedpref"
+        path="MySpendsPrefs" />
+    <!--<include
+        domain="database"
+        path="in_phoenix_myspends.db" />-->
+</full-backup-content>

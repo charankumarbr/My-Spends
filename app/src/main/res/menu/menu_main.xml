@@ -4,23 +4,40 @@
 
     <item
         android:id="@+id/menu_payment"
-        android:title="@string/payment_types"
+        android:title="@string/payment_type"
         app:showAsAction="always"
-        android:icon="@drawable/ic_credit_card_white_24dp"/>
+        android:icon="@drawable/ic_credit_card_white_24dp" />
 
     <item
         android:id="@+id/menu_add_expense"
         android:title="@string/add_expense"
         app:showAsAction="always"
-        android:icon="@drawable/ic_add_white_24dp"/>
+        android:icon="@drawable/ic_add_white_24dp" />
+
+    <item
+        android:id="@+id/menu_message_board"
+        android:title="@string/message_board"
+        android:titleCondensed="@string/board"
+        app:showAsAction="never|withText" />
 
     <item
         android:id="@+id/menu_reports"
         android:title="@string/reports"
-        app:showAsAction="never|withText"/>
+        app:showAsAction="never|withText" />
+
+    <item
+        android:id="@+id/menu_profile"
+        android:title="@string/profile"
+        app:showAsAction="never|withText" />
 
     <item
         android:id="@+id/menu_about"
         android:title="@string/about_app"
-        app:showAsAction="never|withText"/>
+        app:showAsAction="never|withText" />
+
+    <item
+        android:id="@+id/menu_logout"
+        android:title="@string/logout"
+        app:showAsAction="never|withText"
+        android:visible="false" />
 </menu>

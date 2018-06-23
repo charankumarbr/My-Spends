@@ -11,7 +11,34 @@
         <!-- Support library compatibility -->
         <item name="actionOverflowButtonStyle">@style/ActionButtonOverflow</item>
 
+        <item name="android:colorButtonNormal">@color/colorAccent</item>
         <item name="colorButtonNormal">@color/colorAccent</item>
+        
+        <item name="android:windowAnimationStyle">@style/CustomTransition</item>
+    </style>
+
+    <style name="CustomTransition" parent="@android:style/Animation.Activity">
+        <!--<item name="android:windowEnterAnimation">@anim/your_in_down</item>
+        <item name="android:windowExitAnimation">@anim/your_out_down</item>-->
+
+        <!-- enable window content transitions -->
+        <!--<item name="android:windowContentTransitions">true</item>
+        <item name="android:windowActivityTransitions">true</item>-->
+
+        <!-- specify enter and exit transitions -->
+        <!--<item name="android:windowEnterTransition">@android:transition/slide_right</item>
+        <item name="android:windowExitTransition">@android:transition/slide_left</item>
+        <item name="android:windowReenterTransition">@android:transition/slide_left</item>
+        <item name="android:windowReturnTransition">@android:transition/slide_right</item>-->
+
+        <item name="android:activityOpenEnterAnimation">@anim/slide_from_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_from_left</item>
+
+        <!--<item name="android:windowAllowEnterTransitionOverlap">false</item>
+        <item name="android:windowAllowReturnTransitionOverlap">false</item>-->
+
     </style>
 
     <style name="ActionButtonOverflow" parent="@style/Widget.AppCompat.ActionButton.Overflow">
@@ -25,5 +52,10 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="ToolbarSubtitleAppearance" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">#EFEFEF</item>
+    </style>
 
 </resources>

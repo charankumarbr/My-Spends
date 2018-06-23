@@ -1,6 +1,6 @@
 <resources>
     <!--<string name="app_name">Expense Tracker</string>-->
-    <string name="app_name">Track My Spends</string>
+    <string name="app_name">My Spends</string>
     <string name="add_expense">Add Expense</string>
     <string name="add_payment">Add Payment</string>
     <string name="add_payment_type">Add Payment Type</string>
@@ -9,17 +9,18 @@
     <string name="payment">Payment</string>
 
     <string name="add">Add</string>
-    <string name="please_select_payment_type">Please select Payment type</string>
+    <string name="please_select_payment_type">Please select Payment Type</string>
     <string name="enter_payment_name">Enter Payment Name</string>
     <string name="enter_valid_payment_name">Enter a valid Payment Name</string>
     <string name="Rs">\u20B9</string>
     <string name="font_noto_sans">fontNotoSans</string>
-    <string name="paid_by">Paid by:</string>
+    <string name="paid_by_">Paid by:</string>
+    <string name="paid_by">Paid by</string>
     <string name="note">Note</string>
     <string name="value">default</string>
     <string name="done_caps">DONE</string>
     <string name="payment_types">Payment Types</string>
-    <string name="pref_name">ExpenseTracker</string>
+    <string name="pref_name">MySpendsPrefs</string>
     <string name="select_currency">Select Currency</string>
     <string name="expense_on">Expense on:</string>
     <string name="added_on">Added on:</string>
@@ -33,16 +34,41 @@
     <string name="confirm_delete_message">Are you sure you want to delete this expense? It cannot be recovered later.</string>
     <string name="expense_deleted_successfully">Expense deleted successfully!</string>
     <string name="add_another_expense">Add another expense</string>
-    <string name="title_activity_expenses_list">ExpensesListActivity</string>
+    <string name="add_another">Add another</string>
     <string name="add_new">Add New</string>
     <string name="expenses_for_month_of">Expenses for the month of</string>
     <string name="reports">Reports</string>
     <string name="about">About</string>
     <string name="about_app">About App</string>
-    <string name="about_app_msg">is an app to track all your spends/expenditure. And first of it\'s kind to NOT TO read your personal data.\n\n
-        ->This app keeps track of your spends/expenditure when you add it.\n\n <!--This app DOES NOT need internet to work.-->
-        ->All the data will be saved on the phone.\n<!--\n
-        ->Having said this, We DON\'T read your personal data, your spends/expenditures.\n-->
+    <string name="about_app_msg">My Spends is an app to track all your spends. And, first of it\'s kind to not to read your personal data.\n\nMy Spends keeps track of your spends when you add them.
     </string>
     <string name="contact_us">Contact Us</string>
+    <string name="select_from_date">Select the from date</string>
+    <string name="select_to_date">Select the to date</string>
+    <string name="value_month_expenses">%s month expenses</string>
+    <string name="no_expenses_found_in_filter">No expenses found in the filter applied.</string>
+    <string name="logout">Logout</string>
+    <string name="no_internet">No Internet Connection!!</string>
+    <integer name="splash_obj_time">1000</integer>
+    <string name="payment_type">Payment Type</string>
+    <string name="no_spends_tracked">No spends!\n\nAdd your spends to track.</string>
+    <string name="unable_fetch_spends">Unable to fetch your spends.\n\nPlease check your internet connection.</string>
+    <string name="no_spends_tracked_tune_filters">No spends tracked!\n\nFine tune your filters.</string>
+    <string name="get_total">Get Total</string>
+    <string name="profile">Profile</string>
+    <string name="category">Category</string>
+    <string name="spends_chart">Spends Chart</string>
+    <string name="total">Total</string>
+    <string name="message_board">Message Board</string>
+    <string name="scribble">Scribble</string>
+    <string name="board">Board</string>
+
+    <string-array name="imps">
+        <item>My Spends is an app to track all your spends.</item>
+        <item>My Spends app is first of it\'s kind to NOT TO READ your personal data.</item>
+        <item>My Spends tracks your spends when you manually add them.</item>
+        <item>All your spends are stored and synced in a remote secured channel.</item>
+    </string-array>
+
+    <string name="confirm_exit_app">Press back again to exit</string>
 </resources>

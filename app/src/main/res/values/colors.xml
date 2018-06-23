@@ -2,7 +2,13 @@
 <resources>
     <color name="colorPrimary">#FF5722</color>
     <color name="colorPrimaryDark">#E64A19</color>
-    <color name="colorAccent">#009973</color>
+    <color name="colorAccent">#00B286</color><!--009973-->
     <color name="secondary_text">#55000000</color>
     <color name="primary_text">#BC000000</color>
+
+    <color name="lighter_gray">#dddddd</color>
+    <color name="darker_gray">#aaaaaa</color>
+    <color name="secondary_">#424242</color>
+    <color name="tertiary_">#737373</color>
+    <color name="bg_screen">#FFFFFF</color><!--FAFAFA-->
 </resources>

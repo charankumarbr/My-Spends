@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_get_total"
+        android:title="@string/total"
+        app:showAsAction="always"
+        android:visible="false"
+        android:icon="@drawable/ic_total_white_24dp"/>
+
+    <item
+        android:id="@+id/menu_spends_chart"
+        android:title="@string/spends_chart"
+        app:showAsAction="ifRoom"
+        android:visible="false"
+        android:icon="@drawable/ic_chart_white_24dp"/>
+</menu>

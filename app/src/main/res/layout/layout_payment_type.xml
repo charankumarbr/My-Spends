@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <in.charanbr.expensetracker.customview.CustomTextView
+    <in.phoenix.myspends.customview.CustomTextView
         android:id="@+id/lpt_textview_ptype_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,7 +17,8 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         app:fontName="@string/font_noto_sans"
-        android:textColor="@color/primary_text"/>
+        android:textColor="@color/primary_text"
+        android:text="Select Payment Type"/>
 
     <Switch
         android:id="@+id/lpt_switch_active"

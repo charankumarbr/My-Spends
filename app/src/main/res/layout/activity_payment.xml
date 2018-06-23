@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/lfn_layout_complete">
+    android:id="@+id/lfn_layout_complete"
+    android:background="@color/bg_screen">
 
-    <include layout="@layout/layout_toolbar"/>
+    <include layout="@layout/layout_toolbar"
+        android:id="@+id/ap_toolbar"/>
 
     <ListView
         android:id="@+id/ap_listview_payment"
@@ -14,5 +15,13 @@
         android:layout_height="match_parent"
         android:listSelector="@android:color/transparent"
         android:cacheColorHint="@color/colorAccent"
-        android:dividerHeight="2dp"/>
-</LinearLayout>
+        android:dividerHeight="2dp"
+        android:layout_below="@+id/ap_toolbar"/>
+
+    <ProgressBar
+        android:id="@+id/ap_pb_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+</RelativeLayout>

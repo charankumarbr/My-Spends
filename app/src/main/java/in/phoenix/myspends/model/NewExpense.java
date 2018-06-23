@@ -142,4 +142,13 @@ public final class NewExpense implements Parcelable {
                 + ":" + getAmount() + ":" + getCreatedOn() + ":"
                 + getExpenseDate() + ":" + getPaymentTypeKey() + ":" + getUpdatedOn() + ":" + getCategoryId();
     }
+
+    public boolean isAddedOnDiffDate() {
+        return new ExpenseDate(getExpenseDate()).isSameExpenseDate(getCreatedOn());
+    }
+
+    public boolean isUpdated() {
+        return getCreatedOn() != getUpdatedOn();
+    }
+
 }

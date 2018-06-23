@@ -34,6 +34,7 @@
     <string name="confirm_delete_message">Are you sure you want to delete this expense? It cannot be recovered later.</string>
     <string name="expense_deleted_successfully">Expense deleted successfully!</string>
     <string name="add_another_expense">Add another expense</string>
+    <string name="add_another">Add another</string>
     <string name="add_new">Add New</string>
     <string name="expenses_for_month_of">Expenses for the month of</string>
     <string name="reports">Reports</string>
@@ -68,4 +69,6 @@
         <item>My Spends tracks your spends when you manually add them.</item>
         <item>All your spends are stored and synced in a remote secured channel.</item>
     </string-array>
+
+    <string name="confirm_exit_app">Press back again to exit</string>
 </resources>

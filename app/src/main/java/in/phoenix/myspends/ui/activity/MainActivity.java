@@ -7,6 +7,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -63,6 +66,8 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
     private CustomTextView mCTvNoSpends = null;
 
     private long mLastExpense = -1;
+
+    private boolean mIsExitFlag = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -342,7 +347,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
         }
     };*/
 
-    private void navigateToViewExpense(final int position, View view) {
+    private void navigateToViewExpense(final int position, final View view) {
         Animation animation1 = new AlphaAnimation(0.3f, 1.0f);
         animation1.setDuration(300);
         animation1.setAnimationListener(new Animation.AnimationListener() {
@@ -355,9 +360,17 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             public void onAnimationEnd(Animation animation) {
                 Intent viewExpenseIntent = new Intent(MainActivity.this, ViewExpenseActivity.class);
                 viewExpenseIntent.putExtra(AppConstants.Bundle.EXPENSE, mExpenseAdapter.getItem(position));
-                /*ActivityCompat.startActivityForResult(MainActivity.this, viewExpenseIntent, AppConstants.VIEW_EXPENSE_CODE,
-                        ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());*/
-                startActivityForResult(viewExpenseIntent, AppConstants.VIEW_EXPENSE_CODE);
+
+                // Now we provide a list of Pair items which contain the view we can transitioning
+                // from, and the name of the view it is transitioning to, in the launched activity
+                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat
+                        .makeSceneTransitionAnimation(MainActivity.this,
+                                new Pair(view.findViewById(R.id.le_textview_payment_note), ViewExpenseActivity.VIEW_NAME_NOTE),
+                                new Pair(view.findViewById(R.id.le_textview_amount), ViewExpenseActivity.VIEW_NAME_AMOUNT),
+                                new Pair(view.findViewById(R.id.le_textview_payment_type), ViewExpenseActivity.VIEW_NAME_TYPE));
+                ActivityCompat.startActivityForResult(MainActivity.this, viewExpenseIntent, AppConstants.VIEW_EXPENSE_CODE,
+                        activityOptionsCompat.toBundle());
+                //startActivityForResult(viewExpenseIntent, AppConstants.VIEW_EXPENSE_CODE);
             }
 
             @Override
@@ -370,9 +383,22 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        FirebaseDB.initDb().detachPaymentTypes();
-        FirebaseDB.initDb().detachSpendsListener();
+        if (!mIsExitFlag) {
+            super.onBackPressed();
+            FirebaseDB.initDb().detachPaymentTypes();
+            FirebaseDB.initDb().detachSpendsListener();
+        }
+
+        if (mIsExitFlag) {
+            AppUtil.showToast(getString(R.string.confirm_exit_app));
+            mIsExitFlag = false;
+            mLvExpense.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mIsExitFlag = true;
+                }
+            }, 2000);
+        }
     }
 
     @Override

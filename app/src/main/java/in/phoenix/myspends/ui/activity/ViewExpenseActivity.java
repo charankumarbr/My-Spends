@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -35,6 +36,9 @@ import in.phoenix.myspends.util.AppUtil;
  */
 public class ViewExpenseActivity extends BaseActivity {
 
+    public static final String VIEW_NAME_NOTE = "view:name:note";
+    public static final String VIEW_NAME_AMOUNT = "view:name:amount";
+    public static final String VIEW_NAME_TYPE = "view:name:type";
     private NewExpense mExpense = null;
 
     private CustomTextView mCTvAmount;
@@ -70,12 +74,13 @@ public class ViewExpenseActivity extends BaseActivity {
             getParticularExpense();
         }*/
 
-        mCTvAddedOn.postDelayed(new Runnable() {
+        viewExpense();
+        /*mCTvAddedOn.postDelayed(new Runnable() {
             @Override
             public void run() {
                 viewExpense();
             }
-        }, 200);
+        }, 200);*/
     }
 
     private void init() {
@@ -109,13 +114,22 @@ public class ViewExpenseActivity extends BaseActivity {
             mCTvAmount.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)
                     + " " + AppUtil.getStringAmount(String.valueOf(mExpense.getAmount())));
             mCTvNote.setText(TextUtils.isEmpty(mExpense.getNote()) ? AppConstants.BLANK_NOTE_TEMPLATE : mExpense.getNote());
-            ExpenseDate expenseDate = new ExpenseDate(mExpense.getExpenseDate());
-            boolean isAddedOnDiffDate = expenseDate.isSameExpenseDate(mExpense.getCreatedOn());
-            boolean isUpdated = mExpense.getCreatedOn() != mExpense.getUpdatedOn();
+            mCTvPaidBy.setText(AppUtil.getPaidByForKey(mExpense.getPaymentTypeKey()));
 
+            ViewCompat.setTransitionName(mCTvAmount, VIEW_NAME_AMOUNT);
+            ViewCompat.setTransitionName(mCTvNote, VIEW_NAME_NOTE);
+            ViewCompat.setTransitionName(mCTvPaidBy, VIEW_NAME_TYPE);
+
+            mCTvCategory.setText(MySpends.getCategoryName(mExpense.getCategoryId()));
+
+            ExpenseDate expenseDate = new ExpenseDate(mExpense.getExpenseDate());
             mCTvExpenseOn.setText(getString(R.string.expense_on) + " " + expenseDate.getFormattedDate());
+
+            /*boolean isAddedOnDiffDate = expenseDate.isSameExpenseDate(mExpense.getCreatedOn());
+            boolean isUpdated = mExpense.getCreatedOn() != mExpense.getUpdatedOn();*/
+
             AppLog.d("ViewExpense", "ExpenseDate:" + expenseDate.getTimeInMillis() + ":: Created Date:" + mExpense.getCreatedOn() + ":: Expense:" + mExpense.getExpenseDate());
-            if (!isAddedOnDiffDate) {
+            if (mExpense.isAddedOnDiffDate()) {
                 try {
                     mCTvAddedOn.setText(getString(R.string.added_on) + " " + AppUtil.dateDBToString(mExpense.getCreatedOn()));
                     mCTvAddedOn.setVisibility(View.VISIBLE);
@@ -127,7 +141,7 @@ public class ViewExpenseActivity extends BaseActivity {
                 }
             }
 
-            if (isUpdated) {
+            if (mExpense.isUpdated()) {
                 try {
                     mCTvLastUpdatedOn.setText(getString(R.string.last_updated_on) + " " + AppUtil.dateDBToString(mExpense.getUpdatedOn()));
                     mCTvLastUpdatedOn.setVisibility(View.VISIBLE);
@@ -138,9 +152,6 @@ public class ViewExpenseActivity extends BaseActivity {
                     mCTvLastUpdatedOn.setVisibility(View.GONE);
                 }
             }
-
-            mCTvPaidBy.setText(AppUtil.getPaidByForKey(mExpense.getPaymentTypeKey()));
-            mCTvCategory.setText(MySpends.getCategoryName(mExpense.getCategoryId()));
         }
     }
 

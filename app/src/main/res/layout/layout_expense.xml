@@ -51,13 +51,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/le_tv_month"
             app:cardUseCompatPadding="true"
-            app:cardCornerRadius="1dp"
+            app:cardCornerRadius="4dp"
             app:cardPreventCornerOverlap="true"
             app:cardElevation="2dp"
             android:layout_marginStart="6dp"
             android:layout_marginLeft="6dp"
             android:layout_marginEnd="6dp"
             android:layout_marginRight="6dp"
+            app:cardBackgroundColor="@android:color/white"
             android:visibility="gone">
 
             <RelativeLayout
@@ -124,8 +125,8 @@
                         android:id="@+id/le_textview_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                        android:textColor="@color/secondary_text"
                         android:layout_marginTop="8dp"
                         app:fontName="@string/font_noto_sans"
                         android:layout_gravity="end"

@@ -20,6 +20,7 @@
 -keepattributes Signature
 -keepattributes *Annotation*
 
+-keep public class * extends android.support.v7.app.AppCompatActivity
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
 -keep public class * extends android.app.Service

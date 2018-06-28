@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.customview.CustomEditText;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.PaymentMode;
 import in.phoenix.myspends.model.PaymentType;
@@ -38,7 +39,7 @@ public class AddPaymentTypeFragment extends DialogFragment {
 
     private Context mContext;
 
-    private TextInputEditText mTIETTypeName = null;
+    private CustomEditText mTIETTypeName = null;
 
     private TextInputLayout mTILTypeName = null;
 

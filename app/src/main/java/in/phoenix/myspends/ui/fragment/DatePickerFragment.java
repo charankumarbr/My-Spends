@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import java.util.Calendar;
 
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.customview.CustomEditText;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.util.AppLog;
@@ -39,8 +40,8 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
     private TextInputLayout mTilFromDate;
     private TextInputLayout mTilToDate;
 
-    private TextInputEditText mTietFromDate;
-    private TextInputEditText mTietToDate;
+    private CustomEditText mTietFromDate;
+    private CustomEditText mTietToDate;
 
     private long mFromMillis = 0;
     private long mToMillis = 0;

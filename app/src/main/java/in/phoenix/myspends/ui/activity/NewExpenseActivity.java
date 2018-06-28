@@ -42,6 +42,7 @@ import java.util.Calendar;
 
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.CustomSpinnerAdapter;
+import in.phoenix.myspends.customview.CustomEditText;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.customview.MoneyValueFilter;
 import in.phoenix.myspends.database.FirebaseDB;
@@ -74,8 +75,8 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
     private CustomTextView mCTvExpenseDate = null;
 
-    private TextInputEditText mTIEtAmount = null;
-    private TextInputEditText mTIEtNote = null;
+    private CustomEditText mTIEtAmount = null;
+    private CustomEditText mTIEtNote = null;
 
     private CheckBox mCbAddAnotherExpense;
 

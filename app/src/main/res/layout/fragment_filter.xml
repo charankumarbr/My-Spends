@@ -36,14 +36,15 @@
                 android:layout_toStartOf="@+id/ff_imageview_from_date"
                 android:layout_marginEnd="12dp">
 
-                <android.support.design.widget.TextInputEditText
+                <in.phoenix.myspends.customview.CustomEditText
                     android:id="@+id/ff_tiet_from_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:hint="From"
                     android:textColor="@color/primary_text"
-                    android:inputType="none" />
+                    android:inputType="none"
+                    app:fontName="@string/font_noto_sans"/>
             </android.support.design.widget.TextInputLayout>
 
             <ImageView
@@ -65,14 +66,15 @@
                 android:layout_toStartOf="@+id/ff_imageview_to_date"
                 android:layout_marginEnd="12dp">
 
-                <android.support.design.widget.TextInputEditText
+                <in.phoenix.myspends.customview.CustomEditText
                     android:id="@+id/ff_tiet_to_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:hint="To"
                     android:textColor="@color/primary_text"
-                    android:inputType="none" />
+                    android:inputType="none"
+                    app:fontName="@string/font_noto_sans"/>
             </android.support.design.widget.TextInputLayout>
 
             <ImageView

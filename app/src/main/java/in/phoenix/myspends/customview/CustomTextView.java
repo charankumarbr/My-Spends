@@ -7,6 +7,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.util.AppLog;
 
 /**
  * Created by Charan.Br on 2/28/2017.
@@ -22,13 +23,13 @@ public final class CustomTextView extends AppCompatTextView {
         this(context, attributeSet, 0);
     }
 
-    public CustomTextView(Context context, AttributeSet attributeSet, int defStyle) {
-        super(context, attributeSet, defStyle);
+    public CustomTextView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
 
         if (isInEditMode())
             return;
 
-        TypedArray typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.CustomTextView);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomTextView);
         if (null != typedArray) {
 
             String fontName = typedArray.getString(R.styleable.CustomTextView_fontName);
@@ -36,8 +37,8 @@ public final class CustomTextView extends AppCompatTextView {
                 fontName = "fontNotoSans";
             }
             int textStyle = Typeface.NORMAL;
-            if (null != attributeSet) {
-                textStyle = attributeSet.getAttributeIntValue("http://schemas.android.com/apk/res/android",
+            if (null != attrs) {
+                textStyle = attrs.getAttributeIntValue("http://schemas.android.com/apk/res/android",
                         "textStyle", Typeface.NORMAL);
             }
             //AppLog.d("CustomTextView", fontName + "::" + textStyle);

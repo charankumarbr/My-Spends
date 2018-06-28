@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.firebase.ui.auth.AuthUI;
@@ -26,6 +25,7 @@ import in.phoenix.myspends.BuildConfig;
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.ImpsAdapter;
+import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.util.AppConstants;
@@ -50,8 +50,8 @@ public class LaunchDeciderActivity extends BaseActivity {
         setContentView(R.layout.activity_login_signup);
         initLayout();
         mPbLoading = findViewById(R.id.als_pb_loading);
-        TextView tvVersion = findViewById(R.id.als_tv_version);
-        tvVersion.setText("v " + BuildConfig.VERSION_NAME);
+        CustomTextView tvVersion = findViewById(R.id.als_tv_version);
+        tvVersion.setText("v " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")");
 
         if (AppUtil.isUserLoggedIn()) {
             //MySpends.fetchPaymentTypes();

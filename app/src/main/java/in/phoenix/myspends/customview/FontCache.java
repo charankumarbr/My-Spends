@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import java.util.HashMap;
 
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.util.AppLog;
 
 /**
  * Created by Charan.Br on 2/28/2017.
@@ -27,6 +28,7 @@ final class FontCache {
 
                     typeface = Typeface.createFromAsset(context.getAssets(), "fonts/NotoSans-Bold.ttf");
                     fontMap.put(fontName + textStyle, typeface);
+                    AppLog.d("FontCache", "Generating new typeface: BOLD");
                     return typeface;
 
                 case Typeface.NORMAL:
@@ -37,6 +39,7 @@ final class FontCache {
 
                     typeface = Typeface.createFromAsset(context.getAssets(), "fonts/NotoSans-Regular.ttf");
                     fontMap.put(fontName + textStyle, typeface);
+                    AppLog.d("FontCache", "Generating new typeface: NORMAL/Default");
                     return typeface;
             }
 

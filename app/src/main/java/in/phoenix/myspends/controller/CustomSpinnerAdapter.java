@@ -8,11 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import java.util.List;
 
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.model.Category;
 import in.phoenix.myspends.model.PaymentType;
 
@@ -82,12 +82,12 @@ public final class CustomSpinnerAdapter extends ArrayAdapter<String> {
             View view;
             if (isDropdown) {
                 view = mInflater.inflate(R.layout.layout_spinner_dropdown, parent, false);
-                TextView tvInfo = view.findViewById(android.R.id.text1);
+                CustomTextView tvInfo = view.findViewById(android.R.id.text1);
                 tvInfo.setText(mSelectionText);
 
             } else {
                 view = mInflater.inflate(mResource, parent, false);
-                TextView tvInfo = view.findViewById(R.id.lss_tv_name);
+                CustomTextView tvInfo = view.findViewById(R.id.lss_tv_name);
                 //view.findViewById(R.id.lpt_switch_active).setVisibility(View.GONE);
                 tvInfo.setText(mSelectionText);
             }
@@ -105,7 +105,7 @@ public final class CustomSpinnerAdapter extends ArrayAdapter<String> {
         position--;
         final View view = mInflater.inflate(mResource, parent, false);
 
-        TextView offTypeTv = view.findViewById(R.id.lss_tv_name);
+        CustomTextView offTypeTv = view.findViewById(R.id.lss_tv_name);
         //view.findViewById(R.id.lpt_switch_active).setVisibility(View.GONE);
 
         //if (position > 0) {

@@ -38,7 +38,7 @@
         android:textSize="15sp"
         android:visibility="gone"/>
 
-    <EditText
+    <in.phoenix.myspends.customview.CustomEditText
         android:id="@+id/amb_et_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,6 +53,7 @@
         android:textColor="@color/primary_text"
         android:visibility="gone"
         android:hint="Write your message and click DONE to save."
-        android:inputType="textCapSentences|textMultiLine|textImeMultiLine"/>
+        android:inputType="textCapSentences|textMultiLine|textImeMultiLine"
+        app:fontName="@string/font_noto_sans"/>
 
 </LinearLayout>

@@ -12,7 +12,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.util.AppLog;
 
 /**
  * Created by Charan.Br on 6/28/2018.
@@ -35,10 +34,10 @@ public final class CustomEditText extends AppCompatEditText {
             return;
         }
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomTextView);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomFont);
         if (null != typedArray) {
 
-            String fontName = typedArray.getString(R.styleable.CustomTextView_fontName);
+            String fontName = typedArray.getString(R.styleable.CustomFont_fontName);
             if (null == fontName) {
                 fontName = "fontNotoSans";
             }

@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -16,6 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Iterator;
 
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.customview.CustomEditText;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.MessageBoard;
@@ -27,7 +27,7 @@ public class MessageBoardActivity extends BaseActivity {
 
     private CustomTextView mCTvMessage;
     private View mVHeader;
-    private EditText mEtMessage;
+    private CustomEditText mEtMessage;
 
     private MenuItem mMiEdit;
     private MenuItem mMiDone;

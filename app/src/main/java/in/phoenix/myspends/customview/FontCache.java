@@ -42,8 +42,6 @@ final class FontCache {
                     AppLog.d("FontCache", "Generating new typeface: NORMAL/Default");
                     return typeface;
             }
-
-
         }
         return null;
     }

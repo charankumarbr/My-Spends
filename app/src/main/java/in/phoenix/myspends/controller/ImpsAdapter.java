@@ -16,6 +16,7 @@ public class ImpsAdapter extends FragmentPagerAdapter {
 
     private Context mContext;
     private String[] mImps;
+
     public ImpsAdapter(Context context, FragmentManager supportFragmentManager) {
         super(supportFragmentManager);
         mContext = context;

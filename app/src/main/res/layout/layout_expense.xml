@@ -164,7 +164,7 @@
         android:id="@+id/le_tv_spends_end"
         android:layout_width="wrap_content"
         android:layout_height="?attr/actionBarSize"
-        android:text="Light at the end of tunnel."
+        android:text="@string/spends_list_end"
         android:gravity="center"
         android:textColor="@color/colorPrimary"
         android:layout_centerHorizontal="true"

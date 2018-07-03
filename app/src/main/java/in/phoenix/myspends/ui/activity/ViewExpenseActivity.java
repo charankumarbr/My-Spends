@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -217,7 +218,7 @@ public class ViewExpenseActivity extends BaseActivity {
                 AppDialog.dismissDialog();
                 AppUtil.showToast(R.string.expense_deleted_successfully);
                 setResult(RESULT_OK);
-                finish();
+                ActivityCompat.finishAfterTransition(ViewExpenseActivity.this);
             }
         }, new OnFailureListener() {
             @Override
@@ -246,6 +247,6 @@ public class ViewExpenseActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         setResult(mResultCode);
-        finish();
+        ActivityCompat.finishAfterTransition(ViewExpenseActivity.this);
     }
 }

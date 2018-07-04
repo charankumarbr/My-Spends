@@ -52,7 +52,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="in.phoenix.myspends.ui.activity.MainActivity" />
 
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -62,7 +62,7 @@
                     android:host="www.myspends.co.in"
                     android:path="/addSpend"
                     android:scheme="myspends" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
 
         <receiver android:name=".controller.HourTimeReceiver" />

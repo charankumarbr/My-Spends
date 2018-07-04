@@ -209,7 +209,7 @@
                     android:imeOptions="actionDone"
                     android:inputType="textCapSentences"
                     android:maxLength="80"
-                    android:minLines="2"
+                    android:maxLines="1"
                     android:textColor="@color/primary_text"
                     android:textSize="18sp"
                     app:fontName="@string/font_noto_sans"/>

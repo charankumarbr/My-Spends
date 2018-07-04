@@ -101,28 +101,33 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getIntent().hasExtra(AppConstants.Bundle.EXPENSE)) {
-            mExpense = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE);
-            isNew = false;
-
-        } else if (getIntent().hasExtra(AppConstants.Bundle.EXPENSE_DATE)) {
-            mExpenseDate = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE_DATE);
-            isNew = true;
+        mViaNotification = getIntent().getBooleanExtra(AppConstants.Bundle.VIA_NOTIFICATION, false);
+        AppLog.d(getClass().getSimpleName(), "Logged in Status:" + AppUtil.isUserLoggedIn() + ":: viaNotif" + mViaNotification);
+        if (!AppUtil.isUserLoggedIn()) {
+            finish();
 
         } else {
-            if (AppUtil.isUserLoggedIn()) {
-                mExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());
+            if (getIntent().hasExtra(AppConstants.Bundle.EXPENSE)) {
+                mExpense = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE);
+                isNew = false;
+
+            } else if (getIntent().hasExtra(AppConstants.Bundle.EXPENSE_DATE)) {
+                mExpenseDate = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE_DATE);
                 isNew = true;
 
             } else {
-                finish();
+                if (AppUtil.isUserLoggedIn()) {
+                    mExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());
+                    isNew = true;
+
+                } else {
+                    finish();
+                }
             }
+
+            setContentView(R.layout.activity_new_expense);
+            init();
         }
-
-        mViaNotification = getIntent().getBooleanExtra(AppConstants.Bundle.VIA_NOTIFICATION, false);
-
-        setContentView(R.layout.activity_new_expense);
-        init();
     }
 
     private void init() {
@@ -329,10 +334,10 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     private void closeActivity() {
         AppUtil.toggleKeyboard(mViewComplete, false);
         if (mViaNotification) {
-            Intent upIntent = NavUtils.getParentActivityIntent(this);
+            /*Intent upIntent = NavUtils.getParentActivityIntent(this);
             TaskStackBuilder.create(this)
                     .addNextIntentWithParentStack(upIntent)
-                    .startActivities();
+                    .startActivities();*/
             //startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
 
         } else {

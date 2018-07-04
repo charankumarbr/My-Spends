@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_screen">
 
-    <android.support.v7.widget.Toolbar
+    <!--<android.support.v7.widget.Toolbar
         android:id="@+id/ap_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -15,7 +15,12 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"/>-->
+    <include layout="@layout/layout_toolbar"
+        android:id="@+id/ap_toolbar"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
 
     <in.phoenix.myspends.customview.CustomTextView
         android:id="@+id/ap_tv_name_header"

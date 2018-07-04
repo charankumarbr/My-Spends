@@ -22,8 +22,8 @@
         <item name="android:windowExitAnimation">@anim/your_out_down</item>-->
 
         <!-- enable window content transitions -->
-        <!--<item name="android:windowContentTransitions">true</item>
-        <item name="android:windowActivityTransitions">true</item>-->
+        <item name="android:windowContentTransitions">true</item>
+        <!--<item name="android:windowActivityTransitions">true</item>-->
 
         <!-- specify enter and exit transitions -->
         <!--<item name="android:windowEnterTransition">@android:transition/slide_right</item>
@@ -56,6 +56,15 @@
     <style name="ToolbarSubtitleAppearance" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">#EFEFEF</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">@font/noto</item>
+    </style>
+
+    <style name="ToolbarTitleAppearance" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:fontFamily">@font/noto</item>
     </style>
 
 </resources>

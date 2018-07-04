@@ -4,29 +4,47 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <in.phoenix.myspends.customview.CustomTextView
-        android:id="@+id/lpt_textview_ptype_name"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:textSize="17sp"
-        android:layout_marginLeft="16dp"
-        android:layout_toLeftOf="@+id/lpt_switch_active"
-        android:layout_alignParentLeft="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:fontName="@string/font_noto_sans"
-        android:textColor="@color/primary_text"
-        android:text="Select Payment Type"/>
+        android:orientation="vertical"
+        android:layout_toStartOf="@+id/lpt_switch_active"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="10dp"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+
+        <in.phoenix.myspends.customview.CustomTextView
+            android:id="@+id/lpt_textview_ptype_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textSize="17sp"
+            app:fontName="@string/font_noto_sans"
+            android:textColor="@color/primary_text"
+            android:text="Select Payment Type"/>
+
+        <in.phoenix.myspends.customview.CustomTextView
+            android:id="@+id/lpt_textview_ptype_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"
+            app:fontName="@string/font_noto_sans"
+            android:textColor="@color/secondary_text"
+            android:text="Payment Type"/>
+    </LinearLayout>
 
     <Switch
         android:id="@+id/lpt_switch_active"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="16dp"/>
+        android:layout_marginEnd="16dp"/>
 
     <!--<in.charanbr.expensetracker.customview.CustomTextView
         android:id="@+id/lpt_ctextview_created"

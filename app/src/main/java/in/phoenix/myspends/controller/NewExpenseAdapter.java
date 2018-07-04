@@ -137,7 +137,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
             NewExpense expense = getItem(position);
             holder.tvAmount.setText(mCurrencySymbol + AppUtil.getStringAmount(String.valueOf(expense.getAmount())));
             holder.tvNote.setText(TextUtils.isEmpty(expense.getNote()) ? AppConstants.BLANK_NOTE_TEMPLATE : expense.getNote());
-            holder.tvPaymentTypeName.setText(mContext.getString(R.string.paid_by_) + " " + AppUtil.getPaidByForKey(expense.getPaymentTypeKey()));
+            holder.tvPaymentTypeName.setText(/*mContext.getString(R.string.paid_by_) + " " +*/ AppUtil.getPaidByForKey(expense.getPaymentTypeKey()));
             holder.tvAmount.setTag(expense.getId());
 
             if (null == mExpenseDate) {

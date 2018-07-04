@@ -58,4 +58,6 @@ public interface AppConstants {
         int NO_ACTION = -1;
         int FINISH = 1;
     }
+
+    long DELAY_EXIT = 2000;
 }

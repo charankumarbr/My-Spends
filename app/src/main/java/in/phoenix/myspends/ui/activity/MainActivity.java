@@ -72,37 +72,46 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.am_toolbar);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            toolbar.setTitleTextColor(getResources().getColor(android.R.color.white, null));
+        AppLog.d(getClass().getSimpleName(), "onCreate():");
+        if (!AppUtil.isUserLoggedIn()) {
+            Intent launchIntent = new Intent(MainActivity.this, LaunchDeciderActivity.class);
+            startActivity(launchIntent);
+            finish();
 
         } else {
-            toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
+            setContentView(R.layout.activity_main);
+
+            Toolbar toolbar = findViewById(R.id.am_toolbar);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                toolbar.setTitleTextColor(getResources().getColor(android.R.color.white, null));
+
+            } else {
+                toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
+            }
+
+            toolbar.setTitle(getString(R.string.app_name));
+            toolbar.setSubtitle(AppUtil.getUserShortName());
+            setSupportActionBar(toolbar);
+
+            mCalendarExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());
+
+            mLvExpense = findViewById(R.id.am_lv_spends);
+
+            Float dimen = getResources().getDimension(R.dimen.title_text_size);
+            String value = getString(R.string.value);
+            DisplayMetrics displayMetrics = MySpends.APP_CONTEXT.getResources().getDisplayMetrics();
+            AppLog.d("TestDensity", "Dimen:" + dimen + "::value:" + value + "::Density:" + displayMetrics.density + "::ScaledDensity:" + displayMetrics.scaledDensity);
+            Float typedValue = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 19, displayMetrics);
+            AppLog.d("TestDensity", "TypedValue:" + typedValue);
+            int dp20 = AppUtil.dpToPx(20);
+            AppLog.d("TestDensity", "Width:" + displayMetrics.widthPixels + "::20 dp:" + dp20);
+
+            mBpbLoading = findViewById(R.id.am_bpb_loading);
+            mPbLoading = findViewById(R.id.am_pb_loading);
+            mCTvNoSpends = findViewById(R.id.am_ctv_no_spends);
+            getExpenses();
         }
-
-        toolbar.setTitle(getString(R.string.app_name));
-        toolbar.setSubtitle(AppUtil.getUserShortName());
-        setSupportActionBar(toolbar);
-
-        mCalendarExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());
-
-        mLvExpense = findViewById(R.id.am_lv_spends);
-
-        Float dimen = getResources().getDimension(R.dimen.title_text_size);
-        String value = getString(R.string.value);
-        DisplayMetrics displayMetrics = MySpends.APP_CONTEXT.getResources().getDisplayMetrics();
-        AppLog.d("TestDensity", "Dimen:" + dimen + "::value:" + value + "::Density:" + displayMetrics.density + "::ScaledDensity:" + displayMetrics.scaledDensity);
-        Float typedValue = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 19, displayMetrics);
-        AppLog.d("TestDensity", "TypedValue:" + typedValue);
-        int dp20 = AppUtil.dpToPx(20);
-        AppLog.d("TestDensity", "Width:" + displayMetrics.widthPixels + "::20 dp:" + dp20);
-
-        mBpbLoading = findViewById(R.id.am_bpb_loading);
-        mPbLoading = findViewById(R.id.am_pb_loading);
-        mCTvNoSpends = findViewById(R.id.am_ctv_no_spends);
-        getExpenses();
     }
 
     private void getExpenses() {
@@ -397,7 +406,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
                 public void run() {
                     mIsExitFlag = true;
                 }
-            }, 2000);
+            }, AppConstants.DELAY_EXIT);
         }
     }
 

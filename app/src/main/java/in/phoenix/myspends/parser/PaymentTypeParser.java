@@ -92,13 +92,6 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
 
         }
 
-        return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-
         if (null == mPaymentTypes) {
             mPaymentTypes = new ArrayList<>();
         }
@@ -108,6 +101,13 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
             mAllPaymentTypes = new HashMap<>();
         }
         mAllPaymentTypes.put("0", PaymentType.getCashPaymentType());
+
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
 
         if (null != mListener) {
             mListener.onPaymentTypesParsed(mPaymentTypes, true);

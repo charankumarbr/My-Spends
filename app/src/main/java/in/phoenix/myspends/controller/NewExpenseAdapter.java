@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
+import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.model.CategoryChart;
@@ -107,6 +108,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
             holder.tvNote = view.findViewById(R.id.le_textview_payment_note);
             holder.tvPaymentTypeName = view.findViewById(R.id.le_textview_payment_type);
             holder.tvExpenseDate = view.findViewById(R.id.le_textview_date);
+            holder.tvExpCategoryName = view.findViewById(R.id.le_textview_category);
             holder.tvMonth = view.findViewById(R.id.le_tv_month);
             holder.vLayoutExpense = view.findViewById(R.id.le_layout_expense);
             holder.vRLayoutExpense = view.findViewById(R.id.le_rlayout_expense);
@@ -176,6 +178,9 @@ public final class NewExpenseAdapter extends BaseAdapter {
                     holder.tvMonth.setVisibility(View.GONE);
                 }
             }
+
+            holder.tvExpCategoryName.setText(expense.getCategoryId() > 0 ? MySpends.getCategoryName
+                    (expense.getCategoryId()) : AppConstants.BLANK_NOTE_TEMPLATE);
 
             if (null != mClickListener) {
                 holder.vLayoutExpense.setTag(position);
@@ -309,6 +314,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
         CustomTextView tvAmount;
         CustomTextView tvPaymentTypeName;
         CustomTextView tvExpenseDate;
+        CustomTextView tvExpCategoryName;
         CustomTextView tvMonth;
         View vLayoutExpense;
         View vRLayoutExpense;

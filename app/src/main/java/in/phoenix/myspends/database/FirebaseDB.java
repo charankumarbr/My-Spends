@@ -316,10 +316,15 @@ public final class FirebaseDB {
 
         com.google.firebase.firestore.Query query = fsSpendsRef.orderBy("expenseDate", com.google.firebase.firestore.Query.Direction.DESCENDING);
 
+        //int categoryId; - categoryId has to be passed to this function, user has to choose the category in the UI
         if (null != paidBy) {
             AppLog.d("FirebaseDB", "getFsSpends: PaidBy:" + paidBy);
             query = query.whereEqualTo("paymentTypeKey", paidBy);
         }
+
+        /*if (categoryId >= 0) {
+            query = query.whereEqualTo("categoryId", categoryId);
+        }*/
 
         query = query.whereGreaterThanOrEqualTo("expenseDate", fromMillis).whereLessThanOrEqualTo("expenseDate", toMillis);
 

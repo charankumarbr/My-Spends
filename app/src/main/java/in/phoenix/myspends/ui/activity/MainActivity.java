@@ -452,8 +452,8 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
         } else {
             if (isRefresh) {
                 mExpenseAdapter.setData(spends);
-                mLvExpense.setAdapter(mExpenseAdapter);
-                //mExpenseAdapter.notifyDataSetChanged();
+                //mLvExpense.setAdapter(mExpenseAdapter);
+                mExpenseAdapter.notifyDataSetChanged();
                 AppLog.d("MainActivity", "Spends: Refresh Done");
 
             } else if (mExpenseAdapter.isLoading()) {

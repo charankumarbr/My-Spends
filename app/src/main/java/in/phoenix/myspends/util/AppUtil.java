@@ -365,8 +365,8 @@ public final class AppUtil {
 
         } else {
             notificationIntent = new Intent(context, NewExpenseActivity.class);
-            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            /*notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);*/
             notificationIntent.putExtra(AppConstants.Bundle.EXPENSE_DATE, expenseDate);
             notificationIntent.putExtra(AppConstants.Bundle.VIA_NOTIFICATION, true);
             //taskStackBuilder.addParentStack(NewExpenseActivity.class);

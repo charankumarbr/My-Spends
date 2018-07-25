@@ -16,24 +16,24 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp">
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:id="@+id/lpt_textview_ptype_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:textSize="17sp"
-            app:fontName="@string/font_noto_sans"
+            app:fontFamily="@font/source_sans_pro"
             android:textColor="@color/primary_text"
             android:text="Select Payment Type"/>
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:id="@+id/lpt_textview_ptype_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:textSize="14sp"
             android:layout_marginTop="4dp"
-            app:fontName="@string/font_noto_sans"
+            app:fontFamily="@font/source_sans_pro"
             android:textColor="@color/secondary_text"
             android:text="Payment Type"/>
     </LinearLayout>
@@ -57,6 +57,6 @@
         android:layout_below="@+id/lpt_textview_ptype_name"
         android:textColor="@color/secondary_text"
         android:layout_marginBottom="10dp"
-        app:fontName="@string/font_noto_sans"/>-->
+        app:fontFamily="@font/source_sans_pro"/>-->
 
 </RelativeLayout>

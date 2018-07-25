@@ -6,16 +6,16 @@
     android:id="@+id/lfn_layout_complete"
     android:background="@android:color/white">
 
-    <in.phoenix.myspends.customview.CustomTextView
+    <TextView
         android:id="@+id/als_tv_app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
         android:textColor="@color/colorPrimary"
-        android:textSize="25sp"
+        android:textSize="32sp"
         android:layout_marginTop="35dp"
         android:layout_centerHorizontal="true"
-        app:fontName="@string/font_noto_sans"/>
+        app:fontFamily="@font/source_sans_pro"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -70,26 +70,26 @@
             android:id="@+id/als_abtn_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
             android:layout_gravity="center_horizontal"
+            app:fontFamily="@font/source_sans_pro"
+            android:paddingEnd="32dp"
+            android:paddingStart="32dp"
             android:text="@string/sign_in_with_google"
             android:textAllCaps="false"
-            android:paddingStart="32dp"
-            android:paddingEnd="32dp"
-            android:fontFamily="@font/open_sans"/>
+            android:textColor="@android:color/white"/>
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="Sign in to track your spends."
             android:textSize="15sp"
             android:textColor="@color/secondary_"
-            app:fontName="@string/font_noto_sans"
+            app:fontFamily="@font/source_sans_pro"
             android:layout_marginTop="6dp"/>
     </LinearLayout>
 
-    <in.phoenix.myspends.customview.CustomTextView
+    <TextView
         android:id="@+id/als_tv_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -98,6 +98,6 @@
         android:layout_marginBottom="10dp"
         android:textSize="13sp"
         android:textColor="@color/colorAccent"
-        app:fontName="@string/font_noto_sans"/>
+        app:fontFamily="@font/source_sans_pro"/>
 
 </RelativeLayout>

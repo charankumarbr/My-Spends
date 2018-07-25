@@ -144,11 +144,11 @@ public final class NewExpense implements Parcelable {
     }
 
     public boolean isAddedOnDiffDate() {
-        return new ExpenseDate(getExpenseDate()).isSameExpenseDate(getCreatedOn());
+        return !new ExpenseDate(getExpenseDate()).isSameExpenseDate(getCreatedOn());
     }
 
     public boolean isUpdated() {
-        return getCreatedOn() != getUpdatedOn();
+        return getCreatedOn() < (getUpdatedOn() - 1000l);
     }
 
 }

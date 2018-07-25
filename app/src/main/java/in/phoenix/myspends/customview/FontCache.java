@@ -22,13 +22,13 @@ final class FontCache {
             return fontMap.get(fontName + textStyle);
         }
 
-        if (fontName.equals(context.getString(R.string.font_noto_sans))) {
+        //if (fontName.equals(context.getString(R.string.font_noto_sans))) {
 
             Typeface typeface;
             switch (textStyle) {
                 case Typeface.BOLD:
                     //typeface = Typeface.createFromAsset(context.getAssets(), "fonts/notosans_bold.ttf");
-                    typeface = ResourcesCompat.getFont(context, R.font.notosans_bold);
+                    typeface = ResourcesCompat.getFont(context, R.font.source_sans_pro_bold);
                     fontMap.put(fontName + textStyle, typeface);
                     AppLog.d("FontCache", "Generating new typeface: BOLD");
                     return typeface;
@@ -41,12 +41,12 @@ final class FontCache {
                     }
 
                     //typeface = Typeface.createFromAsset(context.getAssets(), "fonts/notosans_regular.ttf");
-                    typeface = ResourcesCompat.getFont(context, R.font.notosans_regular);
+                    typeface = ResourcesCompat.getFont(context, R.font.source_sans_pro);
                     fontMap.put(fontName + textStyle, typeface);
                     AppLog.d("FontCache", "Generating new typeface: NORMAL/Default");
                     return typeface;
             }
-        }
-        return null;
+        /*}
+        return null;*/
     }
 }

@@ -15,7 +15,7 @@
         android:layout_marginRight="12dp"
         android:layout_marginTop="12dp">
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Payment Type"
@@ -40,10 +40,10 @@
                 android:hint="Payment Name"
                 android:textSize="16sp"
                 android:inputType="textCapWords"
-                app:fontName="@string/font_noto_sans"/>
+                app:fontFamily="@font/source_sans_pro"/>
         </android.support.design.widget.TextInputLayout>
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:id="@+id/fapt_tv_type_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
             android:textSize="15sp"
             android:layout_marginTop="16dp"
             android:layout_below="@+id/fapt_til_type_name"
-            app:fontName="@string/font_noto_sans"/>
+            app:fontFamily="@font/source_sans_pro"/>
 
         <RadioGroup
             android:id="@+id/fapt_radiogroup_type"
@@ -85,7 +85,8 @@
             android:paddingRight="16dp"
             android:layout_marginBottom="16dp"
             android:textColor="@android:color/white"
-            android:layout_below="@+id/fapt_radiogroup_type"/>
+            android:layout_below="@+id/fapt_radiogroup_type"
+            app:fontFamily="@font/source_sans_pro"/>
 
         <ProgressBar
             android:id="@+id/fapt_pb_loading"

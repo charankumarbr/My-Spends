@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -23,7 +24,6 @@ import java.util.ArrayList;
 import in.phoenix.myspends.BuildConfig;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.CurrencyListAdapter;
-import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.ui.dialog.AppDialog;
@@ -39,7 +39,7 @@ public class AppSetupActivity extends BaseActivity {
 
     private ListView mLvCurrencies;
 
-    private CustomTextView mCTvStatus;
+    private TextView mCTvStatus;
 
     private ProgressBar mPbLoading;
 

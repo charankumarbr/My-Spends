@@ -7,11 +7,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.model.PaymentMode;
 import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.util.AppLog;
@@ -147,9 +147,9 @@ public class PaymentTypeAdapter extends BaseAdapter {
     };*/
 
     class ViewHolder {
-        CustomTextView tvPaymentTypeName;
+        TextView tvPaymentTypeName;
         Switch swToggleActive;
-        CustomTextView tvPaymentTypeMode;
+        TextView tvPaymentTypeMode;
     }
 
     public interface OnStatusChangedListener {

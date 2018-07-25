@@ -6,12 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.model.Currency;
 
 /**
@@ -105,7 +105,7 @@ public final class CurrencyListAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        CustomTextView cTvCurrencyCode;
-        CustomTextView cTvCurrencyName;
+        TextView cTvCurrencyCode;
+        TextView cTvCurrencyName;
     }
 }

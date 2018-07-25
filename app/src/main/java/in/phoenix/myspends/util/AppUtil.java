@@ -481,7 +481,11 @@ public final class AppUtil {
     public static String getUserShortName() {
         String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName().trim();
         if (userName.contains(" ")) {
-            return userName.split("\\s+")[0];
+            String[] nameSplit = userName.split("\\s+");
+            if (nameSplit.length > 2) {
+                return nameSplit[0] + " " + nameSplit[1];
+            }
+            return nameSplit[0];
         }
         return userName;
     }

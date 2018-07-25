@@ -21,6 +21,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,7 +37,6 @@ import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.NewExpenseAdapter;
 import in.phoenix.myspends.customview.ButteryProgressBar;
-import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
@@ -63,7 +63,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
     //private String mLastKey = null;
 
-    private CustomTextView mCTvNoSpends = null;
+    private TextView mCTvNoSpends = null;
 
     private long mLastExpense = -1;
 

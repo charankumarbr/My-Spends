@@ -11,7 +11,7 @@
         android:layout_marginEnd="8dp"
         android:orientation="vertical">
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:id="@+id/fpb_ctextview_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
             android:layout_centerHorizontal="true"
             android:textSize="17sp"
             android:textColor="@color/colorPrimary"
-            app:fontName="@string/font_noto_sans" />
+            app:fontFamily="@font/source_sans_pro" />
 
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/fpb_fblayout_payment_mode"
@@ -45,7 +45,8 @@
             android:textSize="16sp"
             android:layout_marginBottom="16dp"
             android:layout_below="@+id/fpb_fblayout_payment_mode"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true"
+            app:fontFamily="@font/source_sans_pro"/>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/fpb_abutton_reset"
@@ -59,6 +60,7 @@
             android:textSize="16sp"
             android:layout_marginBottom="16dp"
             android:layout_below="@+id/fpb_fblayout_payment_mode"
-            android:layout_toStartOf="@+id/fpb_abutton_done"/>
+            android:layout_toStartOf="@+id/fpb_abutton_done"
+            app:fontFamily="@font/source_sans_pro"/>
     </RelativeLayout>
 </FrameLayout>

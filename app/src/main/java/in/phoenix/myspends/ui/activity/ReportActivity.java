@@ -18,6 +18,7 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,7 +34,6 @@ import java.util.Iterator;
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.NewExpenseAdapter;
-import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.CategoryChart;
 import in.phoenix.myspends.model.CategoryChartData;
@@ -61,9 +61,9 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
 
     private ListView mLvExpenses = null;
 
-    private CustomTextView mCTvFilter = null;
-    private CustomTextView mCTvMsg = null;
-    private CustomTextView mCTvPaidBy = null;
+    private TextView mCTvFilter = null;
+    private TextView mCTvMsg = null;
+    private TextView mCTvPaidBy = null;
 
     private NewExpenseAdapter mExpenseAdapter = null;
 

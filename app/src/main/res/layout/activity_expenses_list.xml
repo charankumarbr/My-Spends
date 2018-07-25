@@ -25,11 +25,11 @@
         android:visibility="gone"
         android:layout_below="@+id/ael_toolbar" />
 
-    <in.phoenix.myspends.customview.CustomTextView
+    <TextView
         android:id="@+id/ael_ctextview_no_expenses"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:fontName="@string/font_noto_sans"
+        app:fontFamily="@font/source_sans_pro"
         android:textSize="19sp"
         android:text="No expenses for this month."
         android:layout_marginStart="16dp"

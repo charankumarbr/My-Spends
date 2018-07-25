@@ -6,9 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.customview.CustomTextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,7 +54,7 @@ public class ImpFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_imp, container, false);
-        CustomTextView tvImp = view.findViewById(R.id.fi_tv_imp);
+        TextView tvImp = view.findViewById(R.id.fi_tv_imp);
         tvImp.setText(mParam1);
         return view;
     }

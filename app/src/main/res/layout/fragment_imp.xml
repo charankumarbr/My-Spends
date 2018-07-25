@@ -17,7 +17,7 @@
         app:cardMaxElevation="2dp"
         app:cardCornerRadius="8dp">
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:id="@+id/fi_tv_imp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

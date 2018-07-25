@@ -57,14 +57,14 @@
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">#EFEFEF</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:fontFamily">@font/notosans_regular</item>
+        <item name="android:fontFamily">@font/source_sans_pro</item>
     </style>
 
     <style name="ToolbarTitleAppearance" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">#FFFFFF</item>
-        <item name="android:fontFamily">@font/notosans_regular</item>
+        <item name="android:fontFamily">@font/source_sans_pro</item>
     </style>
 
 </resources>

@@ -40,7 +40,6 @@ import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.CustomSpinnerAdapter;
 import in.phoenix.myspends.customview.CustomCheckBox;
 import in.phoenix.myspends.customview.CustomEditText;
-import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.customview.MoneyValueFilter;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Category;
@@ -70,7 +69,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
     //private FlexboxLayout mFlexboxLayout = null;
 
-    private CustomTextView mCTvExpenseDate = null;
+    private TextView mCTvExpenseDate = null;
 
     private CustomEditText mTIEtAmount = null;
     private CustomEditText mTIEtNote = null;
@@ -140,7 +139,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         }
 
         mCTvExpenseDate = findViewById(R.id.ane_tv_expense_date);
-        CustomTextView cTvCurrencySymbol = findViewById(R.id.ane_ctextview_currency);
+        TextView cTvCurrencySymbol = findViewById(R.id.ane_ctextview_currency);
         cTvCurrencySymbol.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY));
 
         findViewById(R.id.ane_ctextview_add_new_payment).setOnClickListener(clickListener);
@@ -409,11 +408,12 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
             if (AppUtil.isConnected()) {
                 if (AppUtil.isUserLoggedIn()) {
                     final NewExpense newExpense = new NewExpense();
+                    final long timeMillis = System.currentTimeMillis();
                     newExpense.setAmount(AppUtil.getFloatAmount(mTIEtAmount.getText().toString()));
-                    newExpense.setCreatedOn(System.currentTimeMillis());
+                    newExpense.setCreatedOn(timeMillis);
                     newExpense.setExpenseDate(mExpenseDate.getTimeInMillis());
                     newExpense.setNote(mTIEtNote.getText().toString().trim().length() == 0 ? "" : mTIEtNote.getText().toString().trim());
-                    newExpense.setUpdatedOn(System.currentTimeMillis());
+                    newExpense.setUpdatedOn(timeMillis);
                     newExpense.setPaymentTypeKey(mSelectedTypeKey);
                     newExpense.setCategoryId(mSelectedCategoryId);
 

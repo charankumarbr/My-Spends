@@ -17,7 +17,7 @@
         android:background="@android:color/white"
         android:layout_below="@+id/ar_in_toolbar" />
 
-    <in.phoenix.myspends.customview.CustomTextView
+    <TextView
         android:id="@+id/ar_layout_filter"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -27,9 +27,9 @@
         android:textColor="@android:color/white"
         android:gravity="center"
         android:textSize="17sp"
-        app:fontName="@string/font_noto_sans">
+        app:fontFamily="@font/source_sans_pro">
 
-    </in.phoenix.myspends.customview.CustomTextView>
+    </TextView>
 
     <LinearLayout
         android:id="@+id/ar_layout_filter_options"
@@ -41,7 +41,7 @@
         android:weightSum="2"
         android:visibility="gone">
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:id="@+id/ar_ctextview_date"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -50,10 +50,10 @@
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="18sp"
-            app:fontName="@string/font_noto_sans"
+            app:fontFamily="@font/source_sans_pro"
             android:layout_weight="1"/>
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:id="@+id/ar_ctextview_paid_by"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -62,12 +62,12 @@
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="18sp"
-            app:fontName="@string/font_noto_sans"
+            app:fontFamily="@font/source_sans_pro"
             android:layout_marginStart="1dp"
             android:layout_weight="1"/>
     </LinearLayout>
 
-    <in.phoenix.myspends.customview.CustomTextView
+    <TextView
         android:id="@+id/ar_ctextview_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
         android:layout_marginEnd="16dp"
         android:gravity="center"
         android:textSize="17sp"
-        app:fontName="@string/font_noto_sans"
+        app:fontFamily="@font/source_sans_pro"
         android:textColor="@color/colorPrimary"/>
 
     <ProgressBar

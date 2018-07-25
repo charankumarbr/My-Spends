@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"/>
 
-    <in.phoenix.myspends.customview.CustomTextView
+    <TextView
         android:id="@+id/ap_tv_name_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,23 +30,23 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:textSize="15sp"
-        app:fontName="@string/font_noto_sans"
+        app:fontFamily="@font/source_sans_pro"
         android:textColor="@color/secondary_text"
         android:layout_below="@+id/ap_toolbar"/>
 
-    <in.phoenix.myspends.customview.CustomTextView
+    <TextView
         android:id="@+id/ap_tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginStart="16dp"
         android:textSize="17sp"
-        app:fontName="@string/font_noto_sans"
+        app:fontFamily="@font/source_sans_pro"
         android:textColor="@color/primary_text"
         android:maxLines="2"
         android:layout_below="@+id/ap_tv_name_header"/>
 
-    <in.phoenix.myspends.customview.CustomTextView
+    <TextView
         android:id="@+id/ap_tv_email_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,22 +54,22 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:textSize="15sp"
-        app:fontName="@string/font_noto_sans"
+        app:fontFamily="@font/source_sans_pro"
         android:textColor="@color/secondary_text"
         android:layout_below="@+id/ap_tv_name"/>
 
-    <in.phoenix.myspends.customview.CustomTextView
+    <TextView
         android:id="@+id/ap_tv_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginStart="16dp"
         android:textSize="17sp"
-        app:fontName="@string/font_noto_sans"
+        app:fontFamily="@font/source_sans_pro"
         android:textColor="@color/primary_text"
         android:layout_below="@+id/ap_tv_email_header"/>
 
-    <in.phoenix.myspends.customview.CustomTextView
+    <TextView
         android:id="@+id/ap_tv_currency_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -77,22 +77,22 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:textSize="15sp"
-        app:fontName="@string/font_noto_sans"
+        app:fontFamily="@font/source_sans_pro"
         android:textColor="@color/secondary_text"
         android:layout_below="@+id/ap_tv_email"/>
 
-    <in.phoenix.myspends.customview.CustomTextView
+    <TextView
         android:id="@+id/ap_tv_currency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginStart="16dp"
         android:textSize="17sp"
-        app:fontName="@string/font_noto_sans"
+        app:fontFamily="@font/source_sans_pro"
         android:textColor="@color/primary_text"
         android:layout_below="@+id/ap_tv_currency_header"/>
 
-    <in.phoenix.myspends.customview.CustomTextView
+    <TextView
         android:id="@+id/ap_tv_logout"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -101,7 +101,7 @@
         android:paddingEnd="16dp"
         android:textSize="15sp"
         android:layout_marginTop="20dp"
-        app:fontName="@string/font_noto_sans"
+        app:fontFamily="@font/source_sans_pro"
         android:textColor="@color/primary_text"
         android:gravity="center_vertical"
         android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
@@ -109,7 +109,7 @@
         android:background="#F5F5F5"
         android:layout_alignParentBottom="true"/>
 
-    <!--<in.phoenix.myspends.customview.CustomTextView
+    <!--<TextView
         android:id="@+id/ap_tv_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
         android:layout_marginBottom="6dp"
         android:textSize="13sp"
         android:textColor="@color/primary_text"
-        app:fontName="@string/font_noto_sans"
+        app:fontFamily="@font/source_sans_pro"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="2dp"
         android:visibility="gone"/>-->

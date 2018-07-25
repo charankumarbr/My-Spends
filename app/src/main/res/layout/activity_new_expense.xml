@@ -16,7 +16,7 @@
         android:layout_below="@+id/ane_toolbar"
         android:visibility="gone">
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:id="@+id/ane_ctextview_expense_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
             android:text="Expense on 11 April 2017"
             android:textColor="@color/colorPrimary"
             android:textSize="19sp"
-            app:fontName="@string/font_noto_sans" />
+            app:fontFamily="@font/source_sans_pro" />
 
         <ImageView
             android:id="@+id/ane_imageview_edit_date"
@@ -62,7 +62,7 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp">
 
-                <in.phoenix.myspends.customview.CustomTextView
+                <TextView
                     android:id="@+id/ane_tv_expense_date"
                     android:layout_width="180dp"
                     android:layout_height="40dp"
@@ -71,7 +71,7 @@
                     android:drawablePadding="12dp"
                     android:textSize="17sp"
                     android:textColor="@color/primary_text"
-                    app:fontName="@string/font_noto_sans"
+                    app:fontFamily="@font/source_sans_pro"
                     android:layout_alignParentStart="true"/>
 
                 <in.phoenix.myspends.customview.CustomCheckBox
@@ -82,7 +82,7 @@
                     android:textColor="@color/primary_text"
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
-                    app:fontName="@string/font_noto_sans"/>
+                    app:fontFamily="@font/source_sans_pro"/>
             </RelativeLayout>
 
             <View
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp">
 
-                <in.phoenix.myspends.customview.CustomTextView
+                <TextView
                     android:id="@+id/ane_ctextview_currency"
                     android:minWidth="30dp"
                     android:layout_width="wrap_content"
@@ -110,7 +110,7 @@
                     android:textColor="@android:color/white"
                     android:textSize="18sp"
                     android:gravity="center"
-                    app:fontName="@string/font_noto_sans" />
+                    app:fontFamily="@font/source_sans_pro" />
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/ane_til_expense_amount"
@@ -130,7 +130,7 @@
                         android:maxLines="1"
                         android:textColor="@color/primary_text"
                         android:textSize="18sp"
-                        app:fontName="@string/font_noto_sans"/>
+                        app:fontFamily="@font/source_sans_pro"/>
                 </android.support.design.widget.TextInputLayout>
             </RelativeLayout>
 
@@ -139,18 +139,18 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone">
 
-                <in.phoenix.myspends.customview.CustomTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/paid_by_"
                     android:textColor="@color/primary_text"
                     android:textSize="17sp"
-                    app:fontName="@string/font_noto_sans"
+                    app:fontFamily="@font/source_sans_pro"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"/>
 
-                <in.phoenix.myspends.customview.CustomTextView
+                <TextView
                     android:id="@+id/ane_ctextview_add_new_payment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -160,7 +160,7 @@
                     android:text="@string/add_new"
                     android:padding="6dp"
                     android:gravity="center_vertical"
-                    app:fontName="@string/font_noto_sans"
+                    app:fontFamily="@font/source_sans_pro"
                     android:textSize="16sp"
                     android:textColor="@color/primary_text"
                     android:visibility="gone"/>
@@ -174,14 +174,14 @@
                 android:dropDownSelector="@color/colorAccent"
                 android:spinnerMode="dialog"/>
 
-            <in.phoenix.myspends.customview.CustomTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/category"
                 android:textColor="@color/primary_text"
                 android:textSize="17sp"
-                app:fontName="@string/font_noto_sans"
+                app:fontFamily="@font/source_sans_pro"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:visibility="gone"/>
@@ -212,7 +212,7 @@
                     android:maxLines="1"
                     android:textColor="@color/primary_text"
                     android:textSize="18sp"
-                    app:fontName="@string/font_noto_sans"/>
+                    app:fontFamily="@font/source_sans_pro"/>
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
     </ScrollView>

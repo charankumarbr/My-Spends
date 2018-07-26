@@ -1,6 +1,7 @@
 package in.phoenix.myspends.customview;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.support.v4.content.res.ResourcesCompat;
 
@@ -16,7 +17,8 @@ final class FontCache {
 
     private static final HashMap<String, Typeface> fontMap = new HashMap<>();
 
-    public static Typeface getFont(Context context, String fontName, int textStyle) {
+    public static Typeface getFont(Context context, String fontName, int textStyle) throws
+            Resources.NotFoundException {
 
         if (fontMap.containsKey(fontName + textStyle)) {
             return fontMap.get(fontName + textStyle);

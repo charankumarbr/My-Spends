@@ -38,7 +38,7 @@
         android:textSize="15sp"
         android:visibility="gone"/>
 
-    <in.phoenix.myspends.customview.CustomEditText
+    <EditText
         android:id="@+id/amb_et_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

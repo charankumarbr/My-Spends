@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,8 +29,6 @@ import java.util.Calendar;
 
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.CustomSpinnerAdapter;
-import in.phoenix.myspends.customview.CustomEditText;
-import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.PaymentType;
@@ -50,8 +50,8 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
     private TextInputLayout mTilFromDate;
     private TextInputLayout mTilToDate;
 
-    private CustomEditText mTietFromDate;
-    private CustomEditText mTietToDate;
+    private TextInputEditText mTietFromDate;
+    private TextInputEditText mTietToDate;
 
     private long mFromMillis = 0;
     private long mToMillis = 0;
@@ -220,7 +220,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
                 datePickerDialog.getDatePicker().setMaxDate(currentMillis);
                 LayoutInflater inflater = LayoutInflater.from(mContext);
                 View customTitleView = inflater.inflate(R.layout.layout_date_title, null);
-                ((CustomTextView) customTitleView).setText(R.string.select_from_date);
+                ((TextView) customTitleView).setText(R.string.select_from_date);
                 datePickerDialog.setCustomTitle(customTitleView);
                 datePickerDialog.show();
 
@@ -252,7 +252,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
                         ? currentMillis : mFromExpenseDate.reportToDateTimeInMillis());
                 LayoutInflater inflater = LayoutInflater.from(mContext);
                 View customTitleView = inflater.inflate(R.layout.layout_date_title, null);
-                ((CustomTextView) customTitleView).setText(R.string.select_to_date);
+                ((TextView) customTitleView).setText(R.string.select_to_date);
                 datePickerDialog.setCustomTitle(customTitleView);
                 datePickerDialog.show();
 

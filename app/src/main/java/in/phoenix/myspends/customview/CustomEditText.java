@@ -1,6 +1,7 @@
 package in.phoenix.myspends.customview;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.support.design.widget.TextInputLayout;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.view.ViewParent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
+
+import com.crashlytics.android.Crashlytics;
 
 import in.phoenix.myspends.R;
 
@@ -47,7 +50,12 @@ public final class CustomEditText extends AppCompatEditText {
                         "textStyle", Typeface.NORMAL);
             }
             //AppLog.d("CustomEditText", fontName + "::" + textStyle + "::" + getText());
-            setTypeface(FontCache.getFont(getContext(), fontName, textStyle));
+            try {
+                setTypeface(FontCache.getFont(getContext(), fontName, textStyle));
+
+            } catch (Resources.NotFoundException e) {
+                Crashlytics.logException(e);
+            }
 
             typedArray.recycle();
         }

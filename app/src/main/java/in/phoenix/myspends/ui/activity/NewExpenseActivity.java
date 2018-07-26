@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -38,8 +40,6 @@ import java.util.Calendar;
 
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.CustomSpinnerAdapter;
-import in.phoenix.myspends.customview.CustomCheckBox;
-import in.phoenix.myspends.customview.CustomEditText;
 import in.phoenix.myspends.customview.MoneyValueFilter;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Category;
@@ -71,10 +71,10 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
     private TextView mCTvExpenseDate = null;
 
-    private CustomEditText mTIEtAmount = null;
-    private CustomEditText mTIEtNote = null;
+    private TextInputEditText mTIEtAmount = null;
+    private TextInputEditText mTIEtNote = null;
 
-    private CustomCheckBox mCbAddAnotherExpense;
+    private CheckBox mCbAddAnotherExpense;
 
     private String mSelectedTypeKey = null;
     private int mOkStatus = RESULT_CANCELED;

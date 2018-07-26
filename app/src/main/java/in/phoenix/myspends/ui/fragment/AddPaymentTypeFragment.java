@@ -2,6 +2,7 @@ package in.phoenix.myspends.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -21,7 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.customview.CustomEditText;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.PaymentMode;
 import in.phoenix.myspends.model.PaymentType;
@@ -38,7 +38,7 @@ public class AddPaymentTypeFragment extends DialogFragment {
 
     private Context mContext;
 
-    private CustomEditText mTIETTypeName = null;
+    private TextInputEditText mTIETTypeName = null;
 
     private TextInputLayout mTILTypeName = null;
 

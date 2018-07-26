@@ -1,10 +1,13 @@
 package in.phoenix.myspends.customview;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
+
+import com.crashlytics.android.Crashlytics;
 
 import in.phoenix.myspends.R;
 
@@ -41,7 +44,12 @@ public final class CustomTextView extends AppCompatTextView {
                         "textStyle", Typeface.NORMAL);
             }
             //AppLog.d("CustomTextView", fontName + "::" + textStyle);
-            setTypeface(FontCache.getFont(getContext(), fontName, textStyle));
+            try {
+                setTypeface(FontCache.getFont(getContext(), fontName, textStyle));
+
+            }  catch (Resources.NotFoundException e) {
+                Crashlytics.logException(e);
+            }
 
             typedArray.recycle();
         }

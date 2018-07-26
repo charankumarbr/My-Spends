@@ -32,7 +32,7 @@
             android:layout_toStartOf="@+id/fdp_imageview_from_date"
             android:layout_marginEnd="12dp">
 
-            <in.phoenix.myspends.customview.CustomEditText
+            <android.support.design.widget.TextInputEditText
                 android:id="@+id/fdp_tiet_from_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
             android:layout_toStartOf="@+id/fdp_imageview_to_date"
             android:layout_marginEnd="12dp">
 
-            <in.phoenix.myspends.customview.CustomEditText
+            <android.support.design.widget.TextInputEditText
                 android:id="@+id/fdp_tiet_to_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

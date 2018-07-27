@@ -38,6 +38,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UnknownFormatConversionException;
+import java.util.concurrent.TimeUnit;
 
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
@@ -482,11 +483,33 @@ public final class AppUtil {
         String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName().trim();
         if (userName.contains(" ")) {
             String[] nameSplit = userName.split("\\s+");
-            if (nameSplit.length > 2) {
+            /*if (nameSplit.length > 2) {
                 return nameSplit[0] + " " + nameSplit[1];
-            }
+            }*/
             return nameSplit[0];
         }
         return userName;
+    }
+
+    public static String getGreeting() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dateformat = new SimpleDateFormat("HH");
+        String datetime = dateformat.format(c.getTime());
+        AppLog.d("AppUtil", "getGreeting: time:" + datetime);
+        int hour = Integer.valueOf(datetime);
+        if (hour > 19 || hour < 5) {
+            return "Night, ";
+
+        } else if (hour > 4 && hour < 12) {
+            return "Morning, ";
+
+        } else if (hour > 11 && hour < 16) {
+            return "Afternoon, ";
+        }
+        return "Evening, ";
+    }
+
+    public static long daysDiff(long fromMillis, long toMillis) {
+        return TimeUnit.MILLISECONDS.toDays(toMillis - fromMillis);
     }
 }

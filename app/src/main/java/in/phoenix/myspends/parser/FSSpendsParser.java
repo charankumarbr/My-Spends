@@ -29,15 +29,17 @@ public final class FSSpendsParser extends AsyncTask<Iterator<DocumentSnapshot>, 
 
         if (null != iterators && iterators.length > 0) {
 
-            Iterator<DocumentSnapshot> documentSnapshots = iterators[0];
-            if (null != documentSnapshots) {
-                while (documentSnapshots.hasNext()) {
-                    DocumentSnapshot documentSnapshot = documentSnapshots.next();
-                    AppLog.d("FSSpendsParser", "doInBg: Id:" + documentSnapshot.getId());
-                    NewExpense newExpense = documentSnapshot.toObject(NewExpense.class);
-                    newExpense.setId(documentSnapshot.getId());
-                    AppLog.d("FSSpendsParser", "Spend:" + newExpense.toString());
-                    mSpends.add(newExpense);
+            for (int index = 0; index < iterators.length; index++) {
+                Iterator<DocumentSnapshot> documentSnapshots = iterators[index];
+                if (null != documentSnapshots) {
+                    while (documentSnapshots.hasNext()) {
+                        DocumentSnapshot documentSnapshot = documentSnapshots.next();
+                        AppLog.d("FSSpendsParser", "doInBg: Id:" + documentSnapshot.getId());
+                        NewExpense newExpense = documentSnapshot.toObject(NewExpense.class);
+                        newExpense.setId(documentSnapshot.getId());
+                        AppLog.d("FSSpendsParser", "Spend:" + newExpense.toString());
+                        mSpends.add(newExpense);
+                    }
                 }
             }
         }

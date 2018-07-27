@@ -3,9 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menu_filter"
+        android:title="@string/filter"
+        app:showAsAction="always"
+        android:visible="true"
+        android:icon="@drawable/ic_filter_list_white_24dp"/>
+
+    <item
         android:id="@+id/menu_get_total"
         android:title="@string/total"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:visible="false"
         android:icon="@drawable/ic_total_white_24dp"/>
 

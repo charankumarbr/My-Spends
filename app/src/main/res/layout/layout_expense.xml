@@ -7,14 +7,15 @@
     <RelativeLayout
         android:id="@+id/le_rlayout_expense"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
 
         <TextView
             android:id="@+id/le_tv_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:textSize="23sp"
+            android:textSize="21sp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="12dp"
             android:layout_marginLeft="12dp"

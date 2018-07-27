@@ -1,12 +1,15 @@
 package in.phoenix.myspends.model;
 
+import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Charan.Br on 4/9/2018.
  */
 
-public final class CategoryChartData {
+public final class CategoryChartData extends ExpandableGroup<NewExpense> {
 
     private int categoryId;
 
@@ -15,6 +18,10 @@ public final class CategoryChartData {
     private ArrayList<NewExpense> expenses;
 
     private Float categoryTotal;
+
+    public CategoryChartData(String title, List<NewExpense> items) {
+        super(title, items);
+    }
 
     public int getCategoryId() {
         return categoryId;

@@ -189,9 +189,15 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
         public void onClick(View v) {
             if (v.getId() == R.id.ff_abutton_view_spends) {
                 if (isDateSelected()) {
-                    if (null != mListener) {
-                        mListener.onFilterChanged(mFromMillis, mToMillis, mSelectedPaymentKey);
-                        dismissAllowingStateLoss();
+                    if (AppUtil.daysDiff(mFromMillis, mToMillis) <= 60) {
+                        if (null != mListener) {
+                            AppLog.d("FilterFragment", "clickListener: DaysDiff:" + AppUtil.daysDiff(mFromMillis, mToMillis));
+                            mListener.onFilterChanged(mFromMillis, mToMillis, mSelectedPaymentKey);
+                            dismissAllowingStateLoss();
+                        }
+
+                    } else {
+                        AppUtil.showToast("Maximum date range allowed is 60 days.");
                     }
                 }
             } else if (v.getId() == R.id.ff_imageview_from_date) {

@@ -12,8 +12,6 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +31,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import in.phoenix.myspends.BuildConfig;
-import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.NewExpenseAdapter;
 import in.phoenix.myspends.customview.ButteryProgressBar;
@@ -68,6 +65,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
     private long mLastExpense = -1;
 
     private boolean mIsExitFlag = true;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +80,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
         } else {
             setContentView(R.layout.activity_main);
 
-            Toolbar toolbar = findViewById(R.id.am_toolbar);
+            toolbar = findViewById(R.id.am_toolbar);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 toolbar.setTitleTextColor(getResources().getColor(android.R.color.white, null));
 
@@ -91,27 +89,32 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             }
 
             toolbar.setTitle(getString(R.string.app_name));
-            toolbar.setSubtitle(AppUtil.getUserShortName());
             setSupportActionBar(toolbar);
 
             mCalendarExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());
 
             mLvExpense = findViewById(R.id.am_lv_spends);
 
-            Float dimen = getResources().getDimension(R.dimen.title_text_size);
+            /*Float dimen = getResources().getDimension(R.dimen.title_text_size);
             String value = getString(R.string.value);
             DisplayMetrics displayMetrics = MySpends.APP_CONTEXT.getResources().getDisplayMetrics();
             AppLog.d("TestDensity", "Dimen:" + dimen + "::value:" + value + "::Density:" + displayMetrics.density + "::ScaledDensity:" + displayMetrics.scaledDensity);
             Float typedValue = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 19, displayMetrics);
             AppLog.d("TestDensity", "TypedValue:" + typedValue);
             int dp20 = AppUtil.dpToPx(20);
-            AppLog.d("TestDensity", "Width:" + displayMetrics.widthPixels + "::20 dp:" + dp20);
+            AppLog.d("TestDensity", "Width:" + displayMetrics.widthPixels + "::20 dp:" + dp20);*/
 
             mBpbLoading = findViewById(R.id.am_bpb_loading);
             mPbLoading = findViewById(R.id.am_pb_loading);
             mCTvNoSpends = findViewById(R.id.am_ctv_no_spends);
             getExpenses();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        toolbar.setSubtitle(AppUtil.getGreeting() + AppUtil.getUserShortName());
     }
 
     private void getExpenses() {
@@ -315,8 +318,8 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
         AlertDialog.Builder aboutappDialog = new AlertDialog.Builder(MainActivity.this);
         //aboutappDialog.setTitle(getString(R.string.about) + " " + getString(R.string.app_name));
         aboutappDialog.setTitle(getString(R.string.app_name));
-        aboutappDialog.setMessage("Version: " + BuildConfig.VERSION_NAME + "\n\n"
-                + getString(R.string.about_app_msg));
+        aboutappDialog.setMessage("Version: " + BuildConfig.VERSION_NAME + " (" +
+                BuildConfig.VERSION_CODE + ")" + "\n\n" + getString(R.string.about_app_msg));
         aboutappDialog.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

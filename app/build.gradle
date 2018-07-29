@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
-apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
@@ -9,9 +8,9 @@ android {
     defaultConfig {
         applicationId "in.phoenix.myspends"
         minSdkVersion 21
-        targetSdkVersion 25
-        versionCode 13
-        versionName "0.8.11"
+        targetSdkVersion 26
+        versionCode 14
+        versionName "0.8.12"
         resConfigs "en"
         //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -19,6 +18,7 @@ android {
     buildTypes {
         release {
             debuggable false
+            shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -26,36 +26,37 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
-    compile "com.android.support:design:$rootProject.supportLibraryVersion"
-    compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
-    compile "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:design:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
 
-    compile "com.google.android:flexbox:$rootProject.flexboxVersion"
+    implementation "com.google.android:flexbox:$rootProject.flexboxVersion"
 
     //-- firebase crashlytics --//
-    compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.3@aar') {
         transitive = true
     }
     //-- firebase --//
-    compile "com.google.firebase:firebase-core:$rootProject.firebaseVersion"
+    implementation "com.google.firebase:firebase-core:$rootProject.firebaseVersion"
     //-- firebase auth --//
-    compile "com.google.android.gms:play-services-auth:$rootProject.gmsVersion"
-    compile "com.firebaseui:firebase-ui-auth:$rootProject.firebaseUIVersion"
+    implementation "com.google.android.gms:play-services-auth:$rootProject.gmsVersion"
+    implementation "com.firebaseui:firebase-ui-auth:$rootProject.firebaseUIVersion"
     //-- firebase realtime database --//
-    compile "com.google.firebase:firebase-database:$rootProject.firebaseVersion"
+    implementation "com.google.firebase:firebase-database:$rootProject.firebaseVersion"
     //-- firebase firestore --//
-    compile "com.google.firebase:firebase-firestore:$rootProject.firebaseVersion"
+    implementation "com.google.firebase:firebase-firestore:$rootProject.firebaseVersion"
     //-- firebase performance --//
-    compile "com.google.firebase:firebase-perf:$rootProject.firebaseVersion"
+    implementation "com.google.firebase:firebase-perf:$rootProject.firebaseVersion"
 
     //-- expandable recycler view --//
-    compile 'com.thoughtbot:expandablerecyclerview:1.3'
+    implementation 'com.thoughtbot:expandablerecyclerview:1.3'
 
     /*androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })*/
     //testCompile 'junit:junit:4.12'
 }
+apply plugin: 'com.google.gms.google-services'

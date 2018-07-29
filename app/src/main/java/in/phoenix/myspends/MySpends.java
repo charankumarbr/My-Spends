@@ -50,8 +50,8 @@ public class MySpends extends Application {
         AppPref.getInstance().putLong(AppConstants.PrefConstants.LAST_APP_OPENED_ON,
                 System.currentTimeMillis());
         if (AppUtil.isUserLoggedIn()) {
-            fetchCategories();
             Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            fetchCategories();
         }
         initNotification();
         //AppUtil.createNotification(APP_CONTEXT, AppUtil.convertToDate(Calendar.getInstance().getTimeInMillis()));

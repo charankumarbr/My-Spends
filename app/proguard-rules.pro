@@ -20,6 +20,9 @@
 -keepattributes Signature
 -keepattributes *Annotation*
 
+-keepattributes SourceFile,LineNumberTable
+-keep public class * extends java.lang.Exception
+
 -keep public class * extends android.support.v7.app.AppCompatActivity
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
@@ -68,4 +71,5 @@
 # rule to test the
 -keep class android.util.Log
 
-
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**

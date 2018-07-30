@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatButton;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.ImpsAdapter;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;
+import in.phoenix.myspends.util.AppAnalytics;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
@@ -110,6 +112,10 @@ public class LaunchDeciderActivity extends BaseActivity {
                         AppLog.d("Login", "Email is verified!");
                     }
 
+                    Bundle eventBundle = new Bundle();
+                    eventBundle.putString("user_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                    AppAnalytics.init().logEvent("login_success", eventBundle);
+
                     //-- move fetch categories to FirebaseDB class --//
                     MySpends.fetchCategories();
 
@@ -124,6 +130,9 @@ public class LaunchDeciderActivity extends BaseActivity {
                 } else {
                     //-- Sign in failed, check response for error code --//
                     AppLog.d("Login", "Failed:" + response.getErrorCode());
+                    Bundle eventBundle = new Bundle();
+                    eventBundle.putInt("error_code", response.getErrorCode());
+                    AppAnalytics.init().logEvent("login_failed", eventBundle);
                     AppUtil.showToast("Unable to login. Please try again later.");
                 }
             }
@@ -168,6 +177,7 @@ public class LaunchDeciderActivity extends BaseActivity {
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                     AppLog.d("LaunchDecider", "Currency: DatabaseError" + databaseError.getMessage());
+                    Crashlytics.log("Code:" + databaseError.getCode() + "::Message:" + databaseError.getMessage());
                     mPbLoading.setVisibility(View.GONE);
                     startActivity(new Intent(LaunchDeciderActivity.this, AppSetupActivity.class));
                     finish();

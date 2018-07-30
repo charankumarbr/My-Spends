@@ -429,7 +429,10 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                             AppUtil.showToast("Expense tracked!");
                             mOkStatus = RESULT_OK;
 
-                            AppAnalytics.init().logEvent("added_expense", new Bundle());
+                            Bundle eventBundle = new Bundle();
+                            eventBundle.putBoolean("is_another", mCbAddAnotherExpense.isChecked());
+                            eventBundle.putInt("category_id", newExpense.getCategoryId());
+                            AppAnalytics.init().logEvent("added_expense", eventBundle);
 
                             if (!mCbAddAnotherExpense.isChecked()) {
                                 AppUtil.toggleKeyboard(mViewComplete, false);

@@ -254,8 +254,13 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
                 }
                 datePickerDialog.getDatePicker().setMinDate(mFromMillis);
                 long currentMillis = System.currentTimeMillis();
-                datePickerDialog.getDatePicker().setMaxDate((currentMillis < mFromExpenseDate.reportToDateTimeInMillis())
-                        ? currentMillis : mFromExpenseDate.reportToDateTimeInMillis());
+                if (null != mFromExpenseDate) {
+                    //-- not sure how the NPE crash came for mFromExpenseDate --//
+                    datePickerDialog.getDatePicker().setMaxDate((currentMillis < mFromExpenseDate.reportToDateTimeInMillis())
+                            ? currentMillis : mFromExpenseDate.reportToDateTimeInMillis());
+                } else {
+                    datePickerDialog.getDatePicker().setMaxDate(currentMillis);
+                }
                 LayoutInflater inflater = LayoutInflater.from(mContext);
                 View customTitleView = inflater.inflate(R.layout.layout_date_title, null);
                 ((TextView) customTitleView).setText(R.string.select_to_date);

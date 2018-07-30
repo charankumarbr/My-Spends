@@ -26,6 +26,7 @@ import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.PaymentMode;
 import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.ui.dialog.AppDialog;
+import in.phoenix.myspends.util.AppAnalytics;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppUtil;
 
@@ -128,7 +129,7 @@ public class AddPaymentTypeFragment extends DialogFragment {
         private void addPaymentType() {
             String paymentTypeName = mTIETTypeName.getText().toString();
 
-            PaymentType paymentType = new PaymentType();
+            final PaymentType paymentType = new PaymentType();
             paymentType.setName(paymentTypeName);
             paymentType.setCreatedOn(System.currentTimeMillis());
             paymentType.setPaymentModeId(mSelectedPaymentModeId);
@@ -149,6 +150,10 @@ public class AddPaymentTypeFragment extends DialogFragment {
                             if (null == databaseError) {
                                 AppLog.d("AddNew", "onComplete 3");
                                 AppLog.d("AddNew", "Key:" + databaseReference.getKey());
+                                Bundle eventBundle = new Bundle();
+                                eventBundle.putInt("payment_mode_id", paymentType.getPaymentModeId());
+                                eventBundle.putString("payment_type", paymentType.getName());
+                                AppAnalytics.init().logEvent("added_payment_type", eventBundle);
                                 if (null != mListener) {
                                     AppLog.d("AddNew", "onComplete 4");
                                     mListener.onPaymentTypeAdded();

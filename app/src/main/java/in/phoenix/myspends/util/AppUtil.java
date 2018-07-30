@@ -415,7 +415,7 @@ public final class AppUtil {
             }
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "reminder")
                 .setSmallIcon(R.drawable.ic_notification)
                 .setColor(context.getResources().getColor(R.color.colorPrimary))
                 .setContentTitle(contentTitle)
@@ -423,7 +423,6 @@ public final class AppUtil {
                 .setContentText(contentText)
                 .setSound(alarmSound)
                 .setAutoCancel(true)
-                .setWhen(when)
                 .setContentIntent(pendingIntent)
                 .setVibrate(new long[]{1000, 1000, 1000});
 

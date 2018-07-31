@@ -14,9 +14,7 @@
         app:cardPreventCornerOverlap="true"
         app:cardElevation="2dp"
         android:layout_marginStart="6dp"
-        android:layout_marginLeft="6dp"
         android:layout_marginEnd="6dp"
-        android:layout_marginRight="6dp"
         app:cardBackgroundColor="@android:color/white"
         android:visibility="visible">
 
@@ -24,8 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp">
+            android:layout_marginStart="10dp">
 
             <TextView
                 android:id="@+id/lre_textview_payment_note"
@@ -65,8 +62,7 @@
                 android:text="300.00"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginEnd="10dp"/>
 
             <TextView
                 android:id="@+id/lre_textview_date"
@@ -80,8 +76,7 @@
                 android:layout_below="@id/lre_textview_amount"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginEnd="10dp"/>
 
             <TextView
                 android:id="@+id/lre_textview_category"

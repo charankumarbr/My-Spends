@@ -70,5 +70,9 @@
         <item>All your spends are stored and synced in a remote secured channel.</item>
     </string-array>
 
-    <string name="confirm_exit_app">Press back again to exit</string>
+    <string name="confirm_exit_app">Press again to exit</string>
+    <string name="spends_list_end">Light at the end of tunnel</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="filter">Filter</string>
+    <string name="groupby_category">Groupby Spends Category</string>
 </resources>

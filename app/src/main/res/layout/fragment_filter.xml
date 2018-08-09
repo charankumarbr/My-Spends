@@ -17,7 +17,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp">
 
-            <in.phoenix.myspends.customview.CustomTextView
+            <TextView
                 android:id="@+id/ff_ctextview_date_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
                 android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:textColor="@color/colorPrimary"
-                app:fontName="@string/font_noto_sans" />
+                app:fontFamily="@font/source_sans_pro" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/ff_til_from_date"
@@ -36,7 +36,7 @@
                 android:layout_toStartOf="@+id/ff_imageview_from_date"
                 android:layout_marginEnd="12dp">
 
-                <in.phoenix.myspends.customview.CustomEditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/ff_tiet_from_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -44,7 +44,9 @@
                     android:hint="From"
                     android:textColor="@color/primary_text"
                     android:inputType="none"
-                    app:fontName="@string/font_noto_sans"/>
+                    app:fontFamily="@font/source_sans_pro"
+                    android:gravity="start"
+                    android:textAlignment="viewStart"/>
             </android.support.design.widget.TextInputLayout>
 
             <ImageView
@@ -66,7 +68,7 @@
                 android:layout_toStartOf="@+id/ff_imageview_to_date"
                 android:layout_marginEnd="12dp">
 
-                <in.phoenix.myspends.customview.CustomEditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/ff_tiet_to_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -74,7 +76,9 @@
                     android:hint="To"
                     android:textColor="@color/primary_text"
                     android:inputType="none"
-                    app:fontName="@string/font_noto_sans"/>
+                    app:fontFamily="@font/source_sans_pro"
+                    android:gravity="start"
+                    android:textAlignment="viewStart"/>
             </android.support.design.widget.TextInputLayout>
 
             <ImageView
@@ -87,7 +91,7 @@
                 android:layout_marginTop="30dp"
                 android:padding="6dp" />
 
-            <in.phoenix.myspends.customview.CustomTextView
+            <TextView
                 android:id="@+id/ff_ctextview_paidby_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -95,19 +99,8 @@
                 android:layout_marginTop="20dp"
                 android:textSize="16sp"
                 android:textColor="@color/colorPrimary"
-                app:fontName="@string/font_noto_sans"
+                app:fontFamily="@font/source_sans_pro"
                 android:layout_below="@+id/ff_imageview_to_date"/>
-
-            <!--<com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/ff_fblayout_payment_mode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:flexDirection="row"
-                app:alignItems="center"
-                app:flexWrap="wrap"
-                app:alignContent="center"
-                android:layout_marginTop="16dp"
-                android:layout_below="@+id/ff_ctextview_paidby_header"/>-->
 
             <Spinner
                 android:id="@+id/ff_spnr_paid_by"
@@ -117,6 +110,18 @@
                 android:dropDownSelector="@color/colorAccent"
                 android:spinnerMode="dialog"
                 android:layout_below="@+id/ff_ctextview_paidby_header"/>
+
+
+            <CheckBox
+                android:id="@+id/ff_checkbox_group_category"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="@string/groupby_category"
+                android:textColor="@color/primary_text"
+                app:fontFamily="@font/source_sans_pro"
+                android:layout_below="@+id/ff_spnr_paid_by"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="12dp"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/ff_abutton_reset"
@@ -128,22 +133,24 @@
                 android:textColor="@color/colorAccent"
                 android:layout_marginEnd="12dp"
                 android:layout_marginBottom="16dp"
-                android:layout_below="@+id/ff_spnr_paid_by"
+                android:layout_below="@+id/ff_checkbox_group_category"
                 android:layout_toStartOf="@+id/ff_abutton_view_spends"
-                style="@style/Widget.AppCompat.Button.Borderless"/>
+                style="@style/Widget.AppCompat.Button.Borderless"
+                app:fontFamily="@font/source_sans_pro"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/ff_abutton_view_spends"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ff_spnr_paid_by"
+                android:layout_below="@+id/ff_checkbox_group_category"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="16dp"
                 android:text="View My Spends"
                 android:textAllCaps="true"
                 android:textColor="@color/colorAccent"
                 android:layout_marginBottom="16dp"
-                style="@style/Widget.AppCompat.Button.Borderless"/>
+                style="@style/Widget.AppCompat.Button.Borderless"
+                app:fontFamily="@font/source_sans_pro"/>
         </RelativeLayout>
     </ScrollView>
 </FrameLayout>

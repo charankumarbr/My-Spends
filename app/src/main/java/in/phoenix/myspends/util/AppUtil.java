@@ -38,6 +38,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UnknownFormatConversionException;
+import java.util.concurrent.TimeUnit;
 
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
@@ -353,26 +354,38 @@ public final class AppUtil {
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent notificationIntent = null;
-        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(MySpends.APP_CONTEXT);
+        PendingIntent pendingIntent = null;
         if (null == AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)) {
             //-- no currency setup, get it first --//
             notificationIntent = new Intent(context, LaunchDeciderActivity.class);
+            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            notificationIntent.putExtra(AppConstants.Bundle.VIA_NOTIFICATION, true);
+            pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
 
         } else {
             notificationIntent = new Intent(context, NewExpenseActivity.class);
+            /*notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);*/
             notificationIntent.putExtra(AppConstants.Bundle.EXPENSE_DATE, expenseDate);
+            notificationIntent.putExtra(AppConstants.Bundle.VIA_NOTIFICATION, true);
             //taskStackBuilder.addParentStack(NewExpenseActivity.class);
+
+            TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context);
+            taskStackBuilder.addNextIntentWithParentStack(notificationIntent);
+            pendingIntent = taskStackBuilder.getPendingIntent(0,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
-        notificationIntent.putExtra(AppConstants.Bundle.VIA_NOTIFICATION, true);
         //notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         //taskStackBuilder.addNextIntent(notificationIntent);
-        taskStackBuilder.addNextIntentWithParentStack(notificationIntent);
+        //taskStackBuilder.addNextIntentWithParentStack(notificationIntent);
 
         //int random = new Random().nextInt(500);
-        PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+        /*PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0,
+                PendingIntent.FLAG_UPDATE_CURRENT);*/
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
@@ -402,7 +415,7 @@ public final class AppUtil {
             }
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "reminder")
                 .setSmallIcon(R.drawable.ic_notification)
                 .setColor(context.getResources().getColor(R.color.colorPrimary))
                 .setContentTitle(contentTitle)
@@ -410,7 +423,6 @@ public final class AppUtil {
                 .setContentText(contentText)
                 .setSound(alarmSound)
                 .setAutoCancel(true)
-                .setWhen(when)
                 .setContentIntent(pendingIntent)
                 .setVibrate(new long[]{1000, 1000, 1000});
 
@@ -469,8 +481,34 @@ public final class AppUtil {
     public static String getUserShortName() {
         String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName().trim();
         if (userName.contains(" ")) {
-            return userName.split("\\s+")[0];
+            String[] nameSplit = userName.split("\\s+");
+            /*if (nameSplit.length > 2) {
+                return nameSplit[0] + " " + nameSplit[1];
+            }*/
+            return nameSplit[0];
         }
         return userName;
+    }
+
+    public static String getGreeting() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dateformat = new SimpleDateFormat("HH");
+        String datetime = dateformat.format(c.getTime());
+        AppLog.d("AppUtil", "getGreeting: time:" + datetime);
+        int hour = Integer.valueOf(datetime);
+        if (hour > 19 || hour < 5) {
+            return "Night, ";
+
+        } else if (hour > 4 && hour < 12) {
+            return "Morning, ";
+
+        } else if (hour > 11 && hour < 16) {
+            return "Afternoon, ";
+        }
+        return "Evening, ";
+    }
+
+    public static long daysDiff(long fromMillis, long toMillis) {
+        return TimeUnit.MILLISECONDS.toDays(toMillis - fromMillis);
     }
 }

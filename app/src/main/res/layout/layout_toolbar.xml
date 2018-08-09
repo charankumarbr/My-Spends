@@ -9,6 +9,8 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    app:titleTextAppearance="@style/ToolbarTitleAppearance"
+    app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
     android:elevation="3dp">
 
 </android.support.v7.widget.Toolbar>

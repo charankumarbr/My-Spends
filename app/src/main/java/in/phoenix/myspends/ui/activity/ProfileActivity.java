@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,7 +22,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.util.AppPref;
@@ -33,7 +33,7 @@ import in.phoenix.myspends.util.AppUtil;
 
 public class ProfileActivity extends BaseActivity {
 
-    private CustomTextView cTvData;
+    private TextView cTvData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

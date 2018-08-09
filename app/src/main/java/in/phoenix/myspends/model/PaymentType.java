@@ -73,4 +73,8 @@ public final class PaymentType {
     public void setKey(String key) {
         this.key = key;
     }
+
+    public static boolean isCashType(long createdOn, int paymentModeId) {
+        return (createdOn == 0 && paymentModeId == DBConstants.PAYMENT_MODE.CASH_ID);
+    }
 }

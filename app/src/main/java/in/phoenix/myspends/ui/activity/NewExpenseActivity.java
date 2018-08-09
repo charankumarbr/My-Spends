@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
@@ -42,8 +40,6 @@ import java.util.Calendar;
 
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.CustomSpinnerAdapter;
-import in.phoenix.myspends.customview.CustomEditText;
-import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.customview.MoneyValueFilter;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Category;
@@ -73,10 +69,10 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
     //private FlexboxLayout mFlexboxLayout = null;
 
-    private CustomTextView mCTvExpenseDate = null;
+    private TextView mCTvExpenseDate = null;
 
-    private CustomEditText mTIEtAmount = null;
-    private CustomEditText mTIEtNote = null;
+    private TextInputEditText mTIEtAmount = null;
+    private TextInputEditText mTIEtNote = null;
 
     private CheckBox mCbAddAnotherExpense;
 
@@ -102,28 +98,33 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getIntent().hasExtra(AppConstants.Bundle.EXPENSE)) {
-            mExpense = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE);
-            isNew = false;
-
-        } else if (getIntent().hasExtra(AppConstants.Bundle.EXPENSE_DATE)) {
-            mExpenseDate = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE_DATE);
-            isNew = true;
+        mViaNotification = getIntent().getBooleanExtra(AppConstants.Bundle.VIA_NOTIFICATION, false);
+        AppLog.d(getClass().getSimpleName(), "Logged in Status:" + AppUtil.isUserLoggedIn() + ":: viaNotif" + mViaNotification);
+        if (!AppUtil.isUserLoggedIn()) {
+            finish();
 
         } else {
-            if (AppUtil.isUserLoggedIn()) {
-                mExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());
+            if (getIntent().hasExtra(AppConstants.Bundle.EXPENSE)) {
+                mExpense = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE);
+                isNew = false;
+
+            } else if (getIntent().hasExtra(AppConstants.Bundle.EXPENSE_DATE)) {
+                mExpenseDate = getIntent().getParcelableExtra(AppConstants.Bundle.EXPENSE_DATE);
                 isNew = true;
 
             } else {
-                finish();
+                if (AppUtil.isUserLoggedIn()) {
+                    mExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());
+                    isNew = true;
+
+                } else {
+                    finish();
+                }
             }
+
+            setContentView(R.layout.activity_new_expense);
+            init();
         }
-
-        mViaNotification = getIntent().getBooleanExtra(AppConstants.Bundle.VIA_NOTIFICATION, false);
-
-        setContentView(R.layout.activity_new_expense);
-        init();
     }
 
     private void init() {
@@ -138,7 +139,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
         }
 
         mCTvExpenseDate = findViewById(R.id.ane_tv_expense_date);
-        CustomTextView cTvCurrencySymbol = findViewById(R.id.ane_ctextview_currency);
+        TextView cTvCurrencySymbol = findViewById(R.id.ane_ctextview_currency);
         cTvCurrencySymbol.setText(AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY));
 
         findViewById(R.id.ane_ctextview_add_new_payment).setOnClickListener(clickListener);
@@ -330,10 +331,10 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     private void closeActivity() {
         AppUtil.toggleKeyboard(mViewComplete, false);
         if (mViaNotification) {
-            Intent upIntent = NavUtils.getParentActivityIntent(this);
+            /*Intent upIntent = NavUtils.getParentActivityIntent(this);
             TaskStackBuilder.create(this)
                     .addNextIntentWithParentStack(upIntent)
-                    .startActivities();
+                    .startActivities();*/
             //startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
 
         } else {
@@ -407,11 +408,12 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
             if (AppUtil.isConnected()) {
                 if (AppUtil.isUserLoggedIn()) {
                     final NewExpense newExpense = new NewExpense();
+                    final long timeMillis = System.currentTimeMillis();
                     newExpense.setAmount(AppUtil.getFloatAmount(mTIEtAmount.getText().toString()));
-                    newExpense.setCreatedOn(System.currentTimeMillis());
+                    newExpense.setCreatedOn(timeMillis);
                     newExpense.setExpenseDate(mExpenseDate.getTimeInMillis());
                     newExpense.setNote(mTIEtNote.getText().toString().trim().length() == 0 ? "" : mTIEtNote.getText().toString().trim());
-                    newExpense.setUpdatedOn(System.currentTimeMillis());
+                    newExpense.setUpdatedOn(timeMillis);
                     newExpense.setPaymentTypeKey(mSelectedTypeKey);
                     newExpense.setCategoryId(mSelectedCategoryId);
 
@@ -427,7 +429,10 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                             AppUtil.showToast("Expense tracked!");
                             mOkStatus = RESULT_OK;
 
-                            AppAnalytics.init().logEvent("added_expense", new Bundle());
+                            Bundle eventBundle = new Bundle();
+                            eventBundle.putBoolean("is_another", mCbAddAnotherExpense.isChecked());
+                            eventBundle.putInt("category_id", newExpense.getCategoryId());
+                            AppAnalytics.init().logEvent("added_expense", eventBundle);
 
                             if (!mCbAddAnotherExpense.isChecked()) {
                                 AppUtil.toggleKeyboard(mViewComplete, false);

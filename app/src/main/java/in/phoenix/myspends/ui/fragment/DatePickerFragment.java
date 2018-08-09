@@ -14,12 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.Calendar;
 
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.customview.CustomEditText;
-import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.util.AppLog;
 
@@ -40,8 +39,8 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
     private TextInputLayout mTilFromDate;
     private TextInputLayout mTilToDate;
 
-    private CustomEditText mTietFromDate;
-    private CustomEditText mTietToDate;
+    private TextInputEditText mTietFromDate;
+    private TextInputEditText mTietToDate;
 
     private long mFromMillis = 0;
     private long mToMillis = 0;
@@ -173,7 +172,7 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
             }
             LayoutInflater inflater = LayoutInflater.from(mContext);
             View customTitleView = inflater.inflate(R.layout.layout_date_title, null);
-            ((CustomTextView) customTitleView).setText(R.string.select_from_date);
+            ((TextView) customTitleView).setText(R.string.select_from_date);
             datePickerDialog.setCustomTitle(customTitleView);
             datePickerDialog.show();
 
@@ -205,7 +204,7 @@ public class DatePickerFragment extends DialogFragment implements View.OnClickLi
                     ? currentMillis : mFromExpenseDate.reportToDateTimeInMillis());
             LayoutInflater inflater = LayoutInflater.from(mContext);
             View customTitleView = inflater.inflate(R.layout.layout_date_title, null);
-            ((CustomTextView) customTitleView).setText(R.string.select_to_date);
+            ((TextView) customTitleView).setText(R.string.select_to_date);
             datePickerDialog.setCustomTitle(customTitleView);
             datePickerDialog.show();
         }

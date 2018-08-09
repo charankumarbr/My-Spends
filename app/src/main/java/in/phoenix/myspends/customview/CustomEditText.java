@@ -1,6 +1,7 @@
 package in.phoenix.myspends.customview;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.support.design.widget.TextInputLayout;
@@ -11,8 +12,9 @@ import android.view.ViewParent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
+import com.crashlytics.android.Crashlytics;
+
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.util.AppLog;
 
 /**
  * Created by Charan.Br on 6/28/2018.
@@ -35,10 +37,10 @@ public final class CustomEditText extends AppCompatEditText {
             return;
         }
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomTextView);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomFont);
         if (null != typedArray) {
 
-            String fontName = typedArray.getString(R.styleable.CustomTextView_fontName);
+            String fontName = typedArray.getString(R.styleable.CustomFont_fontName);
             if (null == fontName) {
                 fontName = "fontNotoSans";
             }
@@ -48,7 +50,12 @@ public final class CustomEditText extends AppCompatEditText {
                         "textStyle", Typeface.NORMAL);
             }
             //AppLog.d("CustomEditText", fontName + "::" + textStyle + "::" + getText());
-            setTypeface(FontCache.getFont(getContext(), fontName, textStyle));
+            try {
+                setTypeface(FontCache.getFont(getContext(), fontName, textStyle));
+
+            } catch (Resources.NotFoundException e) {
+                Crashlytics.logException(e);
+            }
 
             typedArray.recycle();
         }

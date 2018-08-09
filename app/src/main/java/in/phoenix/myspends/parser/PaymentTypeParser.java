@@ -20,7 +20,7 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
     private PaymentTypeParserListener mListener;
 
     private ArrayList<PaymentType> mPaymentTypes = null;
-    private ArrayList<PaymentType> mActivePaymentTypes = null;
+    //private ArrayList<PaymentType> mActivePaymentTypes = null;
 
     private HashMap<String, PaymentType> mAllPaymentTypes = null;
 
@@ -45,11 +45,15 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
             AppLog.d("PaymentType", "Zero");
             if (null != values) {
                 mPaymentTypes = new ArrayList<>();
-                if (null != mListener) {
+                if (null == mListener) {
+                    mAllPaymentTypes = new HashMap<>();
+                }
 
-                    if (mIsActiveOnly) {
+                //if (null != mListener) {
+
+                    /*if (mIsActiveOnly) {
                         mActivePaymentTypes = new ArrayList<>();
-                    }
+                    }*/
 
                     AppLog.d("PaymentType", "One");
                     AppLog.d("PaymentType", "Two");
@@ -58,12 +62,21 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
                         AppLog.d("PaymentType", "Value:" + aValue.getValue());
                         PaymentType paymentType = aValue.getValue(PaymentType.class);
                         paymentType.setKey(aValue.getKey());
-                        mPaymentTypes.add(paymentType);
-                        if (mIsActiveOnly && paymentType.isActive()) {
-                            mActivePaymentTypes.add(paymentType);
+                        //mPaymentTypes.add(paymentType);
+                        if (mIsActiveOnly) {
+                            if (paymentType.isActive()) {
+                                mPaymentTypes.add(paymentType);
+                            }
+
+                        } else {
+                            mPaymentTypes.add(paymentType);
+                        }
+
+                        if (null == mListener) {
+                            mAllPaymentTypes.put(aValue.getKey(), paymentType);
                         }
                     }
-                } else {
+                /*} else {
                     //-- for the application --//
                     mAllPaymentTypes = new HashMap<>();
                     for (DataSnapshot aValue : values) {
@@ -74,10 +87,20 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
                         mPaymentTypes.add(paymentType);
                         mAllPaymentTypes.put(aValue.getKey(), paymentType);
                     }
-                }
+                }*/
             }
 
         }
+
+        if (null == mPaymentTypes) {
+            mPaymentTypes = new ArrayList<>();
+        }
+        mPaymentTypes.add(0, PaymentType.getCashPaymentType());
+
+        if (null == mAllPaymentTypes) {
+            mAllPaymentTypes = new HashMap<>();
+        }
+        mAllPaymentTypes.put("0", PaymentType.getCashPaymentType());
 
         return null;
     }
@@ -85,12 +108,13 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+
         if (null != mListener) {
-            mListener.onPaymentTypesParsed((mIsActiveOnly) ? mActivePaymentTypes : mPaymentTypes, false);
-            if (null == mPaymentTypes) {
+            mListener.onPaymentTypesParsed(mPaymentTypes, true);
+            /*if (null == mPaymentTypes) {
                 mPaymentTypes = new ArrayList<>();
             }
-            mPaymentTypes.add(PaymentType.getCashPaymentType());
+            mPaymentTypes.add(PaymentType.getCashPaymentType());*/
             MySpends.updatePaymentTypes(mPaymentTypes);
 
         } else {

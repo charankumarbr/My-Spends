@@ -11,7 +11,7 @@
         layout="@layout/layout_toolbar"
         android:id="@+id/amb_in_toolbar" />
 
-    <in.phoenix.myspends.customview.CustomTextView
+    <TextView
         android:id="@+id/amb_tv_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,16 +24,17 @@
         android:gravity="top|start"
         android:textSize="16sp"
         android:textColor="@color/primary_text"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:textAlignment="viewStart"/>
 
-    <in.phoenix.myspends.customview.CustomTextView
+    <TextView
         android:id="@+id/amb_tv_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:layout_marginStart="12dp"
         android:text="Write in below space and save..."
-        app:fontName="@string/font_noto_sans"
+        app:fontFamily="@font/source_sans_pro"
         android:textColor="@color/colorAccent"
         android:textSize="15sp"
         android:visibility="gone"/>
@@ -49,10 +50,12 @@
         android:layout_marginEnd="12dp"
         android:lineSpacingMultiplier="1.1"
         android:gravity="top|start"
+        android:textAlignment="viewStart"
         android:textSize="16sp"
         android:textColor="@color/primary_text"
         android:visibility="gone"
         android:hint="Write your message and click DONE to save."
-        android:inputType="textCapSentences|textMultiLine|textImeMultiLine"/>
+        android:inputType="textCapSentences|textMultiLine|textImeMultiLine"
+        app:fontFamily="@font/source_sans_pro"/>
 
 </LinearLayout>

@@ -20,25 +20,25 @@
         android:paddingStart="32dp"
         android:layout_below="@+id/ave_toolbar">
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:id="@+id/ave_ctextview_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textColor="@android:color/white"
             android:textSize="25sp"
-            app:fontName="@string/font_noto_sans" />
+            app:fontFamily="@font/source_sans_pro" />
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:id="@+id/ave_ctextview_expense_on"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textColor="@android:color/white"
             android:textSize="17sp"
-            app:fontName="@string/font_noto_sans" />
+            app:fontFamily="@font/source_sans_pro" />
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:id="@+id/ave_ctextview_created_on"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,10 +46,10 @@
             android:text="@string/added_on"
             android:textColor="@android:color/white"
             android:textSize="17sp"
-            app:fontName="@string/font_noto_sans"
+            app:fontFamily="@font/source_sans_pro"
             android:visibility="gone" />
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:id="@+id/ave_ctextview_updated_on"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
             android:text="@string/last_updated_on"
             android:textColor="@android:color/white"
             android:textSize="17sp"
-            app:fontName="@string/font_noto_sans"
+            app:fontFamily="@font/source_sans_pro"
             android:visibility="gone" />
     </LinearLayout>
 
@@ -71,79 +71,79 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <in.phoenix.myspends.customview.CustomTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/paid_by"
                 android:textColor="#99000000"
                 android:textSize="16sp"
                 android:id="@+id/ave_cTextView_paid_by_header"
-                android:drawableLeft="@drawable/ic_credit_card_white_24dp"
+                android:drawableStart="@drawable/ic_credit_card_white_24dp"
                 android:drawableTint="@color/colorAccent"
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
-                app:fontName="@string/font_noto_sans" />
+                app:fontFamily="@font/source_sans_pro" />
 
-            <in.phoenix.myspends.customview.CustomTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
                 android:textColor="@color/primary_text"
                 android:layout_marginTop="10dp"
                 android:textSize="16sp"
-                app:fontName="@string/font_noto_sans"
+                app:fontFamily="@font/source_sans_pro"
                 android:id="@+id/ave_cTextView_paid_by" />
 
-            <in.phoenix.myspends.customview.CustomTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="25dp"
                 android:text="@string/category"
                 android:textColor="#99000000"
                 android:textSize="16sp"
                 android:id="@+id/ave_cTextView_category_header"
-                android:drawableLeft="@drawable/ic_label_outline_24dp"
+                android:drawableStart="@drawable/ic_label_outline_24dp"
                 android:drawableTint="@color/colorAccent"
                 android:drawablePadding="8dp"
-                app:fontName="@string/font_noto_sans"
+                app:fontFamily="@font/source_sans_pro"
                 android:gravity="center_vertical" />
 
-            <in.phoenix.myspends.customview.CustomTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
                 android:textColor="@color/primary_text"
                 android:layout_marginTop="10dp"
                 android:textSize="16sp"
-                app:fontName="@string/font_noto_sans"
+                app:fontFamily="@font/source_sans_pro"
                 android:id="@+id/ave_cTextView_category" />
 
-            <in.phoenix.myspends.customview.CustomTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="25dp"
                 android:text="@string/note"
                 android:textColor="#99000000"
                 android:textSize="16sp"
                 android:id="@+id/ave_cTextView_note_header"
-                android:drawableLeft="@drawable/ic_comment_black_24dp"
+                android:drawableStart="@drawable/ic_comment_black_24dp"
                 android:drawableTint="@color/colorAccent"
                 android:drawablePadding="8dp"
-                app:fontName="@string/font_noto_sans"
+                app:fontFamily="@font/source_sans_pro"
                 android:gravity="center_vertical" />
 
-            <in.phoenix.myspends.customview.CustomTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
                 android:textColor="@color/primary_text"
                 android:layout_marginTop="10dp"
                 android:textSize="16sp"
-                app:fontName="@string/font_noto_sans"
+                app:fontFamily="@font/source_sans_pro"
                 android:id="@+id/ave_cTextView_note" />
         </LinearLayout>
     </ScrollView>

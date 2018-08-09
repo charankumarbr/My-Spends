@@ -7,11 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.model.CategoryChart;
 import in.phoenix.myspends.model.CategoryChartData;
 import in.phoenix.myspends.model.ExpenseDate;
@@ -107,6 +108,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
             holder.tvNote = view.findViewById(R.id.le_textview_payment_note);
             holder.tvPaymentTypeName = view.findViewById(R.id.le_textview_payment_type);
             holder.tvExpenseDate = view.findViewById(R.id.le_textview_date);
+            holder.tvExpCategoryName = view.findViewById(R.id.le_textview_category);
             holder.tvMonth = view.findViewById(R.id.le_tv_month);
             holder.vLayoutExpense = view.findViewById(R.id.le_layout_expense);
             holder.vRLayoutExpense = view.findViewById(R.id.le_rlayout_expense);
@@ -137,7 +139,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
             NewExpense expense = getItem(position);
             holder.tvAmount.setText(mCurrencySymbol + AppUtil.getStringAmount(String.valueOf(expense.getAmount())));
             holder.tvNote.setText(TextUtils.isEmpty(expense.getNote()) ? AppConstants.BLANK_NOTE_TEMPLATE : expense.getNote());
-            holder.tvPaymentTypeName.setText(mContext.getString(R.string.paid_by_) + " " + AppUtil.getPaidByForKey(expense.getPaymentTypeKey()));
+            holder.tvPaymentTypeName.setText(/*mContext.getString(R.string.paid_by_) + " " +*/ AppUtil.getPaidByForKey(expense.getPaymentTypeKey()));
             holder.tvAmount.setTag(expense.getId());
 
             if (null == mExpenseDate) {
@@ -176,6 +178,9 @@ public final class NewExpenseAdapter extends BaseAdapter {
                     holder.tvMonth.setVisibility(View.GONE);
                 }
             }
+
+            holder.tvExpCategoryName.setText(expense.getCategoryId() > 0 ? MySpends.getCategoryName
+                    (expense.getCategoryId()) : AppConstants.BLANK_NOTE_TEMPLATE);
 
             if (null != mClickListener) {
                 holder.vLayoutExpense.setTag(position);
@@ -305,22 +310,23 @@ public final class NewExpenseAdapter extends BaseAdapter {
     }
 
     class ExpenseHolder {
-        CustomTextView tvNote;
-        CustomTextView tvAmount;
-        CustomTextView tvPaymentTypeName;
-        CustomTextView tvExpenseDate;
-        CustomTextView tvMonth;
+        TextView tvNote;
+        TextView tvAmount;
+        TextView tvPaymentTypeName;
+        TextView tvExpenseDate;
+        TextView tvExpCategoryName;
+        TextView tvMonth;
         View vLayoutExpense;
         View vRLayoutExpense;
         View vPbLoading;
         View vSpendsEnd;
 
         View vSpends;
-        CustomTextView tvCategoryName;
-        CustomTextView tvCategoryTotal;
+        TextView tvCategoryName;
+        TextView tvCategoryTotal;
         View vSpendPercentage;
-        CustomTextView tvCategoryPercentage;
-        CustomTextView tvGrandTotal;
+        TextView tvCategoryPercentage;
+        TextView tvGrandTotal;
     }
 
     public int getExpensesSize() {
@@ -346,5 +352,9 @@ public final class NewExpenseAdapter extends BaseAdapter {
 
     public interface OnLoadingListener {
         void onLoading(long lastExpenseDate);
+    }
+
+    public String getCurrencySymbol() {
+        return mCurrencySymbol;
     }
 }

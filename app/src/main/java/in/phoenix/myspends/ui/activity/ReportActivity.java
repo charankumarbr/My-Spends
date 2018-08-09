@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -18,11 +20,14 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.thoughtbot.expandablerecyclerview.listeners.GroupExpandCollapseListener;
+import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,7 +38,7 @@ import java.util.Iterator;
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.NewExpenseAdapter;
-import in.phoenix.myspends.customview.CustomTextView;
+import in.phoenix.myspends.controller.ReportAdapter;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.CategoryChart;
 import in.phoenix.myspends.model.CategoryChartData;
@@ -60,15 +65,19 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
     private ProgressBar mPbLoading = null;
 
     private ListView mLvExpenses = null;
+    private RecyclerView mRvExpenses = null;
 
-    private CustomTextView mCTvFilter = null;
-    private CustomTextView mCTvMsg = null;
-    private CustomTextView mCTvPaidBy = null;
+    //private TextView mCTvFilter = null;
+    private TextView mCTvMsg = null;
+    //private TextView mCTvPaidBy = null;
 
     private NewExpenseAdapter mExpenseAdapter = null;
+    private ReportAdapter mReportAdapter = null;
 
     //private String mLastKey = null;
     private DocumentSnapshot mLastSnapshot = null;
+    private Toolbar mToolbar;
+    private Boolean mIsGroupbyCategory = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +89,9 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
 
     private void init() {
         initLayout();
-        Toolbar toolbar = findViewById(R.id.ar_in_toolbar);
-        toolbar.setTitle("Reports");
-        setSupportActionBar(toolbar);
+        mToolbar = findViewById(R.id.ar_in_toolbar);
+        mToolbar.setTitle("Reports");
+        setSupportActionBar(mToolbar);
 
         if (null != getSupportActionBar()) {
             getSupportActionBar().setElevation(0f);
@@ -90,19 +99,20 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
 
-        findViewById(R.id.ar_ctextview_date).setOnClickListener(clickListener);
-        mCTvPaidBy = findViewById(R.id.ar_ctextview_paid_by);
+        //findViewById(R.id.ar_ctextview_date).setOnClickListener(clickListener);
+        //mCTvPaidBy = findViewById(R.id.ar_ctextview_paid_by);
         mPbLoading = findViewById(R.id.ar_progressbar_loading);
 
         mLvExpenses = findViewById(R.id.ar_listview_expenses);
         //mLvExpenses.setOnItemClickListener(itemClickListener);
+        mRvExpenses = findViewById(R.id.ar_recyclerview_expenses);
 
         mCTvMsg = findViewById(R.id.ar_ctextview_msg);
         mFromMillis = AppUtil.getFirstDayOfMonth();
         mToMillis = AppUtil.getCurrentDayOfMonth();
         AppLog.d("ReportActivity", "From:" + mFromMillis + ":: To:" + mToMillis);
-        mCTvFilter = findViewById(R.id.ar_layout_filter);
-        mCTvFilter.setOnClickListener(clickListener);
+        //mCTvFilter = findViewById(R.id.ar_layout_filter);
+        //mCTvFilter.setOnClickListener(clickListener);
         //getExpenses();
     }
 
@@ -117,11 +127,11 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                 PaidByFragment paidByFragment = PaidByFragment.newInstance(mPaidBy);
                 paidByFragment.show(getSupportFragmentManager(), "PaidByFragment");
 
-            } else*/
+            } else
             if (view.getId() == R.id.ar_layout_filter) {
                 FilterFragment paidByFragment = FilterFragment.newInstance();
                 paidByFragment.show(getSupportFragmentManager(), "FilterFragment");
-            }
+            }*/
         }
     };
 
@@ -131,8 +141,8 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
             if (mFromMillis != fromDate || mToMillis != toDate) {
                 mFromMillis = fromDate;
                 mToMillis = toDate;
-                mCTvPaidBy.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                mCTvPaidBy.setOnClickListener(clickListener);
+                //mCTvPaidBy.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                //mCTvPaidBy.setOnClickListener(clickListener);
                 getExpenses();
             }
         }
@@ -158,17 +168,21 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
     private void getExpenses() {
         if ((0 != mFromMillis && 0 != mToMillis)) {
 
-            if (null == mExpenseAdapter) {
+            if (null == mExpenseAdapter || null == mReportAdapter) {
                 mPbLoading.setVisibility(View.VISIBLE);
+                mMiTotal.setVisible(false);
+                mMiSpendsChart.setVisible(false);
             }
 
             mCTvMsg.setVisibility(View.GONE);
+
+            mToolbar.setSubtitle(null);
 
             FirebaseDB.initDb().getFsSpends(mFromMillis, mToMillis, mPaidBy, mLastSnapshot, new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot documentSnapshots) {
 
-                    boolean isFromCache = documentSnapshots.getMetadata().isFromCache();
+                    /*boolean isFromCache = documentSnapshots.getMetadata().isFromCache();
                     AppLog.d("ReportActivity", "Spends Firestore:onSuccess :: isCache:" + isFromCache);
 
                     mMiTotal.setVisible(false);
@@ -179,30 +193,47 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
 
                     } else {
                         mCTvFilter.setText("Filters");
-                    }
+                    }*/
 
                     if (!documentSnapshots.isEmpty()) {
-                        if (null != mLastSnapshot) {
-                            mLastSnapshot = null;
-                        }
-                        mLastSnapshot = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
 
-                        new FSSpendsParser(ReportActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-                                documentSnapshots.iterator());
+                        if (null == mSpendsIters) {
+                            mSpendsIters = new ArrayList<>();
+                        }
+                        mSpendsIters.add(documentSnapshots.iterator());
+
+                        if (documentSnapshots.size() == AppConstants.PAGE_SPENDS_SIZE) {
+                            if (null != mLastSnapshot) {
+                                mLastSnapshot = null;
+                            }
+                            mLastSnapshot = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
+                            getExpenses();
+
+                        } else {
+                            //-- end of the pagination --//
+                            new FSSpendsParser(ReportActivity.this).executeOnExecutor(
+                                    AsyncTask.THREAD_POOL_EXECUTOR, arrayListToArray());
+                        }
+
+                        /*new FSSpendsParser(ReportActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+                                iter);*/
 
                     } else {
                         AppLog.d("ReportActivity", "Spends: Empty! ::" + "Count: ZERO");
 
-                        mPbLoading.setVisibility(View.GONE);
-
-                        if (null == mExpenseAdapter) {
+                        if (null == mSpendsIters) {
+                            mPbLoading.setVisibility(View.GONE);
                             AppUtil.showToast("No Spends tracked!");
                             mLvExpenses.setVisibility(View.GONE);
                             mCTvMsg.setText(R.string.no_spends_tracked_tune_filters);
                             mCTvMsg.setVisibility(View.VISIBLE);
 
                         } else {
-                            if (mExpenseAdapter.isLoading()) {
+                            //-- data of previous page is available --//
+                            new FSSpendsParser(ReportActivity.this).executeOnExecutor(
+                                    AsyncTask.THREAD_POOL_EXECUTOR, arrayListToArray());
+
+                            /*if (mExpenseAdapter.isLoading()) {
                                 endLoading();
 
                             } else {
@@ -212,7 +243,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                                 mLvExpenses.setVisibility(View.GONE);
                                 mCTvMsg.setText(R.string.no_spends_tracked_tune_filters);
                                 mCTvMsg.setVisibility(View.VISIBLE);
-                            }
+                            }*/
                         }
                     }
                 }
@@ -227,17 +258,20 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
 
                     AppUtil.showToast(R.string.unable_fetch_spends);
 
-                    if (null == mExpenseAdapter) {
+                    if (null == mSpendsIters) {
                         mLvExpenses.setVisibility(View.GONE);
+                        mCTvMsg.setText("Something went wrong. Try again.");
                         mCTvMsg.setVisibility(View.VISIBLE);
                         mPbLoading.setVisibility(View.GONE);
 
                     } else {
-                        if (mExpenseAdapter.isLoading()) {
+                        new FSSpendsParser(ReportActivity.this).executeOnExecutor(
+                                AsyncTask.THREAD_POOL_EXECUTOR, arrayListToArray());
+                        /*if (mExpenseAdapter.isLoading()) {
                             mExpenseAdapter.setIsLoading(false);
                             //mExpenseAdapter.setIsLoadingRequired(false);
                             mExpenseAdapter.notifyDataSetChanged();
-                        }
+                        }*/
                     }
                 }
             });
@@ -246,14 +280,28 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         }
     }
 
-    private void endLoading() {
+    private Iterator<DocumentSnapshot>[] arrayListToArray() {
+
+        Iterator<DocumentSnapshot>[] iters = null;
+        if ((null != mSpendsIters) && mSpendsIters.size() > 0) {
+            iters = new Iterator[mSpendsIters.size()];
+
+            for (int index = 0; index < mSpendsIters.size(); index++) {
+                iters[index] = mSpendsIters.get(index);
+            }
+        }
+
+        return iters;
+    }
+
+    /*private void endLoading() {
         AppUtil.showToast("Fetched all your spends.");
-        mExpenseAdapter.setIsLoading(false);
-        mExpenseAdapter.setIsLoadingRequired(false);
+        *//*mExpenseAdapter.setIsLoading(false);
+        mExpenseAdapter.setIsLoadingRequired(false);*//*
         mExpenseAdapter.notifyDataSetChanged();
         mMiTotal.setVisible(true);
         mMiSpendsChart.setVisible(true);
-    }
+    }*/
 
     private final AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         @Override
@@ -291,9 +339,9 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
             return true;
 
         } else if (item.getItemId() == R.id.menu_get_total) {
-            if ((null != mExpenseAdapter) && !mExpenseAdapter.isLoading()) {
+            /*if ((null != mExpenseAdapter) && !mExpenseAdapter.isLoading()) {
                 new CalculateTotal().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
-            }
+            }*/
             return true;
 
         } else if (item.getItemId() == R.id.menu_spends_chart) {
@@ -301,6 +349,10 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                 new SpendsChart().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
             }
             return true;
+
+        } else if (item.getItemId() == R.id.menu_filter) {
+            FilterFragment paidByFragment = FilterFragment.newInstance();
+            paidByFragment.show(getSupportFragmentManager(), "FilterFragment");
         }
         return super.onOptionsItemSelected(item);
     }
@@ -311,17 +363,41 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
     }
 
     @Override
-    public void onSpendsParsed(ArrayList<NewExpense> spends) {
-        if (spends.size() > 0) {
-            setSpends(spends);
-        }
+    public void onSpendsParsed(ArrayList<NewExpense> spends, Float grandTotal) {
 
-        mPbLoading.setVisibility(View.GONE);
+        if (!isFinishing()) {
+            mPbLoading.setVisibility(View.GONE);
+
+            if (spends.size() > 0) {
+                mMiSpendsChart.setVisible(!mIsGroupbyCategory);
+
+                if (mIsGroupbyCategory) {
+                    new SpendsChart(spends).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
+
+                } else {
+                    setSpends(spends);
+                    mToolbar.setSubtitle("Total Spends: " + mExpenseAdapter.getCurrencySymbol() +
+                            AppUtil.getStringAmount(String.valueOf(grandTotal)));
+                }
+
+            } else {
+                AppUtil.showToast("No Spends tracked!");
+                mLvExpenses.setVisibility(View.GONE);
+                mRvExpenses.setVisibility(View.GONE);
+                mCTvMsg.setText(R.string.no_spends_tracked_tune_filters);
+                mCTvMsg.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void setSpends(ArrayList<NewExpense> spends) {
+
+        setActualView(false);
+
         if (null == mExpenseAdapter) {
+            //mExpenseAdapter = new NewExpenseAdapter(ReportActivity.this, spends, null);
             mExpenseAdapter = new NewExpenseAdapter(ReportActivity.this, spends, null);
+            mExpenseAdapter.setIsLoadingRequired(false); //-- test --//
             mLvExpenses.setAdapter(mExpenseAdapter);
             mLvExpenses.setVisibility(View.VISIBLE);
 
@@ -333,10 +409,6 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                 mExpenseAdapter.setData(spends);
                 mLvExpenses.setAdapter(mExpenseAdapter);
             }
-        }
-
-        if (spends.size() < AppConstants.PAGE_SPENDS_SIZE) {
-            endLoading();
         }
     }
 
@@ -362,7 +434,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
     }
 
     @Override
-    public void onFilterChanged(long fromDate, long toDate, String paidByKey) {
+    public void onFilterChanged(long fromDate, long toDate, String paidByKey, boolean isGroupbyCategory) {
         AppLog.d("ReportActivity", "onFilterChanged: FromDate:" + fromDate + " :: To Date:" + toDate + " :: Paidby:" + paidByKey);
         if (0 != fromDate && 0 != toDate) {
             boolean isChanged = false;
@@ -380,13 +452,25 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                 isChanged = true;
             }
 
+            if ((null == mIsGroupbyCategory) || mIsGroupbyCategory != isGroupbyCategory) {
+                isChanged = true;
+            }
+            mIsGroupbyCategory = isGroupbyCategory;
+
             if (isChanged) {
                 mLastSnapshot = null;
                 //mLastKey = null;
 
+                mSpendsIters = null;
+
                 if (null != mExpenseAdapter) {
                     mExpenseAdapter = null;
                     mLvExpenses.setAdapter(null);
+                }
+
+                if (null != mReportAdapter) {
+                    mReportAdapter = null;
+                    mRvExpenses.setAdapter(null);
                 }
                 getExpenses();
 
@@ -395,6 +479,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
             }
         }
     }
+    private ArrayList<Iterator<DocumentSnapshot>> mSpendsIters = null;
 
     class CalculateTotal extends AsyncTask<Void, Void, Void> {
 
@@ -414,10 +499,10 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
 
         @Override
         protected Void doInBackground(Void... voids) {
-            if ((null != mExpenseAdapter) && !mExpenseAdapter.isLoading()) {
+            /*if ((null != mExpenseAdapter) && !mExpenseAdapter.isLoading()) {
                 Float amount = mExpenseAdapter.calculateTotal();
                 totalAmount = AppUtil.getStringAmount(String.valueOf(amount));
-            }
+            }*/
             return null;
         }
 
@@ -449,6 +534,16 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
 
         private CategoryChart categoryChart;
 
+        private ArrayList<NewExpense> spends;
+
+        public SpendsChart() {
+
+        }
+
+        public SpendsChart(ArrayList<NewExpense> spends) {
+            this.spends = spends;
+        }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -462,13 +557,27 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         @Override
         protected Void doInBackground(Void... voids) {
             //totalAmount = mExpenseAdapter.calculateTotal();
-            int maxIndex = mExpenseAdapter.getExpensesSize();
+            int maxIndex = 0;
+            if (null == spends) {
+                maxIndex = mExpenseAdapter.getExpensesSize();
+
+            } else {
+                maxIndex = spends.size();
+            }
+
             if (maxIndex > 0) {
                 HashMap<Integer, ArrayList<NewExpense>> categoryExpense = new HashMap<>();
                 HashMap<Integer, Float> categoryTotal = new HashMap<>();
                 Float grandTotal = 0f;
                 for (int index = 0; index < maxIndex; index++) {
-                    NewExpense anExpense = mExpenseAdapter.getItem(index);
+                    NewExpense anExpense = null;
+                    if (null == spends) {
+                        anExpense = mExpenseAdapter.getItem(index);
+
+                    } else {
+                        anExpense = spends.get(index);
+                    }
+
                     int categoryId = anExpense.getCategoryId();
 
                     ArrayList<NewExpense> expenses;
@@ -498,9 +607,9 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                     Iterator<Integer> keyIter = categoryExpense.keySet().iterator();
                     ArrayList<CategoryChartData> chartData = new ArrayList<>();
                     do {
-                        CategoryChartData categoryChartData = new CategoryChartData();
                         Integer categoryId = keyIter.next();
-
+                        CategoryChartData categoryChartData = new CategoryChartData(
+                                MySpends.getCategoryName(categoryId), categoryExpense.get(categoryId));
                         categoryChartData.setCategoryId(categoryId);
                         categoryChartData.setCategoryName(MySpends.getCategoryName(categoryId));
                         categoryChartData.setCategoryTotal(categoryTotal.get(categoryId));
@@ -528,27 +637,54 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                 if (null != categoryChart) {
                     AppLog.d("ReportActivity", "CategoryChart::Total Size:" + categoryChart.getGrandTotal());
 
-                    if (null != mExpenseAdapter) {
-                        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-                        int dp20 = AppUtil.dpToPx(20);
-                        AppLog.d("ReportActivity", "Width:" + displayMetrics.widthPixels + "::20 dp:" + dp20);
+                    pdLoading.dismiss();
+                    pdLoading = null;
 
-                        mExpenseAdapter.setSpendsChartData(categoryChart, displayMetrics.widthPixels - dp20);
-                        pdLoading.dismiss();
-                        pdLoading = null;
-                        if (categoryChart.getCategoryChartData().size() > 3) {
-                            mLvExpenses.smoothScrollToPosition(mExpenseAdapter.getExpensesSize() + 2);
+                    if (mMiSpendsChart.isVisible()) {
+                        //-- expense list --//
 
-                        } else {
-                            mLvExpenses.smoothScrollToPosition(mExpenseAdapter.getExpensesSize());
+                        if (null != mExpenseAdapter) {
+                            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+                            int dp20 = AppUtil.dpToPx(20);
+                            AppLog.d("ReportActivity", "Width:" + displayMetrics.widthPixels + "::20 dp:" + dp20);
+
+                            mExpenseAdapter.setSpendsChartData(categoryChart, displayMetrics.widthPixels - dp20);
+                            if (categoryChart.getCategoryChartData().size() > 3) {
+                                mLvExpenses.smoothScrollToPosition(mExpenseAdapter.getExpensesSize() + 2);
+
+                            } else {
+                                mLvExpenses.smoothScrollToPosition(mExpenseAdapter.getExpensesSize());
+                            }
+
+                            mMiSpendsChart.setVisible(false);
+                            displayMetrics = null;
                         }
-                        displayMetrics = null;
 
                     } else {
-                        pdLoading.dismiss();
-                        pdLoading = null;
-                        AppUtil.showToast("Unable to prepare your Spends Chart!");
+                        //-- group by category --//
+                        mReportAdapter = new ReportAdapter(ReportActivity.this, categoryChart);
+
+                        setActualView(true);
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(ReportActivity.this);
+                        mRvExpenses.setLayoutManager(layoutManager);
+                        mRvExpenses.setAdapter(mReportAdapter);
+
+                        mToolbar.setSubtitle("Total Spends: " + mReportAdapter.getCurrencySymbol() +
+                                AppUtil.getStringAmount(String.valueOf(categoryChart.getGrandTotal())));
+
+                        mReportAdapter.setOnGroupExpandCollapseListener(new GroupExpandCollapseListener() {
+                            @Override
+                            public void onGroupExpanded(ExpandableGroup group) {
+                                mRvExpenses.smoothScrollBy(0, 150);
+                            }
+
+                            @Override
+                            public void onGroupCollapsed(ExpandableGroup group) {
+
+                            }
+                        });
                     }
+
                 } else {
                     pdLoading.dismiss();
                     pdLoading = null;
@@ -560,6 +696,33 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         @Override
         public int compare(CategoryChartData chartData1, CategoryChartData chartData2) {
             return chartData1.getCategoryTotal() < chartData2.getCategoryTotal() ? 1 : -1;
+        }
+    }
+
+    private void setActualView(boolean isGroupbyCategory) {
+        mRvExpenses.setVisibility(isGroupbyCategory ? View.VISIBLE : View.GONE);
+        mLvExpenses.setVisibility(isGroupbyCategory ? View.GONE : View.VISIBLE);
+        if (isGroupbyCategory) {
+            mExpenseAdapter = null;
+
+        } else {
+            mReportAdapter = null;
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (null != mReportAdapter) {
+            mReportAdapter.onSaveInstanceState(outState);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (null != mReportAdapter) {
+            mReportAdapter.onRestoreInstanceState(savedInstanceState);
         }
     }
 }

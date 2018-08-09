@@ -7,11 +7,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.customview.CustomTextView;
+import in.phoenix.myspends.model.PaymentMode;
 import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppUtil;
@@ -88,6 +89,7 @@ public class PaymentTypeAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.tvPaymentTypeName = view.findViewById(R.id.lpt_textview_ptype_name);
             holder.swToggleActive = view.findViewById(R.id.lpt_switch_active);
+            holder.tvPaymentTypeMode = view.findViewById(R.id.lpt_textview_ptype_mode);
             view.setTag(holder);
 
         } else {
@@ -99,18 +101,22 @@ public class PaymentTypeAdapter extends BaseAdapter {
         long createdOn = paymentType.getCreatedOn();
         AppLog.d("PaymentTypeAdapter", "Created On:" + createdOn);
         boolean isActive = paymentType.isActive();
-        if (createdOn == 0) {
+        if (PaymentType.isCashType(createdOn, paymentType.getPaymentModeId())) {
             //-- cash payment type --//
             holder.swToggleActive.setChecked(true);
             holder.swToggleActive.setEnabled(false);
+            holder.tvPaymentTypeMode.setVisibility(View.GONE);
 
         } else {
+            //-- user added payment types --//
             holder.swToggleActive.setEnabled(true);
             holder.swToggleActive.setTag(paymentType.getKey());
             holder.swToggleActive.setOnCheckedChangeListener(null);
             holder.swToggleActive.setChecked(isActive);
             holder.swToggleActive.setOnCheckedChangeListener(togglePaymentType);
             //holder.swToggleActive.setOnClickListener();
+            holder.tvPaymentTypeMode.setText(PaymentMode.getModeName(paymentType.getPaymentModeId()));
+            holder.tvPaymentTypeMode.setVisibility(View.VISIBLE);
         }
 
         holder.tvPaymentTypeName.setText(paymentType.getName());
@@ -141,8 +147,9 @@ public class PaymentTypeAdapter extends BaseAdapter {
     };*/
 
     class ViewHolder {
-        CustomTextView tvPaymentTypeName;
+        TextView tvPaymentTypeName;
         Switch swToggleActive;
+        TextView tvPaymentTypeMode;
     }
 
     public interface OnStatusChangedListener {

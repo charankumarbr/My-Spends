@@ -50,8 +50,8 @@ public class MySpends extends Application {
         AppPref.getInstance().putLong(AppConstants.PrefConstants.LAST_APP_OPENED_ON,
                 System.currentTimeMillis());
         if (AppUtil.isUserLoggedIn()) {
-            fetchCategories();
             Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            fetchCategories();
         }
         initNotification();
         //AppUtil.createNotification(APP_CONTEXT, AppUtil.convertToDate(Calendar.getInstance().getTimeInMillis()));
@@ -114,8 +114,8 @@ public class MySpends extends Application {
         AppLog.d("MySpends", "addCashPaymentType");
         if (null == mapPaymentTypes) {
             mapPaymentTypes = new HashMap<>();
+            mapPaymentTypes.put("0", PaymentType.getCashPaymentType());
         }
-        mapPaymentTypes.put("0", PaymentType.getCashPaymentType());
 
         //-- removed list of payment types --//
         /*if (null == listpaymentTypes) {
@@ -126,7 +126,7 @@ public class MySpends extends Application {
         setAllPaymentTypes(listpaymentTypes, mapPaymentTypes);
     }
 
-    public static void setAllPaymentTypes(ArrayList<PaymentType> listAllPaymentTypes, HashMap<String, PaymentType> mapAllPaymentTypes) {
+    private static void setAllPaymentTypes(ArrayList<PaymentType> listAllPaymentTypes, HashMap<String, PaymentType> mapAllPaymentTypes) {
         AppLog.d("MySpends", "setAllPaymentTypes");
         if (null == mMapAllPaymentTypes) {
             mMapAllPaymentTypes = new HashMap<>();

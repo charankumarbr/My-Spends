@@ -7,25 +7,25 @@
     <RelativeLayout
         android:id="@+id/le_rlayout_expense"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:id="@+id/le_tv_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:textSize="23sp"
+            android:textSize="21sp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="12dp"
-            android:layout_marginLeft="12dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="4dp"
             android:textColor="@color/colorAccent"
-            app:fontName="@string/font_noto_sans"
+            app:fontFamily="@font/source_sans_pro"
             android:visibility="gone"
             android:text="Spends Chart"/>
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:id="@+id/le_tv_grand_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,12 +33,11 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:layout_marginEnd="10dp"
-            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="4dp"
             android:layout_marginStart="12dp"
             android:textColor="@color/colorAccent"
-            app:fontName="@string/font_noto_sans"
+            app:fontFamily="@font/source_sans_pro"
             android:visibility="gone"
             android:layout_alignBaseline="@+id/le_tv_month"
             android:layout_toEndOf="@+id/le_tv_month"
@@ -55,52 +54,52 @@
             app:cardPreventCornerOverlap="true"
             app:cardElevation="2dp"
             android:layout_marginStart="6dp"
-            android:layout_marginLeft="6dp"
             android:layout_marginEnd="6dp"
-            android:layout_marginRight="6dp"
             app:cardBackgroundColor="@android:color/white"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp">
+                android:layout_marginStart="10dp">
 
-                <LinearLayout
+                <!--<LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_toStartOf="@+id/le_layout_end"
-                    android:layout_alignParentStart="true">
+                    android:layout_alignParentStart="true">-->
 
-                    <in.phoenix.myspends.customview.CustomTextView
+                    <TextView
                         android:id="@+id/le_textview_payment_note"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:maxLines="1"
                         android:ellipsize="end"
-                        app:fontName="@string/font_noto_sans"
+                        app:fontFamily="@font/source_sans_pro"
                         android:textColor="@color/primary_text"
-                        android:text="Lunch"/>
+                        android:text="Lunch"
+                        android:layout_toStartOf="@+id/le_textview_amount"
+                        android:gravity="start"
+                        android:textAlignment="viewStart"/>
 
-                    <in.phoenix.myspends.customview.CustomTextView
+                    <TextView
                         android:id="@+id/le_textview_payment_type"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
-                        android:layout_marginTop="8dp"
-                        app:fontName="@string/font_noto_sans"
+                        app:fontFamily="@font/source_sans_pro"
                         android:textSize="14sp"
                         android:textColor="@color/secondary_text"
                         android:ellipsize="end"
-                        android:text="Cash"/>
-                </LinearLayout>
+                        android:text="Cash"
+                        android:layout_toStartOf="@+id/le_textview_date"
+                        android:gravity="start"
+                        android:textAlignment="viewStart"
+                        android:layout_alignBaseline="@+id/le_textview_date"/>
+                <!--</LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/le_layout_end"
@@ -108,30 +107,54 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp">
+                    android:layout_marginStart="10dp">-->
 
-                    <in.phoenix.myspends.customview.CustomTextView
+                    <TextView
                         android:id="@+id/le_textview_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:textColor="@color/colorPrimary"
-                        app:fontName="@string/font_noto_sans"
+                        app:fontFamily="@font/source_sans_pro"
                         android:layout_gravity="end"
-                        android:text="300.00"/>
+                        android:text="300.00"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"/>
 
-                    <in.phoenix.myspends.customview.CustomTextView
+                    <TextView
                         android:id="@+id/le_textview_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:textColor="@color/secondary_text"
                         android:layout_marginTop="8dp"
-                        app:fontName="@string/font_noto_sans"
-                        android:layout_gravity="end"
-                        android:text="10 Apr"/>
-                </LinearLayout>
+                        app:fontFamily="@font/source_sans_pro"
+                        android:text="10 Apr"
+                        android:layout_below="@id/le_textview_amount"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"/>
+
+                <TextView
+                    android:id="@+id/le_textview_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:textColor="@android:color/white"
+                    android:text="Bills and Payments"
+                    android:layout_below="@id/le_textview_date"
+                    android:layout_alignParentEnd="true"
+                    android:background="@color/colorAccent"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    android:paddingTop="1dp"
+                    android:paddingBottom="1dp"
+                    android:layout_marginTop="6dp"/>
+                <!--</LinearLayout>-->
             </RelativeLayout>
         </android.support.v7.widget.CardView>
     </RelativeLayout>
@@ -149,33 +172,31 @@
             android:layout_height="36dp"
             android:layout_gravity="center_vertical"/>
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Loading..."
             android:layout_gravity="center_vertical"
             android:layout_marginStart="16dp"
             android:textSize="16sp"
-            app:fontName="@string/font_noto_sans"
+            app:fontFamily="@font/source_sans_pro"
             android:textColor="@color/colorPrimary"/>
     </LinearLayout>
 
-    <in.phoenix.myspends.customview.CustomTextView
+    <TextView
         android:id="@+id/le_tv_spends_end"
         android:layout_width="wrap_content"
         android:layout_height="?attr/actionBarSize"
-        android:text="Light at the end of tunnel."
+        android:text="@string/spends_list_end"
         android:gravity="center"
         android:textColor="@color/colorPrimary"
         android:layout_centerHorizontal="true"
         android:textSize="15sp"
         android:drawableStart="@drawable/ic_light_bulb"
-        android:drawableLeft="@drawable/ic_light_bulb"
         android:drawableEnd="@drawable/ic_light_bulb"
-        android:drawableRight="@drawable/ic_light_bulb"
         android:drawablePadding="16dp"
         android:layout_below="@+id/le_rlayout_expense"
-        app:fontName="@string/font_noto_sans"
+        app:fontFamily="@font/source_sans_pro"
         android:visibility="gone"/>
 
     <RelativeLayout
@@ -190,33 +211,33 @@
         android:layout_marginBottom="12dp"
         android:visibility="gone">
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/le_tv_category_name"
             android:textSize="15sp"
             android:textColor="@color/primary_text"
-            app:fontName="@string/font_noto_sans"
+            app:fontFamily="@font/source_sans_pro"
             android:layout_alignParentStart="true"
             android:layout_toStartOf="@+id/le_tv_category_total"/>
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/le_tv_category_total"
             android:layout_marginStart="10dp"
             android:textSize="15sp"
             android:textColor="@color/primary_text"
-            app:fontName="@string/font_noto_sans"
+            app:fontFamily="@font/source_sans_pro"
             android:layout_alignParentEnd="true"/>
 
-        <in.phoenix.myspends.customview.CustomTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/le_tv_category_percentage"
             android:textSize="14sp"
             android:textColor="@color/colorAccent"
-            app:fontName="@string/font_noto_sans"
+            app:fontFamily="@font/source_sans_pro"
             android:layout_alignParentStart="true"
             android:layout_marginTop="8dp"
             android:layout_below="@+id/le_tv_category_total"/>

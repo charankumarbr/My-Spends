@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -21,7 +23,6 @@ import java.text.ParseException;
 
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
@@ -41,13 +42,13 @@ public class ViewExpenseActivity extends BaseActivity {
     public static final String VIEW_NAME_TYPE = "view:name:type";
     private NewExpense mExpense = null;
 
-    private CustomTextView mCTvAmount;
-    private CustomTextView mCTvExpenseOn;
-    private CustomTextView mCTvAddedOn;
-    private CustomTextView mCTvLastUpdatedOn;
-    private CustomTextView mCTvPaidBy;
-    private CustomTextView mCTvNote;
-    private CustomTextView mCTvCategory;
+    private TextView mCTvAmount;
+    private TextView mCTvExpenseOn;
+    private TextView mCTvAddedOn;
+    private TextView mCTvLastUpdatedOn;
+    private TextView mCTvPaidBy;
+    private TextView mCTvNote;
+    private TextView mCTvCategory;
 
     private int mResultCode = RESULT_CANCELED;
 
@@ -217,7 +218,7 @@ public class ViewExpenseActivity extends BaseActivity {
                 AppDialog.dismissDialog();
                 AppUtil.showToast(R.string.expense_deleted_successfully);
                 setResult(RESULT_OK);
-                finish();
+                ActivityCompat.finishAfterTransition(ViewExpenseActivity.this);
             }
         }, new OnFailureListener() {
             @Override
@@ -246,6 +247,6 @@ public class ViewExpenseActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         setResult(mResultCode);
-        finish();
+        ActivityCompat.finishAfterTransition(ViewExpenseActivity.this);
     }
 }

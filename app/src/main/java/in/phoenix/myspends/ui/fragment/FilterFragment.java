@@ -14,10 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,8 +30,6 @@ import java.util.Calendar;
 
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.CustomSpinnerAdapter;
-import in.phoenix.myspends.customview.CustomEditText;
-import in.phoenix.myspends.customview.CustomTextView;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.PaymentType;
@@ -51,8 +51,8 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
     private TextInputLayout mTilFromDate;
     private TextInputLayout mTilToDate;
 
-    private CustomEditText mTietFromDate;
-    private CustomEditText mTietToDate;
+    private TextInputEditText mTietFromDate;
+    private TextInputEditText mTietToDate;
 
     private long mFromMillis = 0;
     private long mToMillis = 0;
@@ -67,6 +67,8 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
     private String mSelectedPaymentKey = null;
 
     private Spinner mSpnrPaidBy = null;
+
+    private CheckBox mCbGroupByCategory;
 
     public FilterFragment() {
         // Required empty public constructor
@@ -108,7 +110,8 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
         super.onStart();
         if (getDialog() != null) {
             getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            getDialog().setTitle("Filters");
+            getDialog().setTitle("Filter");
+            getDialog().setCanceledOnTouchOutside(false);
         }
     }
 
@@ -144,6 +147,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
 
         //mFlexboxLayout = (FlexboxLayout) filterView.findViewById(R.id.ff_fblayout_payment_mode);
         mSpnrPaidBy = filterView.findViewById(R.id.ff_spnr_paid_by);
+        mCbGroupByCategory = filterView.findViewById(R.id.ff_checkbox_group_category);
         filterView.post(new Runnable() {
             @Override
             public void run() {
@@ -190,9 +194,15 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
         public void onClick(View v) {
             if (v.getId() == R.id.ff_abutton_view_spends) {
                 if (isDateSelected()) {
-                    if (null != mListener) {
-                        mListener.onFilterChanged(mFromMillis, mToMillis, mSelectedPaymentKey);
-                        dismissAllowingStateLoss();
+                    if (AppUtil.daysDiff(mFromMillis, mToMillis) <= 60) {
+                        if (null != mListener) {
+                            AppLog.d("FilterFragment", "clickListener: DaysDiff:" + AppUtil.daysDiff(mFromMillis, mToMillis));
+                            mListener.onFilterChanged(mFromMillis, mToMillis, mSelectedPaymentKey, mCbGroupByCategory.isChecked());
+                            dismissAllowingStateLoss();
+                        }
+
+                    } else {
+                        AppUtil.showToast("Maximum date range allowed is 60 days.");
                     }
                 }
             } else if (v.getId() == R.id.ff_imageview_from_date) {
@@ -221,7 +231,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
                 datePickerDialog.getDatePicker().setMaxDate(currentMillis);
                 LayoutInflater inflater = LayoutInflater.from(mContext);
                 View customTitleView = inflater.inflate(R.layout.layout_date_title, null);
-                ((CustomTextView) customTitleView).setText(R.string.select_from_date);
+                ((TextView) customTitleView).setText(R.string.select_from_date);
                 datePickerDialog.setCustomTitle(customTitleView);
                 datePickerDialog.show();
 
@@ -249,17 +259,23 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
                 }
                 datePickerDialog.getDatePicker().setMinDate(mFromMillis);
                 long currentMillis = System.currentTimeMillis();
-                datePickerDialog.getDatePicker().setMaxDate((currentMillis < mFromExpenseDate.reportToDateTimeInMillis())
-                        ? currentMillis : mFromExpenseDate.reportToDateTimeInMillis());
+                if (null != mFromExpenseDate) {
+                    //-- not sure how the NPE crash came for mFromExpenseDate --//
+                    datePickerDialog.getDatePicker().setMaxDate((currentMillis < mFromExpenseDate.reportToDateTimeInMillis())
+                            ? currentMillis : mFromExpenseDate.reportToDateTimeInMillis());
+                } else {
+                    datePickerDialog.getDatePicker().setMaxDate(currentMillis);
+                }
                 LayoutInflater inflater = LayoutInflater.from(mContext);
                 View customTitleView = inflater.inflate(R.layout.layout_date_title, null);
-                ((CustomTextView) customTitleView).setText(R.string.select_to_date);
+                ((TextView) customTitleView).setText(R.string.select_to_date);
                 datePickerDialog.setCustomTitle(customTitleView);
                 datePickerDialog.show();
 
             } else if (v.getId() == R.id.ff_abutton_reset) {
                 resetDate();
                 resetPaymentTypes();
+                mCbGroupByCategory.setChecked(false);
             }
         }
     };
@@ -271,6 +287,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
         mTietToDate.setText("");
         mToExpenseDate = null;
         mToMillis = 0;
+        mIvToDate.setEnabled(false);
     }
 
     private void getToDateMillis(int dayOfMonth, int month, int year) {
@@ -420,7 +437,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFilterListener {
-        void onFilterChanged(long fromDate, long toDate, String paidByKey);
+        void onFilterChanged(long fromDate, long toDate, String paidByKey, boolean isGroupbyCategory);
     }
 
     @Override

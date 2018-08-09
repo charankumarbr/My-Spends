@@ -74,4 +74,5 @@
     <string name="spends_list_end">Light at the end of tunnel</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="filter">Filter</string>
+    <string name="groupby_category">Groupby Spends Category</string>
 </resources>

@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -67,6 +68,8 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
 
     private Spinner mSpnrPaidBy = null;
 
+    private CheckBox mCbGroupByCategory;
+
     public FilterFragment() {
         // Required empty public constructor
     }
@@ -107,7 +110,8 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
         super.onStart();
         if (getDialog() != null) {
             getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            getDialog().setTitle("Filters");
+            getDialog().setTitle("Filter");
+            getDialog().setCanceledOnTouchOutside(false);
         }
     }
 
@@ -143,6 +147,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
 
         //mFlexboxLayout = (FlexboxLayout) filterView.findViewById(R.id.ff_fblayout_payment_mode);
         mSpnrPaidBy = filterView.findViewById(R.id.ff_spnr_paid_by);
+        mCbGroupByCategory = filterView.findViewById(R.id.ff_checkbox_group_category);
         filterView.post(new Runnable() {
             @Override
             public void run() {
@@ -192,7 +197,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
                     if (AppUtil.daysDiff(mFromMillis, mToMillis) <= 60) {
                         if (null != mListener) {
                             AppLog.d("FilterFragment", "clickListener: DaysDiff:" + AppUtil.daysDiff(mFromMillis, mToMillis));
-                            mListener.onFilterChanged(mFromMillis, mToMillis, mSelectedPaymentKey);
+                            mListener.onFilterChanged(mFromMillis, mToMillis, mSelectedPaymentKey, mCbGroupByCategory.isChecked());
                             dismissAllowingStateLoss();
                         }
 
@@ -270,6 +275,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
             } else if (v.getId() == R.id.ff_abutton_reset) {
                 resetDate();
                 resetPaymentTypes();
+                mCbGroupByCategory.setChecked(false);
             }
         }
     };
@@ -281,6 +287,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
         mTietToDate.setText("");
         mToExpenseDate = null;
         mToMillis = 0;
+        mIvToDate.setEnabled(false);
     }
 
     private void getToDateMillis(int dayOfMonth, int month, int year) {
@@ -430,7 +437,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFilterListener {
-        void onFilterChanged(long fromDate, long toDate, String paidByKey);
+        void onFilterChanged(long fromDate, long toDate, String paidByKey, boolean isGroupbyCategory);
     }
 
     @Override

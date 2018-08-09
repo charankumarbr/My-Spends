@@ -70,6 +70,7 @@ public class AddPaymentTypeFragment extends DialogFragment {
         super.onStart();
         if (getDialog() != null) {
             getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            getDialog().setCanceledOnTouchOutside(false);
         }
     }
 

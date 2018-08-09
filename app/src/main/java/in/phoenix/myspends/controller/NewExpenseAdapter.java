@@ -353,4 +353,8 @@ public final class NewExpenseAdapter extends BaseAdapter {
     public interface OnLoadingListener {
         void onLoading(long lastExpenseDate);
     }
+
+    public String getCurrencySymbol() {
+        return mCurrencySymbol;
+    }
 }

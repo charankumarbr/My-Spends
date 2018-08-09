@@ -24,7 +24,8 @@
         android:gravity="top|start"
         android:textSize="16sp"
         android:textColor="@color/primary_text"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:textAlignment="viewStart"/>
 
     <TextView
         android:id="@+id/amb_tv_header"
@@ -49,6 +50,7 @@
         android:layout_marginEnd="12dp"
         android:lineSpacingMultiplier="1.1"
         android:gravity="top|start"
+        android:textAlignment="viewStart"
         android:textSize="16sp"
         android:textColor="@color/primary_text"
         android:visibility="gone"

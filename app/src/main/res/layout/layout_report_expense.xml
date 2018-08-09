@@ -26,7 +26,7 @@
 
             <TextView
                 android:id="@+id/lre_textview_payment_note"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:maxLines="1"
@@ -35,11 +35,12 @@
                 android:textColor="@color/primary_text"
                 android:text="Lunch"
                 android:layout_toStartOf="@+id/lre_textview_amount"
-                android:layout_alignParentStart="true"/>
+                android:gravity="start"
+                android:textAlignment="viewStart"/>
 
             <TextView
                 android:id="@+id/lre_textview_payment_type"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 app:fontFamily="@font/source_sans_pro"
@@ -48,8 +49,9 @@
                 android:ellipsize="end"
                 android:text="Cash"
                 android:layout_toStartOf="@+id/lre_textview_date"
-                android:layout_alignParentStart="true"
-                android:layout_alignBaseline="@+id/lre_textview_date"/>
+                android:layout_alignBaseline="@+id/lre_textview_date"
+                android:gravity="start"
+                android:textAlignment="viewStart"/>
 
             <TextView
                 android:id="@+id/lre_textview_amount"

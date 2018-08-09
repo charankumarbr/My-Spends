@@ -41,6 +41,7 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
     private ProgressDialog mDialog = null;
 
     private int mPaymentTypeCount = -1;
+    private MenuItem mMiAddPaymentType = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +133,7 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_payment_type, menu);
+        mMiAddPaymentType = menu.findItem(R.id.menu_add_payment_type);
         return true;
     }
 
@@ -229,6 +231,7 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
 
         mPaymentTypeCount = paymentTypes.size();
 
+        mMiAddPaymentType.setEnabled(true);
         if (null == mPaymentAdapter) {
             mPaymentAdapter = new PaymentTypeAdapter(PaymentActivity.this, paymentTypes);
             mLvPayment.setAdapter(mPaymentAdapter);

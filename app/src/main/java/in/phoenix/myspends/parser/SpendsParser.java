@@ -55,11 +55,11 @@ public final class SpendsParser extends AsyncTask<Iterable<DataSnapshot>, Void, 
         super.onPostExecute(aVoid);
         if (null != mListener) {
             AppLog.d("SpendsParser", "onPostExecute" + (null != mSpends ? mSpends.size() : 0));
-            mListener.onSpendsParsed(mSpends);
+            mListener.onSpendsParsed(mSpends, null);
         }
     }
 
     public interface SpendsParserListener {
-        void onSpendsParsed(ArrayList<NewExpense> spends);
+        void onSpendsParsed(ArrayList<NewExpense> spends, Float grandTotal);
     }
 }

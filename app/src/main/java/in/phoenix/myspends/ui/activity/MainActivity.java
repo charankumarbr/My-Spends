@@ -433,7 +433,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
     }
 
     @Override
-    public void onSpendsParsed(ArrayList<NewExpense> spends) {
+    public void onSpendsParsed(ArrayList<NewExpense> spends, Float grandTotal) {
         //mLastKey = null;
         AppLog.d("MainActivity", "onSpendsParsed:" + spends.size());
         if (spends.size() > 0) {

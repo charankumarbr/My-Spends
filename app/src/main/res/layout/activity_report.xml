@@ -87,7 +87,7 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
-    <!--<ListView
+    <ListView
         android:id="@+id/ar_listview_expenses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -98,12 +98,13 @@
         android:scrollbars="vertical"
         android:cacheColorHint="@android:color/transparent"
         android:smoothScrollbar="true"
-        android:visibility="gone" />-->
+        android:visibility="gone" />
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/ar_listview_expenses"
+        android:id="@+id/ar_recyclerview_expenses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
-        android:layout_below="@+id/ar_in_toolbar"/>
+        android:layout_below="@+id/ar_in_toolbar"
+        android:visibility="gone"/>
 
 </RelativeLayout>

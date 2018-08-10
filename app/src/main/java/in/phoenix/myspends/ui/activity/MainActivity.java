@@ -82,12 +82,12 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             setContentView(R.layout.activity_main);
 
             toolbar = findViewById(R.id.am_toolbar);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 toolbar.setTitleTextColor(getResources().getColor(android.R.color.white, null));
 
             } else {
                 toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
-            }
+            }*/
 
             toolbar.setTitle(getString(R.string.app_name));
             setSupportActionBar(toolbar);

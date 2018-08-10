@@ -49,7 +49,7 @@ public class MessageBoardActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         if (null != getSupportActionBar()) {
-            getSupportActionBar().setElevation(0f);
+            //getSupportActionBar().setElevation(0f);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }

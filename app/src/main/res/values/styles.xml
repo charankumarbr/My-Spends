@@ -15,6 +15,10 @@
         <item name="colorButtonNormal">@color/colorAccent</item>
         
         <item name="android:windowAnimationStyle">@style/CustomTransition</item>
+
+        <!--<item name="android:colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/colorPrimary</item>-->
     </style>
 
     <style name="CustomTransition" parent="@android:style/Animation.Activity">
@@ -55,7 +59,7 @@
 
     <style name="ToolbarSubtitleAppearance" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
         <item name="android:textSize">13sp</item>
-        <item name="android:textColor">#EFEFEF</item>
+        <item name="android:textColor">@color/secondary_text</item>
         <item name="android:textStyle">normal</item>
         <item name="android:fontFamily">@font/source_sans_pro</item>
     </style>
@@ -63,8 +67,16 @@
     <style name="ToolbarTitleAppearance" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:fontFamily">@font/source_sans_pro</item>
+    </style>
+
+    <style name="CustomToolbar" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorControlNormal">@color/colorPrimary</item>
+
+        <item name="android:actionOverflowButtonStyle">@style/ActionButtonOverflow</item>
+        <!-- Support library compatibility -->
+        <item name="actionOverflowButtonStyle">@style/ActionButtonOverflow</item>
     </style>
 
 </resources>

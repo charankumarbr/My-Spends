@@ -94,7 +94,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         setSupportActionBar(mToolbar);
 
         if (null != getSupportActionBar()) {
-            getSupportActionBar().setElevation(0f);
+            //getSupportActionBar().setElevation(0f);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }

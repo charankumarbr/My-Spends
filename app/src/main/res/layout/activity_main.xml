@@ -11,12 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:minHeight="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:background="@android:color/white"
+        android:theme="@style/CustomToolbar"
+        app:theme="@style/CustomToolbar"
+        app:popupTheme="@style/Theme.AppCompat.Light"
         app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
-        app:titleTextAppearance="@style/ToolbarTitleAppearance"/>
+        app:titleTextAppearance="@style/ToolbarTitleAppearance"
+        android:elevation="3dp"/>
 
     <in.phoenix.myspends.customview.ButteryProgressBar
         android:id="@+id/am_bpb_loading"

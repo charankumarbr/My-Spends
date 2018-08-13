@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -79,7 +80,7 @@ public class LaunchDeciderActivity extends BaseActivity {
                 public void onClick(View view) {
                     if (AppUtil.isConnected()) {
                         List<AuthUI.IdpConfig> providers = Arrays.asList(
-                                new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build());
+                                new AuthUI.IdpConfig.GoogleBuilder().build());
                         startActivityForResult(
                                 AuthUI.getInstance()
                                         .createSignInIntentBuilder()
@@ -128,12 +129,36 @@ public class LaunchDeciderActivity extends BaseActivity {
                     FirebaseDB.initDb().listenPaymentTypes();
 
                 } else {
-                    //-- Sign in failed, check response for error code --//
-                    AppLog.d("Login", "Failed:" + response.getErrorCode());
                     Bundle eventBundle = new Bundle();
-                    eventBundle.putInt("error_code", response.getErrorCode());
+                    String toastMsg = "Try again later!";
+                    if (null != response.getError()) {
+                        int errorCode = response.getError().getErrorCode();
+                        //-- Sign in failed, check response for error code --//
+                        AppLog.d("Login", "Failed:" + errorCode);
+                        eventBundle.putInt("error_code", errorCode);
+
+                        switch (errorCode) {
+                            case ErrorCodes.NO_NETWORK:
+                                toastMsg = getString(R.string.no_internet);
+                                break;
+                            case ErrorCodes.DEVELOPER_ERROR:
+                                toastMsg = "Unable to login. Try again later.";
+                                break;
+                            case ErrorCodes.PROVIDER_ERROR:
+                                toastMsg = "Sign-in error. Try again later.";
+                                break;
+                            case ErrorCodes.PLAY_SERVICES_UPDATE_CANCELLED:
+                            case ErrorCodes.UNKNOWN_ERROR:
+                            default:
+                                toastMsg = "Unable to login. Try again later.";
+                                break;
+                        }
+
+                    } else {
+                        eventBundle.putInt("error_code", -1);
+                    }
+                    AppUtil.showToast(toastMsg);
                     AppAnalytics.init().logEvent("login_failed", eventBundle);
-                    AppUtil.showToast("Unable to login. Please try again later.");
                 }
             }
         }

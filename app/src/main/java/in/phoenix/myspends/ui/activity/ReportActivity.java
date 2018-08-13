@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.thoughtbot.expandablerecyclerview.listeners.GroupExpandCollapseListener;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
@@ -280,9 +281,9 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         }
     }
 
-    private Iterator<DocumentSnapshot>[] arrayListToArray() {
+    private Iterator<QueryDocumentSnapshot>[] arrayListToArray() {
 
-        Iterator<DocumentSnapshot>[] iters = null;
+        Iterator<QueryDocumentSnapshot>[] iters = null;
         if ((null != mSpendsIters) && mSpendsIters.size() > 0) {
             iters = new Iterator[mSpendsIters.size()];
 
@@ -479,7 +480,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
             }
         }
     }
-    private ArrayList<Iterator<DocumentSnapshot>> mSpendsIters = null;
+    private ArrayList<Iterator<QueryDocumentSnapshot>> mSpendsIters = null;
 
     class CalculateTotal extends AsyncTask<Void, Void, Void> {
 

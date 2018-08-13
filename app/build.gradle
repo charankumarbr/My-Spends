@@ -17,8 +17,8 @@ android {
         applicationId "in.phoenix.myspends"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 19
-        versionName "0.9"
+        versionCode 20
+        versionName "0.9.1"
         resConfigs "en"
         //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -39,24 +39,36 @@ dependencies {
     implementation "com.android.support:design:$rootProject.supportLibraryVersion"
     implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     implementation "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
+
+    //-- google flexbox --//
     implementation "com.google.android:flexbox:$rootProject.flexboxVersion"
+
+    //-- firebase core --//
+    implementation "com.google.firebase:firebase-core:$rootProject.firebaseCoreVersion"
+
     //-- firebase crashlytics --//
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.3@aar') {
         transitive = true
     }
-    //-- firebase --//
-    implementation "com.google.firebase:firebase-core:$rootProject.firebaseVersion"
-    //-- firebase auth --//
+
+    //-- google play services --//
     implementation "com.google.android.gms:play-services-auth:$rootProject.gmsVersion"
-    implementation "com.firebaseui:firebase-ui-auth:$rootProject.firebaseUIVersion"
+
+    //-- firebase UI for auth --//
+    implementation "com.firebaseui:firebase-ui-auth:$rootProject.firebaseUIAuthVersion"
+
     //-- firebase realtime database --//
-    implementation "com.google.firebase:firebase-database:$rootProject.firebaseVersion"
+    implementation "com.google.firebase:firebase-database:$rootProject.firebaseDBVersion"
+
     //-- firebase firestore --//
-    implementation "com.google.firebase:firebase-firestore:$rootProject.firebaseVersion"
+    implementation "com.google.firebase:firebase-firestore:$rootProject.firebaseFirestoreVersion"
+
     //-- firebase performance --//
-    implementation "com.google.firebase:firebase-perf:$rootProject.firebaseVersion"
+    implementation "com.google.firebase:firebase-perf:$rootProject.firebasePerfVersion"
+
     //-- expandable recycler view --//
     implementation 'com.thoughtbot:expandablerecyclerview:1.3'
+
     /*androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
             exclude group: 'com.android.support', module: 'support-annotations'
         })*/

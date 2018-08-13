@@ -10,8 +10,8 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
-        classpath 'com.google.gms:google-services:3.1.2'
-        classpath 'io.fabric.tools:gradle:1.24.4'
+        classpath 'com.google.gms:google-services:4.0.1'
+        classpath 'io.fabric.tools:gradle:1.25.4'
         classpath ('com.google.firebase:firebase-plugins:1.1.5') {
             exclude group: 'com.google.guava', module: 'guava-jdk5'
         }
@@ -35,9 +35,12 @@ allprojects {
 ext {
     supportLibraryVersion = '26.1.0'
     flexboxVersion = '0.2.5'
-    firebaseVersion = "11.4.2"
-    firebaseUIVersion = "3.1.0"
-    gmsVersion = "11.4.2"
+    firebaseCoreVersion = "16.0.1"
+    firebaseUIAuthVersion = "4.0.0"
+    firebaseDBVersion = "16.0.1"
+    firebaseFirestoreVersion = "17.0.4"
+    firebasePerfVersion = "16.0.0"
+    gmsVersion = "15.0.1"
     archVersion = '1.0.0'
     junitVersion = '4.12'
     mockitoVersion = '1.10.19'

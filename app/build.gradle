@@ -17,9 +17,10 @@ android {
         applicationId "in.phoenix.myspends"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 20
-        versionName "0.9"
+        versionCode 21
+        versionName "0.9.1"
         resConfigs "en"
+        multiDexEnabled true
         //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

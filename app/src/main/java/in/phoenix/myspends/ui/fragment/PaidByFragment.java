@@ -184,6 +184,12 @@ public class PaidByFragment extends DialogFragment implements View.OnClickListen
 
     @Override
     public void onPaymentTypesParsed(ArrayList<PaymentType> paymentTypes, boolean isCashPaymentTypeAdded) {
+
+        if (null == paymentTypes && !isCashPaymentTypeAdded) {
+            AppUtil.showToast("Unable to fetch payment types!");
+            return;
+        }
+
         if (null == paymentTypes) {
             paymentTypes = new ArrayList<>();
         }

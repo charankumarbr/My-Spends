@@ -164,7 +164,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (null != dataSnapshot) {
-                    AppLog.d("PaidByFragment", "Count:" + dataSnapshot.getChildrenCount());
+                    AppLog.d("FilterFragment", "Count:" + dataSnapshot.getChildrenCount());
                     if (dataSnapshot.getChildrenCount() > 0) {
                         new PaymentTypeParser(FilterFragment.this).executeOnExecutor(
                                 AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
@@ -178,10 +178,10 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 if (null != databaseError) {
-                    AppLog.d("PaidByFragment", "Payment Types Error:" + databaseError.getDetails() + "::" + databaseError.getMessage());
+                    AppLog.d("FilterFragment", "Payment Types Error:" + databaseError.getDetails() + "::" + databaseError.getMessage());
 
                 } else {
-                    AppLog.d("PaidByFragment", "Payment Types Error!");
+                    AppLog.d("FilterFragment", "Payment Types Error!");
                 }
                 AppUtil.showToast("Unable to fetch payment types.");
                 dismissAllowingStateLoss();
@@ -357,6 +357,12 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
 
     @Override
     public void onPaymentTypesParsed(ArrayList<PaymentType> paymentTypes, boolean isCashPaymentTypeAdded) {
+
+        if (null == paymentTypes && !isCashPaymentTypeAdded) {
+            AppUtil.showToast("Unable to fetch payment types!");
+            return;
+        }
+        
         if (null == paymentTypes) {
             paymentTypes = new ArrayList<>();
         }
@@ -392,7 +398,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
             mSelectedPaymentKey = (String) view.getTag();
-            AppLog.d("PaidByFragment", "TypeId:" + mSelectedPaymentKey);
+            AppLog.d("FilterFragment", "TypeId:" + mSelectedPaymentKey);
         }
 
         @Override
@@ -411,7 +417,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
             if (isChecked) {
                 buttonView.setChecked(true);
                 mSelectedPaymentKey = (String) buttonView.getTag();
-                AppLog.d("PaidByFragment", "TypeId:" + mSelectedPaymentKey + "::Title:" + buttonView.getText());
+                AppLog.d("FilterFragment", "TypeId:" + mSelectedPaymentKey + "::Title:" + buttonView.getText());
             }
         }
     };

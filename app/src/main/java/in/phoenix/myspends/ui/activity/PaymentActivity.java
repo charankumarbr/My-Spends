@@ -220,11 +220,11 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
         //mPbLoading.setVisibility(View.GONE);
         AppDialog.dismissDialog();
 
-        /*if (null == paymentTypes && !isCashPaymentTypeAdded) {
+        if (null == paymentTypes && !isCashPaymentTypeAdded) {
             AppUtil.showToast("Unable to fetch payment types!");
             finish();
             return;
-        }*/
+        }
 
         if (null == paymentTypes) {
             paymentTypes = new ArrayList<>();

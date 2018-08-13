@@ -49,14 +49,13 @@ import in.phoenix.myspends.parser.FSSpendsParser;
 import in.phoenix.myspends.parser.SpendsParser;
 import in.phoenix.myspends.ui.fragment.DatePickerFragment;
 import in.phoenix.myspends.ui.fragment.FilterFragment;
-import in.phoenix.myspends.ui.fragment.PaidByFragment;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
 public class ReportActivity extends BaseActivity implements DatePickerFragment.OnDatePickedListener,
-        PaidByFragment.OnPaidBySelectedListener, SpendsParser.SpendsParserListener,
+        /*PaidByFragment.OnPaidBySelectedListener,*/ SpendsParser.SpendsParserListener,
         NewExpenseAdapter.OnLoadingListener, FilterFragment.OnFilterListener {
 
     private long mFromMillis = 0;
@@ -149,7 +148,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         }
     }
 
-    @Override
+    /*@Override
     public void onPaidBySelected(String paidByKey) {
         if (null == paidByKey && null == mPaidBy) {
             //-- nothing to do --//
@@ -164,7 +163,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                 getExpenses();
             }
         }
-    }
+    }*/
 
     private void getExpenses() {
         if ((0 != mFromMillis && 0 != mToMillis)) {

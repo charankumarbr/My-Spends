@@ -44,8 +44,8 @@ public interface AppConstants {
     //-- 128 bit key --//
     String dummy = "iVuNaNKaRcHuGaLu";
 
-    //-- TODO: change to 7, including 1 Payment Type for cash + 6 to user-custom --//
-    int MAX_PAYMENT_TYPE_COUNT = 7;
+    //-- TODO: change to 6, including 1 Payment Type for cash + 5 to user-custom --//
+    int MAX_PAYMENT_TYPE_COUNT = 6;
 
     String[] RESTRICTED_CHARS = {":", "\"", "\\", "*", "%"};
 

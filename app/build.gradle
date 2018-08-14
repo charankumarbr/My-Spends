@@ -11,12 +11,12 @@ android {
             storePassword 'phoenixMySpends'
         }
     }
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "in.phoenix.myspends"
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 21
         versionName "0.9.1"
         resConfigs "en"

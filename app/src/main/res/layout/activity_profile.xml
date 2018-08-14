@@ -103,11 +103,12 @@
         android:layout_marginTop="20dp"
         app:fontFamily="@font/source_sans_pro"
         android:textColor="@color/primary_text"
-        android:gravity="center_vertical"
+        android:gravity="center_vertical|start"
         android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
         android:drawableTint="@color/primary_text"
         android:background="#F5F5F5"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:textAlignment="viewStart"/>
 
     <!--<TextView
         android:id="@+id/ap_tv_version"

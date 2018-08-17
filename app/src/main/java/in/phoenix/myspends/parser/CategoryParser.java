@@ -11,7 +11,6 @@ import java.util.HashMap;
 
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.model.Category;
-import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.util.AppLog;
 
 /**

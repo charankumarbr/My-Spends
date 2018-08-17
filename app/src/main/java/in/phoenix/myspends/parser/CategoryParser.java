@@ -5,10 +5,13 @@ import android.os.AsyncTask;
 import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.model.Category;
+import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.util.AppLog;
 
 /**
@@ -47,6 +50,13 @@ public final class CategoryParser extends AsyncTask<Iterable<DataSnapshot>, Void
                     mAllCategories.add(category);
                     mMapAllCategories.put(category.getId(), category.getName());
                 }
+
+                Collections.sort(mAllCategories, new Comparator<Category>() {
+                    @Override
+                    public int compare(Category o1, Category o2) {
+                        return o1.getName().compareTo(o2.getName());
+                    }
+                });
             }
         }
 

@@ -217,7 +217,9 @@ public class ViewExpenseActivity extends BaseActivity {
                 //mPbLoading.setVisibility(View.GONE);
                 AppDialog.dismissDialog();
                 AppUtil.showToast(R.string.expense_deleted_successfully);
-                setResult(RESULT_OK);
+                Intent delIntent = new Intent();
+                delIntent.putExtra(AppConstants.Bundle.EXPENSE_PRIMARY_KEY, mExpense.getId());
+                setResult(AppConstants.ACTION_SPEND_DELETE, delIntent);
                 ActivityCompat.finishAfterTransition(ViewExpenseActivity.this);
             }
         }, new OnFailureListener() {
@@ -234,9 +236,9 @@ public class ViewExpenseActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == AppConstants.EDIT_EXPENSE_CODE) {
             if (resultCode == RESULT_OK) {
-                mResultCode = RESULT_OK;
                 if (null != data && data.hasExtra(AppConstants.Bundle.EXPENSE) &&
                         null != data.getParcelableExtra(AppConstants.Bundle.EXPENSE)) {
+                    mResultCode = AppConstants.ACTION_SPEND_EDIT;
                     mExpense = data.getParcelableExtra(AppConstants.Bundle.EXPENSE);
                     viewExpense();
                 }
@@ -246,7 +248,15 @@ public class ViewExpenseActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        setResult(mResultCode);
+        if (mResultCode == AppConstants.ACTION_SPEND_EDIT) {
+            Intent editIntent = new Intent();
+            editIntent.putExtra(AppConstants.Bundle.EXPENSE, mExpense);
+            setResult(mResultCode, editIntent);
+
+        } else {
+            setResult(mResultCode);
+        }
+
         ActivityCompat.finishAfterTransition(ViewExpenseActivity.this);
     }
 }

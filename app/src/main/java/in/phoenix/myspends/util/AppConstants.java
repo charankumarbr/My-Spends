@@ -37,6 +37,7 @@ public interface AppConstants {
         String NOTIFICATION_HOUR = "notificationHour";
         String NOTIFICATION_MIN = "notificationMin";
         String LAST_APP_OPENED_ON = "lastAppOpenedOn";
+        String LAUNCH_COUNT = "launchCount";
     }
 
     int PAGE_SPENDS_SIZE = 30;
@@ -60,4 +61,9 @@ public interface AppConstants {
     }
 
     long DELAY_EXIT = 2000;
+
+    int ACTION_SPEND_DELETE = 339;
+    int ACTION_SPEND_EDIT = 338;
+
+    int APP_RATE_FREQUENCY = 3;
 }

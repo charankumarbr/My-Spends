@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 
 import org.json.JSONException;
 
@@ -22,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import in.phoenix.myspends.BuildConfig;
+import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.CurrencyListAdapter;
 import in.phoenix.myspends.database.FirebaseDB;
@@ -136,12 +141,36 @@ public class AppSetupActivity extends BaseActivity {
                 AppUtil.showSnackbar(mViewComplete, "Please select the currency!");
 
             } else {
-                Currency selectedCurrency = (Currency) mLvCurrencies.getAdapter().getItem(mPosition);
-                FirebaseDB.initDb().setCurrency(selectedCurrency);
-                AppPref.getInstance().putString(AppConstants.PrefConstants.CURRENCY, selectedCurrency.getCurrencySymbol());
-                startActivity(new Intent(AppSetupActivity.this, MainActivity.class));
-                AppPref.getInstance().putInt(AppConstants.PrefConstants.APP_SETUP, BuildConfig.VERSION_CODE);
-                finish();
+                final Currency selectedCurrency = (Currency) mLvCurrencies.getAdapter().getItem(mPosition);
+                FirebaseDB.initDb().setCurrency(selectedCurrency, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                        if (null == databaseError) {
+                            AppPref.getInstance().putString(AppConstants.PrefConstants.CURRENCY, selectedCurrency.getCurrencySymbol());
+                            startActivity(new Intent(AppSetupActivity.this, MainActivity.class));
+                            AppPref.getInstance().putInt(AppConstants.PrefConstants.APP_SETUP, BuildConfig.VERSION_CODE);
+                            finish();
+
+                        } else {
+                            int errorCode = databaseError.getCode();
+                            if (errorCode == DatabaseError.NETWORK_ERROR || errorCode == DatabaseError.DISCONNECTED ) {
+                                AppUtil.showToast(R.string.no_internet);
+
+                            } else if (errorCode == DatabaseError.INVALID_TOKEN || errorCode == DatabaseError.EXPIRED_TOKEN) {
+                                AppUtil.showToast("Session Expired/Invalid. Please login again.");
+
+                                AppPref.getInstance().clearAll();
+                                MySpends.clearAll();
+                                FirebaseDB.onLogout();
+                                AppUtil.removeDynamicShortcut();
+                                Intent newIntent = new Intent(AppSetupActivity.this, LaunchDeciderActivity.class);
+                                newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(newIntent);
+                                finish();
+                            }
+                        }
+                    }
+                });
             }
             return true;
         }

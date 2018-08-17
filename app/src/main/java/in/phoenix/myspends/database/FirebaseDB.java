@@ -41,15 +41,20 @@ public final class FirebaseDB {
 
     private static FirebaseDB mFirebaseDB;
 
+    //-- database reference of currency --//
     private DatabaseReference currencyRef;
 
+    //-- database reference of payment types --//
     private DatabaseReference paymentTypeRef;
     private ChildEventListener mPaymentTypeListener;
 
+    //-- database reference of category --//
     private DatabaseReference categoryRef;
 
+    //-- database reference of message board --//
     private DatabaseReference messageBoardRef;
 
+    //-- database reference of payments --//
     private FirebaseFirestore firebaseFirestore;
     private CollectionReference fsSpendsRef;
     private EventListener mSpendsListener = null;
@@ -92,7 +97,7 @@ public final class FirebaseDB {
 
             firebaseFirestore = FirebaseFirestore.getInstance();
             FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                    .setPersistenceEnabled(true)
+                    .setPersistenceEnabled(false)
                     .build();
             firebaseFirestore.setFirestoreSettings(settings);
 
@@ -187,8 +192,8 @@ public final class FirebaseDB {
         return mFirebaseDB;
     }
 
-    public void setCurrency(Currency selectedCurrency) {
-        currencyRef.setValue(selectedCurrency);
+    public void setCurrency(Currency selectedCurrency, DatabaseReference.CompletionListener completionListener) {
+        currencyRef.setValue(selectedCurrency, completionListener);
     }
 
     public String getCurrency() {
@@ -380,7 +385,7 @@ public final class FirebaseDB {
         String[] categoryNames = {"Beauty & Fitness", "Bills & Payments", "Books & Stationery",
                 "Clothing", "Donation", "EMI", "Entertainment", "Food & Beverages", "Gifts", "Grocery",
                 "Home", "Insurance", "Investments", "Maintenance", "Medical", "Miscellaneous", "Purchases",
-                "Rent", "Service & Repairs", "Shopping", "Transport", "Travel", "Utility", "Vacation"};
+                "Rent", "Service & Repairs", "Shopping", "Transport", "Travel", "Utility", "Vacation", "Savings"};
 
         //Beauty & Fitness, EMI, Entertainment, Grocery, Investments, Shopping, Travel, Medical (instead of Healthcare)
 

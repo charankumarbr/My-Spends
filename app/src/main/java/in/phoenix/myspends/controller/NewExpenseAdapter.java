@@ -1,6 +1,7 @@
 package in.phoenix.myspends.controller;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -307,6 +308,33 @@ public final class NewExpenseAdapter extends BaseAdapter {
             }
         }
         return totalAmount;
+    }
+
+    public void removeSpend(String expenseId) {
+        if (null != mSpends) {
+            for (int index = 0; index < mSpends.size(); index++) {
+                if (mSpends.get(index).getId().equals(expenseId)) {
+                    AppLog.d("NewExpenseAdapter", "removeSpend:" + expenseId + ":Amount:" + mSpends.get(index).getAmount());
+                    mSpends.remove(index);
+                    notifyDataSetChanged();
+                    break;
+                }
+            }
+        }
+    }
+
+    public void updateSpend(NewExpense editedExpense) {
+        if (null != mSpends) {
+            String expenseId = editedExpense.getId();
+            for (int index = 0; index < mSpends.size(); index++) {
+                if (mSpends.get(index).getId().equals(expenseId)) {
+                    AppLog.d("NewExpenseAdapter", "updateSpend:" + expenseId + ":Amount:" + mSpends.get(index).getAmount());
+                    mSpends.set(index, editedExpense);
+                    notifyDataSetChanged();
+                    break;
+                }
+            }
+        }
     }
 
     class ExpenseHolder {

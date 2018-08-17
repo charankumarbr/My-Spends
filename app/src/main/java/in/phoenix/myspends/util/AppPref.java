@@ -55,4 +55,19 @@ public final class AppPref {
     public long getLong(String key) {
         return mSharedPref.getLong(key, 0);
     }
+
+    public void incrementAppOpenCount() {
+        int currentCount = mSharedPref.getInt(AppConstants.PrefConstants.LAUNCH_COUNT, 0);
+        AppLog.d("AppPref", "incrementAppOpenCount: Pre:" + currentCount);
+        if (currentCount >= 0) {
+            currentCount++;
+            currentCount = currentCount % AppConstants.APP_RATE_FREQUENCY;
+            AppLog.d("AppPref", "incrementAppOpenCount: Post:" + currentCount);
+            mSharedPref.edit().putInt(AppConstants.PrefConstants.LAUNCH_COUNT, currentCount).apply();
+        }
+    }
+
+    public void appRated() {
+        mSharedPref.edit().putInt(AppConstants.PrefConstants.LAUNCH_COUNT, -1).apply();
+    }
 }

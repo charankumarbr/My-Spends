@@ -75,4 +75,5 @@
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="filter">Filter</string>
     <string name="groupby_category">Groupby Spends Category</string>
+    <string name="app_rate_msg">If you enjoy using My Spends, please take a moment to rate the app. Please encourage us by rating 5 stars. Thanks for your support!</string>
 </resources>

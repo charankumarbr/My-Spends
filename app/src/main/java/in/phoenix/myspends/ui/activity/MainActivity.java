@@ -1,5 +1,6 @@
 package in.phoenix.myspends.ui.activity;
 
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -38,13 +39,15 @@ import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.parser.FSSpendsParser;
 import in.phoenix.myspends.parser.SpendsParser;
+import in.phoenix.myspends.ui.fragment.AppRateFragment;
+import in.phoenix.myspends.ui.fragment.AppRateFragmentKt;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
 public class MainActivity extends BaseActivity implements SpendsParser.SpendsParserListener,
-        NewExpenseAdapter.OnLoadingListener {
+        NewExpenseAdapter.OnLoadingListener, AppRateFragment.OnAppRateActionListener {
 
     private ExpenseDate mCalendarExpenseDate;
 
@@ -416,10 +419,29 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == AppConstants.VIEW_EXPENSE_CODE || requestCode == AppConstants.NEW_EXPENSE_CODE
                 || requestCode == AppConstants.EXPENSE_LIST_CODE) {
-            if (resultCode == RESULT_OK) {
-                isRefresh = true;
-                AppLog.d("MainActivity", "Spends: Refresh");
-                getExpenses();
+
+            if (requestCode == AppConstants.VIEW_EXPENSE_CODE) {
+                if (mExpenseAdapter == null) {
+                    isRefresh = true;
+                    AppLog.d("MainActivity", "Spends: Refresh/View");
+                    getExpenses();
+
+                } else if (null != data) {
+                    if (data.hasExtra(AppConstants.Bundle.EXPENSE_PRIMARY_KEY)) {
+                        //-- delete expense --//
+                        mExpenseAdapter.removeSpend(data.getStringExtra(AppConstants.Bundle.EXPENSE_PRIMARY_KEY));
+
+                    } else if (data.hasExtra(AppConstants.Bundle.EXPENSE)) {
+                        mExpenseAdapter.updateSpend((NewExpense) data.getParcelableExtra(AppConstants.Bundle.EXPENSE));
+                    }
+                }
+
+            } else {
+                if (resultCode == RESULT_OK) {
+                    isRefresh = true;
+                    AppLog.d("MainActivity", "Spends: Refresh/Other");
+                    getExpenses();
+                }
             }
         }
     }
@@ -444,6 +466,14 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
         }
 
         mPbLoading.setVisibility(View.GONE);
+
+        checkAppRateDialog();
+    }
+
+    private void checkAppRateDialog() {
+        if (!isFinishing() && AppUtil.canRateDialogShow()) {
+            getSupportFragmentManager().beginTransaction().add(AppRateFragment.newInstance(), "AppRate").commitAllowingStateLoss();
+        }
     }
 
     private void setSpends(ArrayList<NewExpense> spends) {
@@ -480,6 +510,19 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             AppLog.d("MainActivity", "onLoading: Key:" + lastExpenseDate);
             mLastExpense = lastExpenseDate;
             getExpenses();
+        }
+    }
+
+    @Override
+    public void onAppRateAction(int action) {
+        if (action == AppRateFragmentKt.ACTION_RATE_NOW) {
+            AppPref.getInstance().appRated();
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID)));
+
+            } catch (ActivityNotFoundException e) {
+                AppUtil.showToast("Google Play Store is not found!");
+            }
         }
     }
 }

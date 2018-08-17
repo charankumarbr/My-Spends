@@ -511,4 +511,9 @@ public final class AppUtil {
     public static long daysDiff(long fromMillis, long toMillis) {
         return TimeUnit.MILLISECONDS.toDays(toMillis - fromMillis);
     }
+
+    public static boolean canRateDialogShow() {
+        AppLog.d("AppUtil", "canRateDialogShow:" + AppPref.getInstance().getInt(AppConstants.PrefConstants.LAUNCH_COUNT));
+        return AppPref.getInstance().getInt(AppConstants.PrefConstants.LAUNCH_COUNT) % AppConstants.APP_RATE_FREQUENCY == 0;
+    }
 }

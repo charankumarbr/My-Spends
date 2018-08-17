@@ -57,11 +57,7 @@ public class LaunchDeciderActivity extends BaseActivity {
 
         if (AppUtil.isUserLoggedIn()) {
             //MySpends.fetchPaymentTypes();
-            FirebaseDB.initDb().listenPaymentTypes();
-            findViewById(R.id.als_layout_signin).setVisibility(View.GONE);
-            mPbLoading.setVisibility(View.VISIBLE);
-            AppUtil.addDynamicShortcut();
-            getCurrency();
+            userLoggedIn();
 
         } else {
             ViewPager pager = (ViewPager) findViewById(R.id.als_vp_imps);
@@ -94,6 +90,15 @@ public class LaunchDeciderActivity extends BaseActivity {
         }
     }
 
+    private void userLoggedIn() {
+        Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        FirebaseDB.initDb().listenPaymentTypes();
+        findViewById(R.id.als_layout_signin).setVisibility(View.GONE);
+        mPbLoading.setVisibility(View.VISIBLE);
+        AppUtil.addDynamicShortcut();
+        getCurrency();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -119,13 +124,15 @@ public class LaunchDeciderActivity extends BaseActivity {
                     //-- move fetch categories to FirebaseDB class --//
                     MySpends.fetchCategories();
 
-                    Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    userLoggedIn();
 
-                    AppUtil.addDynamicShortcut();
+                    //Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-                    getCurrency();
+                    //AppUtil.addDynamicShortcut();
+
+                    //getCurrency();
                     //MySpends.fetchPaymentTypes();
-                    FirebaseDB.initDb().listenPaymentTypes();
+                    //FirebaseDB.initDb().listenPaymentTypes();
 
                 } else {
                     Bundle eventBundle = new Bundle();

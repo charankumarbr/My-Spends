@@ -13,11 +13,10 @@
     <string name="enter_payment_name">Enter Payment Name</string>
     <string name="enter_valid_payment_name">Enter a valid Payment Name</string>
     <string name="Rs">\u20B9</string>
-    <string name="font_noto_sans">fontNotoSans</string>
+    <!--<string name="font_noto_sans">fontNotoSans</string>-->
     <string name="paid_by_">Paid by:</string>
     <string name="paid_by">Paid by</string>
     <string name="note">Note</string>
-    <string name="value">default</string>
     <string name="done_caps">DONE</string>
     <string name="payment_types">Payment Types</string>
     <string name="pref_name">MySpendsPrefs</string>
@@ -60,7 +59,6 @@
     <string name="spends_chart">Spends Chart</string>
     <string name="total">Total</string>
     <string name="message_board">Message Board</string>
-    <string name="scribble">Scribble</string>
     <string name="board">Board</string>
 
     <string-array name="imps">

@@ -79,6 +79,8 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
     private Toolbar mToolbar;
     private Boolean mIsGroupbyCategory = null;
 
+    private int mCategoryId = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -178,7 +180,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
 
             mToolbar.setSubtitle(null);
 
-            FirebaseDB.initDb().getFsSpends(mFromMillis, mToMillis, mPaidBy, mLastSnapshot, new OnSuccessListener<QuerySnapshot>() {
+            FirebaseDB.initDb().getFsSpends(mFromMillis, mToMillis, mPaidBy, mCategoryId, mLastSnapshot, new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot documentSnapshots) {
 
@@ -434,7 +436,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
     }
 
     @Override
-    public void onFilterChanged(long fromDate, long toDate, String paidByKey, boolean isGroupbyCategory) {
+    public void onFilterChanged(long fromDate, long toDate, String paidByKey, int categoryId, boolean isGroupbyCategory) {
         AppLog.d("ReportActivity", "onFilterChanged: FromDate:" + fromDate + " :: To Date:" + toDate + " :: Paidby:" + paidByKey);
         if (0 != fromDate && 0 != toDate) {
             boolean isChanged = false;
@@ -449,6 +451,11 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
 
             if ((null == mPaidBy) || (!TextUtils.isEmpty(mPaidBy) && !mPaidBy.equals(paidByKey))) {
                 mPaidBy = paidByKey;
+                isChanged = true;
+            }
+
+            if (mCategoryId == -1 || (mCategoryId != categoryId)) {
+                mCategoryId = categoryId;
                 isChanged = true;
             }
 

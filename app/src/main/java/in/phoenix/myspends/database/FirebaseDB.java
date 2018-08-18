@@ -316,20 +316,21 @@ public final class FirebaseDB {
         fsSpendsRef.document(spendId).delete().addOnSuccessListener(successListener).addOnFailureListener(failureListener);
     }
 
-    public void getFsSpends(long fromMillis, long toMillis, String paidBy, DocumentSnapshot lastVisible,
+    public void getFsSpends(long fromMillis, long toMillis, String paidBy, int categoryId, DocumentSnapshot lastVisible,
                             OnSuccessListener<QuerySnapshot> successListener, OnFailureListener failureListener) {
 
         com.google.firebase.firestore.Query query = fsSpendsRef.orderBy("expenseDate", com.google.firebase.firestore.Query.Direction.DESCENDING);
 
-        //int categoryId; - categoryId has to be passed to this function, user has to choose the category in the UI
         if (null != paidBy) {
             AppLog.d("FirebaseDB", "getFsSpends: PaidBy:" + paidBy);
             query = query.whereEqualTo("paymentTypeKey", paidBy);
         }
 
-        /*if (categoryId >= 0) {
+        //int categoryId; - categoryId has to be passed to this function, user has to choose the category in the UI
+        AppLog.d("FirebaseDB", "getFsSpends: CategoryId:" + categoryId);
+        if (categoryId > 0) {
             query = query.whereEqualTo("categoryId", categoryId);
-        }*/
+        }
 
         query = query.whereGreaterThanOrEqualTo("expenseDate", fromMillis).whereLessThanOrEqualTo("expenseDate", toMillis);
 

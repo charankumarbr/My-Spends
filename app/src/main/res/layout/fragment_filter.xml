@@ -110,6 +110,25 @@
                 android:spinnerMode="dialog"
                 android:layout_below="@+id/ff_ctextview_paidby_header"/>
 
+            <TextView
+                android:id="@+id/ff_ctextview_category_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select the category to filter your spends"
+                android:layout_marginTop="20dp"
+                android:textSize="16sp"
+                android:textColor="@color/colorPrimary"
+                app:fontFamily="@font/source_sans_pro"
+                android:layout_below="@+id/ff_spnr_paid_by"/>
+
+            <Spinner
+                android:id="@+id/ff_spnr_category"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="12dp"
+                android:dropDownSelector="@color/colorAccent"
+                android:spinnerMode="dialog"
+                android:layout_below="@+id/ff_ctextview_category_header"/>
 
             <CheckBox
                 android:id="@+id/ff_checkbox_group_category"
@@ -118,7 +137,7 @@
                 android:text="@string/groupby_category"
                 android:textColor="@color/primary_text"
                 app:fontFamily="@font/source_sans_pro"
-                android:layout_below="@+id/ff_spnr_paid_by"
+                android:layout_below="@+id/ff_spnr_category"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="12dp"/>
 

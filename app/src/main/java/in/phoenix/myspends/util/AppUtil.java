@@ -42,6 +42,7 @@ import java.util.concurrent.TimeUnit;
 
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.model.Category;
 import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.PaymentMode;
@@ -515,5 +516,14 @@ public final class AppUtil {
     public static boolean canRateDialogShow() {
         AppLog.d("AppUtil", "canRateDialogShow:" + AppPref.getInstance().getInt(AppConstants.PrefConstants.LAUNCH_COUNT));
         return AppPref.getInstance().getInt(AppConstants.PrefConstants.LAUNCH_COUNT) % AppConstants.APP_RATE_FREQUENCY == 0;
+    }
+
+    public static int getPosOf(int categoryId, ArrayList<Category> allCategories) {
+        for (int index = 0; index < allCategories.size(); index++) {
+            if (allCategories.get(index).getId() == categoryId) {
+                return index;
+            }
+        }
+        return 0;
     }
 }

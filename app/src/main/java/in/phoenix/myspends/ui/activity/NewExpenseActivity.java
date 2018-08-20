@@ -749,7 +749,8 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
             mSpnrCategory.setAdapter(categoryAdapter);
 
             if (!isNew) {
-                mSpnrCategory.setSelection(mExpense.getCategoryId());
+                int selectionIndex = AppUtil.getPosOf(mExpense.getCategoryId(), allCategories);
+                mSpnrCategory.setSelection(selectionIndex > 0 ? selectionIndex + 1 : 0);
             }
             mSpnrCategory.setOnItemSelectedListener(mCategoryListener);
 

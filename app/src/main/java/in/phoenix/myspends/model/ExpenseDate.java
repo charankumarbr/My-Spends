@@ -97,9 +97,14 @@ public class ExpenseDate implements Parcelable {
 
     public long getTimeInMillis() {
         Calendar calendar = Calendar.getInstance();
+        if (calendar.get(Calendar.DAY_OF_MONTH) != dayOfMonth || calendar.get(Calendar.MONTH) != month
+                || calendar.get(Calendar.YEAR) != year) {
+            calendar.set(Calendar.HOUR_OF_DAY, 23);
+        }
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.YEAR, year);
+
         return calendar.getTimeInMillis();
     }
 

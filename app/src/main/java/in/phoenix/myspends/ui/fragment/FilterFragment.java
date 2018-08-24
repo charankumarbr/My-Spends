@@ -318,10 +318,18 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
             } else if (v.getId() == R.id.ff_abutton_reset) {
                 resetDate();
                 resetPaymentTypes();
+                resetCategory();
                 mCbGroupByCategory.setChecked(false);
             }
         }
     };
+
+    private void resetCategory() {
+        if (null != mSpnrCategory) {
+            mSpnrCategory.setSelection(0);
+        }
+        mSelectedCategoryId = -1;
+    }
 
     private void resetDate() {
         mTietFromDate.setText("");
@@ -488,7 +496,9 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
                 ((RadioButton) mFlexboxLayout.getChildAt(index)).setChecked(false);
             }
         }*/
-        mSpnrPaidBy.setSelection(0);
+        if (null != mSpnrPaidBy) {
+            mSpnrPaidBy.setSelection(0);
+        }
         mSelectedPaymentKey = null;
     }
 

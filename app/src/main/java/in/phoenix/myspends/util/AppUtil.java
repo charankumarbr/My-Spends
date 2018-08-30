@@ -515,7 +515,8 @@ public final class AppUtil {
 
     public static boolean canRateDialogShow() {
         AppLog.d("AppUtil", "canRateDialogShow:" + AppPref.getInstance().getInt(AppConstants.PrefConstants.LAUNCH_COUNT));
-        return AppPref.getInstance().getInt(AppConstants.PrefConstants.LAUNCH_COUNT) % AppConstants.APP_RATE_FREQUENCY == 0;
+        int launchCount = AppPref.getInstance().getInt(AppConstants.PrefConstants.LAUNCH_COUNT);
+        return (launchCount > 0) && launchCount % AppConstants.APP_RATE_FREQUENCY == 0;
     }
 
     public static int getPosOf(int categoryId, ArrayList<Category> allCategories) {

@@ -2,10 +2,12 @@ package `in`.phoenix.myspends.ui.fragment
 
 import `in`.phoenix.myspends.R
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.support.v7.widget.AppCompatButton
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,10 +49,17 @@ class AppRateFragment : DialogFragment() {
     override fun onStart() {
         super.onStart()
         if (dialog != null) {
-            dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            dialog.setTitle("Rate " + getString(R.string.app_name))
-            dialog.setCanceledOnTouchOutside(false)
+            with(dialog) {
+                window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                setTitle("Rate " + getString(R.string.app_name))
+                setCanceledOnTouchOutside(false)
+                setOnKeyListener(keyListener)
+            }
         }
+    }
+
+    private val keyListener =  DialogInterface.OnKeyListener { dialogInterface: DialogInterface, keyCode: Int, keyEvent: KeyEvent ->
+        keyCode == KeyEvent.KEYCODE_BACK
     }
 
     private val clickListener = View.OnClickListener {

@@ -516,13 +516,17 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
     @Override
     public void onAppRateAction(int action) {
         if (action == AppRateFragmentKt.ACTION_RATE_NOW) {
-            AppPref.getInstance().appRated();
             try {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID)));
+                AppPref.getInstance().appRated();
 
             } catch (ActivityNotFoundException e) {
                 AppUtil.showToast("Google Play Store is not found!");
+                AppPref.getInstance().putInt(AppConstants.PrefConstants.LAUNCH_COUNT, 0);
             }
+
+        } else if (action == AppRateFragmentKt.ACTION_LATER) {
+            AppPref.getInstance().putInt(AppConstants.PrefConstants.LAUNCH_COUNT, 0);
         }
     }
 }

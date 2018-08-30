@@ -61,7 +61,7 @@ public final class AppPref {
         AppLog.d("AppPref", "incrementAppOpenCount: Pre:" + currentCount);
         if (currentCount >= 0) {
             currentCount++;
-            currentCount = currentCount % AppConstants.APP_RATE_FREQUENCY;
+            //currentCount = currentCount % AppConstants.APP_RATE_FREQUENCY;
             AppLog.d("AppPref", "incrementAppOpenCount: Post:" + currentCount);
             mSharedPref.edit().putInt(AppConstants.PrefConstants.LAUNCH_COUNT, currentCount).apply();
         }

@@ -172,8 +172,13 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
                         }
                     } else {
                         //AppUtil.showToast("No Spends tracked!");
+                        if (AppUtil.isConnected()) {
+                            mCTvNoSpends.setText(R.string.no_spends_tracked);
+
+                        } else {
+                            mCTvNoSpends.setText(R.string.no_internet);
+                        }
                         mLvExpense.setVisibility(View.GONE);
-                        mCTvNoSpends.setText(R.string.no_spends_tracked);
                         mCTvNoSpends.setVisibility(View.VISIBLE);
                     }
                 }

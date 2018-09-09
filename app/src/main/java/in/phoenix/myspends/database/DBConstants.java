@@ -6,7 +6,7 @@ package in.phoenix.myspends.database;
 
 public interface DBConstants {
 
-    String DB_NAME = "in_phoenix_myspends.db";
+    /*String DB_NAME = "in_phoenix_myspends.db";
 
     int DB_VERSION = 1;
 
@@ -37,14 +37,14 @@ public interface DBConstants {
         String PAYMENT_TYPE_PRI_ID = "payment_type_pri_id";
         String UPDATED_ON = "updated_on";
         String EXPENSE_ON = "expense_on";
-    }
+    }*/
 
     interface PAYMENT_MODE {
         String CASH = "Cash";
         String CREDIT_CARD = "Credit Card";
         String DEBIT_CARD = "Debit Card";
         String WALLET = "Wallet";
-        String NET_BANKING = "Net Banking";
+        String NET_BANKING = "Online Banking";
 
         int CASH_ID = 0;
         int CREDIT_CARD_ID = 1;

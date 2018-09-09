@@ -386,7 +386,7 @@ public final class FirebaseDB {
         String[] categoryNames = {"Beauty & Fitness", "Bills & Payments", "Books & Stationery",
                 "Clothing", "Donation", "EMI", "Entertainment", "Food & Beverages", "Gifts", "Grocery",
                 "Home", "Insurance", "Investments", "Maintenance", "Medical", "Miscellaneous", "Purchases",
-                "Rent", "Service & Repairs", "Shopping", "Transport", "Travel", "Utility", "Vacation", "Savings", "Arrears"};
+                "Rent", "Service & Repairs", "Shopping", "Transport", "Travel", "Utility", "Vacation", "Savings", "Arrears", "Lend"};
 
         //Beauty & Fitness, EMI, Entertainment, Grocery, Investments, Shopping, Travel, Medical (instead of Healthcare)
 
@@ -435,12 +435,12 @@ public final class FirebaseDB {
         AppLog.d("FirebaseDB", "onLogout");
     }
 
-    /*private void addACategory() {
+    /*public void addACategory() {
         String categoryKey = categoryRef.push().getKey();
         AppLog.d("FirebaseDB", "Key:" + categoryKey);
         Category category = new Category();
-        category.setName("Arrears");
-        category.setId(26);
+        category.setName("Lend");
+        category.setId(27);
         categoryRef.child(categoryKey).setValue(category);
     }*/
 }

@@ -7,7 +7,7 @@ android {
         release {
             keyAlias 'phoenixmyspends'
             keyPassword 'phoenixMySpends'
-            storeFile file('C:/Users/charan.br/D/Personal/ExpenseTracker/expense-tracker/MySpends.jks')
+            storeFile file('/MySpends.jks')
             storePassword 'phoenixMySpends'
         }
     }

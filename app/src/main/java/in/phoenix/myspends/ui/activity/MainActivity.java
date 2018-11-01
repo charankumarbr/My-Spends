@@ -20,6 +20,7 @@ import android.view.animation.Animation;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -327,10 +328,24 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
         aboutappDialog.setTitle(getString(R.string.app_name));
         aboutappDialog.setMessage("Version: " + BuildConfig.VERSION_NAME + " (" +
                 BuildConfig.VERSION_CODE + ")" + "\n\n" + getString(R.string.about_app_msg));
+
         aboutappDialog.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+            }
+        });
+
+        aboutappDialog.setNeutralButton("Privacy Policy", new DialogInterface.OnClickListener(){
+
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                try {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://icharan.blogspot.com/2018/11/my-spends-privacy-policy.html"));
+                    startActivity(browserIntent);
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, "Unable to open the link", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

@@ -1,5 +1,6 @@
 package in.phoenix.myspends.util;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -350,9 +351,19 @@ public final class AppUtil {
     }
 
     public static void createNotification(Context context, ExpenseDate expenseDate) {
-        long when = System.currentTimeMillis();
+
+        String channelId = "reminder";
+        String channelName = "Reminder";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel mChannel = new NotificationChannel(
+                    channelId, channelName, importance);
+            notificationManager.createNotificationChannel(mChannel);
+        }
 
         Intent notificationIntent = null;
         PendingIntent pendingIntent = null;
@@ -416,7 +427,8 @@ public final class AppUtil {
             }
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "reminder")
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setColor(context.getResources().getColor(R.color.colorPrimary))
                 .setContentTitle(contentTitle)
@@ -425,6 +437,7 @@ public final class AppUtil {
                 .setSound(alarmSound)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
+                .setWhen(System.currentTimeMillis())
                 .setVibrate(new long[]{1000, 1000, 1000});
 
         notificationManager.notify(20332, builder.build());

@@ -1,12 +1,15 @@
 package in.phoenix.myspends.ui.activity;
 
+import android.animation.Animator;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -45,6 +48,8 @@ public class LaunchDeciderActivity extends BaseActivity {
 
     private ProgressBar mPbLoading;
 
+    private View mVSignIn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +58,8 @@ public class LaunchDeciderActivity extends BaseActivity {
         initLayout();
         mPbLoading = findViewById(R.id.als_pb_loading);
         TextView tvVersion = findViewById(R.id.als_tv_version);
-        tvVersion.setText("v " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")");
+        tvVersion.setText("Phoenix Apps\nv " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")");
+        mVSignIn = findViewById(R.id.als_layout_signin);
 
         if (AppUtil.isUserLoggedIn()) {
             //MySpends.fetchPaymentTypes();
@@ -66,9 +72,29 @@ public class LaunchDeciderActivity extends BaseActivity {
 
             TabLayout tabLayout = (TabLayout) findViewById(R.id.als_tl_dots);
             tabLayout.setupWithViewPager(pager, true);
+            pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    if (position == 3) {
+                        toggleSignIn(true);
+
+                    } else {
+                        toggleSignIn(false);
+                    }
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
 
             AppUtil.removeDynamicShortcut();
-            findViewById(R.id.als_layout_signin).setVisibility(View.VISIBLE);
             AppCompatButton btnLogin = findViewById(R.id.als_abtn_login);
             btnLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -90,10 +116,81 @@ public class LaunchDeciderActivity extends BaseActivity {
         }
     }
 
+    private void toggleSignIn(boolean toShow) {
+        if (!AppUtil.isUserLoggedIn()) {
+            if (toShow) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    // get the center for the clipping circle
+                    int cx = mVSignIn.getWidth() / 2;
+                    int cy = mVSignIn.getHeight() / 2;
+
+                    // get the final radius for the clipping circle
+                    float finalRadius = (float) Math.hypot(cx, cy);
+
+                    // create the animator for this view (the start radius is zero)
+                    Animator anim = ViewAnimationUtils.createCircularReveal(mVSignIn, cx, cy, 0f, finalRadius);
+                    anim.setDuration(300);
+
+                    // make the view visible and start the animation
+                    mVSignIn.setVisibility(View.VISIBLE);
+                    anim.start();
+
+                } else {
+                    // set the view to visible without a circular reveal animation below Lollipop
+                    mVSignIn.setVisibility(View.VISIBLE);
+                }
+
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    // get the center for the clipping circle
+                    int cx = mVSignIn.getWidth() / 2;
+                    int cy = mVSignIn.getHeight() / 2;
+
+                    // get the initial radius for the clipping circle
+                    float initialRadius = (float) Math.hypot(cx, cy);
+
+                    // create the animation (the final radius is zero)
+                    Animator anim = ViewAnimationUtils.createCircularReveal(mVSignIn, cx, cy, initialRadius, 0f);
+                    anim.setDuration(300);
+
+                    // make the view invisible when the animation is done
+                    anim.addListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animator) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animator) {
+                            mVSignIn.setVisibility(View.INVISIBLE);
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animator) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animator) {
+
+                        }
+                    });
+
+                    // start the animation
+                    anim.start();
+
+                } else {
+                    // set the view to visible without a circular reveal animation below Lollipop
+                    mVSignIn.setVisibility(View.INVISIBLE);
+                }
+            }
+        }
+    }
+
     private void userLoggedIn() {
         Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
         FirebaseDB.initDb().listenPaymentTypes();
-        findViewById(R.id.als_layout_signin).setVisibility(View.GONE);
+        mVSignIn.setVisibility(View.GONE);
         mPbLoading.setVisibility(View.VISIBLE);
         AppUtil.addDynamicShortcut();
         getCurrency();

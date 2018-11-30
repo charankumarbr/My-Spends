@@ -55,7 +55,7 @@
         android:layout_marginBottom="20dp"
         android:orientation="vertical"
         android:layout_above="@+id/als_tv_version"
-        android:visibility="gone">
+        android:visibility="invisible">
 
         <ImageView
             android:id="@+id/als_iv_google_logo"
@@ -98,6 +98,7 @@
         android:layout_marginBottom="10dp"
         android:textSize="13sp"
         android:textColor="@color/colorAccent"
-        app:fontFamily="@font/source_sans_pro"/>
+        app:fontFamily="@font/source_sans_pro"
+        android:gravity="center"/>
 
 </RelativeLayout>

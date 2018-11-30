@@ -153,7 +153,7 @@ public class AppSetupActivity extends BaseActivity {
 
                         } else {
                             int errorCode = databaseError.getCode();
-                            if (errorCode == DatabaseError.NETWORK_ERROR || errorCode == DatabaseError.DISCONNECTED ) {
+                            if (errorCode == DatabaseError.NETWORK_ERROR || errorCode == DatabaseError.DISCONNECTED) {
                                 AppUtil.showToast(R.string.no_internet);
 
                             } else if (errorCode == DatabaseError.INVALID_TOKEN || errorCode == DatabaseError.EXPIRED_TOKEN) {

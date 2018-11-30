@@ -26,28 +26,28 @@ final class FontCache {
 
         //if (fontName.equals(context.getString(R.string.font_noto_sans))) {
 
-            Typeface typeface;
-            switch (textStyle) {
-                case Typeface.BOLD:
-                    //typeface = Typeface.createFromAsset(context.getAssets(), "fonts/notosans_bold.ttf");
-                    typeface = ResourcesCompat.getFont(context, R.font.source_sans_pro_bold);
-                    fontMap.put(fontName + textStyle, typeface);
-                    AppLog.d("FontCache", "Generating new typeface: BOLD");
-                    return typeface;
+        Typeface typeface;
+        switch (textStyle) {
+            case Typeface.BOLD:
+                //typeface = Typeface.createFromAsset(context.getAssets(), "fonts/notosans_bold.ttf");
+                typeface = ResourcesCompat.getFont(context, R.font.source_sans_pro_bold);
+                fontMap.put(fontName + textStyle, typeface);
+                AppLog.d("FontCache", "Generating new typeface: BOLD");
+                return typeface;
 
-                case Typeface.NORMAL:
-                default:
-                    textStyle = Typeface.NORMAL;
-                    if (fontMap.containsKey(fontName + textStyle)) {
-                        return fontMap.get(fontName + textStyle);
-                    }
+            case Typeface.NORMAL:
+            default:
+                textStyle = Typeface.NORMAL;
+                if (fontMap.containsKey(fontName + textStyle)) {
+                    return fontMap.get(fontName + textStyle);
+                }
 
-                    //typeface = Typeface.createFromAsset(context.getAssets(), "fonts/notosans_regular.ttf");
-                    typeface = ResourcesCompat.getFont(context, R.font.source_sans_pro);
-                    fontMap.put(fontName + textStyle, typeface);
-                    AppLog.d("FontCache", "Generating new typeface: NORMAL/Default");
-                    return typeface;
-            }
+                //typeface = Typeface.createFromAsset(context.getAssets(), "fonts/notosans_regular.ttf");
+                typeface = ResourcesCompat.getFont(context, R.font.source_sans_pro);
+                fontMap.put(fontName + textStyle, typeface);
+                AppLog.d("FontCache", "Generating new typeface: NORMAL/Default");
+                return typeface;
+        }
         /*}
         return null;*/
     }

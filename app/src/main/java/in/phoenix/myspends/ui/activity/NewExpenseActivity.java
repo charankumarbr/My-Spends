@@ -276,7 +276,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                 View customTitleView = inflater.inflate(R.layout.layout_date_title, null);
                 datePickerDialog.setCustomTitle(customTitleView);
                 datePickerDialog.show();
-                AppUtil.toggleKeyboard(mViewComplete,false);
+                AppUtil.toggleKeyboard(mViewComplete, false);
 
             } else if (v.getId() == R.id.ane_ctextview_add_new_payment) {
 

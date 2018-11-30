@@ -486,6 +486,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
             }
         }
     }
+
     private ArrayList<Iterator<QueryDocumentSnapshot>> mSpendsIters = null;
 
     class CalculateTotal extends AsyncTask<Void, Void, Void> {
@@ -535,7 +536,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         }
     }
 
-    private class SpendsChart extends AsyncTask<Void, Void, Void> implements Comparator<CategoryChartData>{
+    private class SpendsChart extends AsyncTask<Void, Void, Void> implements Comparator<CategoryChartData> {
 
         private ProgressDialog pdLoading;
 

@@ -413,7 +413,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
             AppUtil.showToast("Unable to fetch payment types!");
             return;
         }
-        
+
         if (null == paymentTypes) {
             paymentTypes = new ArrayList<>();
         }

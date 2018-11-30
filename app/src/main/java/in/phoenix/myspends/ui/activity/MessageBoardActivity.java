@@ -156,7 +156,7 @@ public class MessageBoardActivity extends BaseActivity {
                     saveMessage();
 
                 } else {
-                    AppLog.d("MessageBoard","Not reqd to save!");
+                    AppLog.d("MessageBoard", "Not reqd to save!");
                     AppUtil.toggleKeyboard(mViewComplete, false);
                     showMessage();
                     mEtMessage.setText("");
@@ -191,7 +191,7 @@ public class MessageBoardActivity extends BaseActivity {
                     }
                 }
             });
-            AppUtil.toggleKeyboard(mViewComplete,false);
+            AppUtil.toggleKeyboard(mViewComplete, false);
 
         } else {
             AppUtil.showToast(R.string.no_internet);

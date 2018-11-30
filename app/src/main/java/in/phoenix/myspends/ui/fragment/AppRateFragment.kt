@@ -58,7 +58,7 @@ class AppRateFragment : DialogFragment() {
         }
     }
 
-    private val keyListener =  DialogInterface.OnKeyListener { dialogInterface: DialogInterface, keyCode: Int, keyEvent: KeyEvent ->
+    private val keyListener = DialogInterface.OnKeyListener { dialogInterface: DialogInterface, keyCode: Int, keyEvent: KeyEvent ->
         keyCode == KeyEvent.KEYCODE_BACK
     }
 

@@ -55,27 +55,27 @@ public class PaymentTypeParser extends AsyncTask<Iterable<DataSnapshot>, Void, V
                         mActivePaymentTypes = new ArrayList<>();
                     }*/
 
-                    AppLog.d("PaymentType", "One");
-                    AppLog.d("PaymentType", "Two");
-                    for (DataSnapshot aValue : values) {
-                        AppLog.d("PaymentType", "Key:" + aValue.getKey());
-                        AppLog.d("PaymentType", "Value:" + aValue.getValue());
-                        PaymentType paymentType = aValue.getValue(PaymentType.class);
-                        paymentType.setKey(aValue.getKey());
-                        //mPaymentTypes.add(paymentType);
-                        if (mIsActiveOnly) {
-                            if (paymentType.isActive()) {
-                                mPaymentTypes.add(paymentType);
-                            }
-
-                        } else {
+                AppLog.d("PaymentType", "One");
+                AppLog.d("PaymentType", "Two");
+                for (DataSnapshot aValue : values) {
+                    AppLog.d("PaymentType", "Key:" + aValue.getKey());
+                    AppLog.d("PaymentType", "Value:" + aValue.getValue());
+                    PaymentType paymentType = aValue.getValue(PaymentType.class);
+                    paymentType.setKey(aValue.getKey());
+                    //mPaymentTypes.add(paymentType);
+                    if (mIsActiveOnly) {
+                        if (paymentType.isActive()) {
                             mPaymentTypes.add(paymentType);
                         }
 
-                        if (null == mListener) {
-                            mAllPaymentTypes.put(aValue.getKey(), paymentType);
-                        }
+                    } else {
+                        mPaymentTypes.add(paymentType);
                     }
+
+                    if (null == mListener) {
+                        mAllPaymentTypes.put(aValue.getKey(), paymentType);
+                    }
+                }
                 /*} else {
                     //-- for the application --//
                     mAllPaymentTypes = new HashMap<>();

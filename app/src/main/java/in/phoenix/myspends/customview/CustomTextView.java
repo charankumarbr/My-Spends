@@ -47,7 +47,7 @@ public final class CustomTextView extends AppCompatTextView {
             try {
                 setTypeface(FontCache.getFont(getContext(), fontName, textStyle));
 
-            }  catch (Resources.NotFoundException e) {
+            } catch (Resources.NotFoundException e) {
                 Crashlytics.logException(e);
             }
 

@@ -336,7 +336,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             }
         });
 
-        aboutappDialog.setNeutralButton("Privacy Policy", new DialogInterface.OnClickListener(){
+        aboutappDialog.setNeutralButton("Privacy Policy", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

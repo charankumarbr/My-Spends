@@ -17,8 +17,8 @@ android {
         applicationId "in.phoenix.myspends"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 27
-        versionName "1.1"
+        versionCode 29
+        versionName "1.2"
         resConfigs "en"
         //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

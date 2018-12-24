@@ -14,12 +14,12 @@
         android:title="@string/spends_chart"
         app:showAsAction="ifRoom"
         android:visible="false"
-        android:icon="@drawable/ic_chart_white_24dp"/>
+        android:icon="@drawable/ic_chart_primary_24dp"/>
 
     <item
         android:id="@+id/menu_filter"
         android:title="@string/filter"
         app:showAsAction="always"
         android:visible="true"
-        android:icon="@drawable/ic_filter_list_white_24dp"/>
+        android:icon="@drawable/ic_filter_primary_24dp"/>
 </menu>

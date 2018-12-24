@@ -675,11 +675,11 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     @Override
     public void onPaymentTypesParsed(ArrayList<PaymentType> paymentTypes, boolean isCashPaymentTypeAdded) {
 
-        if (null == paymentTypes && !isCashPaymentTypeAdded) {
+        /*if (null == paymentTypes && !isCashPaymentTypeAdded) {
             AppUtil.showToast("Unable to fetch payment types!");
             finish();
             return;
-        }
+        }*/
 
         if (null == paymentTypes) {
             paymentTypes = new ArrayList<>();
@@ -687,6 +687,12 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
 
         if (!isCashPaymentTypeAdded) {
             paymentTypes.add(0, PaymentType.getCashPaymentType());
+        }
+
+        if (paymentTypes.size() == 0) {
+            AppUtil.showToast("Unable to fetch payment types!");
+            finish();
+            return;
         }
 
         if (null != paymentTypes && paymentTypes.size() > 0) {

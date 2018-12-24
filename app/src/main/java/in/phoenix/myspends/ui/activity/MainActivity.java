@@ -110,6 +110,15 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             mBpbLoading = findViewById(R.id.am_bpb_loading);
             mPbLoading = findViewById(R.id.am_pb_loading);
             mCTvNoSpends = findViewById(R.id.am_ctv_no_spends);
+
+            findViewById(R.id.am_fab_new).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent newExpenseIntent = new Intent(MainActivity.this, NewExpenseActivity.class);
+                    newExpenseIntent.putExtra(AppConstants.Bundle.EXPENSE_DATE, mCalendarExpenseDate);
+                    startActivityForResult(newExpenseIntent, AppConstants.NEW_EXPENSE_CODE);
+                }
+            });
             getExpenses();
         }
     }

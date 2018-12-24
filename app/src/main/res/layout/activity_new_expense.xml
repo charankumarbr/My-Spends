@@ -38,7 +38,7 @@
             android:layout_toEndOf="@+id/ane_ctextview_expense_date"
             android:foregroundTint="@color/colorAccent"
             android:foregroundTintMode="src_in"
-            android:foreground="@drawable/ic_mode_edit_white_24dp" />
+            android:foreground="@drawable/ic_mode_edit_primary_24dp" />
     </RelativeLayout>
 
     <ScrollView
@@ -73,8 +73,7 @@
                     android:textColor="@color/primary_text"
                     app:fontFamily="@font/source_sans_pro"
                     android:layout_alignParentStart="true"
-                    android:textAlignment="viewStart"
-                    android:text="Hello"/>
+                    android:textAlignment="viewStart"/>
 
                 <CheckBox
                     android:id="@+id/ane_checkbox_add_another"

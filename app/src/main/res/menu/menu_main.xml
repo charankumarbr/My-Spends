@@ -6,13 +6,14 @@
         android:id="@+id/menu_payment"
         android:title="@string/payment_type"
         app:showAsAction="always"
-        android:icon="@drawable/ic_credit_card_white_24dp" />
+        android:icon="@drawable/ic_credit_card_primary_24dp" />
 
     <item
         android:id="@+id/menu_add_expense"
         android:title="@string/add_expense"
         app:showAsAction="always"
-        android:icon="@drawable/ic_add_white_24dp" />
+        android:icon="@drawable/ic_add_primary_24dp"
+        android:visible="false"/>
 
     <item
         android:id="@+id/menu_message_board"

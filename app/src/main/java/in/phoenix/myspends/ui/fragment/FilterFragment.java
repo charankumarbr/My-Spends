@@ -409,10 +409,10 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
     @Override
     public void onPaymentTypesParsed(ArrayList<PaymentType> paymentTypes, boolean isCashPaymentTypeAdded) {
 
-        if (null == paymentTypes && !isCashPaymentTypeAdded) {
+        /*if (null == paymentTypes && !isCashPaymentTypeAdded) {
             AppUtil.showToast("Unable to fetch payment types!");
             return;
-        }
+        }*/
 
         if (null == paymentTypes) {
             paymentTypes = new ArrayList<>();
@@ -420,6 +420,11 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
 
         if (!isCashPaymentTypeAdded) {
             paymentTypes.add(0, PaymentType.getCashPaymentType());
+        }
+
+        if (paymentTypes.size() == 0) {
+            AppUtil.showToast("Unable to fetch payment types!");
+            return;
         }
 
         CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(mContext,

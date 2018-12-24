@@ -34,7 +34,7 @@ allprojects {
 }
 
 ext {
-    supportLibraryVersion = '26.1.0'
+    supportLibraryVersion = '28.0.0'
     flexboxVersion = '0.2.5'
     firebaseCoreVersion = "16.0.1"
     firebaseUIAuthVersion = "4.0.0"

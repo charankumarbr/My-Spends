@@ -3,6 +3,7 @@ package in.phoenix.myspends.parser;
 import android.os.AsyncTask;
 
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,7 +15,7 @@ import in.phoenix.myspends.util.AppLog;
  * Created by Charan.Br on 12/19/2017.
  */
 
-public final class FSSpendsParser extends AsyncTask<Iterator<DocumentSnapshot>, Void, Void> {
+public final class FSSpendsParser extends AsyncTask<Iterator<QueryDocumentSnapshot>, Void, Void> {
 
     private SpendsParser.SpendsParserListener mListener = null;
 
@@ -27,12 +28,12 @@ public final class FSSpendsParser extends AsyncTask<Iterator<DocumentSnapshot>, 
     }
 
     @Override
-    protected Void doInBackground(Iterator<DocumentSnapshot>... iterators) {
+    protected Void doInBackground(Iterator<QueryDocumentSnapshot>... iterators) {
 
         if (null != iterators && iterators.length > 0) {
 
             for (int index = 0; index < iterators.length; index++) {
-                Iterator<DocumentSnapshot> documentSnapshots = iterators[index];
+                Iterator<QueryDocumentSnapshot> documentSnapshots = iterators[index];
                 if (null != documentSnapshots) {
                     while (documentSnapshots.hasNext()) {
                         DocumentSnapshot documentSnapshot = documentSnapshots.next();

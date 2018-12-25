@@ -54,6 +54,6 @@ public final class ExpenseViewHolder extends ChildViewHolder {
 
         tvExpCategoryName.setText(expense.getCategoryId() > 0 ? MySpends.getCategoryName
                 (expense.getCategoryId()) : AppConstants.BLANK_NOTE_TEMPLATE);
-        
+
     }
 }

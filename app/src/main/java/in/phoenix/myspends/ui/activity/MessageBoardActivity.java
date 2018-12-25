@@ -34,6 +34,8 @@ public class MessageBoardActivity extends BaseActivity {
 
     private MessageBoard mMessageBoard;
 
+    private View mMessageLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +51,7 @@ public class MessageBoardActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         if (null != getSupportActionBar()) {
-            getSupportActionBar().setElevation(0f);
+            //getSupportActionBar().setElevation(0f);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
@@ -57,6 +59,7 @@ public class MessageBoardActivity extends BaseActivity {
         mCTvMessage = findViewById(R.id.amb_tv_message);
         mVHeader = findViewById(R.id.amb_tv_header);
         mEtMessage = findViewById(R.id.amb_et_message);
+        mMessageLayout = findViewById(R.id.amb_layout_message);
 
         getMessage();
     }
@@ -124,6 +127,7 @@ public class MessageBoardActivity extends BaseActivity {
         mMiEdit.setVisible(!editStatus);
         mMiDone.setVisible(editStatus);
 
+        mMessageLayout.setVisibility(editStatus ? View.GONE : View.VISIBLE);
         mCTvMessage.setVisibility(editStatus ? View.GONE : View.VISIBLE);
         mVHeader.setVisibility(editStatus ? View.VISIBLE : View.GONE);
         mEtMessage.setVisibility(editStatus ? View.VISIBLE : View.GONE);
@@ -156,7 +160,7 @@ public class MessageBoardActivity extends BaseActivity {
                     saveMessage();
 
                 } else {
-                    AppLog.d("MessageBoard","Not reqd to save!");
+                    AppLog.d("MessageBoard", "Not reqd to save!");
                     AppUtil.toggleKeyboard(mViewComplete, false);
                     showMessage();
                     mEtMessage.setText("");
@@ -191,7 +195,7 @@ public class MessageBoardActivity extends BaseActivity {
                     }
                 }
             });
-            AppUtil.toggleKeyboard(mViewComplete,false);
+            AppUtil.toggleKeyboard(mViewComplete, false);
 
         } else {
             AppUtil.showToast(R.string.no_internet);

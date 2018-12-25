@@ -31,6 +31,22 @@
           }
         },
         {
+          "client_id": "434217671470-9ba5v0npgmo64pgj7nfj4a04ee4daf1m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.phoenix.myspends",
+            "certificate_hash": "5153586ca9f8f0a424001617d01d9478e76ae9d2"
+          }
+        },
+        {
+          "client_id": "434217671470-gf5d8i6581eti2dvdac9gnp5m625n6cn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.phoenix.myspends",
+            "certificate_hash": "608c24a349ccb4a7c4a930967132d72da5196b3d"
+          }
+        },
+        {
           "client_id": "434217671470-j8k51nmmfoib5uj7ljg75m2eso31hr1a.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.thoughtbot.expandablerecyclerview.listeners.GroupExpandCollapseListener;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
@@ -48,14 +49,13 @@ import in.phoenix.myspends.parser.FSSpendsParser;
 import in.phoenix.myspends.parser.SpendsParser;
 import in.phoenix.myspends.ui.fragment.DatePickerFragment;
 import in.phoenix.myspends.ui.fragment.FilterFragment;
-import in.phoenix.myspends.ui.fragment.PaidByFragment;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
 public class ReportActivity extends BaseActivity implements DatePickerFragment.OnDatePickedListener,
-        PaidByFragment.OnPaidBySelectedListener, SpendsParser.SpendsParserListener,
+        /*PaidByFragment.OnPaidBySelectedListener,*/ SpendsParser.SpendsParserListener,
         NewExpenseAdapter.OnLoadingListener, FilterFragment.OnFilterListener {
 
     private long mFromMillis = 0;
@@ -79,6 +79,8 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
     private Toolbar mToolbar;
     private Boolean mIsGroupbyCategory = null;
 
+    private int mCategoryId = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +96,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         setSupportActionBar(mToolbar);
 
         if (null != getSupportActionBar()) {
-            getSupportActionBar().setElevation(0f);
+            //getSupportActionBar().setElevation(0f);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
@@ -148,7 +150,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         }
     }
 
-    @Override
+    /*@Override
     public void onPaidBySelected(String paidByKey) {
         if (null == paidByKey && null == mPaidBy) {
             //-- nothing to do --//
@@ -163,7 +165,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                 getExpenses();
             }
         }
-    }
+    }*/
 
     private void getExpenses() {
         if ((0 != mFromMillis && 0 != mToMillis)) {
@@ -178,7 +180,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
 
             mToolbar.setSubtitle(null);
 
-            FirebaseDB.initDb().getFsSpends(mFromMillis, mToMillis, mPaidBy, mLastSnapshot, new OnSuccessListener<QuerySnapshot>() {
+            FirebaseDB.initDb().getFsSpends(mFromMillis, mToMillis, mPaidBy, mCategoryId, mLastSnapshot, new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot documentSnapshots) {
 
@@ -280,9 +282,9 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         }
     }
 
-    private Iterator<DocumentSnapshot>[] arrayListToArray() {
+    private Iterator<QueryDocumentSnapshot>[] arrayListToArray() {
 
-        Iterator<DocumentSnapshot>[] iters = null;
+        Iterator<QueryDocumentSnapshot>[] iters = null;
         if ((null != mSpendsIters) && mSpendsIters.size() > 0) {
             iters = new Iterator[mSpendsIters.size()];
 
@@ -434,7 +436,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
     }
 
     @Override
-    public void onFilterChanged(long fromDate, long toDate, String paidByKey, boolean isGroupbyCategory) {
+    public void onFilterChanged(long fromDate, long toDate, String paidByKey, int categoryId, boolean isGroupbyCategory) {
         AppLog.d("ReportActivity", "onFilterChanged: FromDate:" + fromDate + " :: To Date:" + toDate + " :: Paidby:" + paidByKey);
         if (0 != fromDate && 0 != toDate) {
             boolean isChanged = false;
@@ -449,6 +451,11 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
 
             if ((null == mPaidBy) || (!TextUtils.isEmpty(mPaidBy) && !mPaidBy.equals(paidByKey))) {
                 mPaidBy = paidByKey;
+                isChanged = true;
+            }
+
+            if (mCategoryId == -1 || (mCategoryId != categoryId)) {
+                mCategoryId = categoryId;
                 isChanged = true;
             }
 
@@ -479,7 +486,8 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
             }
         }
     }
-    private ArrayList<Iterator<DocumentSnapshot>> mSpendsIters = null;
+
+    private ArrayList<Iterator<QueryDocumentSnapshot>> mSpendsIters = null;
 
     class CalculateTotal extends AsyncTask<Void, Void, Void> {
 
@@ -528,7 +536,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         }
     }
 
-    private class SpendsChart extends AsyncTask<Void, Void, Void> implements Comparator<CategoryChartData>{
+    private class SpendsChart extends AsyncTask<Void, Void, Void> implements Comparator<CategoryChartData> {
 
         private ProgressDialog pdLoading;
 

@@ -37,6 +37,7 @@ public interface AppConstants {
         String NOTIFICATION_HOUR = "notificationHour";
         String NOTIFICATION_MIN = "notificationMin";
         String LAST_APP_OPENED_ON = "lastAppOpenedOn";
+        String LAUNCH_COUNT = "launchCount";
     }
 
     int PAGE_SPENDS_SIZE = 30;
@@ -44,8 +45,9 @@ public interface AppConstants {
     //-- 128 bit key --//
     String dummy = "iVuNaNKaRcHuGaLu";
 
-    //-- including 1 Payment Type for cash --//
-    int MAX_PAYMENT_TYPE_COUNT = 6;
+    //-- TODO: change to 6, including 1 Payment Type for cash + 5 to user-custom --//
+    //-- updated to support 1 CASH and 7 user-custom --//
+    int MAX_PAYMENT_TYPE_COUNT = 8;
 
     String[] RESTRICTED_CHARS = {":", "\"", "\\", "*", "%"};
 
@@ -60,4 +62,9 @@ public interface AppConstants {
     }
 
     long DELAY_EXIT = 2000;
+
+    int ACTION_SPEND_DELETE = 339;
+    int ACTION_SPEND_EDIT = 338;
+
+    int APP_RATE_FREQUENCY = 3;
 }

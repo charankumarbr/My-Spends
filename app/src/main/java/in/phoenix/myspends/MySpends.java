@@ -49,8 +49,10 @@ public class MySpends extends Application {
 
         AppPref.getInstance().putLong(AppConstants.PrefConstants.LAST_APP_OPENED_ON,
                 System.currentTimeMillis());
+        AppPref.getInstance().incrementAppOpenCount();
         if (AppUtil.isUserLoggedIn()) {
             Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            //FirebaseDB.initDb().addACategory();
             fetchCategories();
         }
         initNotification();

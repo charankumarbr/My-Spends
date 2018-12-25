@@ -276,7 +276,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                 View customTitleView = inflater.inflate(R.layout.layout_date_title, null);
                 datePickerDialog.setCustomTitle(customTitleView);
                 datePickerDialog.show();
-                AppUtil.toggleKeyboard(mViewComplete,false);
+                AppUtil.toggleKeyboard(mViewComplete, false);
 
             } else if (v.getId() == R.id.ane_ctextview_add_new_payment) {
 
@@ -675,12 +675,24 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
     @Override
     public void onPaymentTypesParsed(ArrayList<PaymentType> paymentTypes, boolean isCashPaymentTypeAdded) {
 
+        /*if (null == paymentTypes && !isCashPaymentTypeAdded) {
+            AppUtil.showToast("Unable to fetch payment types!");
+            finish();
+            return;
+        }*/
+
         if (null == paymentTypes) {
             paymentTypes = new ArrayList<>();
         }
 
         if (!isCashPaymentTypeAdded) {
             paymentTypes.add(0, PaymentType.getCashPaymentType());
+        }
+
+        if (paymentTypes.size() == 0) {
+            AppUtil.showToast("Unable to fetch payment types!");
+            finish();
+            return;
         }
 
         if (null != paymentTypes && paymentTypes.size() > 0) {
@@ -743,9 +755,14 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
             mSpnrCategory.setAdapter(categoryAdapter);
 
             if (!isNew) {
-                mSpnrCategory.setSelection(mExpense.getCategoryId());
+                int selectionIndex = AppUtil.getPosOf(mExpense.getCategoryId(), allCategories);
+                mSpnrCategory.setSelection(selectionIndex > 0 ? selectionIndex + 1 : 0);
             }
             mSpnrCategory.setOnItemSelectedListener(mCategoryListener);
+
+        } else {
+            AppUtil.showToast("Unable to fetch payment types!");
+            finish();
         }
     }
 }

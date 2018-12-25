@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
@@ -31,8 +32,10 @@ import java.util.Calendar;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.controller.CustomSpinnerAdapter;
 import in.phoenix.myspends.database.FirebaseDB;
+import in.phoenix.myspends.model.Category;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.PaymentType;
+import in.phoenix.myspends.parser.CategoryParser;
 import in.phoenix.myspends.parser.PaymentTypeParser;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppUtil;
@@ -42,7 +45,7 @@ import in.phoenix.myspends.util.AppUtil;
  * Use the {@link FilterFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FilterFragment extends DialogFragment implements PaymentTypeParser.PaymentTypeParserListener {
+public class FilterFragment extends DialogFragment implements PaymentTypeParser.PaymentTypeParserListener, CategoryParser.CategoryParserListener {
 
     private Context mContext;
 
@@ -65,8 +68,11 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
     //private FlexboxLayout mFlexboxLayout = null;
 
     private String mSelectedPaymentKey = null;
+    private int mSelectedCategoryId = -1;
 
     private Spinner mSpnrPaidBy = null;
+
+    private Spinner mSpnrCategory = null;
 
     private CheckBox mCbGroupByCategory;
 
@@ -148,6 +154,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
         //mFlexboxLayout = (FlexboxLayout) filterView.findViewById(R.id.ff_fblayout_payment_mode);
         mSpnrPaidBy = filterView.findViewById(R.id.ff_spnr_paid_by);
         mCbGroupByCategory = filterView.findViewById(R.id.ff_checkbox_group_category);
+        mSpnrCategory = filterView.findViewById(R.id.ff_spnr_category);
         filterView.post(new Runnable() {
             @Override
             public void run() {
@@ -158,13 +165,43 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
         return filterView;
     }
 
+    private void getCategories() {
+        FirebaseDB.initDb().getExpenseCategories(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (null != dataSnapshot) {
+                    AppLog.d("FilterFragment", "getCategories::Count:" + dataSnapshot.getChildrenCount());
+                    if (dataSnapshot.getChildrenCount() > 0) {
+                        new CategoryParser(FilterFragment.this).executeOnExecutor(
+                                AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
+
+                    } else {
+                        onCategoriesParsed(null);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                if (null != databaseError) {
+                    AppLog.d("FilterFragment", "getCategories::Error:" + databaseError.getDetails() + "::" + databaseError.getMessage());
+
+                } else {
+                    AppLog.d("FilterFragment", "getCategories::Error!");
+                }
+                AppUtil.showToast("Unable to fetch categories.");
+                onCategoriesParsed(null);
+            }
+        });
+    }
+
     private void getAllPaymentTypes() {
         //mFlexboxLayout.removeAllViews();
         FirebaseDB.initDb().getPaymentTypes(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (null != dataSnapshot) {
-                    AppLog.d("PaidByFragment", "Count:" + dataSnapshot.getChildrenCount());
+                    AppLog.d("FilterFragment", "getAllPaymentTypes::Count:" + dataSnapshot.getChildrenCount());
                     if (dataSnapshot.getChildrenCount() > 0) {
                         new PaymentTypeParser(FilterFragment.this).executeOnExecutor(
                                 AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
@@ -172,16 +209,18 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
                     } else {
                         onPaymentTypesParsed(null, false);
                     }
+
+                    getCategories();
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 if (null != databaseError) {
-                    AppLog.d("PaidByFragment", "Payment Types Error:" + databaseError.getDetails() + "::" + databaseError.getMessage());
+                    AppLog.d("FilterFragment", "Payment Types Error:" + databaseError.getDetails() + "::" + databaseError.getMessage());
 
                 } else {
-                    AppLog.d("PaidByFragment", "Payment Types Error!");
+                    AppLog.d("FilterFragment", "Payment Types Error!");
                 }
                 AppUtil.showToast("Unable to fetch payment types.");
                 dismissAllowingStateLoss();
@@ -197,7 +236,11 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
                     if (AppUtil.daysDiff(mFromMillis, mToMillis) <= 60) {
                         if (null != mListener) {
                             AppLog.d("FilterFragment", "clickListener: DaysDiff:" + AppUtil.daysDiff(mFromMillis, mToMillis));
-                            mListener.onFilterChanged(mFromMillis, mToMillis, mSelectedPaymentKey, mCbGroupByCategory.isChecked());
+                            boolean isGroupBy = mCbGroupByCategory.isChecked();
+                            if (isGroupBy && mSelectedCategoryId > 0) {
+                                isGroupBy = false;
+                            }
+                            mListener.onFilterChanged(mFromMillis, mToMillis, mSelectedPaymentKey, mSelectedCategoryId, isGroupBy);
                             dismissAllowingStateLoss();
                         }
 
@@ -275,10 +318,18 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
             } else if (v.getId() == R.id.ff_abutton_reset) {
                 resetDate();
                 resetPaymentTypes();
+                resetCategory();
                 mCbGroupByCategory.setChecked(false);
             }
         }
     };
+
+    private void resetCategory() {
+        if (null != mSpnrCategory) {
+            mSpnrCategory.setSelection(0);
+        }
+        mSelectedCategoryId = -1;
+    }
 
     private void resetDate() {
         mTietFromDate.setText("");
@@ -357,12 +408,23 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
 
     @Override
     public void onPaymentTypesParsed(ArrayList<PaymentType> paymentTypes, boolean isCashPaymentTypeAdded) {
+
+        /*if (null == paymentTypes && !isCashPaymentTypeAdded) {
+            AppUtil.showToast("Unable to fetch payment types!");
+            return;
+        }*/
+
         if (null == paymentTypes) {
             paymentTypes = new ArrayList<>();
         }
 
         if (!isCashPaymentTypeAdded) {
             paymentTypes.add(0, PaymentType.getCashPaymentType());
+        }
+
+        if (paymentTypes.size() == 0) {
+            AppUtil.showToast("Unable to fetch payment types!");
+            return;
         }
 
         CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(mContext,
@@ -392,13 +454,30 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
             mSelectedPaymentKey = (String) view.getTag();
-            AppLog.d("PaidByFragment", "TypeId:" + mSelectedPaymentKey);
+            AppLog.d("FilterFragment", "PaymentType::TypeId:" + mSelectedPaymentKey);
         }
 
         @Override
         public void onNothingSelected(AdapterView<?> adapterView) {
-            AppLog.d("Paid By Listener", "onNothing:");
+            AppLog.d("FilterFragment", "Paid By Listener::onNothing:");
             mSelectedPaymentKey = null;
+        }
+    };
+
+    private AdapterView.OnItemSelectedListener mCategoryListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            mSelectedCategoryId = (int) view.getTag();
+            AppLog.d("FilterFragment", "Category::TypeId:" + mSelectedCategoryId);
+            if (mSelectedCategoryId > 0) {
+                mCbGroupByCategory.setChecked(false);
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+            AppLog.d("FilterFragment", "mCategoryListener::onNothing:");
+            mSelectedCategoryId = -1;
         }
     };
 
@@ -411,7 +490,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
             if (isChecked) {
                 buttonView.setChecked(true);
                 mSelectedPaymentKey = (String) buttonView.getTag();
-                AppLog.d("PaidByFragment", "TypeId:" + mSelectedPaymentKey + "::Title:" + buttonView.getText());
+                AppLog.d("FilterFragment", "TypeId:" + mSelectedPaymentKey + "::Title:" + buttonView.getText());
             }
         }
     };
@@ -422,8 +501,25 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
                 ((RadioButton) mFlexboxLayout.getChildAt(index)).setChecked(false);
             }
         }*/
-        mSpnrPaidBy.setSelection(0);
+        if (null != mSpnrPaidBy) {
+            mSpnrPaidBy.setSelection(0);
+        }
         mSelectedPaymentKey = null;
+    }
+
+    @Override
+    public void onCategoriesParsed(ArrayList<Category> allCategories) {
+        if ((null == allCategories) || allCategories.size() == 0) {
+            mSpnrCategory.setEnabled(false);
+            return;
+        }
+
+        mSpnrCategory.setEnabled(true);
+        CustomSpinnerAdapter categoryAdapter = new CustomSpinnerAdapter(mContext,
+                R.layout.layout_spinner_selected, allCategories);
+        categoryAdapter.setSelectionText("Select Category");
+        mSpnrCategory.setAdapter(categoryAdapter);
+        mSpnrCategory.setOnItemSelectedListener(mCategoryListener);
     }
 
     /**
@@ -437,7 +533,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFilterListener {
-        void onFilterChanged(long fromDate, long toDate, String paidByKey, boolean isGroupbyCategory);
+        void onFilterChanged(long fromDate, long toDate, String paidByKey, int categoryId, boolean isGroupbyCategory);
     }
 
     @Override

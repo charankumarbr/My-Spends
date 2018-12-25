@@ -17,6 +17,7 @@ import in.phoenix.myspends.model.CategoryChart;
 import in.phoenix.myspends.model.CategoryChartData;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
+import in.phoenix.myspends.ui.activity.MainActivity;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
@@ -121,6 +122,8 @@ public final class NewExpenseAdapter extends BaseAdapter {
             holder.tvCategoryPercentage = view.findViewById(R.id.le_tv_category_percentage);
             holder.vSpendPercentage = view.findViewById(R.id.le_v_percent);
             holder.tvGrandTotal = view.findViewById(R.id.le_tv_grand_total);
+
+            holder.vSpace = view.findViewById(R.id.le_v_space);
 
             view.setTag(holder);
 
@@ -243,6 +246,15 @@ public final class NewExpenseAdapter extends BaseAdapter {
             }
         }
 
+        AppLog.d("NewExpenseAdapter", "Position:" + position + "Count:" + getCount());
+        if (position == (getCount() - 1) && mContext instanceof MainActivity) {
+            //-- the last item --//
+            holder.vSpace.setVisibility(View.VISIBLE);
+
+        } else {
+            holder.vSpace.setVisibility(View.GONE);
+        }
+
         //-- anim view from bottom to up or top to down based on ListView scroll direction --//
         /*if (position > mLastPos) {
             view.startAnimation(position > mLastPos ? mAnimUp4mBottom : mAnimDown4mTop);
@@ -309,6 +321,33 @@ public final class NewExpenseAdapter extends BaseAdapter {
         return totalAmount;
     }
 
+    public void removeSpend(String expenseId) {
+        if (null != mSpends) {
+            for (int index = 0; index < mSpends.size(); index++) {
+                if (mSpends.get(index).getId().equals(expenseId)) {
+                    AppLog.d("NewExpenseAdapter", "removeSpend:" + expenseId + ":Amount:" + mSpends.get(index).getAmount());
+                    mSpends.remove(index);
+                    notifyDataSetChanged();
+                    break;
+                }
+            }
+        }
+    }
+
+    public void updateSpend(NewExpense editedExpense) {
+        if (null != mSpends) {
+            String expenseId = editedExpense.getId();
+            for (int index = 0; index < mSpends.size(); index++) {
+                if (mSpends.get(index).getId().equals(expenseId)) {
+                    AppLog.d("NewExpenseAdapter", "updateSpend:" + expenseId + ":Amount:" + mSpends.get(index).getAmount());
+                    mSpends.set(index, editedExpense);
+                    notifyDataSetChanged();
+                    break;
+                }
+            }
+        }
+    }
+
     class ExpenseHolder {
         TextView tvNote;
         TextView tvAmount;
@@ -327,6 +366,8 @@ public final class NewExpenseAdapter extends BaseAdapter {
         View vSpendPercentage;
         TextView tvCategoryPercentage;
         TextView tvGrandTotal;
+
+        android.support.v4.widget.Space vSpace;
     }
 
     public int getExpensesSize() {

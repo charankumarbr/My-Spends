@@ -165,7 +165,7 @@
         android:layout_height="?attr/actionBarSize"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ProgressBar
             android:layout_width="36dp"
@@ -181,6 +181,12 @@
             android:textSize="16sp"
             app:fontFamily="@font/source_sans_pro"
             android:textColor="@color/colorPrimary"/>
+
+        <ProgressBar
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_vertical"
+            android:visibility="invisible"/>
     </LinearLayout>
 
     <TextView
@@ -251,4 +257,13 @@
             android:layout_alignParentStart="true"
             android:layout_marginTop="3dp"/>
     </RelativeLayout>
+
+    <android.support.v4.widget.Space
+        android:id="@+id/le_v_space"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@+id/le_rlayout_expense"
+        android:background="@android:color/transparent"
+        android:visibility="visible"
+        android:layout_marginTop="10dp"/>
 </RelativeLayout>

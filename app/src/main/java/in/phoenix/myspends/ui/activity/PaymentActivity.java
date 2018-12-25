@@ -2,7 +2,6 @@ package in.phoenix.myspends.ui.activity;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
@@ -48,12 +47,12 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
         setContentView(R.layout.activity_payment);
 
         Toolbar toolbar = findViewById(R.id.ap_toolbar);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             toolbar.setTitleTextColor(getResources().getColor(android.R.color.white, null));
 
         } else {
             toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
-        }
+        }*/
         toolbar.setTitle("Payment Types");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -232,6 +231,12 @@ public class PaymentActivity extends BaseActivity implements PaymentTypeAdapter.
 
         if (!isCashPaymentTypeAdded) {
             paymentTypes.add(0, PaymentType.getCashPaymentType());
+        }
+
+        if (paymentTypes.size() == 0) {
+            AppUtil.showToast("Unable to fetch payment types!");
+            finish();
+            return;
         }
 
         mPaymentTypeCount = paymentTypes.size();

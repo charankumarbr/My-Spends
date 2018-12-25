@@ -1,5 +1,6 @@
 package in.phoenix.myspends.util;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -42,6 +43,7 @@ import java.util.concurrent.TimeUnit;
 
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.model.Category;
 import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.PaymentMode;
@@ -349,9 +351,19 @@ public final class AppUtil {
     }
 
     public static void createNotification(Context context, ExpenseDate expenseDate) {
-        long when = System.currentTimeMillis();
+
+        String channelId = "reminder";
+        String channelName = "Reminder";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel mChannel = new NotificationChannel(
+                    channelId, channelName, importance);
+            notificationManager.createNotificationChannel(mChannel);
+        }
 
         Intent notificationIntent = null;
         PendingIntent pendingIntent = null;
@@ -415,7 +427,8 @@ public final class AppUtil {
             }
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "reminder")
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setColor(context.getResources().getColor(R.color.colorPrimary))
                 .setContentTitle(contentTitle)
@@ -424,6 +437,7 @@ public final class AppUtil {
                 .setSound(alarmSound)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
+                .setWhen(System.currentTimeMillis())
                 .setVibrate(new long[]{1000, 1000, 1000});
 
         notificationManager.notify(20332, builder.build());
@@ -510,5 +524,20 @@ public final class AppUtil {
 
     public static long daysDiff(long fromMillis, long toMillis) {
         return TimeUnit.MILLISECONDS.toDays(toMillis - fromMillis);
+    }
+
+    public static boolean canRateDialogShow() {
+        AppLog.d("AppUtil", "canRateDialogShow:" + AppPref.getInstance().getInt(AppConstants.PrefConstants.LAUNCH_COUNT));
+        int launchCount = AppPref.getInstance().getInt(AppConstants.PrefConstants.LAUNCH_COUNT);
+        return (launchCount > 0) && launchCount % AppConstants.APP_RATE_FREQUENCY == 0;
+    }
+
+    public static int getPosOf(int categoryId, ArrayList<Category> allCategories) {
+        for (int index = 0; index < allCategories.size(); index++) {
+            if (allCategories.get(index).getId() == categoryId) {
+                return index;
+            }
+        }
+        return 0;
     }
 }

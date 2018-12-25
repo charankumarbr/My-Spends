@@ -41,15 +41,20 @@ public final class FirebaseDB {
 
     private static FirebaseDB mFirebaseDB;
 
+    //-- database reference of currency --//
     private DatabaseReference currencyRef;
 
+    //-- database reference of payment types --//
     private DatabaseReference paymentTypeRef;
     private ChildEventListener mPaymentTypeListener;
 
+    //-- database reference of category --//
     private DatabaseReference categoryRef;
 
+    //-- database reference of message board --//
     private DatabaseReference messageBoardRef;
 
+    //-- database reference of payments --//
     private FirebaseFirestore firebaseFirestore;
     private CollectionReference fsSpendsRef;
     private EventListener mSpendsListener = null;
@@ -92,7 +97,7 @@ public final class FirebaseDB {
 
             firebaseFirestore = FirebaseFirestore.getInstance();
             FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                    .setPersistenceEnabled(true)
+                    .setPersistenceEnabled(false)
                     .build();
             firebaseFirestore.setFirestoreSettings(settings);
 
@@ -187,8 +192,8 @@ public final class FirebaseDB {
         return mFirebaseDB;
     }
 
-    public void setCurrency(Currency selectedCurrency) {
-        currencyRef.setValue(selectedCurrency);
+    public void setCurrency(Currency selectedCurrency, DatabaseReference.CompletionListener completionListener) {
+        currencyRef.setValue(selectedCurrency, completionListener);
     }
 
     public String getCurrency() {
@@ -311,20 +316,21 @@ public final class FirebaseDB {
         fsSpendsRef.document(spendId).delete().addOnSuccessListener(successListener).addOnFailureListener(failureListener);
     }
 
-    public void getFsSpends(long fromMillis, long toMillis, String paidBy, DocumentSnapshot lastVisible,
+    public void getFsSpends(long fromMillis, long toMillis, String paidBy, int categoryId, DocumentSnapshot lastVisible,
                             OnSuccessListener<QuerySnapshot> successListener, OnFailureListener failureListener) {
 
         com.google.firebase.firestore.Query query = fsSpendsRef.orderBy("expenseDate", com.google.firebase.firestore.Query.Direction.DESCENDING);
 
-        //int categoryId; - categoryId has to be passed to this function, user has to choose the category in the UI
         if (null != paidBy) {
             AppLog.d("FirebaseDB", "getFsSpends: PaidBy:" + paidBy);
             query = query.whereEqualTo("paymentTypeKey", paidBy);
         }
 
-        /*if (categoryId >= 0) {
+        //int categoryId; - categoryId has to be passed to this function, user has to choose the category in the UI
+        AppLog.d("FirebaseDB", "getFsSpends: CategoryId:" + categoryId);
+        if (categoryId > 0) {
             query = query.whereEqualTo("categoryId", categoryId);
-        }*/
+        }
 
         query = query.whereGreaterThanOrEqualTo("expenseDate", fromMillis).whereLessThanOrEqualTo("expenseDate", toMillis);
 
@@ -380,7 +386,7 @@ public final class FirebaseDB {
         String[] categoryNames = {"Beauty & Fitness", "Bills & Payments", "Books & Stationery",
                 "Clothing", "Donation", "EMI", "Entertainment", "Food & Beverages", "Gifts", "Grocery",
                 "Home", "Insurance", "Investments", "Maintenance", "Medical", "Miscellaneous", "Purchases",
-                "Rent", "Service & Repairs", "Shopping", "Transport", "Travel", "Utility", "Vacation"};
+                "Rent", "Service & Repairs", "Shopping", "Transport", "Travel", "Utility", "Vacation", "Savings", "Arrears", "Lend"};
 
         //Beauty & Fitness, EMI, Entertainment, Grocery, Investments, Shopping, Travel, Medical (instead of Healthcare)
 
@@ -428,4 +434,13 @@ public final class FirebaseDB {
         mFirebaseDB.mIsLoggedOut = Boolean.TRUE;
         AppLog.d("FirebaseDB", "onLogout");
     }
+
+    /*public void addACategory() {
+        String categoryKey = categoryRef.push().getKey();
+        AppLog.d("FirebaseDB", "Key:" + categoryKey);
+        Category category = new Category();
+        category.setName("Lend");
+        category.setId(27);
+        categoryRef.child(categoryKey).setValue(category);
+    }*/
 }

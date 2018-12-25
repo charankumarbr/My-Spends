@@ -55,7 +55,7 @@
         android:layout_marginBottom="20dp"
         android:orientation="vertical"
         android:layout_above="@+id/als_tv_version"
-        android:visibility="gone">
+        android:visibility="invisible">
 
         <ImageView
             android:id="@+id/als_iv_google_logo"
@@ -65,6 +65,15 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="4dp"
             android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Sign in to track your spends."
+            android:textSize="15sp"
+            android:textColor="@color/secondary_"
+            app:fontFamily="@font/source_sans_pro"/>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/als_abtn_login"
@@ -76,16 +85,7 @@
             android:paddingStart="32dp"
             android:text="@string/sign_in_with_google"
             android:textAllCaps="false"
-            android:textColor="@android:color/white"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Sign in to track your spends."
-            android:textSize="15sp"
-            android:textColor="@color/secondary_"
-            app:fontFamily="@font/source_sans_pro"
+            android:textColor="@android:color/white"
             android:layout_marginTop="6dp"/>
     </LinearLayout>
 
@@ -98,6 +98,7 @@
         android:layout_marginBottom="10dp"
         android:textSize="13sp"
         android:textColor="@color/colorAccent"
-        app:fontFamily="@font/source_sans_pro"/>
+        app:fontFamily="@font/source_sans_pro"
+        android:gravity="center"/>
 
 </RelativeLayout>

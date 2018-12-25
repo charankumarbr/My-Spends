@@ -14,6 +14,7 @@ import java.util.List;
 
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.model.Category;
+import in.phoenix.myspends.model.PaymentMode;
 import in.phoenix.myspends.model.PaymentType;
 
 /**
@@ -116,6 +117,11 @@ public final class CustomSpinnerAdapter extends ArrayAdapter<String> {
             Category category = (Category) type;
             offTypeTv.setText(category.getName());
             view.setTag(category.getId());
+
+        } else if (type instanceof PaymentMode) {
+            PaymentMode paymentMode = (PaymentMode) type;
+            offTypeTv.setText(paymentMode.getName());
+            view.setTag(paymentMode.getId());
         }
 
 

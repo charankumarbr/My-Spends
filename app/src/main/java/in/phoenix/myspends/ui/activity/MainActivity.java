@@ -1,10 +1,10 @@
 package in.phoenix.myspends.ui.activity;
 
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -20,8 +20,8 @@ import android.view.animation.Animation;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -40,13 +40,15 @@ import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.parser.FSSpendsParser;
 import in.phoenix.myspends.parser.SpendsParser;
+import in.phoenix.myspends.ui.fragment.AppRateFragment;
+import in.phoenix.myspends.ui.fragment.AppRateFragmentKt;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
 public class MainActivity extends BaseActivity implements SpendsParser.SpendsParserListener,
-        NewExpenseAdapter.OnLoadingListener {
+        NewExpenseAdapter.OnLoadingListener, AppRateFragment.OnAppRateActionListener {
 
     private ExpenseDate mCalendarExpenseDate;
 
@@ -82,12 +84,12 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             setContentView(R.layout.activity_main);
 
             toolbar = findViewById(R.id.am_toolbar);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 toolbar.setTitleTextColor(getResources().getColor(android.R.color.white, null));
 
             } else {
                 toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
-            }
+            }*/
 
             toolbar.setTitle(getString(R.string.app_name));
             setSupportActionBar(toolbar);
@@ -108,6 +110,15 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             mBpbLoading = findViewById(R.id.am_bpb_loading);
             mPbLoading = findViewById(R.id.am_pb_loading);
             mCTvNoSpends = findViewById(R.id.am_ctv_no_spends);
+
+            findViewById(R.id.am_fab_new).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent newExpenseIntent = new Intent(MainActivity.this, NewExpenseActivity.class);
+                    newExpenseIntent.putExtra(AppConstants.Bundle.EXPENSE_DATE, mCalendarExpenseDate);
+                    startActivityForResult(newExpenseIntent, AppConstants.NEW_EXPENSE_CODE);
+                }
+            });
             getExpenses();
         }
     }
@@ -171,8 +182,13 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
                         }
                     } else {
                         //AppUtil.showToast("No Spends tracked!");
+                        if (AppUtil.isConnected()) {
+                            mCTvNoSpends.setText(R.string.no_spends_tracked);
+
+                        } else {
+                            mCTvNoSpends.setText(R.string.no_internet);
+                        }
                         mLvExpense.setVisibility(View.GONE);
-                        mCTvNoSpends.setText(R.string.no_spends_tracked);
                         mCTvNoSpends.setVisibility(View.VISIBLE);
                     }
                 }
@@ -321,10 +337,24 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
         aboutappDialog.setTitle(getString(R.string.app_name));
         aboutappDialog.setMessage("Version: " + BuildConfig.VERSION_NAME + " (" +
                 BuildConfig.VERSION_CODE + ")" + "\n\n" + getString(R.string.about_app_msg));
+
         aboutappDialog.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+            }
+        });
+
+        aboutappDialog.setNeutralButton("Privacy Policy", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                try {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://icharan.blogspot.com/2018/11/my-spends-privacy-policy.html"));
+                    startActivity(browserIntent);
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, "Unable to open the link", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -418,10 +448,29 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == AppConstants.VIEW_EXPENSE_CODE || requestCode == AppConstants.NEW_EXPENSE_CODE
                 || requestCode == AppConstants.EXPENSE_LIST_CODE) {
-            if (resultCode == RESULT_OK) {
-                isRefresh = true;
-                AppLog.d("MainActivity", "Spends: Refresh");
-                getExpenses();
+
+            if (requestCode == AppConstants.VIEW_EXPENSE_CODE) {
+                if (mExpenseAdapter == null) {
+                    isRefresh = true;
+                    AppLog.d("MainActivity", "Spends: Refresh/View");
+                    getExpenses();
+
+                } else if (null != data) {
+                    if (data.hasExtra(AppConstants.Bundle.EXPENSE_PRIMARY_KEY)) {
+                        //-- delete expense --//
+                        mExpenseAdapter.removeSpend(data.getStringExtra(AppConstants.Bundle.EXPENSE_PRIMARY_KEY));
+
+                    } else if (data.hasExtra(AppConstants.Bundle.EXPENSE)) {
+                        mExpenseAdapter.updateSpend((NewExpense) data.getParcelableExtra(AppConstants.Bundle.EXPENSE));
+                    }
+                }
+
+            } else {
+                if (resultCode == RESULT_OK) {
+                    isRefresh = true;
+                    AppLog.d("MainActivity", "Spends: Refresh/Other");
+                    getExpenses();
+                }
             }
         }
     }
@@ -446,6 +495,14 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
         }
 
         mPbLoading.setVisibility(View.GONE);
+
+        checkAppRateDialog();
+    }
+
+    private void checkAppRateDialog() {
+        if (!isFinishing() && AppUtil.canRateDialogShow()) {
+            getSupportFragmentManager().beginTransaction().add(AppRateFragment.newInstance(), "AppRate").commitAllowingStateLoss();
+        }
     }
 
     private void setSpends(ArrayList<NewExpense> spends) {
@@ -482,6 +539,23 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             AppLog.d("MainActivity", "onLoading: Key:" + lastExpenseDate);
             mLastExpense = lastExpenseDate;
             getExpenses();
+        }
+    }
+
+    @Override
+    public void onAppRateAction(int action) {
+        if (action == AppRateFragmentKt.ACTION_RATE_NOW) {
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID)));
+                AppPref.getInstance().appRated();
+
+            } catch (ActivityNotFoundException e) {
+                AppUtil.showToast("Google Play Store is not found!");
+                AppPref.getInstance().putInt(AppConstants.PrefConstants.LAUNCH_COUNT, 0);
+            }
+
+        } else if (action == AppRateFragmentKt.ACTION_LATER) {
+            AppPref.getInstance().putInt(AppConstants.PrefConstants.LAUNCH_COUNT, 0);
         }
     }
 }

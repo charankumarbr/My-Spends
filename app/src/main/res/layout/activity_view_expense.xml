@@ -80,7 +80,7 @@
                 android:textColor="#99000000"
                 android:textSize="16sp"
                 android:id="@+id/ave_cTextView_paid_by_header"
-                android:drawableStart="@drawable/ic_credit_card_white_24dp"
+                android:drawableStart="@drawable/ic_credit_card_primary_24dp"
                 android:drawableTint="@color/colorAccent"
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"

@@ -2,7 +2,6 @@ package in.phoenix.myspends.ui.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -46,12 +45,12 @@ public class ProfileActivity extends BaseActivity {
 
     private void init() {
         Toolbar toolbar = findViewById(R.id.ap_toolbar);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             toolbar.setTitleTextColor(getResources().getColor(android.R.color.white, null));
 
         } else {
             toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
-        }
+        }*/
         toolbar.setTitle("Profile");
         setSupportActionBar(toolbar);
 

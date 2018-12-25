@@ -6,7 +6,7 @@
         android:id="@+id/menu_edit_expense"
         android:title="@string/edit"
         app:showAsAction="always"
-        android:icon="@drawable/ic_mode_edit_white_24dp" />
+        android:icon="@drawable/ic_mode_edit_primary_24dp" />
 
     <item
         android:id="@+id/menu_delete_expense"

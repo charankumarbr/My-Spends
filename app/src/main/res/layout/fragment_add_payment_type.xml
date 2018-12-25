@@ -17,10 +17,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Payment Type"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorPrimary"
             android:textSize="19sp"
             android:id="@+id/fapt_tv_title"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/source_sans_pro"/>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/fapt_til_type_name"
@@ -41,7 +42,7 @@
                 app:fontFamily="@font/source_sans_pro"/>
         </android.support.design.widget.TextInputLayout>
 
-        <TextView
+        <!--<TextView
             android:id="@+id/fapt_tv_type_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,9 +50,9 @@
             android:textSize="15sp"
             android:layout_marginTop="16dp"
             android:layout_below="@+id/fapt_til_type_name"
-            app:fontFamily="@font/source_sans_pro"/>
+            app:fontFamily="@font/source_sans_pro"/>-->
 
-        <RadioGroup
+        <!--<RadioGroup
             android:id="@+id/fapt_radiogroup_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,7 +70,15 @@
                 app:alignContent="center">
 
             </com.google.android.flexbox.FlexboxLayout>
-        </RadioGroup>
+        </RadioGroup>-->
+        <Spinner
+            android:id="@+id/fapt_spnr_payment_type"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:dropDownSelector="@color/colorAccent"
+            android:spinnerMode="dialog"
+            android:layout_below="@+id/fapt_til_type_name"/>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/fapt_acbutton_add"
@@ -83,7 +92,7 @@
             android:paddingEnd="16dp"
             android:layout_marginBottom="16dp"
             android:textColor="@android:color/white"
-            android:layout_below="@+id/fapt_radiogroup_type"
+            android:layout_below="@+id/fapt_spnr_payment_type"
             app:fontFamily="@font/source_sans_pro"/>
 
         <ProgressBar

@@ -28,9 +28,12 @@ import java.util.ArrayList;
 import in.phoenix.myspends.BuildConfig;
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.components.DaggerMySpendsComponent;
+import in.phoenix.myspends.components.MySpendsComponent;
 import in.phoenix.myspends.controller.CurrencyListAdapter;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;
+import in.phoenix.myspends.modules.ContextModule;
 import in.phoenix.myspends.ui.dialog.AppDialog;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppPref;
@@ -145,10 +148,14 @@ public class AppSetupActivity extends BaseActivity {
                 FirebaseDB.initDb().setCurrency(selectedCurrency, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                        MySpendsComponent mySpendsComponent = DaggerMySpendsComponent.builder().contextModule
+                                (new ContextModule(AppSetupActivity.this)).build();
                         if (null == databaseError) {
-                            AppPref.getInstance().putString(AppConstants.PrefConstants.CURRENCY, selectedCurrency.getCurrencySymbol());
+                            mySpendsComponent.getAppPref()
+                                    .putString(AppConstants.PrefConstants.CURRENCY, selectedCurrency.getCurrencySymbol());
                             startActivity(new Intent(AppSetupActivity.this, MainActivity.class));
-                            AppPref.getInstance().putInt(AppConstants.PrefConstants.APP_SETUP, BuildConfig.VERSION_CODE);
+                            mySpendsComponent.getAppPref()
+                                    .putInt(AppConstants.PrefConstants.APP_SETUP, BuildConfig.VERSION_CODE);
                             finish();
 
                         } else {
@@ -159,7 +166,7 @@ public class AppSetupActivity extends BaseActivity {
                             } else if (errorCode == DatabaseError.INVALID_TOKEN || errorCode == DatabaseError.EXPIRED_TOKEN) {
                                 AppUtil.showToast("Session Expired/Invalid. Please login again.");
 
-                                AppPref.getInstance().clearAll();
+                                mySpendsComponent.getAppPref().clearAll();
                                 MySpends.clearAll();
                                 FirebaseDB.onLogout();
                                 AppUtil.removeDynamicShortcut();

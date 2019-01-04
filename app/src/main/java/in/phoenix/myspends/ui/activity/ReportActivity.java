@@ -81,6 +81,10 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
 
     private int mCategoryId = -1;
 
+    private View mCvCurrentMonth;
+    private View mCvPreviousMonth;
+    private View mCvCustomDateRange;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +120,14 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         //mCTvFilter = findViewById(R.id.ar_layout_filter);
         //mCTvFilter.setOnClickListener(clickListener);
         //getExpenses();
+
+        mCvCurrentMonth = findViewById(R.id.ar_cv_current_month);
+        mCvPreviousMonth = findViewById(R.id.ar_cv_previous_month);
+        mCvCustomDateRange = findViewById(R.id.ar_cv_custom_date);
+
+        mCvCurrentMonth.setOnClickListener(clickListener);
+        mCvPreviousMonth.setOnClickListener(clickListener);
+        mCvCustomDateRange.setOnClickListener(clickListener);
     }
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
@@ -134,6 +146,16 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                 FilterFragment paidByFragment = FilterFragment.newInstance();
                 paidByFragment.show(getSupportFragmentManager(), "FilterFragment");
             }*/
+
+            if (view.getId() == R.id.ar_cv_current_month) {
+                displayFilterFragment(FilterFragment.FilterDateRange.CURRENT_MONTH);
+
+            } else if (view.getId() == R.id.ar_cv_previous_month) {
+                displayFilterFragment(FilterFragment.FilterDateRange.PREVIOUS_MONTH);
+
+            } else if (view.getId() == R.id.ar_cv_custom_date) {
+                displayFilterFragment(FilterFragment.FilterDateRange.CUSTOM_DATE);
+            }
         }
     };
 
@@ -176,7 +198,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                 mMiSpendsChart.setVisible(false);
             }
 
-            mCTvMsg.setVisibility(View.GONE);
+            toggleOptionVisibility(false);
 
             mToolbar.setSubtitle(null);
 
@@ -226,9 +248,10 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                         if (null == mSpendsIters) {
                             mPbLoading.setVisibility(View.GONE);
                             AppUtil.showToast("No Spends tracked!");
+                            mRvExpenses.setVisibility(View.GONE);
                             mLvExpenses.setVisibility(View.GONE);
                             mCTvMsg.setText(R.string.no_spends_tracked_tune_filters);
-                            mCTvMsg.setVisibility(View.VISIBLE);
+                            toggleOptionVisibility(true);
 
                         } else {
                             //-- data of previous page is available --//
@@ -261,10 +284,11 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                     AppUtil.showToast(R.string.unable_fetch_spends);
 
                     if (null == mSpendsIters) {
+                        mRvExpenses.setVisibility(View.GONE);
                         mLvExpenses.setVisibility(View.GONE);
-                        mCTvMsg.setText("Something went wrong. Try again.");
-                        mCTvMsg.setVisibility(View.VISIBLE);
                         mPbLoading.setVisibility(View.GONE);
+                        mCTvMsg.setText("Something went wrong. Try again.");
+                        toggleOptionVisibility(true);
 
                     } else {
                         new FSSpendsParser(ReportActivity.this).executeOnExecutor(
@@ -353,15 +377,43 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
             return true;
 
         } else if (item.getItemId() == R.id.menu_filter) {
-            FilterFragment paidByFragment = FilterFragment.newInstance();
-            paidByFragment.show(getSupportFragmentManager(), "FilterFragment");
+            displayFilterFragment(FilterFragment.FilterDateRange.CUSTOM_DATE);
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void displayFilterFragment(@FilterFragment.FilterDateRange int filterDateRange) {
+        FilterFragment paidByFragment = FilterFragment.newInstance(filterDateRange);
+        paidByFragment.show(getSupportFragmentManager(), "FilterFragment");
+    }
+
     @Override
     public void onBackPressed() {
+        if (mLvExpenses.getVisibility() == View.VISIBLE || mRvExpenses.getVisibility() == View.VISIBLE) {
+            if (mLvExpenses.getVisibility() == View.VISIBLE) {
+                mLvExpenses.setAdapter(null);
+                mLvExpenses.setVisibility(View.GONE);
+                mExpenseAdapter = null;
+
+            } else {
+                mRvExpenses.setAdapter(null);
+                mRvExpenses.setVisibility(View.GONE);
+                mReportAdapter = null;
+            }
+            toggleOptionVisibility(true);
+            return;
+        }
         finish();
+    }
+
+    private void toggleOptionVisibility(boolean isOptionReqd) {
+        mCvCurrentMonth.setVisibility(isOptionReqd ? View.VISIBLE : View.GONE);
+        mCvPreviousMonth.setVisibility(isOptionReqd ? View.VISIBLE : View.GONE);
+        mCvCustomDateRange.setVisibility(isOptionReqd ? View.VISIBLE : View.GONE);
+        mCTvMsg.setVisibility(isOptionReqd ? View.VISIBLE : View.GONE);
+        if (isOptionReqd) {
+            mToolbar.setSubtitle(null);
+        }
     }
 
     @Override
@@ -387,7 +439,7 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
                 mLvExpenses.setVisibility(View.GONE);
                 mRvExpenses.setVisibility(View.GONE);
                 mCTvMsg.setText(R.string.no_spends_tracked_tune_filters);
-                mCTvMsg.setVisibility(View.VISIBLE);
+                toggleOptionVisibility(true);
             }
         }
     }

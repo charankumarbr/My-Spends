@@ -10,75 +10,179 @@
         layout="@layout/layout_toolbar"
         android:id="@+id/ar_in_toolbar" />
 
-    <Space
-        android:id="@+id/ar_view_sep"
+    <android.support.v7.widget.CardView
+        android:id="@+id/ar_cv_current_month"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/white"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/ar_in_toolbar"
-        android:visibility="gone"/>
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="4dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="@android:color/white"
+        android:layout_marginTop="16dp">
 
-    <TextView
-        android:id="@+id/ar_layout_filter"
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ar_tv_current_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Month"
+                android:textSize="19sp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="12dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/primary_text"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1st to today of current month."
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/ar_tv_current_month"
+                android:textColor="@color/secondary_text"
+                android:paddingTop="3dp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/ic_chevron_right_black_24dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginEnd="8dp"/>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/ar_cv_previous_month"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_below="@+id/ar_view_sep"
-        android:background="@color/colorPrimary"
-        android:text="Filters"
-        android:textColor="@android:color/white"
-        android:gravity="center"
-        android:textSize="17sp"
-        app:fontFamily="@font/source_sans_pro"
-        android:visibility="gone"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ar_cv_current_month"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="4dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="@android:color/white"
+        android:layout_marginTop="12dp">
 
-    <LinearLayout
-        android:id="@+id/ar_layout_filter_options"
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ar_tv_previous_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Previous Month"
+                android:textSize="19sp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="12dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/primary_text"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1st to last day of previous month."
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/ar_tv_previous_month"
+                android:textColor="@color/secondary_text"
+                android:paddingTop="3dp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/ic_chevron_right_black_24dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginEnd="8dp"/>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/ar_cv_custom_date"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:orientation="horizontal"
-        android:layout_below="@+id/ar_view_sep"
-        android:background="@android:color/white"
-        android:weightSum="2"
-        android:visibility="gone">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ar_cv_previous_month"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="4dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="@android:color/white"
+        android:layout_marginTop="12dp">
 
-        <TextView
-            android:id="@+id/ar_ctextview_date"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
-            android:text="Date"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            app:fontFamily="@font/source_sans_pro"
-            android:layout_weight="1"/>
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/ar_ctextview_paid_by"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@color/darker_gray"
-            android:text="Paid by"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            app:fontFamily="@font/source_sans_pro"
-            android:layout_marginStart="1dp"
-            android:layout_weight="1"/>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/ar_tv_custom_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Custom"
+                android:textSize="19sp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="12dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/primary_text"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose date range."
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/ar_tv_custom_date"
+                android:textColor="@color/secondary_text"
+                android:paddingTop="3dp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/ic_chevron_right_black_24dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginEnd="8dp"/>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
 
     <TextView
         android:id="@+id/ar_ctextview_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Apply filter to view report on your spends!"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:gravity="center"
         android:textSize="17sp"
         app:fontFamily="@font/source_sans_pro"
-        android:textColor="@color/colorPrimary"/>
+        android:textColor="@color/colorPrimary"
+        android:visibility="gone"
+        android:layout_below="@+id/ar_cv_custom_date"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
 
     <ProgressBar
         android:id="@+id/ar_progressbar_loading"
@@ -91,14 +195,15 @@
         android:id="@+id/ar_listview_expenses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/ar_layout_filter"
+        android:layout_below="@+id/ar_in_toolbar"
         android:listSelector="@android:color/transparent"
         android:dividerHeight="2dp"
         android:divider="@null"
         android:scrollbars="vertical"
         android:cacheColorHint="@android:color/transparent"
         android:smoothScrollbar="true"
-        android:visibility="gone" />
+        android:visibility="gone"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/ar_recyclerview_expenses"
         android:layout_width="match_parent"

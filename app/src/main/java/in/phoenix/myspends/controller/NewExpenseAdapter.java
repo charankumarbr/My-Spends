@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
@@ -53,6 +54,8 @@ public final class NewExpenseAdapter extends BaseAdapter {
     /*private Animation mAnimUp4mBottom;
     private Animation mAnimDown4mTop;*/
     private int mLastPos = -1;
+
+    private int mCurrentYear = Calendar.getInstance().get(Calendar.YEAR);
 
     public NewExpenseAdapter(Context context, ArrayList<NewExpense> spends, View.OnClickListener clickListener) {
         mContext = context;
@@ -155,8 +158,13 @@ public final class NewExpenseAdapter extends BaseAdapter {
             holder.tvExpenseDate.setVisibility(View.VISIBLE);
 
             if (position == 0) {
+                if (mExpenseDate.getYear() != mCurrentYear) {
+                    holder.tvMonth.setText(AppUtil.getShortMonth(mExpenseDate.getMonth()) + " " + mExpenseDate.getYear());
+
+                } else {
+                    holder.tvMonth.setText(AppUtil.getMonth(mExpenseDate.getMonth()));
+                }
                 holder.tvMonth.setVisibility(View.VISIBLE);
-                holder.tvMonth.setText(AppUtil.getMonth(mExpenseDate.getMonth()));
 
             } else {
                 if (null == mPrevExpenseDate) {
@@ -166,16 +174,17 @@ public final class NewExpenseAdapter extends BaseAdapter {
                     mPrevExpenseDate.changeDate(getItem(position - 1).getExpenseDate());
                 }
 
-                if ((mExpenseDate.getMonth() != mPrevExpenseDate.getMonth()) || mExpenseDate.getYear() != mPrevExpenseDate.getYear()) {
+                boolean isDiffYear = mExpenseDate.getYear() != mPrevExpenseDate.getYear()
+                        || mExpenseDate.getYear() != mCurrentYear;
 
-                    if (mExpenseDate.getYear() != mPrevExpenseDate.getYear()) {
-                        holder.tvMonth.setVisibility(View.VISIBLE);
+                if ((mExpenseDate.getMonth() != mPrevExpenseDate.getMonth()) || isDiffYear) {
+                    if (isDiffYear) {
                         holder.tvMonth.setText(AppUtil.getShortMonth(mExpenseDate.getMonth()) + " " + mExpenseDate.getYear());
 
                     } else {
-                        holder.tvMonth.setVisibility(View.VISIBLE);
                         holder.tvMonth.setText(AppUtil.getMonth(mExpenseDate.getMonth()));
                     }
+                    holder.tvMonth.setVisibility(View.VISIBLE);
 
                 } else {
                     holder.tvMonth.setVisibility(View.GONE);

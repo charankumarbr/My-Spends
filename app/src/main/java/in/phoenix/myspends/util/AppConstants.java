@@ -16,6 +16,7 @@ public interface AppConstants {
         String EXPENSE = "expense";
         String EXPENSE_DATE = "expenseDate";
         String VIA_NOTIFICATION = "viaNotification";
+        String FILTER_DATE_RANGE = "FILTER_DATE_RANGE";
     }
 
     int VIEW_EXPENSE_CODE = 3832;

@@ -29,9 +29,12 @@ import java.util.List;
 import in.phoenix.myspends.BuildConfig;
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.components.DaggerMySpendsComponent;
+import in.phoenix.myspends.components.MySpendsComponent;
 import in.phoenix.myspends.controller.ImpsAdapter;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;
+import in.phoenix.myspends.modules.ContextModule;
 import in.phoenix.myspends.util.AppAnalytics;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
@@ -289,8 +292,10 @@ public class LaunchDeciderActivity extends BaseActivity {
                     } else {
                         Currency currencyData = dataSnapshot.getValue(Currency.class);
                         if (null != currencyData && dataSnapshot.getChildrenCount() == 3) {
-                            AppPref.getInstance().putString(AppConstants.PrefConstants.CURRENCY, currencyData.getCurrencySymbol());
-                            AppPref.getInstance().putInt(AppConstants.PrefConstants.APP_SETUP, BuildConfig.VERSION_CODE);
+                            MySpendsComponent mySpendsComponent = DaggerMySpendsComponent.builder().contextModule
+                                    (new ContextModule(LaunchDeciderActivity.this)).build();
+                            mySpendsComponent.getAppPref().putString(AppConstants.PrefConstants.CURRENCY, currencyData.getCurrencySymbol());
+                            mySpendsComponent.getAppPref().putInt(AppConstants.PrefConstants.APP_SETUP, BuildConfig.VERSION_CODE);
                             nextIntent = new Intent(LaunchDeciderActivity.this, MainActivity.class);
 
                         } else {

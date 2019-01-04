@@ -459,6 +459,12 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
                     if (data.hasExtra(AppConstants.Bundle.EXPENSE_PRIMARY_KEY)) {
                         //-- delete expense --//
                         mExpenseAdapter.removeSpend(data.getStringExtra(AppConstants.Bundle.EXPENSE_PRIMARY_KEY));
+                        if (mExpenseAdapter.getExpensesSize() == 0) {
+                            //-- all expenses deleted --//
+                            mCTvNoSpends.setText(R.string.no_spends_tracked);
+                            mLvExpense.setVisibility(View.GONE);
+                            mCTvNoSpends.setVisibility(View.VISIBLE);
+                        }
 
                     } else if (data.hasExtra(AppConstants.Bundle.EXPENSE)) {
                         mExpenseAdapter.updateSpend((NewExpense) data.getParcelableExtra(AppConstants.Bundle.EXPENSE));

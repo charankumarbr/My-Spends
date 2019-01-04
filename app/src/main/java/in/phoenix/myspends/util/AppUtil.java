@@ -367,6 +367,7 @@ public final class AppUtil {
 
         Intent notificationIntent = null;
         PendingIntent pendingIntent = null;
+
         if (null == AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)) {
             //-- no currency setup, get it first --//
             notificationIntent = new Intent(context, LaunchDeciderActivity.class);

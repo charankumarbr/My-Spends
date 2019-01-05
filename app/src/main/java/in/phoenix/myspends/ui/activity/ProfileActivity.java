@@ -39,11 +39,11 @@ public class ProfileActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_profile);
-
         init();
     }
 
     private void init() {
+        initLayout();
         Toolbar toolbar = findViewById(R.id.ap_toolbar);
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             toolbar.setTitleTextColor(getResources().getColor(android.R.color.white, null));
@@ -81,7 +81,6 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void getCurrency() {
-
         FirebaseDB.initDb().getCurrencyReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -98,7 +97,6 @@ public class ProfileActivity extends BaseActivity {
 
             }
         });
-
     }
 
     @Override
@@ -142,7 +140,8 @@ public class ProfileActivity extends BaseActivity {
                                         }
                                     });
                         } else {
-                            AppUtil.showToast(R.string.no_internet);
+                            //AppUtil.showToast(R.string.no_internet);
+                            AppUtil.showSnackbar(mViewComplete, R.string.no_internet);
                         }
                     }
                 })

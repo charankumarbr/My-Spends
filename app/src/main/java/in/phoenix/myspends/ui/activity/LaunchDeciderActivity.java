@@ -69,11 +69,11 @@ public class LaunchDeciderActivity extends BaseActivity {
             userLoggedIn();
 
         } else {
-            ViewPager pager = (ViewPager) findViewById(R.id.als_vp_imps);
+            ViewPager pager = findViewById(R.id.als_vp_imps);
             FragmentPagerAdapter adapter = new ImpsAdapter(LaunchDeciderActivity.this, getSupportFragmentManager());
             pager.setAdapter(adapter);
 
-            TabLayout tabLayout = (TabLayout) findViewById(R.id.als_tl_dots);
+            TabLayout tabLayout = findViewById(R.id.als_tl_dots);
             tabLayout.setupWithViewPager(pager, true);
             pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override

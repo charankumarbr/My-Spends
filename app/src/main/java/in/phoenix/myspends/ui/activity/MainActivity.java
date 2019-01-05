@@ -82,6 +82,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
         } else {
             setContentView(R.layout.activity_main);
+            initLayout();
 
             toolbar = findViewById(R.id.am_toolbar);
             /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -433,7 +434,12 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
         }
 
         if (mIsExitFlag) {
-            AppUtil.showToast(getString(R.string.confirm_exit_app));
+            if (mViewComplete != null) {
+                AppUtil.showSnackbar(mViewComplete, R.string.confirm_exit_app);
+
+            } else {
+                AppUtil.showToast(getString(R.string.confirm_exit_app));
+            }
             mIsExitFlag = false;
             mLvExpense.postDelayed(new Runnable() {
                 @Override

@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.text.ParseException;
+import java.util.UnknownFormatConversionException;
 
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
@@ -135,7 +136,7 @@ public class ViewExpenseActivity extends BaseActivity {
                     mCTvAddedOn.setText(getString(R.string.added_on) + " " + AppUtil.dateDBToString(mExpense.getCreatedOn()));
                     mCTvAddedOn.setVisibility(View.VISIBLE);
 
-                } catch (ParseException e) {
+                } catch (UnknownFormatConversionException e) {
                     Crashlytics.logException(e);
                     e.printStackTrace();
                     mCTvAddedOn.setVisibility(View.GONE);
@@ -147,7 +148,7 @@ public class ViewExpenseActivity extends BaseActivity {
                     mCTvLastUpdatedOn.setText(getString(R.string.last_updated_on) + " " + AppUtil.dateDBToString(mExpense.getUpdatedOn()));
                     mCTvLastUpdatedOn.setVisibility(View.VISIBLE);
 
-                } catch (ParseException e) {
+                } catch (UnknownFormatConversionException e) {
                     Crashlytics.logException(e);
                     e.printStackTrace();
                     mCTvLastUpdatedOn.setVisibility(View.GONE);

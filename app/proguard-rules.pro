@@ -73,3 +73,6 @@
 
 -keep class com.crashlytics.** { *; }
 -dontwarn com.crashlytics.**
+
+# Dagger 2
+-dontwarn com.google.errorprone.annotations.**

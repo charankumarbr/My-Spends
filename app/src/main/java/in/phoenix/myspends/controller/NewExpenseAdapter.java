@@ -174,10 +174,47 @@ public final class NewExpenseAdapter extends BaseAdapter {
                     mPrevExpenseDate.changeDate(getItem(position - 1).getExpenseDate());
                 }
 
-                boolean isDiffYear = mExpenseDate.getYear() != mPrevExpenseDate.getYear()
-                        || mExpenseDate.getYear() != mCurrentYear;
+                boolean isDiffYear = mExpenseDate.getYear() != mCurrentYear;
+                boolean isDiffMonth = mExpenseDate.getMonth() != mPrevExpenseDate.getMonth();
 
-                if ((mExpenseDate.getMonth() != mPrevExpenseDate.getMonth()) || isDiffYear) {
+                if (mExpenseDate.getMonth() == mPrevExpenseDate.getMonth() &&
+                        mExpenseDate.getYear() == mPrevExpenseDate.getYear()) {
+                    holder.tvMonth.setVisibility(View.GONE);
+
+                } else {
+                    if (mExpenseDate.getYear() != mCurrentYear) {
+                        holder.tvMonth.setText(AppUtil.getShortMonth(mExpenseDate.getMonth()) + " " + mExpenseDate.getYear());
+
+                    } else {
+                        holder.tvMonth.setText(AppUtil.getMonth(mExpenseDate.getMonth()));
+                    }
+                    holder.tvMonth.setVisibility(View.VISIBLE);
+                }
+
+                /*if (isDiffMonth) {
+                    if (isDiffYear) {
+                        //-- diff month and diff year --//
+                        holder.tvMonth.setText(AppUtil.getShortMonth(mExpenseDate.getMonth()) + " " + mExpenseDate.getYear());
+
+                    } else {
+                        //-- diff month, but same year as current --//
+                        holder.tvMonth.setText(AppUtil.getMonth(mExpenseDate.getMonth()));
+                    }
+                    holder.tvMonth.setVisibility(View.VISIBLE);
+
+                } else {
+                    if (mExpenseDate.getYear() != mPrevExpenseDate.getYear()) {
+                        //-- same month, but diff year --//
+                        holder.tvMonth.setText(AppUtil.getShortMonth(mExpenseDate.getMonth()) + " " + mExpenseDate.getYear());
+                        holder.tvMonth.setVisibility(View.VISIBLE);
+
+                    } else {
+                        //-- same month and same year --//
+                        holder.tvMonth.setVisibility(View.GONE);
+                    }
+                }*/
+
+                /*if ((mExpenseDate.getMonth() != mPrevExpenseDate.getMonth()) || isDiffYear) {
                     if (isDiffYear) {
                         holder.tvMonth.setText(AppUtil.getShortMonth(mExpenseDate.getMonth()) + " " + mExpenseDate.getYear());
 
@@ -188,7 +225,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
 
                 } else {
                     holder.tvMonth.setVisibility(View.GONE);
-                }
+                }*/
             }
 
             holder.tvExpCategoryName.setText(expense.getCategoryId() > 0 ? MySpends.getCategoryName

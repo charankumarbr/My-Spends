@@ -80,19 +80,19 @@ public final class FirebaseDB {
 
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
             currencyRef = databaseReference.child("currency").child(firebaseUserId);
-            currencyRef.goOffline();
+            DatabaseReference.goOffline();
             currencyRef.keepSynced(true);
 
             paymentTypeRef = databaseReference.child("paymentType").child(firebaseUserId);
-            paymentTypeRef.goOffline();
+            DatabaseReference.goOffline();
             paymentTypeRef.keepSynced(true);
 
             categoryRef = databaseReference.child("category");
-            categoryRef.goOffline();
+            DatabaseReference.goOffline();
             categoryRef.keepSynced(true);
 
             messageBoardRef = databaseReference.child("messageBoard").child(firebaseUserId);
-            messageBoardRef.goOffline();
+            DatabaseReference.goOffline();
             messageBoardRef.keepSynced(true);
 
             firebaseFirestore = FirebaseFirestore.getInstance();

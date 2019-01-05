@@ -65,7 +65,7 @@ public final class AppUtil {
      */
     public static ExpenseDate convertToDate(long millis) {
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
         String date = simpleDateFormat.format(new Date(millis));
         String[] dateParts = date.split("-");
 
@@ -74,7 +74,7 @@ public final class AppUtil {
     }
 
     public static String convertToDateDB(long millis) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy h:mm:ss a");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy h:mm:ss a", Locale.ENGLISH);
         return simpleDateFormat.format(new Date(millis));
     }
 
@@ -117,7 +117,7 @@ public final class AppUtil {
     }
 
     public static String dateDBToString(String dateInString) throws ParseException {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy h:mm:ss a");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy h:mm:ss a", Locale.ENGLISH);
         Date strDate = simpleDateFormat.parse(dateInString);
         StringBuilder builder = new StringBuilder();
         Calendar calendar = Calendar.getInstance();
@@ -131,7 +131,7 @@ public final class AppUtil {
         return builder.toString();
     }
 
-    public static String dateDBToString(long timeInMillis) throws ParseException {
+    public static String dateDBToString(long timeInMillis) throws UnknownFormatConversionException {
         StringBuilder builder = new StringBuilder();
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timeInMillis);
@@ -144,7 +144,7 @@ public final class AppUtil {
         return builder.toString();
     }
 
-    public static String getShortMonth(int month) {
+    public static String getShortMonth(int month) throws UnknownFormatConversionException {
         switch (month) {
             case 0:
                 return "Jan";
@@ -172,8 +172,11 @@ public final class AppUtil {
                 return "Dec";
         }
 
-        AppLog.d("ExpenseDate", "Month:" + month, new UnknownFormatConversionException("Wrong month::" + month));
-        return "";
+        UnknownFormatConversionException exception =
+                new UnknownFormatConversionException("Wrong month::" + month);
+        AppLog.d("ExpenseDate", "Month:" + month, exception);
+        throw exception;
+        //return "";
     }
 
     public static String getMonth(int month) {
@@ -317,9 +320,7 @@ public final class AppUtil {
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm != null) {
             NetworkInfo netInfo = cm.getActiveNetworkInfo();
-            if (netInfo != null && netInfo.isConnected()) {
-                return true;
-            }
+            return netInfo != null && netInfo.isConnected();
         }
 
         return false;
@@ -507,7 +508,7 @@ public final class AppUtil {
 
     public static String getGreeting() {
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat dateformat = new SimpleDateFormat("HH");
+        SimpleDateFormat dateformat = new SimpleDateFormat("HH", Locale.ENGLISH);
         String datetime = dateformat.format(c.getTime());
         AppLog.d("AppUtil", "getGreeting: time:" + datetime);
         int hour = Integer.valueOf(datetime);

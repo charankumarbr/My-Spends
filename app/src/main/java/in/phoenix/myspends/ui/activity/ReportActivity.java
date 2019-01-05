@@ -4,12 +4,14 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -124,6 +126,21 @@ public class ReportActivity extends BaseActivity implements DatePickerFragment.O
         mCvCurrentMonth = findViewById(R.id.ar_cv_current_month);
         mCvPreviousMonth = findViewById(R.id.ar_cv_previous_month);
         mCvCustomDateRange = findViewById(R.id.ar_cv_custom_date);
+
+        TextView tvInfo = findViewById(R.id.ar_tv_info_current_month);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            tvInfo.setText(Html.fromHtml(getString(R.string.info_current_month_filter), Html.FROM_HTML_MODE_LEGACY));
+
+        } else {
+            tvInfo.setText(Html.fromHtml(getString(R.string.info_current_month_filter)));
+        }
+        tvInfo = findViewById(R.id.ar_tv_info_previous_month);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            tvInfo.setText(Html.fromHtml(getString(R.string.info_previous_month_filter), Html.FROM_HTML_MODE_LEGACY));
+
+        } else {
+            tvInfo.setText(Html.fromHtml(getString(R.string.info_previous_month_filter)));
+        }
 
         mCvCurrentMonth.setOnClickListener(clickListener);
         mCvPreviousMonth.setOnClickListener(clickListener);

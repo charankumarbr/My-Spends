@@ -13,7 +13,7 @@
         android:title="@string/add_expense"
         app:showAsAction="always"
         android:icon="@drawable/ic_add_primary_24dp"
-        android:visible="false"/>
+        android:visible="false" />
 
     <item
         android:id="@+id/menu_message_board"

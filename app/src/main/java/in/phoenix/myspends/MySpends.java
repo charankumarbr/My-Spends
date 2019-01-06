@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,8 +26,6 @@ import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.modules.ContextModule;
 import in.phoenix.myspends.parser.CategoryParser;
 import in.phoenix.myspends.parser.PaymentTypeParser;
-import in.phoenix.myspends.ui.activity.AppSetupActivity;
-import in.phoenix.myspends.ui.activity.BaseActivity;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;

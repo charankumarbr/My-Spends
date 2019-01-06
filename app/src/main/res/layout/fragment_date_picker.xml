@@ -40,7 +40,7 @@
                 android:hint="From"
                 android:textColor="@color/primary_text"
                 android:inputType="none"
-                app:fontFamily="@font/source_sans_pro"/>
+                app:fontFamily="@font/source_sans_pro" />
         </android.support.design.widget.TextInputLayout>
 
         <ImageView
@@ -70,7 +70,7 @@
                 android:hint="To"
                 android:textColor="@color/primary_text"
                 android:inputType="none"
-                app:fontFamily="@font/source_sans_pro"/>
+                app:fontFamily="@font/source_sans_pro" />
         </android.support.design.widget.TextInputLayout>
 
         <ImageView
@@ -97,6 +97,6 @@
             android:paddingEnd="16dp"
             android:textSize="16sp"
             android:layout_marginBottom="16dp"
-            app:fontFamily="@font/source_sans_pro"/>
+            app:fontFamily="@font/source_sans_pro" />
     </RelativeLayout>
 </FrameLayout>

@@ -17,14 +17,14 @@
         app:popupTheme="@style/Theme.AppCompat.Light"
         app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
         app:titleTextAppearance="@style/ToolbarTitleAppearance"
-        android:elevation="3dp"/>
+        android:elevation="3dp" />
 
     <in.phoenix.myspends.customview.ButteryProgressBar
         android:id="@+id/am_bpb_loading"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:visibility="invisible"
-        android:layout_marginTop="56dp"/>
+        android:layout_marginTop="56dp" />
 
     <ListView
         android:id="@+id/am_lv_spends"
@@ -38,7 +38,7 @@
         android:listSelector="@android:color/transparent"
         android:layout_marginTop="58dp"
         android:nestedScrollingEnabled="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <TextView
         android:id="@+id/am_ctv_no_spends"
@@ -53,14 +53,14 @@
         android:textColor="@color/colorPrimary"
         app:fontFamily="@font/source_sans_pro"
         android:visibility="gone"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center" />
 
     <ProgressBar
         android:id="@+id/am_pb_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/am_fab_new"
@@ -69,7 +69,7 @@
         android:layout_margin="16dp"
         app:fabSize="normal"
         app:layout_anchor="@id/am_bab"
-        android:src="@drawable/ic_add_white_24dp"/>
+        android:src="@drawable/ic_add_white_24dp" />
 
     <android.support.design.bottomappbar.BottomAppBar
         android:id="@+id/am_bab"
@@ -78,5 +78,5 @@
         app:fabAlignmentMode="center"
         android:layout_gravity="bottom"
         android:backgroundTint="@color/colorPrimary"
-        app:backgroundTint="@color/colorPrimary"/>
+        app:backgroundTint="@color/colorPrimary" />
 </android.support.design.widget.CoordinatorLayout>

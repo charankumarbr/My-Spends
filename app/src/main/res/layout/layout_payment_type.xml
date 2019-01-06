@@ -24,7 +24,7 @@
             android:textSize="17sp"
             app:fontFamily="@font/source_sans_pro"
             android:textColor="@color/primary_text"
-            android:text="Select Payment Type"/>
+            android:text="Select Payment Type" />
 
         <TextView
             android:id="@+id/lpt_textview_ptype_mode"
@@ -35,7 +35,7 @@
             android:layout_marginTop="4dp"
             app:fontFamily="@font/source_sans_pro"
             android:textColor="@color/secondary_text"
-            android:text="Payment Type"/>
+            android:text="Payment Type" />
     </LinearLayout>
 
     <Switch
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="16dp"/>
+        android:layout_marginEnd="16dp" />
 
     <!--<in.charanbr.expensetracker.customview.CustomTextView
         android:id="@+id/lpt_ctextview_created"

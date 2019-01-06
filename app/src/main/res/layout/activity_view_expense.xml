@@ -7,8 +7,9 @@
     android:orientation="vertical"
     android:background="@color/bg_screen">
 
-    <include layout="@layout/layout_toolbar"
-        android:id="@+id/ave_toolbar"/>
+    <include
+        layout="@layout/layout_toolbar"
+        android:id="@+id/ave_toolbar" />
 
     <LinearLayout
         android:id="@+id/ave_layout_info"
@@ -153,5 +154,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </RelativeLayout>

@@ -44,7 +44,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:textColor="@color/primary_text"
-                    app:fontFamily="@font/notosans_regular"/>
+                    app:fontFamily="@font/notosans_regular" />
 
                 <TextView
                     android:id="@+id/ar_tv_info_current_month"
@@ -55,7 +55,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/ar_tv_current_month"
                     android:textColor="@color/secondary_text"
                     android:paddingTop="3dp"
-                    app:fontFamily="@font/source_sans_pro"/>
+                    app:fontFamily="@font/source_sans_pro" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:backgroundTint="@color/primary_text"
-                    android:backgroundTintMode="src_in"/>
+                    android:backgroundTintMode="src_in" />
             </android.support.constraint.ConstraintLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
@@ -104,7 +104,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:textColor="@color/primary_text"
-                    app:fontFamily="@font/notosans_regular"/>
+                    app:fontFamily="@font/notosans_regular" />
 
                 <TextView
                     android:id="@+id/ar_tv_info_previous_month"
@@ -115,7 +115,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/ar_tv_previous_month"
                     android:textColor="@color/secondary_text"
                     android:paddingTop="3dp"
-                    app:fontFamily="@font/source_sans_pro"/>
+                    app:fontFamily="@font/source_sans_pro" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -125,7 +125,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:backgroundTint="@color/primary_text"
-                    android:backgroundTintMode="src_in"/>
+                    android:backgroundTintMode="src_in" />
             </android.support.constraint.ConstraintLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
@@ -164,7 +164,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:textColor="@color/primary_text"
-                    app:fontFamily="@font/notosans_regular"/>
+                    app:fontFamily="@font/notosans_regular" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -175,7 +175,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/ar_tv_custom_date"
                     android:textColor="@color/secondary_text"
                     android:paddingTop="3dp"
-                    app:fontFamily="@font/source_sans_pro"/>
+                    app:fontFamily="@font/source_sans_pro" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -185,7 +185,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:backgroundTint="@color/primary_text"
-                    android:backgroundTintMode="src_in"/>
+                    android:backgroundTintMode="src_in" />
             </android.support.constraint.ConstraintLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
@@ -203,7 +203,7 @@
         android:visibility="gone"
         android:layout_below="@+id/ar_cv_custom_date"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp" />
 
     <ProgressBar
         android:id="@+id/ar_progressbar_loading"
@@ -223,7 +223,7 @@
         android:scrollbars="vertical"
         android:cacheColorHint="@android:color/transparent"
         android:smoothScrollbar="true"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/ar_recyclerview_expenses"
@@ -231,6 +231,6 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         android:layout_below="@+id/ar_in_toolbar"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>

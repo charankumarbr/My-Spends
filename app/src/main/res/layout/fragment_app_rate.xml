@@ -20,7 +20,7 @@
             app:fontFamily="@font/source_sans_pro"
             android:layout_centerHorizontal="true"
             android:textSize="19sp"
-            android:layout_marginTop="12dp"/>
+            android:layout_marginTop="12dp" />
 
         <LinearLayout
             android:id="@+id/far_layout_star"
@@ -36,27 +36,31 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/ic_star_accent_24dp"/>
+                android:src="@drawable/ic_star_accent_24dp" />
+
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/ic_star_accent_24dp"/>
+                android:src="@drawable/ic_star_accent_24dp" />
+
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/ic_star_accent_24dp"/>
+                android:src="@drawable/ic_star_accent_24dp" />
+
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/ic_star_accent_24dp"/>
+                android:src="@drawable/ic_star_accent_24dp" />
+
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/ic_star_accent_24dp"/>
+                android:src="@drawable/ic_star_accent_24dp" />
         </LinearLayout>
 
         <TextView
@@ -73,7 +77,7 @@
             android:gravity="start"
             android:layout_below="@+id/far_layout_star"
             android:textAlignment="viewStart"
-            android:text="@string/app_rate_msg"/>
+            android:text="@string/app_rate_msg" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/far_abutton_later"
@@ -88,7 +92,7 @@
             android:layout_below="@+id/far_tv_rate_msg"
             android:layout_toStartOf="@+id/far_abutton_rate_now"
             style="@style/Widget.AppCompat.Button.Borderless"
-            app:fontFamily="@font/source_sans_pro"/>
+            app:fontFamily="@font/source_sans_pro" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/far_abutton_rate_now"
@@ -103,6 +107,6 @@
             android:layout_marginBottom="16dp"
             style="@style/Widget.AppCompat.Button.Borderless"
             app:fontFamily="@font/source_sans_pro"
-            android:layout_marginEnd="12dp"/>
+            android:layout_marginEnd="12dp" />
     </RelativeLayout>
 </FrameLayout>

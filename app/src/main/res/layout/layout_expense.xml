@@ -23,7 +23,7 @@
             android:textColor="@color/colorAccent"
             app:fontFamily="@font/source_sans_pro"
             android:visibility="gone"
-            android:text="Spends Chart"/>
+            android:text="Spends Chart" />
 
         <TextView
             android:id="@+id/le_tv_grand_total"
@@ -42,7 +42,7 @@
             android:layout_alignBaseline="@+id/le_tv_month"
             android:layout_toEndOf="@+id/le_tv_month"
             android:gravity="end"
-            android:text="100000"/>
+            android:text="100000" />
 
         <android.support.v7.widget.CardView
             android:id="@+id/le_layout_expense"
@@ -71,34 +71,34 @@
                     android:layout_toStartOf="@+id/le_layout_end"
                     android:layout_alignParentStart="true">-->
 
-                    <TextView
-                        android:id="@+id/le_textview_payment_note"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        app:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/primary_text"
-                        android:text="Lunch"
-                        android:layout_toStartOf="@+id/le_textview_amount"
-                        android:gravity="start"
-                        android:textAlignment="viewStart"/>
+                <TextView
+                    android:id="@+id/le_textview_payment_note"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:textColor="@color/primary_text"
+                    android:text="Lunch"
+                    android:layout_toStartOf="@+id/le_textview_amount"
+                    android:gravity="start"
+                    android:textAlignment="viewStart" />
 
-                    <TextView
-                        android:id="@+id/le_textview_payment_type"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        app:fontFamily="@font/source_sans_pro"
-                        android:textSize="14sp"
-                        android:textColor="@color/secondary_text"
-                        android:ellipsize="end"
-                        android:text="Cash"
-                        android:layout_toStartOf="@+id/le_textview_date"
-                        android:gravity="start"
-                        android:textAlignment="viewStart"
-                        android:layout_alignBaseline="@+id/le_textview_date"/>
+                <TextView
+                    android:id="@+id/le_textview_payment_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:textSize="14sp"
+                    android:textColor="@color/secondary_text"
+                    android:ellipsize="end"
+                    android:text="Cash"
+                    android:layout_toStartOf="@+id/le_textview_date"
+                    android:gravity="start"
+                    android:textAlignment="viewStart"
+                    android:layout_alignBaseline="@+id/le_textview_date" />
                 <!--</LinearLayout>
 
                 <LinearLayout
@@ -109,32 +109,32 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="10dp">-->
 
-                    <TextView
-                        android:id="@+id/le_textview_amount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textColor="@color/colorPrimary"
-                        app:fontFamily="@font/source_sans_pro"
-                        android:layout_gravity="end"
-                        android:text="300.00"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"/>
+                <TextView
+                    android:id="@+id/le_textview_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorPrimary"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:layout_gravity="end"
+                    android:text="300.00"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp" />
 
-                    <TextView
-                        android:id="@+id/le_textview_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="@color/secondary_text"
-                        android:layout_marginTop="8dp"
-                        app:fontFamily="@font/source_sans_pro"
-                        android:text="10 Apr"
-                        android:layout_below="@id/le_textview_amount"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"/>
+                <TextView
+                    android:id="@+id/le_textview_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/secondary_text"
+                    android:layout_marginTop="8dp"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:text="10 Apr"
+                    android:layout_below="@id/le_textview_amount"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp" />
 
                 <TextView
                     android:id="@+id/le_textview_category"
@@ -153,7 +153,7 @@
                     android:paddingEnd="6dp"
                     android:paddingTop="1dp"
                     android:paddingBottom="1dp"
-                    android:layout_marginTop="6dp"/>
+                    android:layout_marginTop="6dp" />
                 <!--</LinearLayout>-->
             </RelativeLayout>
         </android.support.v7.widget.CardView>
@@ -170,7 +170,7 @@
         <ProgressBar
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -180,13 +180,13 @@
             android:layout_marginStart="16dp"
             android:textSize="16sp"
             app:fontFamily="@font/source_sans_pro"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorPrimary" />
 
         <ProgressBar
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_gravity="center_vertical"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
     </LinearLayout>
 
     <TextView
@@ -203,7 +203,7 @@
         android:drawablePadding="16dp"
         android:layout_below="@+id/le_rlayout_expense"
         app:fontFamily="@font/source_sans_pro"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/le_layout_chart"
@@ -225,7 +225,7 @@
             android:textColor="@color/primary_text"
             app:fontFamily="@font/source_sans_pro"
             android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/le_tv_category_total"/>
+            android:layout_toStartOf="@+id/le_tv_category_total" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -235,7 +235,7 @@
             android:textSize="15sp"
             android:textColor="@color/primary_text"
             app:fontFamily="@font/source_sans_pro"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -246,7 +246,7 @@
             app:fontFamily="@font/source_sans_pro"
             android:layout_alignParentStart="true"
             android:layout_marginTop="8dp"
-            android:layout_below="@+id/le_tv_category_total"/>
+            android:layout_below="@+id/le_tv_category_total" />
 
         <View
             android:id="@+id/le_v_percent"
@@ -255,7 +255,7 @@
             android:background="@color/colorPrimary"
             android:layout_below="@+id/le_tv_category_percentage"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="3dp"/>
+            android:layout_marginTop="3dp" />
     </RelativeLayout>
 
     <android.support.v4.widget.Space
@@ -265,5 +265,5 @@
         android:layout_below="@+id/le_rlayout_expense"
         android:background="@android:color/transparent"
         android:visibility="visible"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp" />
 </RelativeLayout>

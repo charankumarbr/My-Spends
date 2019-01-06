@@ -17,11 +17,12 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:layout_alignParentTop="true"/>-->
-    <include layout="@layout/layout_toolbar"
+    <include
+        layout="@layout/layout_toolbar"
         android:id="@+id/ap_toolbar"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"/>
+        android:layout_height="?attr/actionBarSize" />
 
     <TextView
         android:id="@+id/ap_tv_name_header"
@@ -33,7 +34,7 @@
         android:textSize="15sp"
         app:fontFamily="@font/source_sans_pro"
         android:textColor="@color/secondary_text"
-        android:layout_below="@+id/ap_toolbar"/>
+        android:layout_below="@+id/ap_toolbar" />
 
     <TextView
         android:id="@+id/ap_tv_name"
@@ -45,7 +46,7 @@
         app:fontFamily="@font/source_sans_pro"
         android:textColor="@color/primary_text"
         android:maxLines="2"
-        android:layout_below="@+id/ap_tv_name_header"/>
+        android:layout_below="@+id/ap_tv_name_header" />
 
     <TextView
         android:id="@+id/ap_tv_email_header"
@@ -57,7 +58,7 @@
         android:textSize="15sp"
         app:fontFamily="@font/source_sans_pro"
         android:textColor="@color/secondary_text"
-        android:layout_below="@+id/ap_tv_name"/>
+        android:layout_below="@+id/ap_tv_name" />
 
     <TextView
         android:id="@+id/ap_tv_email"
@@ -68,7 +69,7 @@
         android:textSize="17sp"
         app:fontFamily="@font/source_sans_pro"
         android:textColor="@color/primary_text"
-        android:layout_below="@+id/ap_tv_email_header"/>
+        android:layout_below="@+id/ap_tv_email_header" />
 
     <TextView
         android:id="@+id/ap_tv_currency_header"
@@ -80,7 +81,7 @@
         android:textSize="15sp"
         app:fontFamily="@font/source_sans_pro"
         android:textColor="@color/secondary_text"
-        android:layout_below="@+id/ap_tv_email"/>
+        android:layout_below="@+id/ap_tv_email" />
 
     <TextView
         android:id="@+id/ap_tv_currency"
@@ -91,7 +92,7 @@
         android:textSize="17sp"
         app:fontFamily="@font/source_sans_pro"
         android:textColor="@color/primary_text"
-        android:layout_below="@+id/ap_tv_currency_header"/>
+        android:layout_below="@+id/ap_tv_currency_header" />
 
     <TextView
         android:id="@+id/ap_tv_logout"
@@ -109,7 +110,7 @@
         android:drawableTint="@color/primary_text"
         android:background="#F5F5F5"
         android:layout_alignParentBottom="true"
-        android:textAlignment="viewStart"/>
+        android:textAlignment="viewStart" />
 
     <!--<TextView
         android:id="@+id/ap_tv_version"

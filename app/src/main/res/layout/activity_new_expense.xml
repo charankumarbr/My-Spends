@@ -6,8 +6,9 @@
     android:layout_height="match_parent"
     android:background="@color/bg_screen">
 
-    <include layout="@layout/layout_toolbar"
-        android:id="@+id/ane_toolbar"/>
+    <include
+        layout="@layout/layout_toolbar"
+        android:id="@+id/ane_toolbar" />
 
     <RelativeLayout
         android:id="@+id/ane_layout_expense_date"
@@ -73,7 +74,7 @@
                     android:textColor="@color/primary_text"
                     app:fontFamily="@font/source_sans_pro"
                     android:layout_alignParentStart="true"
-                    android:textAlignment="viewStart"/>
+                    android:textAlignment="viewStart" />
 
                 <CheckBox
                     android:id="@+id/ane_checkbox_add_another"
@@ -83,7 +84,7 @@
                     android:textColor="@color/primary_text"
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
-                    app:fontFamily="@font/source_sans_pro"/>
+                    app:fontFamily="@font/source_sans_pro" />
             </RelativeLayout>
 
             <View
@@ -91,7 +92,7 @@
                 android:layout_height="1dp"
                 android:layout_marginStart="37dp"
                 android:background="@color/secondary_text"
-                android:layout_marginTop="-5dp"/>
+                android:layout_marginTop="-5dp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -111,7 +112,7 @@
                     android:textColor="@android:color/white"
                     android:textSize="18sp"
                     android:gravity="center"
-                    app:fontFamily="@font/source_sans_pro"/>
+                    app:fontFamily="@font/source_sans_pro" />
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/ane_til_expense_amount"
@@ -133,7 +134,7 @@
                         android:textSize="18sp"
                         app:fontFamily="@font/source_sans_pro"
                         android:gravity="start"
-                        android:textAlignment="viewStart"/>
+                        android:textAlignment="viewStart" />
                 </android.support.design.widget.TextInputLayout>
             </RelativeLayout>
 
@@ -151,7 +152,7 @@
                     android:textSize="17sp"
                     app:fontFamily="@font/source_sans_pro"
                     android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true" />
 
                 <TextView
                     android:id="@+id/ane_ctextview_add_new_payment"
@@ -166,7 +167,7 @@
                     app:fontFamily="@font/source_sans_pro"
                     android:textSize="16sp"
                     android:textColor="@color/primary_text"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <Spinner
@@ -175,7 +176,7 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="12dp"
                 android:dropDownSelector="@color/colorAccent"
-                android:spinnerMode="dialog"/>
+                android:spinnerMode="dialog" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -187,7 +188,7 @@
                 app:fontFamily="@font/source_sans_pro"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <Spinner
                 android:id="@+id/ane_spnr_category"
@@ -195,7 +196,7 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="12dp"
                 android:dropDownSelector="@color/colorAccent"
-                android:spinnerMode="dialog"/>
+                android:spinnerMode="dialog" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/ane_til_expense_note"
@@ -217,7 +218,7 @@
                     android:textSize="18sp"
                     app:fontFamily="@font/source_sans_pro"
                     android:gravity="start"
-                    android:textAlignment="viewStart"/>
+                    android:textAlignment="viewStart" />
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
     </ScrollView>
@@ -227,5 +228,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </RelativeLayout>

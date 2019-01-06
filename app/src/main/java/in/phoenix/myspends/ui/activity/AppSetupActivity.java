@@ -36,7 +36,6 @@ import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.modules.ContextModule;
 import in.phoenix.myspends.ui.dialog.AppDialog;
 import in.phoenix.myspends.util.AppConstants;
-import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
 /**

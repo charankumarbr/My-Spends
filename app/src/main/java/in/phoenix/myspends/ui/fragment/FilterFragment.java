@@ -79,7 +79,8 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
 
     private CheckBox mCbGroupByCategory;
 
-    private @FilterDateRange int mFilterDateRange = FilterDateRange.CUSTOM_DATE;
+    private @FilterDateRange
+    int mFilterDateRange = FilterDateRange.CUSTOM_DATE;
 
     public FilterFragment() {
         // Required empty public constructor

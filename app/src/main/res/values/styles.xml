@@ -13,7 +13,7 @@
 
         <item name="android:colorButtonNormal">@color/colorAccent</item>
         <item name="colorButtonNormal">@color/colorAccent</item>
-        
+
         <item name="android:windowAnimationStyle">@style/CustomTransition</item>
 
         <!--<item name="android:colorControlNormal">@color/colorPrimary</item>

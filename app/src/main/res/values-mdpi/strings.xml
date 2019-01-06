@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="value">mdpi</string>
+    <string name="density_bucket">mdpi</string>
 </resources>

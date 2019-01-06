@@ -31,7 +31,7 @@
             android:textColor="@color/primary_text"
             android:visibility="gone"
             android:textAlignment="viewStart"
-            android:fontFamily="@font/source_sans_pro"/>
+            app:fontFamily="@font/source_sans_pro"/>
     </ScrollView>
 
     <TextView

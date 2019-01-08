@@ -4,6 +4,8 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
+import in.phoenix.myspends.components.AppScope;
+import in.phoenix.myspends.components.ApplicationContext;
 
 @Module
 public class ContextModule {
@@ -14,6 +16,8 @@ public class ContextModule {
         mContext = context;
     }
 
+    @ApplicationContext
+    @AppScope
     @Provides
     public Context providesContext() {
         return mContext.getApplicationContext();

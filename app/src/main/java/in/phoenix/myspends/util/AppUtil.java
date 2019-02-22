@@ -15,12 +15,14 @@ import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -495,7 +497,11 @@ public final class AppUtil {
     }
 
     public static String getUserShortName() {
-        String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName().trim();
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (((firebaseUser == null) || firebaseUser.getDisplayName() == null) || TextUtils.isEmpty(firebaseUser.getDisplayName())) {
+            return "User";
+        }
+        String userName = firebaseUser.getDisplayName().trim();
         if (userName.contains(" ")) {
             String[] nameSplit = userName.split("\\s+");
             /*if (nameSplit.length > 2) {

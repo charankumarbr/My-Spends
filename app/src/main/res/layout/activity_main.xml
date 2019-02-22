@@ -78,5 +78,8 @@
         app:fabAlignmentMode="center"
         android:layout_gravity="bottom"
         android:backgroundTint="@color/colorPrimary"
-        app:backgroundTint="@color/colorPrimary" />
+        app:backgroundTint="@color/colorPrimary"
+        app:fabCradleMargin="6dp"
+        app:fabCradleRoundedCornerRadius="24dp"
+        app:fabCradleVerticalOffset="6dp"/>
 </android.support.design.widget.CoordinatorLayout>

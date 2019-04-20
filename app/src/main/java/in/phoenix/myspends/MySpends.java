@@ -30,6 +30,7 @@ import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
+import timber.log.Timber;
 
 /**
  * Created by Charan.Br on 2/11/2017.
@@ -54,6 +55,10 @@ public class MySpends extends Application {
 
         mySpendsComponent = DaggerMySpendsComponent.builder().contextModule
                 (new ContextModule(APP_CONTEXT)).build();
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
 
         getAppPref().putLong(AppConstants.PrefConstants.LAST_APP_OPENED_ON,
                 System.currentTimeMillis());

@@ -49,6 +49,8 @@ ext {
     espressoVersion = '2.2.2'
     //powerMockito = '1.6.2'
     daggerVersion = '2.20'
+    timberVersion = '4.7.1'
+    constraintLayoutVersion = '2.0.0-alpha4'
 }
 
 task clean(type: Delete) {

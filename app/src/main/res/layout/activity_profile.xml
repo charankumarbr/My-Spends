@@ -1,87 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/lfn_layout_complete"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_screen">
 
-    <!--<android.support.v7.widget.Toolbar
-        android:id="@+id/ap_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:layout_alignParentTop="true"/>-->
     <include
-        layout="@layout/layout_toolbar"
         android:id="@+id/ap_toolbar"
-        android:layout_alignParentTop="true"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
+        layout="@layout/layout_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/ap_tv_name_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Name:"
+        android:textColor="@color/secondary_text"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:textSize="15sp"
         app:fontFamily="@font/source_sans_pro"
-        android:textColor="@color/secondary_text"
-        android:layout_below="@+id/ap_toolbar" />
+        app:layout_constraintStart_toStartOf="@+id/ap_toolbar"
+        app:layout_constraintTop_toBottomOf="@id/ap_toolbar" />
 
     <TextView
         android:id="@+id/ap_tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:textColor="@color/primary_text"
         android:layout_marginTop="10dp"
         android:layout_marginStart="16dp"
         android:textSize="17sp"
         app:fontFamily="@font/source_sans_pro"
-        android:textColor="@color/primary_text"
-        android:maxLines="2"
-        android:layout_below="@+id/ap_tv_name_header" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ap_tv_name_header" />
 
     <TextView
         android:id="@+id/ap_tv_email_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Email:"
+        android:textColor="@color/secondary_text"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:textSize="15sp"
         app:fontFamily="@font/source_sans_pro"
-        android:textColor="@color/secondary_text"
-        android:layout_below="@+id/ap_tv_name" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ap_tv_name" />
 
     <TextView
         android:id="@+id/ap_tv_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/primary_text"
         android:layout_marginTop="10dp"
         android:layout_marginStart="16dp"
         android:textSize="17sp"
         app:fontFamily="@font/source_sans_pro"
-        android:textColor="@color/primary_text"
-        android:layout_below="@+id/ap_tv_email_header" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ap_tv_email_header" />
 
     <TextView
         android:id="@+id/ap_tv_currency_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Currency:"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
+        android:text="Currency:"
+        android:textColor="@color/secondary_text"
         android:textSize="15sp"
         app:fontFamily="@font/source_sans_pro"
-        android:textColor="@color/secondary_text"
-        android:layout_below="@+id/ap_tv_email" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ap_tv_email" />
 
     <TextView
         android:id="@+id/ap_tv_currency"
@@ -89,28 +86,85 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginStart="16dp"
+        android:textColor="@color/primary_text"
         android:textSize="17sp"
         app:fontFamily="@font/source_sans_pro"
-        android:textColor="@color/primary_text"
-        android:layout_below="@+id/ap_tv_currency_header" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ap_tv_currency_header" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/ap_layout_font"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_constraintBottom_toTopOf="@+id/ap_tv_logout"
+        android:layout_marginBottom="12dp"
+        android:background="#F5F5F5">
+
+        <ImageView
+            android:id="@+id/ap_iv_font_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_chevron_right_black_24dp"
+            android:tint="@color/primary_text"
+            android:tintMode="multiply"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="16dp"/>
+
+        <TextView
+            android:id="@+id/ap_tv_font_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|start"
+            android:layout_marginStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/font"
+            android:textAlignment="viewStart"
+            android:textColor="@color/primary_text"
+            android:textSize="16sp"
+            app:fontFamily="@font/source_sans_pro"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingTop="12dp"/>
+
+        <TextView
+            android:id="@+id/ap_tv_font_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|start"
+            android:layout_marginStart="16dp"
+            android:textAlignment="viewStart"
+            android:textColor="@color/primary_text"
+            android:textSize="14sp"
+            android:text="Hello"
+            app:fontFamily="@font/source_sans_pro"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ap_tv_font_header"
+            android:paddingTop="3dp"
+            android:paddingBottom="2dp"/>
+    </android.support.constraint.ConstraintLayout>
 
     <TextView
         android:id="@+id/ap_tv_logout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:text="@string/logout"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:textSize="15sp"
-        android:layout_marginTop="20dp"
-        app:fontFamily="@font/source_sans_pro"
-        android:textColor="@color/primary_text"
-        android:gravity="center_vertical|start"
+        android:background="#F5F5F5"
         android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
         android:drawableTint="@color/primary_text"
-        android:background="#F5F5F5"
-        android:layout_alignParentBottom="true"
-        android:textAlignment="viewStart" />
+        android:gravity="center_vertical|start"
+        android:layout_marginTop="20dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/logout"
+        android:textAlignment="viewStart"
+        android:textColor="@color/primary_text"
+        android:textSize="15sp"
+        app:fontFamily="@font/source_sans_pro"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <!--<TextView
         android:id="@+id/ap_tv_version"
@@ -125,4 +179,4 @@
         android:layout_marginTop="2dp"
         android:visibility="gone"/>-->
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

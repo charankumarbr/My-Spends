@@ -10,6 +10,6 @@
     <color name="darker_gray">#aaaaaa</color>
     <color name="secondary_">#424242</color>
     <color name="tertiary_">#737373</color>
-    <color name="bg_screen">#FFFFFF</color><!--FAFAFA-->
+    <color name="bg_screen">#FAFAFA</color><!--FFFFFF-->
     <color name="error">#ec3e3e</color>
 </resources>

@@ -85,6 +85,11 @@ dependencies {
     //-- expandable recycler view, added as a module dependency --//
     //implementation 'com.thoughtbot:expandablerecyclerview:1.3'
     implementation project(':ExpandableRecyclerview')
+
+    //-- timber --//
+    implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
+    implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
+    implementation "com.android.support.constraint:constraint-layout-solver:$rootProject.constraintLayoutVersion"
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'

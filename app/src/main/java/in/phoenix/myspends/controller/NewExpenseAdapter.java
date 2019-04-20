@@ -425,7 +425,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
     }
 
     public void setSpendsChartData(CategoryChart categoryChart, int pixelHundredPercent) {
-        if (null != categoryChart && null != categoryChart.getCategoryChartData()) {
+        if ((null != categoryChart) && null != categoryChart.getCategoryChartData()) {
             mSpendsChartCount = categoryChart.getCategoryChartData().size();
             mGrandTotal = categoryChart.getGrandTotal();
             mCategoryChart = categoryChart;

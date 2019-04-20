@@ -22,7 +22,8 @@
         app:cardPreventCornerOverlap="true"
         app:cardElevation="2dp"
         app:cardBackgroundColor="@android:color/white"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="16dp"
+        android:foreground="?android:attr/selectableItemBackground">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -82,7 +83,8 @@
         app:cardPreventCornerOverlap="true"
         app:cardElevation="2dp"
         app:cardBackgroundColor="@android:color/white"
-        android:layout_marginTop="12dp">
+        android:layout_marginTop="12dp"
+        android:foreground="?android:attr/selectableItemBackground">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -142,7 +144,8 @@
         app:cardPreventCornerOverlap="true"
         app:cardElevation="2dp"
         app:cardBackgroundColor="@android:color/white"
-        android:layout_marginTop="12dp">
+        android:layout_marginTop="12dp"
+        android:foreground="?android:attr/selectableItemBackground">
 
         <LinearLayout
             android:layout_width="match_parent"

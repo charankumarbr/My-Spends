@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/lfn_layout_complete"
-    android:background="@color/bg_screen">
+    android:background="@color/light_bg_screen">
 
     <include
         layout="@layout/layout_toolbar"
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:listSelector="@android:color/transparent"
-        android:cacheColorHint="@color/colorAccent"
+        android:cacheColorHint="@color/light_colorAccent"
         android:dividerHeight="2dp"
         android:layout_below="@+id/ap_toolbar" />
 

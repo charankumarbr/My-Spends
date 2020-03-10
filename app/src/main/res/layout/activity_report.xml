@@ -4,7 +4,7 @@
     android:id="@+id/lfn_layout_complete"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_screen">
+    android:background="@color/light_bg_screen">
 
     <include
         layout="@layout/layout_toolbar"
@@ -44,7 +44,7 @@
                     android:textSize="17sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:textColor="@color/primary_text"
+                    android:textColor="@color/light_primary_text"
                     app:fontFamily="@font/notosans_regular" />
 
                 <TextView
@@ -54,7 +54,7 @@
                     android:textSize="13sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ar_tv_current_month"
-                    android:textColor="@color/secondary_text"
+                    android:textColor="@color/light_secondary_text"
                     android:paddingTop="3dp"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -65,7 +65,7 @@
                     android:background="@drawable/ic_chevron_right_black_24dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:backgroundTint="@color/primary_text"
+                    android:backgroundTint="@color/light_primary_text"
                     android:backgroundTintMode="src_in" />
             </android.support.constraint.ConstraintLayout>
         </LinearLayout>
@@ -105,7 +105,7 @@
                     android:textSize="17sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:textColor="@color/primary_text"
+                    android:textColor="@color/light_primary_text"
                     app:fontFamily="@font/notosans_regular" />
 
                 <TextView
@@ -115,7 +115,7 @@
                     android:textSize="13sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ar_tv_previous_month"
-                    android:textColor="@color/secondary_text"
+                    android:textColor="@color/light_secondary_text"
                     android:paddingTop="3dp"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -126,7 +126,7 @@
                     android:background="@drawable/ic_chevron_right_black_24dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:backgroundTint="@color/primary_text"
+                    android:backgroundTint="@color/light_primary_text"
                     android:backgroundTintMode="src_in" />
             </android.support.constraint.ConstraintLayout>
         </LinearLayout>
@@ -166,7 +166,7 @@
                     android:textSize="17sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:textColor="@color/primary_text"
+                    android:textColor="@color/light_primary_text"
                     app:fontFamily="@font/notosans_regular" />
 
                 <TextView
@@ -176,7 +176,7 @@
                     android:textSize="13sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ar_tv_custom_date"
-                    android:textColor="@color/secondary_text"
+                    android:textColor="@color/light_secondary_text"
                     android:paddingTop="3dp"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -187,7 +187,7 @@
                     android:background="@drawable/ic_chevron_right_black_24dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:backgroundTint="@color/primary_text"
+                    android:backgroundTint="@color/light_primary_text"
                     android:backgroundTintMode="src_in" />
             </android.support.constraint.ConstraintLayout>
         </LinearLayout>
@@ -202,7 +202,7 @@
         android:gravity="center"
         android:textSize="17sp"
         app:fontFamily="@font/source_sans_pro"
-        android:textColor="@color/error"
+        android:textColor="@color/light_error"
         android:visibility="gone"
         android:layout_below="@+id/ar_cv_custom_date"
         android:layout_centerHorizontal="true"

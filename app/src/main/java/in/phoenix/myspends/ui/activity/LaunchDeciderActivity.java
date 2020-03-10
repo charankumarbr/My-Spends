@@ -292,10 +292,14 @@ public class LaunchDeciderActivity extends BaseActivity {
                     } else {
                         Currency currencyData = dataSnapshot.getValue(Currency.class);
                         if (null != currencyData && dataSnapshot.getChildrenCount() == 3) {
-                            MySpendsComponent mySpendsComponent = DaggerMySpendsComponent.builder().contextModule
-                                    (new ContextModule(LaunchDeciderActivity.this)).build();
-                            mySpendsComponent.getAppPref().putString(AppConstants.PrefConstants.CURRENCY, currencyData.getCurrencySymbol());
-                            mySpendsComponent.getAppPref().putInt(AppConstants.PrefConstants.APP_SETUP, BuildConfig.VERSION_CODE);
+                            /*MySpendsComponent mySpendsComponent = DaggerMySpendsComponent.builder().contextModule
+                                    (new ContextModule(LaunchDeciderActivity.this)).build();*/
+
+                            ((MySpends) getApplication()).getAppPref()
+                                    .putString(AppConstants.PrefConstants.CURRENCY, currencyData.getCurrencySymbol());
+                            ((MySpends) getApplication()).getAppPref()
+                                    .putInt(AppConstants.PrefConstants.APP_SETUP, BuildConfig.VERSION_CODE);
+
                             nextIntent = new Intent(LaunchDeciderActivity.this, MainActivity.class);
 
                         } else {

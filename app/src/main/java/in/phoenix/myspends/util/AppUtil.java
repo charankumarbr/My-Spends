@@ -12,6 +12,7 @@ import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -356,13 +357,14 @@ public final class AppUtil {
     public static void createNotification(Context context, ExpenseDate expenseDate) {
 
         String channelId = "reminder";
-        String channelName = "Reminder";
-        int importance = NotificationManager.IMPORTANCE_HIGH;
 
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            String channelName = "Reminder";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+
             NotificationChannel mChannel = new NotificationChannel(
                     channelId, channelName, importance);
             notificationManager.createNotificationChannel(mChannel);
@@ -547,5 +549,62 @@ public final class AppUtil {
             }
         }
         return 0;
+    }
+
+    public static int getPrimaryTextColor() {
+        int nightMode = AppPref.getInstance().getInt(AppConstants.PrefConstants.NIGHT_MODE);
+        if (nightMode == 1) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.colorAccent, null);
+
+            } else {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.colorAccent);
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.light_primary_text, null);
+
+            } else {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.light_primary_text);
+            }
+        }
+    }
+
+    public static int getSecondaryTextColor() {
+        int nightMode = AppPref.getInstance().getInt(AppConstants.PrefConstants.NIGHT_MODE);
+        if (nightMode == 1) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.colorAccent, null);
+
+            } else {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.colorAccent);
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.light_secondary_text, null);
+
+            } else {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.light_secondary_text);
+            }
+        }
+    }
+
+    public static int getAccentColor() {
+        int nightMode = AppPref.getInstance().getInt(AppConstants.PrefConstants.NIGHT_MODE);
+        if (nightMode == 1) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.colorAccent, null);
+
+            } else {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.colorAccent);
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.light_colorAccent, null);
+
+            } else {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.light_colorAccent);
+            }
+        }
     }
 }

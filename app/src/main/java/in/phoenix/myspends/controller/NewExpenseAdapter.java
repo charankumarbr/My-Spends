@@ -12,6 +12,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import javax.inject.Inject;
+
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.model.CategoryChart;
@@ -57,6 +59,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
 
     private int mCurrentYear = Calendar.getInstance().get(Calendar.YEAR);
 
+    @Inject
     public NewExpenseAdapter(Context context, ArrayList<NewExpense> spends, View.OnClickListener clickListener) {
         mContext = context;
         mCurrencySymbol = AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY) + " ";

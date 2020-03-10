@@ -20,7 +20,7 @@
             android:layout_marginTop="16dp"
             android:layout_centerHorizontal="true"
             android:textSize="17sp"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/light_colorPrimary"
             app:fontFamily="@font/source_sans_pro" />
 
         <android.support.design.widget.TextInputLayout
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:hint="From"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/light_primary_text"
                 android:inputType="none"
                 app:fontFamily="@font/source_sans_pro" />
         </android.support.design.widget.TextInputLayout>
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:hint="To"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/light_primary_text"
                 android:inputType="none"
                 app:fontFamily="@font/source_sans_pro" />
         </android.support.design.widget.TextInputLayout>

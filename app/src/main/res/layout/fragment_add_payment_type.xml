@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Payment Type"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/light_colorPrimary"
             android:textSize="19sp"
             android:id="@+id/fapt_tv_title"
             android:layout_centerHorizontal="true"
@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
-            android:dropDownSelector="@color/colorAccent"
+            android:dropDownSelector="@color/light_colorAccent"
             android:spinnerMode="dialog"
             android:layout_below="@+id/fapt_til_type_name" />
 

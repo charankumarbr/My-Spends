@@ -23,7 +23,7 @@
                 android:text="Select the dates to view your spends"
                 android:layout_marginTop="16dp"
                 android:textSize="16sp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/light_colorPrimary"
                 app:fontFamily="@font/source_sans_pro" />
 
             <android.support.design.widget.TextInputLayout
@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:hint="From"
-                    android:textColor="@color/primary_text"
+                    android:textColor="@color/light_primary_text"
                     android:inputType="none"
                     app:fontFamily="@font/source_sans_pro"
                     android:gravity="start"
@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:hint="To"
-                    android:textColor="@color/primary_text"
+                    android:textColor="@color/light_primary_text"
                     android:inputType="none"
                     app:fontFamily="@font/source_sans_pro"
                     android:gravity="start"
@@ -97,7 +97,7 @@
                 android:text="Select the paid by to filter your spends"
                 android:layout_marginTop="20dp"
                 android:textSize="16sp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/light_colorPrimary"
                 app:fontFamily="@font/source_sans_pro"
                 android:layout_below="@+id/ff_imageview_to_date" />
 
@@ -106,7 +106,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="12dp"
-                android:dropDownSelector="@color/colorAccent"
+                android:dropDownSelector="@color/light_colorAccent"
                 android:spinnerMode="dialog"
                 android:layout_below="@+id/ff_ctextview_paidby_header" />
 
@@ -117,7 +117,7 @@
                 android:text="Select the category to filter your spends"
                 android:layout_marginTop="20dp"
                 android:textSize="16sp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/light_colorPrimary"
                 app:fontFamily="@font/source_sans_pro"
                 android:layout_below="@+id/ff_spnr_paid_by" />
 
@@ -126,7 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="12dp"
-                android:dropDownSelector="@color/colorAccent"
+                android:dropDownSelector="@color/light_colorAccent"
                 android:spinnerMode="dialog"
                 android:layout_below="@+id/ff_ctextview_category_header" />
 
@@ -135,7 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:text="@string/groupby_category"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/light_primary_text"
                 app:fontFamily="@font/source_sans_pro"
                 android:layout_below="@+id/ff_spnr_category"
                 android:layout_alignParentStart="true"
@@ -148,7 +148,7 @@
                 android:layout_marginTop="16dp"
                 android:text="Reset"
                 android:textAllCaps="true"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/light_colorAccent"
                 android:layout_marginEnd="12dp"
                 android:layout_marginBottom="16dp"
                 android:layout_below="@+id/ff_checkbox_group_category"
@@ -165,7 +165,7 @@
                 android:layout_marginTop="16dp"
                 android:text="View My Spends"
                 android:textAllCaps="true"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/light_colorAccent"
                 android:layout_marginBottom="16dp"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 app:fontFamily="@font/source_sans_pro" />

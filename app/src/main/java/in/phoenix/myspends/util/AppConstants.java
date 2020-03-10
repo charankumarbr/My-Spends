@@ -39,6 +39,7 @@ public interface AppConstants {
         String NOTIFICATION_MIN = "notificationMin";
         String LAST_APP_OPENED_ON = "lastAppOpenedOn";
         String LAUNCH_COUNT = "launchCount";
+        String NIGHT_MODE = "nightMode";
     }
 
     int PAGE_SPENDS_SIZE = 30;

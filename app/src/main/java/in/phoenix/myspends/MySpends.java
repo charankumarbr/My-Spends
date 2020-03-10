@@ -53,8 +53,10 @@ public class MySpends extends Application {
         super.onCreate();
         APP_CONTEXT = this;
 
-        mySpendsComponent = DaggerMySpendsComponent.builder().contextModule
-                (new ContextModule(APP_CONTEXT)).build();
+        mySpendsComponent = DaggerMySpendsComponent
+                .builder()
+                .contextModule(new ContextModule(APP_CONTEXT))
+                .build();
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());

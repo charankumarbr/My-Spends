@@ -25,14 +25,19 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import in.phoenix.myspends.BuildConfig;
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.components.AppSetupComponent;
+import in.phoenix.myspends.components.DaggerAppSetupComponent;
 import in.phoenix.myspends.components.DaggerMySpendsComponent;
 import in.phoenix.myspends.components.MySpendsComponent;
 import in.phoenix.myspends.controller.CurrencyListAdapter;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;
+import in.phoenix.myspends.modules.AppSetupModule;
 import in.phoenix.myspends.modules.ContextModule;
 import in.phoenix.myspends.ui.dialog.AppDialog;
 import in.phoenix.myspends.util.AppConstants;
@@ -50,7 +55,8 @@ public class AppSetupActivity extends BaseActivity {
 
     private ProgressBar mPbLoading;
 
-    private CurrencyListAdapter mAdapter;
+    @Inject
+    CurrencyListAdapter mAdapter;
 
     private ArrayList<Currency> mCurrencies;
 
@@ -60,18 +66,22 @@ public class AppSetupActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_setup);
+
         Toolbar toolbar = findViewById(R.id.aas_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.select_currency);
-        getCurrencyList();
+
+        mPbLoading = findViewById(R.id.aas_progress_bar_loading);
         mLvCurrencies = findViewById(R.id.aas_listview_currency);
         mCTvStatus = findViewById(R.id.aas_ctextview_status);
-        mPbLoading = findViewById(R.id.aas_progress_bar_loading);
+
+        getCurrencyList();
+
         initLayout();
     }
 
     private void getCurrencyList() {
-        //mPbLoading.setVisibility(View.VISIBLE);
+        mPbLoading.setVisibility(View.VISIBLE);
         AppDialog.showDialog(AppSetupActivity.this, "Fetching currencies...");
         new Thread(new Runnable() {
             @Override
@@ -108,16 +118,27 @@ public class AppSetupActivity extends BaseActivity {
     };
 
     private void displayCurrencyList(boolean status) {
-        //mPbLoading.setVisibility(View.GONE);
+        mPbLoading.setVisibility(View.GONE);
         AppDialog.dismissDialog();
         if (status && null != mCurrencies && mCurrencies.size() > 0) {
+
+            AppSetupComponent appSetupComponent = DaggerAppSetupComponent.builder()
+                    .appSetupModule(new AppSetupModule(AppSetupActivity.this, mCurrencies))
+                    .build();
+            appSetupComponent.inject(AppSetupActivity.this);
+
             mLvCurrencies.setVisibility(View.VISIBLE);
-            mAdapter = new CurrencyListAdapter(AppSetupActivity.this, mCurrencies);
-            mLvCurrencies.setAdapter(mAdapter);
+            mCTvStatus.setVisibility(View.GONE);
+            //mAdapter = new CurrencyListAdapter(AppSetupActivity.this);
+            if (mAdapter != null) {
+                //mAdapter.setCurrencies(mCurrencies);
+                mLvCurrencies.setAdapter(mAdapter);
+            }
             mLvCurrencies.setOnItemClickListener(currencyClickListener);
 
         } else {
             mCTvStatus.setVisibility(View.VISIBLE);
+            mLvCurrencies.setVisibility(View.GONE);
         }
     }
 

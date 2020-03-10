@@ -5,12 +5,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.bottomappbar.BottomAppBar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,14 +33,20 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Objects;
+
+import javax.inject.Inject;
 
 import in.phoenix.myspends.BuildConfig;
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.components.DaggerMainScreenComponent;
+import in.phoenix.myspends.components.MainScreenComponent;
 import in.phoenix.myspends.controller.NewExpenseAdapter;
 import in.phoenix.myspends.customview.ButteryProgressBar;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
+import in.phoenix.myspends.modules.MainScreenModule;
 import in.phoenix.myspends.parser.FSSpendsParser;
 import in.phoenix.myspends.parser.SpendsParser;
 import in.phoenix.myspends.ui.fragment.AppRateFragment;
@@ -54,7 +63,8 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
     private ListView mLvExpense;
 
-    private NewExpenseAdapter mExpenseAdapter;
+    @Inject
+    NewExpenseAdapter mExpenseAdapter;
 
     private ProgressBar mPbLoading;
 
@@ -70,11 +80,17 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
     private boolean mIsExitFlag = true;
     private Toolbar toolbar;
 
+    //private BottomAppBar bottomAppBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         AppLog.d(getClass().getSimpleName(), "onCreate():");
+
+        //getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
         if (!AppUtil.isUserLoggedIn()) {
             Intent launchIntent = new Intent(MainActivity.this, LaunchDeciderActivity.class);
             startActivity(launchIntent);
@@ -94,6 +110,16 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
             toolbar.setTitle(getString(R.string.app_name));
             setSupportActionBar(toolbar);
+            //bottomAppBar = findViewById(R.id.am_bab);
+            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                bottomAppBar.setTitleTextColor(getResources().getColor(R.color.colorPrimary, null));
+                bottomAppBar.setSubtitleTextColor(getResources().getColor(R.color.secondary_text, null));
+            } else {
+                bottomAppBar.setTitleTextColor(getResources().getColor(R.color.colorPrimary));
+                bottomAppBar.setSubtitleTextColor(getResources().getColor(R.color.secondary_text));
+            }
+            bottomAppBar.setTitle(getString(R.string.app_name));
+            setSupportActionBar(bottomAppBar);*/
 
             mCalendarExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());
 
@@ -519,7 +545,12 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
     private void setSpends(ArrayList<NewExpense> spends) {
         if (null == mExpenseAdapter) {
-            mExpenseAdapter = new NewExpenseAdapter(MainActivity.this, spends, clickListener);
+            MainScreenComponent mainScreenComponent = DaggerMainScreenComponent
+                    .builder()
+                    .mainScreenModule(new MainScreenModule(MainActivity.this, spends, clickListener))
+                    .build();
+            mainScreenComponent.inject(MainActivity.this);
+            //mExpenseAdapter = new NewExpenseAdapter(MainActivity.this, spends, clickListener);
             mLvExpense.setAdapter(mExpenseAdapter);
 
         } else {

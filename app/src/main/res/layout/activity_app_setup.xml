@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/bg_screen">
+    android:background="@color/light_bg_screen">
 
     <include
         android:id="@+id/aas_toolbar"
@@ -19,7 +19,7 @@
         android:visibility="gone"
         android:layout_below="@+id/aas_toolbar"
         android:fastScrollEnabled="true"
-        android:fastScrollStyle="@color/colorAccent" />
+        android:fastScrollStyle="@color/light_colorAccent" />
 
     <ProgressBar
         android:id="@+id/aas_progress_bar_loading"

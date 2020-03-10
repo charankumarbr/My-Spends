@@ -4,7 +4,7 @@
     android:id="@+id/lfn_layout_complete"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_screen">
+    android:background="@color/light_bg_screen">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/am_toolbar"
@@ -35,8 +35,8 @@
         android:scrollbars="vertical"
         android:cacheColorHint="@android:color/transparent"
         android:smoothScrollbar="true"
+        android:layout_marginTop="?attr/actionBarSize"
         android:listSelector="@android:color/transparent"
-        android:layout_marginTop="58dp"
         android:nestedScrollingEnabled="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
@@ -50,7 +50,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
         android:gravity="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/light_colorPrimary"
         app:fontFamily="@font/source_sans_pro"
         android:visibility="gone"
         android:layout_gravity="center" />
@@ -68,18 +68,24 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         app:fabSize="normal"
-        app:layout_anchor="@id/am_bab"
-        android:src="@drawable/ic_add_white_24dp" />
+        android:layout_gravity="bottom|center_horizontal"
+        android:src="@drawable/ic_add_white_24dp"/>
 
-    <android.support.design.bottomappbar.BottomAppBar
+    <!--<android.support.design.bottomappbar.BottomAppBar
         android:id="@+id/am_bab"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        app:hideOnScroll="true"
+        style="@style/Widget.MaterialComponents.BottomAppBar"
         app:fabAlignmentMode="center"
         android:layout_gravity="bottom"
-        android:backgroundTint="@color/colorPrimary"
-        app:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="@android:color/white"
+        app:backgroundTint="@android:color/white"
         app:fabCradleMargin="6dp"
         app:fabCradleRoundedCornerRadius="24dp"
-        app:fabCradleVerticalOffset="6dp"/>
+        app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
+        app:titleTextAppearance="@style/ToolbarTitleAppearance"
+        android:elevation="3dp"
+        app:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />-->
 </android.support.design.widget.CoordinatorLayout>

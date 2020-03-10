@@ -34,7 +34,7 @@
         android:text="No expenses for this month."
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/light_colorAccent"
         android:visibility="gone"
         android:layout_centerInParent="true" />
 </RelativeLayout>

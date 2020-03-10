@@ -23,7 +23,7 @@
             android:maxLines="1"
             android:textSize="17sp"
             app:fontFamily="@font/source_sans_pro"
-            android:textColor="@color/primary_text"
+            android:textColor="@color/light_primary_text"
             android:text="Select Payment Type" />
 
         <TextView
@@ -34,7 +34,7 @@
             android:textSize="14sp"
             android:layout_marginTop="4dp"
             app:fontFamily="@font/source_sans_pro"
-            android:textColor="@color/secondary_text"
+            android:textColor="@color/light_secondary_text"
             android:text="Payment Type" />
     </LinearLayout>
 
@@ -55,7 +55,7 @@
         android:layout_marginTop="8dp"
         android:layout_alignLeft="@+id/lpt_textview_ptype_name"
         android:layout_below="@+id/lpt_textview_ptype_name"
-        android:textColor="@color/secondary_text"
+        android:textColor="@color/light_secondary_text"
         android:layout_marginBottom="10dp"
         app:fontFamily="@font/source_sans_pro"/>-->
 

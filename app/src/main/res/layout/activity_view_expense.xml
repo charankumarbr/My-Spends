@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/bg_screen">
+    android:background="@color/light_bg_screen">
 
     <include
         layout="@layout/layout_toolbar"
@@ -15,7 +15,7 @@
         android:id="@+id/ave_layout_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/light_colorPrimary"
         android:orientation="vertical"
         android:paddingBottom="12dp"
         android:paddingStart="32dp"
@@ -82,7 +82,7 @@
                 android:textSize="16sp"
                 android:id="@+id/ave_cTextView_paid_by_header"
                 android:drawableStart="@drawable/ic_credit_card_primary_24dp"
-                android:drawableTint="@color/colorAccent"
+                android:drawableTint="@color/light_colorAccent"
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
                 app:fontFamily="@font/source_sans_pro" />
@@ -91,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/light_primary_text"
                 android:layout_marginTop="10dp"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro"
@@ -107,7 +107,7 @@
                 android:textSize="16sp"
                 android:id="@+id/ave_cTextView_category_header"
                 android:drawableStart="@drawable/ic_label_outline_24dp"
-                android:drawableTint="@color/colorAccent"
+                android:drawableTint="@color/light_colorAccent"
                 android:drawablePadding="8dp"
                 app:fontFamily="@font/source_sans_pro"
                 android:gravity="center_vertical" />
@@ -116,7 +116,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/light_primary_text"
                 android:layout_marginTop="10dp"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro"
@@ -132,7 +132,7 @@
                 android:textSize="16sp"
                 android:id="@+id/ave_cTextView_note_header"
                 android:drawableStart="@drawable/ic_comment_black_24dp"
-                android:drawableTint="@color/colorAccent"
+                android:drawableTint="@color/light_colorAccent"
                 android:drawablePadding="8dp"
                 app:fontFamily="@font/source_sans_pro"
                 android:gravity="center_vertical" />
@@ -141,7 +141,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/light_primary_text"
                 android:layout_marginTop="10dp"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro"

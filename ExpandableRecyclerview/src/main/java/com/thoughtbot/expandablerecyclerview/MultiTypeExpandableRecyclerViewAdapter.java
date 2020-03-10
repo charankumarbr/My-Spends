@@ -1,8 +1,7 @@
 package com.thoughtbot.expandablerecyclerview;
 
-import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
-
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableList;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableListPosition;
@@ -31,7 +30,7 @@ public abstract class MultiTypeExpandableRecyclerViewAdapter<GVH extends GroupVi
      * that holds a {@code android.view.View} of the given view type.
      */
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (isGroup(viewType)) {
             GVH gvh = onCreateGroupViewHolder(parent, viewType);
             gvh.setOnGroupClickListener(this);
@@ -56,7 +55,7 @@ public abstract class MultiTypeExpandableRecyclerViewAdapter<GVH extends GroupVi
      *                 ExpandableList#getVisibleItemCount()} in the list at which to bind
      */
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ExpandableListPosition listPos = expandableList.getUnflattenedPosition(position);
         ExpandableGroup group = expandableList.getExpandableGroup(listPos);
         if (isGroup(getItemViewType(position))) {

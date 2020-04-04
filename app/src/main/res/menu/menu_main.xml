@@ -32,8 +32,8 @@
         app:showAsAction="never|withText" />
 
     <item
-        android:id="@+id/menu_settings"
-        android:title="@string/settings"
+        android:id="@+id/menu_ui_mode"
+        android:title="@string/dark_mode"
         app:showAsAction="never|withText" />
 
     <item

@@ -3,12 +3,11 @@ package in.phoenix.myspends.ui.activity;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.bottomappbar.BottomAppBar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -34,7 +33,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -319,13 +317,31 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             startActivity(new Intent(MainActivity.this, MessageBoardActivity.class));
             return true;
 
-        } else if (item.getItemId() == R.id.menu_settings) {
-            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+        } else if (item.getItemId() == R.id.menu_ui_mode) {
+            //changeUiMode(newConfig);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    /*@Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        changeUiMode(newConfig);
+    }
+
+    private void changeUiMode(Configuration configuration) {
+        int currentNightMode = configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                // Night mode is not active, we're using the light theme
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                // Night mode is active, we're using dark theme
+                break;
+        }
+    }*/
 
     private void confirmLogout() {
         AlertDialog.Builder logoutBuilder = new AlertDialog.Builder(MainActivity.this)

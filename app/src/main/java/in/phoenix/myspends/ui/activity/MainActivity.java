@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.bottomappbar.BottomAppBar;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
@@ -82,6 +83,8 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
     //private BottomAppBar bottomAppBar;
 
+    private FloatingActionButton fabAddNew;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,7 +141,8 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             mPbLoading = findViewById(R.id.am_pb_loading);
             mCTvNoSpends = findViewById(R.id.am_ctv_no_spends);
 
-            findViewById(R.id.am_fab_new).setOnClickListener(new View.OnClickListener() {
+            fabAddNew = findViewById(R.id.am_fab_new);
+            fabAddNew.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent newExpenseIntent = new Intent(MainActivity.this, NewExpenseActivity.class);
@@ -172,6 +176,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
                 boolean isFromCache = documentSnapshots.getMetadata().isFromCache();
                 AppLog.d("MainActivity", "Spends Firestore:onSuccess :: isFromCache:" + isFromCache);
 
+                fabAddNew.show();
                 if (!documentSnapshots.isEmpty()) {
                     new FSSpendsParser(MainActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
                             documentSnapshots.iterator());
@@ -214,6 +219,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
                         } else {
                             mCTvNoSpends.setText(R.string.no_internet);
+                            fabAddNew.hide();
                         }
                         mLvExpense.setVisibility(View.GONE);
                         mCTvNoSpends.setVisibility(View.VISIBLE);
@@ -311,6 +317,10 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
         } else if (item.getItemId() == R.id.menu_message_board) {
             startActivity(new Intent(MainActivity.this, MessageBoardActivity.class));
+            return true;
+
+        } else if (item.getItemId() == R.id.menu_settings) {
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             return true;
         }
 

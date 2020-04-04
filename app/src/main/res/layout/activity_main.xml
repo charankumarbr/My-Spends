@@ -16,8 +16,7 @@
         app:theme="@style/CustomToolbar"
         app:popupTheme="@style/Theme.AppCompat.Light"
         app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
-        app:titleTextAppearance="@style/ToolbarTitleAppearance"
-        android:elevation="3dp" />
+        app:titleTextAppearance="@style/ToolbarTitleAppearance"/>
 
     <in.phoenix.myspends.customview.ButteryProgressBar
         android:id="@+id/am_bpb_loading"

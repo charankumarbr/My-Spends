@@ -607,4 +607,29 @@ public final class AppUtil {
             }
         }
     }
+
+    /*private void printHashKey() {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA256");
+                md.update(signature.toByteArray());
+                final byte[] digest = md.digest();
+                final StringBuilder toRet = new StringBuilder();
+                for (int i = 0; i < digest.length; i++) {
+                    if (i != 0) toRet.append(":");
+                    int b = digest[i] & 0xff;
+                    String hex = Integer.toHexString(b);
+                    if (hex.length() == 1) toRet.append("0");
+                    toRet.append(hex);
+                }
+
+                Log.i("TAG", "SHA256: " + toRet.toString());
+            }
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("TAG", "printHashKey()", e);
+        } catch (Exception e) {
+            Log.e("TAG", "printHashKey()", e);
+        }
+    }*/
 }

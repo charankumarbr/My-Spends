@@ -10,7 +10,6 @@
     app:theme="@style/CustomToolbar"
     app:popupTheme="@style/Theme.MaterialComponents.Light"
     app:titleTextAppearance="@style/ToolbarTitleAppearance"
-    app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
-    android:elevation="3dp">
+    app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance">
 
 </android.support.v7.widget.Toolbar>

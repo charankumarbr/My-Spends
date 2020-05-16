@@ -317,10 +317,10 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             startActivity(new Intent(MainActivity.this, MessageBoardActivity.class));
             return true;
 
-        } else if (item.getItemId() == R.id.menu_ui_mode) {
+        }/* else if (item.getItemId() == R.id.menu_ui_mode) {
             //changeUiMode(newConfig);
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }

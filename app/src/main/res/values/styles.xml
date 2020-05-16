@@ -20,7 +20,6 @@
         <item name="colorControlNormal">@color/colorPrimary</item>
         <item name="android:textColorPrimary">@color/colorPrimary</item>-->
 
-        <item name="android:forceDarkAllowed">true</item>
     </style>
 
     <!--<style name="AppThemeLight" parent="Theme.AppCompat.NoActionBar">

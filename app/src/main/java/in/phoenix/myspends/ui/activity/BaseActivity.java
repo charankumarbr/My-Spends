@@ -2,8 +2,9 @@ package in.phoenix.myspends.ui.activity;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.ui.dialog.AppDialog;

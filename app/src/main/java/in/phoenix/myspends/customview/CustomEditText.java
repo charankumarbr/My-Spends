@@ -4,15 +4,16 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewParent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
+import androidx.appcompat.widget.AppCompatEditText;
+
 import com.crashlytics.android.Crashlytics;
+import com.google.android.material.textfield.TextInputLayout;
 
 import in.phoenix.myspends.R;
 
@@ -27,7 +28,7 @@ public final class CustomEditText extends AppCompatEditText {
     }
 
     public CustomEditText(Context context, AttributeSet attrs) {
-        this(context, attrs, android.support.v7.appcompat.R.attr.editTextStyle);
+        this(context, attrs, androidx.appcompat.R.attr.editTextStyle);
     }
 
     public CustomEditText(Context context, AttributeSet attrs, int defStyleAttr) {

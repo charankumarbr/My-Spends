@@ -3,7 +3,8 @@ package in.phoenix.myspends.ui.dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
+
+import androidx.appcompat.app.AlertDialog;
 
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.util.AppConstants;

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
+import android.widget.Space;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -416,7 +417,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
         TextView tvCategoryPercentage;
         TextView tvGrandTotal;
 
-        android.support.v4.widget.Space vSpace;
+        Space vSpace;
     }
 
     public int getExpensesSize() {

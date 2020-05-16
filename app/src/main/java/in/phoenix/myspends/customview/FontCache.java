@@ -3,7 +3,8 @@ package in.phoenix.myspends.customview;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
-import android.support.v4.content.res.ResourcesCompat;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import java.util.HashMap;
 

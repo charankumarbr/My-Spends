@@ -76,7 +76,8 @@
     <string name="app_rate_msg">If you enjoy using My Spends, please take a moment to rate the app. Please encourage us by rating 5 stars. Thanks for your support!</string>
     <string name="info_previous_month_filter"><![CDATA[1<sup>st</sup> to last day of previous month.]]></string>
     <string name="info_current_month_filter"><![CDATA[1<sup>st</sup> to today of current month.]]></string>
-    <string name="font">Font</string>
+    <!--<string name="font">Font</string>
     <string name="settings">Settings</string>
     <string name="theme">Theme</string>
+    <string name="dark_mode">Dark Theme</string>-->
 </resources>

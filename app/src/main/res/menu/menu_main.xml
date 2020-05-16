@@ -31,16 +31,15 @@
         android:title="@string/profile"
         app:showAsAction="never|withText" />
 
-    <item
-        android:id="@+id/menu_settings"
-        android:title="@string/settings"
-        app:showAsAction="never|withText" />
+    <!--<item
+        android:id="@+id/menu_ui_mode"
+        android:title="@string/dark_mode"
+        app:showAsAction="never|withText" />-->
 
     <item
         android:id="@+id/menu_about"
         android:title="@string/about_app"
-        app:showAsAction="never|withText"
-        android:visible="false"/>
+        app:showAsAction="never|withText"/>
 
     <item
         android:id="@+id/menu_logout"

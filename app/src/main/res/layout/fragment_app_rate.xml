@@ -79,7 +79,7 @@
             android:textAlignment="viewStart"
             android:text="@string/app_rate_msg" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/far_abutton_later"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -94,7 +94,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             app:fontFamily="@font/source_sans_pro" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/far_abutton_rate_now"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

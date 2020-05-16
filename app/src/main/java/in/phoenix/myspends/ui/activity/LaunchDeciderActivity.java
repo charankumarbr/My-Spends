@@ -4,19 +4,20 @@ import android.animation.Animator;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.crashlytics.android.Crashlytics;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,12 +30,9 @@ import java.util.List;
 import in.phoenix.myspends.BuildConfig;
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.components.DaggerMySpendsComponent;
-import in.phoenix.myspends.components.MySpendsComponent;
 import in.phoenix.myspends.controller.ImpsAdapter;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;
-import in.phoenix.myspends.modules.ContextModule;
 import in.phoenix.myspends.util.AppAnalytics;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
@@ -75,7 +73,7 @@ public class LaunchDeciderActivity extends BaseActivity {
 
             TabLayout tabLayout = findViewById(R.id.als_tl_dots);
             tabLayout.setupWithViewPager(pager, true);
-            pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            /*pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -95,28 +93,30 @@ public class LaunchDeciderActivity extends BaseActivity {
                 public void onPageScrollStateChanged(int state) {
 
                 }
-            });
+            });*/
+            toggleSignInNoAnim(true);
 
             AppUtil.removeDynamicShortcut();
             AppCompatButton btnLogin = findViewById(R.id.als_abtn_login);
-            btnLogin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (AppUtil.isConnected()) {
-                        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                                new AuthUI.IdpConfig.GoogleBuilder().build());
-                        startActivityForResult(
-                                AuthUI.getInstance()
-                                        .createSignInIntentBuilder()
-                                        .setAvailableProviders(providers)
-                                        .build(),
-                                RC_SIGN_IN);
-                    } else {
-                        AppUtil.showSnackbar(mViewComplete, "No Internet Connection!");
-                    }
+            btnLogin.setOnClickListener(view -> {
+                if (AppUtil.isConnected()) {
+                    List<AuthUI.IdpConfig> providers = Arrays.asList(
+                            new AuthUI.IdpConfig.GoogleBuilder().build());
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setAvailableProviders(providers)
+                                    .build(),
+                            RC_SIGN_IN);
+                } else {
+                    AppUtil.showSnackbar(mViewComplete, "No Internet Connection!");
                 }
             });
         }
+    }
+
+    private void toggleSignInNoAnim(boolean toShow) {
+        mVSignIn.setVisibility(View.VISIBLE);
     }
 
     private void toggleSignIn(boolean toShow) {

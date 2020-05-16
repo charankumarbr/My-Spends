@@ -4,13 +4,12 @@ import `in`.phoenix.myspends.R
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.Fragment
-import android.support.v7.widget.AppCompatButton
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatButton
+import androidx.fragment.app.DialogFragment
 
 /**
  * A simple [Fragment] subclass.
@@ -49,7 +48,7 @@ class AppRateFragment : DialogFragment() {
     override fun onStart() {
         super.onStart()
         if (dialog != null) {
-            with(dialog) {
+            with (dialog!!) {
                 window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 setTitle("Rate " + getString(R.string.app_name))
                 setCanceledOnTouchOutside(false)

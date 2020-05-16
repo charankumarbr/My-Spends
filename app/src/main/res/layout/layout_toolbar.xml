@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/lt_toolbar"
     android:layout_width="match_parent"
@@ -8,8 +8,9 @@
     android:background="@android:color/white"
     android:theme="@style/CustomToolbar"
     app:theme="@style/CustomToolbar"
-    app:popupTheme="@style/Theme.MaterialComponents.Light"
+    app:popupTheme="@style/Theme.AppCompat.Light"
     app:titleTextAppearance="@style/ToolbarTitleAppearance"
-    app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance">
+    app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
+    android:elevation="3dp">
 
-</android.support.v7.widget.Toolbar>
+</androidx.appcompat.widget.Toolbar>

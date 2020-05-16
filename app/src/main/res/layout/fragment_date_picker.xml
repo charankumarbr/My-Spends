@@ -23,7 +23,7 @@
             android:textColor="@color/light_colorPrimary"
             app:fontFamily="@font/source_sans_pro" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/fdp_til_from_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             android:layout_toStartOf="@+id/fdp_imageview_from_date"
             android:layout_marginEnd="12dp">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/fdp_tiet_from_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                 android:textColor="@color/light_primary_text"
                 android:inputType="none"
                 app:fontFamily="@font/source_sans_pro" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
             android:id="@+id/fdp_imageview_from_date"
@@ -53,7 +53,7 @@
             android:layout_marginTop="30dp"
             android:padding="6dp" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/fdp_til_to_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
             android:layout_toStartOf="@+id/fdp_imageview_to_date"
             android:layout_marginEnd="12dp">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/fdp_tiet_to_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                 android:textColor="@color/light_primary_text"
                 android:inputType="none"
                 app:fontFamily="@font/source_sans_pro" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
             android:id="@+id/fdp_imageview_to_date"
@@ -83,7 +83,7 @@
             android:layout_marginTop="30dp"
             android:padding="6dp" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/fdp_abutton_view_spends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

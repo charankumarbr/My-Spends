@@ -28,6 +28,7 @@ public final class CurrencyListAdapter extends BaseAdapter {
     private ArrayList<Currency> mCurrencies;
 
     private int mSelectedPosition = -1;
+    private Currency mSelectedCurrency = null;
 
     /*@Inject
     public CurrencyListAdapter(AppSetupActivity context) {
@@ -78,7 +79,11 @@ public final class CurrencyListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (mSelectedPosition == position) {
+        Currency currency = getItem(position);
+        if (mSelectedCurrency != null &&
+                mSelectedCurrency.getCurrencySymbol().equals(currency.getCurrencySymbol()) &&
+                mSelectedCurrency.getCurrencyName().equals(currency.getCurrencyName()) &&
+                mSelectedCurrency.getCurrencyCode().equals(currency.getCurrencyCode())) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 convertView.setBackgroundColor(MySpends.APP_CONTEXT.getResources().getColor(R.color.colorAccent, null));
                 holder.cTvCurrencyName.setTextColor(mContext.getResources().getColor(android.R.color.white, null));
@@ -107,7 +112,6 @@ public final class CurrencyListAdapter extends BaseAdapter {
             }
         }
 
-        Currency currency = getItem(position);
         holder.cTvCurrencyCode.setText(currency.getCurrencyCode());
         holder.cTvCurrencyName.setText(currency.getCurrencyName() + " (" +
                 currency.getCurrencySymbol() + ")");
@@ -117,6 +121,12 @@ public final class CurrencyListAdapter extends BaseAdapter {
 
     public void setSelectedPosition(int position) {
         mSelectedPosition = position;
+        mSelectedCurrency = mCurrencies.get(position);
+        notifyDataSetChanged();
+    }
+
+    public void setData(ArrayList<Currency> collect) {
+        mCurrencies = collect;
         notifyDataSetChanged();
     }
 

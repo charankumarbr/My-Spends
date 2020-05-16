@@ -10,7 +10,7 @@
         layout="@layout/layout_toolbar"
         android:id="@+id/ar_in_toolbar" />
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/ar_cv_current_month"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="80dp">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -67,11 +67,11 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:backgroundTint="@color/light_primary_text"
                     android:backgroundTintMode="src_in" />
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/ar_cv_previous_month"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
             android:layout_width="match_parent"
             android:layout_height="80dp">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -128,11 +128,11 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:backgroundTint="@color/light_primary_text"
                     android:backgroundTintMode="src_in" />
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/ar_cv_custom_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -151,7 +151,7 @@
             android:layout_width="match_parent"
             android:layout_height="80dp">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -189,9 +189,9 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:backgroundTint="@color/light_primary_text"
                     android:backgroundTintMode="src_in" />
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/ar_ctextview_msg"
@@ -228,7 +228,7 @@
         android:smoothScrollbar="true"
         android:visibility="gone" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ar_recyclerview_expenses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

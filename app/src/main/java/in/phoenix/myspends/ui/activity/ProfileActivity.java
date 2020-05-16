@@ -62,10 +62,22 @@ public class ProfileActivity extends BaseActivity {
 
         cTvData = findViewById(R.id.ap_tv_name);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        cTvData.setText(user.getDisplayName());
+        String displayName = user.getDisplayName();
+        String emailId = user.getEmail();
+        if (displayName == null || displayName.trim().length() < 1) {
+            if (emailId.contains("@")) {
+                String subEmail = emailId.substring(0, emailId.indexOf("@"));
+                cTvData.setText(subEmail);
+
+            } else {
+                cTvData.setText("User");
+            }
+        } else {
+            cTvData.setText(displayName);
+        }
         cTvData = null;
         cTvData = findViewById(R.id.ap_tv_email);
-        cTvData.setText(user.getEmail());
+        cTvData.setText(emailId);
         /*cTvData = findViewById(R.id.ap_tv_version);
         cTvData.setText("v " + BuildConfig.VERSION_NAME);*/
 

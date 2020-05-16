@@ -73,7 +73,7 @@ public class LaunchDeciderActivity extends BaseActivity {
 
             TabLayout tabLayout = findViewById(R.id.als_tl_dots);
             tabLayout.setupWithViewPager(pager, true);
-            pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            /*pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -93,28 +93,30 @@ public class LaunchDeciderActivity extends BaseActivity {
                 public void onPageScrollStateChanged(int state) {
 
                 }
-            });
+            });*/
+            toggleSignInNoAnim(true);
 
             AppUtil.removeDynamicShortcut();
             AppCompatButton btnLogin = findViewById(R.id.als_abtn_login);
-            btnLogin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (AppUtil.isConnected()) {
-                        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                                new AuthUI.IdpConfig.GoogleBuilder().build());
-                        startActivityForResult(
-                                AuthUI.getInstance()
-                                        .createSignInIntentBuilder()
-                                        .setAvailableProviders(providers)
-                                        .build(),
-                                RC_SIGN_IN);
-                    } else {
-                        AppUtil.showSnackbar(mViewComplete, "No Internet Connection!");
-                    }
+            btnLogin.setOnClickListener(view -> {
+                if (AppUtil.isConnected()) {
+                    List<AuthUI.IdpConfig> providers = Arrays.asList(
+                            new AuthUI.IdpConfig.GoogleBuilder().build());
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setAvailableProviders(providers)
+                                    .build(),
+                            RC_SIGN_IN);
+                } else {
+                    AppUtil.showSnackbar(mViewComplete, "No Internet Connection!");
                 }
             });
         }
+    }
+
+    private void toggleSignInNoAnim(boolean toShow) {
+        mVSignIn.setVisibility(View.VISIBLE);
     }
 
     private void toggleSignIn(boolean toShow) {

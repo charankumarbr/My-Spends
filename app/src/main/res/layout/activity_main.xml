@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/lfn_layout_complete"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_bg_screen">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/am_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:minHeight="?attr/actionBarSize"
-        android:background="@android:color/white"
+        android:background="@color/light_bg_screen"
         android:theme="@style/CustomToolbar"
         app:theme="@style/CustomToolbar"
         app:popupTheme="@style/Theme.AppCompat.Light"
         app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
-        app:titleTextAppearance="@style/ToolbarTitleAppearance"/>
+        app:titleTextAppearance="@style/ToolbarTitleAppearance"
+        android:elevation="3dp"/>
 
     <in.phoenix.myspends.customview.ButteryProgressBar
         android:id="@+id/am_bpb_loading"
@@ -61,14 +62,15 @@
         android:layout_centerInParent="true"
         android:layout_gravity="center" />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/am_fab_new"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         app:fabSize="normal"
         android:layout_gravity="bottom|center_horizontal"
-        android:src="@drawable/ic_add_white_24dp"/>
+        android:src="@drawable/ic_add_white_24dp"
+        android:visibility="gone"/>
 
     <!--<android.support.design.bottomappbar.BottomAppBar
         android:id="@+id/am_bab"
@@ -87,4 +89,4 @@
         android:elevation="3dp"
         app:theme="@style/ThemeOverlay.AppCompat.Light"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />-->
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

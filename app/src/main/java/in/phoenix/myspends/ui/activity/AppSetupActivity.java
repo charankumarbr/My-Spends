@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -43,6 +46,7 @@ import in.phoenix.myspends.modules.ContextModule;
 import in.phoenix.myspends.ui.dialog.AppDialog;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppUtil;
+import in.phoenix.myspends.util.KotUtil;
 
 /**
  * Created by Charan.Br on 4/10/2017.
@@ -63,6 +67,9 @@ public class AppSetupActivity extends BaseActivity {
 
     private int mPosition = -1;
 
+    private View aasLayoutSearch;
+    private EditText aasEtSearch;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,31 +82,67 @@ public class AppSetupActivity extends BaseActivity {
         mPbLoading = findViewById(R.id.aas_progress_bar_loading);
         mLvCurrencies = findViewById(R.id.aas_listview_currency);
         mCTvStatus = findViewById(R.id.aas_ctextview_status);
+        aasEtSearch = findViewById(R.id.aasEtSearch);
+        aasLayoutSearch = findViewById(R.id.aasLayoutSearch);
 
         getCurrencyList();
 
         initLayout();
+        aasEtSearch.addTextChangedListener(textWatcher);
+    }
+
+    private TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (aasEtSearch.getText().length() >= 3) {
+                filterCurrency(aasEtSearch.getText().toString());
+
+            } else {
+                filterCurrency(null);
+            }
+        }
+    };
+
+    private void filterCurrency(String searchTerm) {
+        if (searchTerm != null) {
+            ArrayList<Currency> searched = KotUtil.filterCurrency(searchTerm, mCurrencies);
+            if ((searched != null) && searched.size() > 0) {
+                mAdapter.setData(searched);
+
+            } else {
+                AppUtil.showToast("No match found.");
+            }
+        } else {
+            mAdapter.setData(mCurrencies);
+        }
     }
 
     private void getCurrencyList() {
         mPbLoading.setVisibility(View.VISIBLE);
         AppDialog.showDialog(AppSetupActivity.this, "Fetching currencies...");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mCurrencies = AppUtil.getAllCurrency();
-                    currencyHandler.sendEmptyMessage(AppConstants.CURRENCY_HANDLER_SUCCESS);
+        new Thread(() -> {
+            try {
+                mCurrencies = AppUtil.getAllCurrency();
+                currencyHandler.sendEmptyMessage(AppConstants.CURRENCY_HANDLER_SUCCESS);
 
-                } catch (IOException e) {
-                    Crashlytics.logException(e);
-                    e.printStackTrace();
-                    currencyHandler.sendEmptyMessage(AppConstants.CURRENCY_HANDLER_FAILURE);
-                } catch (JSONException e) {
-                    Crashlytics.logException(e);
-                    e.printStackTrace();
-                    currencyHandler.sendEmptyMessage(AppConstants.CURRENCY_HANDLER_FAILURE);
-                }
+            } catch (IOException e) {
+                Crashlytics.logException(e);
+                e.printStackTrace();
+                currencyHandler.sendEmptyMessage(AppConstants.CURRENCY_HANDLER_FAILURE);
+            } catch (JSONException e) {
+                Crashlytics.logException(e);
+                e.printStackTrace();
+                currencyHandler.sendEmptyMessage(AppConstants.CURRENCY_HANDLER_FAILURE);
             }
         }).start();
     }
@@ -136,10 +179,12 @@ public class AppSetupActivity extends BaseActivity {
                 mLvCurrencies.setAdapter(mAdapter);
             }
             mLvCurrencies.setOnItemClickListener(currencyClickListener);
+            aasLayoutSearch.setVisibility(View.VISIBLE);
 
         } else {
             mCTvStatus.setVisibility(View.VISIBLE);
             mLvCurrencies.setVisibility(View.GONE);
+            aasLayoutSearch.setVisibility(View.GONE);
         }
     }
 

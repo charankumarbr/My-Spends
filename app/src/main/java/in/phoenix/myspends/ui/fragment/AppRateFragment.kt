@@ -48,7 +48,7 @@ class AppRateFragment : DialogFragment() {
     override fun onStart() {
         super.onStart()
         if (dialog != null) {
-            with(dialog) {
+            with (dialog!!) {
                 window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 setTitle("Rate " + getString(R.string.app_name))
                 setCanceledOnTouchOutside(false)

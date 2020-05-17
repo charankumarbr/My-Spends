@@ -221,6 +221,8 @@ public class LaunchDeciderActivity extends BaseActivity {
                     eventBundle.putString("user_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                     AppAnalytics.init().logEvent("login_success", eventBundle);
 
+                    MySpends.fetchPaymentTypes();
+
                     //-- move fetch categories to FirebaseDB class --//
                     MySpends.fetchCategories();
 

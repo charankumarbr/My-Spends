@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "434217671470-fpkpu8c5gd1n2rcgv7naod633fu9hbph.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.phoenix.myspends",
+            "certificate_hash": "142a151f379dcd3209454f49a14fb43b6dc99cbe"
+          }
+        },
+        {
           "client_id": "434217671470-gf5d8i6581eti2dvdac9gnp5m625n6cn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

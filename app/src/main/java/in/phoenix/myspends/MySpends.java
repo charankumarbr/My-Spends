@@ -68,6 +68,7 @@ public class MySpends extends Application {
         if (AppUtil.isUserLoggedIn()) {
             Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
             //FirebaseDB.initDb().addACategory();
+            fetchPaymentTypes();
             fetchCategories();
         }
         initNotification();
@@ -110,6 +111,10 @@ public class MySpends extends Application {
                         new PaymentTypeParser(null).executeOnExecutor(
                                 AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
                     }*/
+                } else {
+                    AppLog.d("MySpends", "null dataSnapshot");
+                    new PaymentTypeParser(null).executeOnExecutor(
+                            AsyncTask.THREAD_POOL_EXECUTOR, null);
                 }
             }
 

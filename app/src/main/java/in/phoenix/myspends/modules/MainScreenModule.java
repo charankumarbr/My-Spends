@@ -1,23 +1,16 @@
 package in.phoenix.myspends.modules;
 
-import android.content.Context;
-import android.view.View;
-
-import java.util.ArrayList;
-
-import dagger.Module;
-import dagger.Provides;
-import in.phoenix.myspends.model.NewExpense;
-import in.phoenix.myspends.ui.activity.MainActivity;
+/*import dagger.Module;
+import dagger.Provides;*/
 
 /**
  * Author: Charan Kumar
  * Date: 2019-05-03
  */
-@Module
+//@Module
 public class MainScreenModule {
 
-    private MainActivity mainActivity;
+    /*private MainActivity mainActivity;
     private ArrayList<NewExpense> spends;
     private View.OnClickListener clickListener;
 
@@ -42,6 +35,6 @@ public class MainScreenModule {
     @Provides
     public View.OnClickListener getClickListener() {
         return clickListener;
-    }
+    }*/
 
 }

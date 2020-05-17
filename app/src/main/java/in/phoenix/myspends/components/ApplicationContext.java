@@ -1,8 +1,8 @@
 package in.phoenix.myspends.components;
 
-import javax.inject.Qualifier;
+//import javax.inject.Qualifier;
 
-@Qualifier
+//@Qualifier
 public @interface ApplicationContext {
 
 }

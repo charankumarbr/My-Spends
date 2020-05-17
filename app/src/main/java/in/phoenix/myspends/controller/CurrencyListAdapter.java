@@ -1,6 +1,5 @@
 package in.phoenix.myspends.controller;
 
-import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +9,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.model.Currency;
+import in.phoenix.myspends.ui.activity.AppSetupActivity;
+import in.phoenix.myspends.util.AppUtil;
 
 /**
  * Created by Charan.Br on 4/10/2017.
@@ -20,14 +23,25 @@ import in.phoenix.myspends.model.Currency;
 
 public final class CurrencyListAdapter extends BaseAdapter {
 
-    private final Context mContext;
+    private final AppSetupActivity mContext;
 
-    private final ArrayList<Currency> mCurrencies;
+    private ArrayList<Currency> mCurrencies;
 
     private int mSelectedPosition = -1;
+    private Currency mSelectedCurrency = null;
 
-    public CurrencyListAdapter(Context context, ArrayList<Currency> currencies) {
+    /*@Inject
+    public CurrencyListAdapter(AppSetupActivity context) {
         mContext = context;
+    }*/
+
+    @Inject
+    public CurrencyListAdapter(AppSetupActivity context, ArrayList<Currency> currencies) {
+        mContext = context;
+        mCurrencies = currencies;
+    }
+
+    public void setCurrencies(ArrayList<Currency> currencies) {
         mCurrencies = currencies;
     }
 
@@ -65,7 +79,11 @@ public final class CurrencyListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (mSelectedPosition == position) {
+        Currency currency = getItem(position);
+        if (mSelectedCurrency != null &&
+                mSelectedCurrency.getCurrencySymbol().equals(currency.getCurrencySymbol()) &&
+                mSelectedCurrency.getCurrencyName().equals(currency.getCurrencyName()) &&
+                mSelectedCurrency.getCurrencyCode().equals(currency.getCurrencyCode())) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 convertView.setBackgroundColor(MySpends.APP_CONTEXT.getResources().getColor(R.color.colorAccent, null));
                 holder.cTvCurrencyName.setTextColor(mContext.getResources().getColor(android.R.color.white, null));
@@ -77,21 +95,23 @@ public final class CurrencyListAdapter extends BaseAdapter {
                 holder.cTvCurrencyCode.setTextColor(mContext.getResources().getColor(android.R.color.white));
             }
 
-
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 convertView.setBackgroundColor(MySpends.APP_CONTEXT.getResources().getColor(android.R.color.white, null));
-                holder.cTvCurrencyName.setTextColor(mContext.getResources().getColor(R.color.primary_text, null));
-                holder.cTvCurrencyCode.setTextColor(mContext.getResources().getColor(R.color.primary_text, null));
+                /*holder.cTvCurrencyName.setTextColor(mContext.getResources().getColor(R.color.primary_text, null));
+                holder.cTvCurrencyCode.setTextColor(mContext.getResources().getColor(R.color.primary_text, null));*/
+                holder.cTvCurrencyName.setTextColor(AppUtil.getPrimaryTextColor());
+                holder.cTvCurrencyCode.setTextColor(AppUtil.getPrimaryTextColor());
 
             } else {
                 convertView.setBackgroundColor(MySpends.APP_CONTEXT.getResources().getColor(android.R.color.white));
-                holder.cTvCurrencyName.setTextColor(mContext.getResources().getColor(R.color.primary_text));
-                holder.cTvCurrencyCode.setTextColor(mContext.getResources().getColor(R.color.primary_text));
+                /*holder.cTvCurrencyName.setTextColor(mContext.getResources().getColor(R.color.primary_text));
+                holder.cTvCurrencyCode.setTextColor(mContext.getResources().getColor(R.color.primary_text));*/
+                holder.cTvCurrencyName.setTextColor(AppUtil.getPrimaryTextColor());
+                holder.cTvCurrencyCode.setTextColor(AppUtil.getPrimaryTextColor());
             }
         }
 
-        Currency currency = getItem(position);
         holder.cTvCurrencyCode.setText(currency.getCurrencyCode());
         holder.cTvCurrencyName.setText(currency.getCurrencyName() + " (" +
                 currency.getCurrencySymbol() + ")");
@@ -101,6 +121,12 @@ public final class CurrencyListAdapter extends BaseAdapter {
 
     public void setSelectedPosition(int position) {
         mSelectedPosition = position;
+        mSelectedCurrency = mCurrencies.get(position);
+        notifyDataSetChanged();
+    }
+
+    public void setData(ArrayList<Currency> collect) {
+        mCurrencies = collect;
         notifyDataSetChanged();
     }
 

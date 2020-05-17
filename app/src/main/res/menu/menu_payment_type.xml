@@ -6,6 +6,6 @@
         android:id="@+id/menu_add_payment_type"
         android:title="@string/add_payment_type"
         app:showAsAction="always"
-        android:icon="@drawable/ic_add_primary_24dp"/>
+        android:icon="@drawable/ic_add_primary_24dp" />
 
 </menu>

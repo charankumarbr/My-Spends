@@ -11,24 +11,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/light_colorPrimary"
         android:textSize="32sp"
         android:layout_marginTop="35dp"
         android:layout_centerHorizontal="true"
-        app:fontFamily="@font/source_sans_pro"/>
+        app:fontFamily="@font/source_sans_pro" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true">
 
-        <android.support.v4.view.ViewPager
+        <androidx.viewpager.widget.ViewPager
             android:id="@+id/als_vp_imps"
             android:layout_width="match_parent"
-            android:layout_height="190dp"
-            android:layout_alignParentTop="true"/>
+            android:layout_height="180dp"
+            android:layout_alignParentTop="true" />
 
-        <android.support.design.widget.TabLayout
+        <com.google.android.material.tabs.TabLayout
             android:id="@+id/als_tl_dots"
             android:layout_width="match_parent"
             android:layout_height="8dp"
@@ -37,7 +37,7 @@
             android:layout_marginTop="4dp"
             app:tabBackground="@drawable/tab_selector"
             app:tabGravity="center"
-            app:tabIndicatorHeight="0dp"/>
+            app:tabIndicatorHeight="0dp" />
     </RelativeLayout>
 
     <ProgressBar
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="gone"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp" />
 
     <LinearLayout
         android:id="@+id/als_layout_signin"
@@ -64,7 +64,7 @@
             android:src="@drawable/bg_google_logo"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="4dp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -72,10 +72,10 @@
             android:layout_gravity="center_horizontal"
             android:text="Sign in to track your spends."
             android:textSize="15sp"
-            android:textColor="@color/secondary_"
-            app:fontFamily="@font/source_sans_pro"/>
+            android:textColor="@color/light_secondary_"
+            app:fontFamily="@font/source_sans_pro" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/als_abtn_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
             android:text="@string/sign_in_with_google"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
-            android:layout_marginTop="6dp"/>
+            android:layout_marginTop="6dp" />
     </LinearLayout>
 
     <TextView
@@ -97,8 +97,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
         android:textSize="13sp"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/light_colorAccent"
         app:fontFamily="@font/source_sans_pro"
-        android:gravity="center"/>
+        android:gravity="center" />
 
 </RelativeLayout>

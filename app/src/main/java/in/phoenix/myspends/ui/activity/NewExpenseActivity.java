@@ -5,11 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -27,9 +22,15 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -248,6 +249,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
             if (v.getId() == R.id.ane_tv_expense_date) {
 
                 final DatePickerDialog datePickerDialog;
+                Calendar calendar = Calendar.getInstance();
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                     datePickerDialog = new DatePickerDialog(NewExpenseActivity.this);
                     datePickerDialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
@@ -260,7 +262,6 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                     });
 
                 } else {
-                    Calendar calendar = Calendar.getInstance();
                     datePickerDialog = new DatePickerDialog(NewExpenseActivity.this, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -270,6 +271,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                         }
                     }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                 }
+                datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
                 datePickerDialog.setOwnerActivity(NewExpenseActivity.this);
                 //datePickerDialog.setTitle("Select the date of expense");
                 LayoutInflater inflater = LayoutInflater.from(NewExpenseActivity.this);
@@ -447,18 +449,22 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                     }, new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            mPbLoading.setVisibility(View.GONE);
+                            //mPbLoading.setVisibility(View.GONE);
+                            AppDialog.dismissDialog();
                             AppUtil.showSnackbar(mViewComplete, "Could not add this Expense!");
                             AppLog.d("NewExpense", "OnFailure: Exception", e);
+                            Crashlytics.logException(e);
                         }
                     });
 
                 } else {
-                    AppUtil.showToast("Not logged in");
+                    //AppUtil.showToast("Not logged in");
+                    AppUtil.showSnackbar(mViewComplete, "Not logged in.");
                 }
 
             } else {
-                AppUtil.showToast("No internet!");
+                //AppUtil.showToast("No internet!");
+                AppUtil.showSnackbar(mViewComplete, R.string.no_internet);
             }
 
         } else {
@@ -611,9 +617,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                 return true;
             }
 
-            if (!TextUtils.isEmpty(mTIEtNote.getText())) {
-                return true;
-            }
+            return !TextUtils.isEmpty(mTIEtNote.getText());
 
         } else {
             if (null != mExpense) {

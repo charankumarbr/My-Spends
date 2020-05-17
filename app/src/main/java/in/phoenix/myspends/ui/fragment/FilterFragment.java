@@ -1,15 +1,9 @@
 package in.phoenix.myspends.ui.fragment;
 
-
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +16,18 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -37,6 +39,7 @@ import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.parser.CategoryParser;
 import in.phoenix.myspends.parser.PaymentTypeParser;
+import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppUtil;
 
@@ -76,6 +79,9 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
 
     private CheckBox mCbGroupByCategory;
 
+    private @FilterDateRange
+    int mFilterDateRange = FilterDateRange.CUSTOM_DATE;
+
     public FilterFragment() {
         // Required empty public constructor
     }
@@ -86,8 +92,12 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
      *
      * @return A new instance of fragment FilterFragment.
      */
-    public static FilterFragment newInstance() {
-        return new FilterFragment();
+    public static FilterFragment newInstance(@FilterDateRange int dateRangeType) {
+        FilterFragment filterFragment = new FilterFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(AppConstants.Bundle.FILTER_DATE_RANGE, dateRangeType);
+        filterFragment.setArguments(bundle);
+        return filterFragment;
     }
 
     @Override
@@ -107,7 +117,7 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-
+            mFilterDateRange = getArguments().getInt(AppConstants.Bundle.FILTER_DATE_RANGE, FilterDateRange.CUSTOM_DATE);
         }
     }
 
@@ -155,6 +165,17 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
         mSpnrPaidBy = filterView.findViewById(R.id.ff_spnr_paid_by);
         mCbGroupByCategory = filterView.findViewById(R.id.ff_checkbox_group_category);
         mSpnrCategory = filterView.findViewById(R.id.ff_spnr_category);
+        if (mFilterDateRange == FilterDateRange.CURRENT_MONTH) {
+            Calendar calendar = Calendar.getInstance();
+            getFromDateMillis(1, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+            getToDateMillis(calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+
+        } else if (mFilterDateRange == FilterDateRange.PREVIOUS_MONTH) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.MONTH, -1);
+            getFromDateMillis(1, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+            getToDateMillis(calendar.getActualMaximum(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+        }
         filterView.post(new Runnable() {
             @Override
             public void run() {
@@ -540,5 +561,12 @@ public class FilterFragment extends DialogFragment implements PaymentTypeParser.
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface FilterDateRange {
+        int CURRENT_MONTH = 1;
+        int PREVIOUS_MONTH = 2;
+        int CUSTOM_DATE = 3;
     }
 }

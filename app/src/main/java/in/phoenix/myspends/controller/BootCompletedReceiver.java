@@ -32,8 +32,9 @@ public final class BootCompletedReceiver extends BroadcastReceiver {
         boolean isPackageReplace = intent.getBooleanExtra(Intent.EXTRA_REPLACING, false);
         AppLog.d("BootCompletedReceiver", "Action:" + action + " :: PackageReplace:" + isPackageReplace);
 
-        if (data.equals("package:" + BuildConfig.APPLICATION_ID) ||
-                action.equals(Intent.ACTION_BOOT_COMPLETED) || isPackageReplace) {
+        if (data.equals("package:" + BuildConfig.APPLICATION_ID)
+                || ((action != null) && action.equals(Intent.ACTION_BOOT_COMPLETED))
+                || isPackageReplace) {
             AppLog.d("BootCompletedReceiver", "Registering Alarm");
 
             Calendar calendar = Calendar.getInstance();
@@ -48,8 +49,11 @@ public final class BootCompletedReceiver extends BroadcastReceiver {
 
             Intent receiverIntent = new Intent(context, HourTimeReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, receiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            am.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            if (alarmManager != null) {
+                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                        AlarmManager.INTERVAL_DAY, pendingIntent);
+            }
         }
     }
 }

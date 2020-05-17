@@ -1,6 +1,6 @@
 package in.phoenix.myspends.util;
 
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -16,6 +16,7 @@ public interface AppConstants {
         String EXPENSE = "expense";
         String EXPENSE_DATE = "expenseDate";
         String VIA_NOTIFICATION = "viaNotification";
+        String FILTER_DATE_RANGE = "FILTER_DATE_RANGE";
     }
 
     int VIEW_EXPENSE_CODE = 3832;
@@ -38,6 +39,7 @@ public interface AppConstants {
         String NOTIFICATION_MIN = "notificationMin";
         String LAST_APP_OPENED_ON = "lastAppOpenedOn";
         String LAUNCH_COUNT = "launchCount";
+        String NIGHT_MODE = "nightMode";
     }
 
     int PAGE_SPENDS_SIZE = 30;

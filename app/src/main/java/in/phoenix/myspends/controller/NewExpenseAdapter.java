@@ -7,9 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
+import android.widget.Space;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+
+import javax.inject.Inject;
 
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
@@ -54,6 +58,9 @@ public final class NewExpenseAdapter extends BaseAdapter {
     private Animation mAnimDown4mTop;*/
     private int mLastPos = -1;
 
+    private int mCurrentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+    @Inject
     public NewExpenseAdapter(Context context, ArrayList<NewExpense> spends, View.OnClickListener clickListener) {
         mContext = context;
         mCurrencySymbol = AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY) + " ";
@@ -155,8 +162,13 @@ public final class NewExpenseAdapter extends BaseAdapter {
             holder.tvExpenseDate.setVisibility(View.VISIBLE);
 
             if (position == 0) {
+                if (mExpenseDate.getYear() != mCurrentYear) {
+                    holder.tvMonth.setText(AppUtil.getShortMonth(mExpenseDate.getMonth()) + " " + mExpenseDate.getYear());
+
+                } else {
+                    holder.tvMonth.setText(AppUtil.getMonth(mExpenseDate.getMonth()));
+                }
                 holder.tvMonth.setVisibility(View.VISIBLE);
-                holder.tvMonth.setText(AppUtil.getMonth(mExpenseDate.getMonth()));
 
             } else {
                 if (null == mPrevExpenseDate) {
@@ -166,20 +178,58 @@ public final class NewExpenseAdapter extends BaseAdapter {
                     mPrevExpenseDate.changeDate(getItem(position - 1).getExpenseDate());
                 }
 
-                if ((mExpenseDate.getMonth() != mPrevExpenseDate.getMonth()) || mExpenseDate.getYear() != mPrevExpenseDate.getYear()) {
+                boolean isDiffYear = mExpenseDate.getYear() != mCurrentYear;
+                boolean isDiffMonth = mExpenseDate.getMonth() != mPrevExpenseDate.getMonth();
 
-                    if (mExpenseDate.getYear() != mPrevExpenseDate.getYear()) {
-                        holder.tvMonth.setVisibility(View.VISIBLE);
+                if (mExpenseDate.getMonth() == mPrevExpenseDate.getMonth() &&
+                        mExpenseDate.getYear() == mPrevExpenseDate.getYear()) {
+                    holder.tvMonth.setVisibility(View.GONE);
+
+                } else {
+                    if (mExpenseDate.getYear() != mCurrentYear) {
                         holder.tvMonth.setText(AppUtil.getShortMonth(mExpenseDate.getMonth()) + " " + mExpenseDate.getYear());
 
                     } else {
-                        holder.tvMonth.setVisibility(View.VISIBLE);
                         holder.tvMonth.setText(AppUtil.getMonth(mExpenseDate.getMonth()));
                     }
+                    holder.tvMonth.setVisibility(View.VISIBLE);
+                }
+
+                /*if (isDiffMonth) {
+                    if (isDiffYear) {
+                        //-- diff month and diff year --//
+                        holder.tvMonth.setText(AppUtil.getShortMonth(mExpenseDate.getMonth()) + " " + mExpenseDate.getYear());
+
+                    } else {
+                        //-- diff month, but same year as current --//
+                        holder.tvMonth.setText(AppUtil.getMonth(mExpenseDate.getMonth()));
+                    }
+                    holder.tvMonth.setVisibility(View.VISIBLE);
+
+                } else {
+                    if (mExpenseDate.getYear() != mPrevExpenseDate.getYear()) {
+                        //-- same month, but diff year --//
+                        holder.tvMonth.setText(AppUtil.getShortMonth(mExpenseDate.getMonth()) + " " + mExpenseDate.getYear());
+                        holder.tvMonth.setVisibility(View.VISIBLE);
+
+                    } else {
+                        //-- same month and same year --//
+                        holder.tvMonth.setVisibility(View.GONE);
+                    }
+                }*/
+
+                /*if ((mExpenseDate.getMonth() != mPrevExpenseDate.getMonth()) || isDiffYear) {
+                    if (isDiffYear) {
+                        holder.tvMonth.setText(AppUtil.getShortMonth(mExpenseDate.getMonth()) + " " + mExpenseDate.getYear());
+
+                    } else {
+                        holder.tvMonth.setText(AppUtil.getMonth(mExpenseDate.getMonth()));
+                    }
+                    holder.tvMonth.setVisibility(View.VISIBLE);
 
                 } else {
                     holder.tvMonth.setVisibility(View.GONE);
-                }
+                }*/
             }
 
             holder.tvExpCategoryName.setText(expense.getCategoryId() > 0 ? MySpends.getCategoryName
@@ -367,7 +417,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
         TextView tvCategoryPercentage;
         TextView tvGrandTotal;
 
-        android.support.v4.widget.Space vSpace;
+        Space vSpace;
     }
 
     public int getExpensesSize() {
@@ -379,7 +429,7 @@ public final class NewExpenseAdapter extends BaseAdapter {
     }
 
     public void setSpendsChartData(CategoryChart categoryChart, int pixelHundredPercent) {
-        if (null != categoryChart && null != categoryChart.getCategoryChartData()) {
+        if ((null != categoryChart) && null != categoryChart.getCategoryChartData()) {
             mSpendsChartCount = categoryChart.getCategoryChartData().size();
             mGrandTotal = categoryChart.getGrandTotal();
             mCategoryChart = categoryChart;

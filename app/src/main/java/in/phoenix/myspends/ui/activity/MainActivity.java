@@ -6,12 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,22 +16,35 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
+
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import in.phoenix.myspends.BuildConfig;
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.components.DaggerMainScreenComponent;
+import in.phoenix.myspends.components.MainScreenComponent;
 import in.phoenix.myspends.controller.NewExpenseAdapter;
 import in.phoenix.myspends.customview.ButteryProgressBar;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
+import in.phoenix.myspends.modules.MainScreenModule;
 import in.phoenix.myspends.parser.FSSpendsParser;
 import in.phoenix.myspends.parser.SpendsParser;
 import in.phoenix.myspends.ui.fragment.AppRateFragment;
@@ -54,7 +61,8 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
     private ListView mLvExpense;
 
-    private NewExpenseAdapter mExpenseAdapter;
+    @Inject
+    NewExpenseAdapter mExpenseAdapter;
 
     private ProgressBar mPbLoading;
 
@@ -70,11 +78,19 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
     private boolean mIsExitFlag = true;
     private Toolbar toolbar;
 
+    //private BottomAppBar bottomAppBar;
+
+    private FloatingActionButton fabAddNew;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         AppLog.d(getClass().getSimpleName(), "onCreate():");
+
+        //getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
         if (!AppUtil.isUserLoggedIn()) {
             Intent launchIntent = new Intent(MainActivity.this, LaunchDeciderActivity.class);
             startActivity(launchIntent);
@@ -82,6 +98,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
         } else {
             setContentView(R.layout.activity_main);
+            initLayout();
 
             toolbar = findViewById(R.id.am_toolbar);
             /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -93,6 +110,16 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
             toolbar.setTitle(getString(R.string.app_name));
             setSupportActionBar(toolbar);
+            //bottomAppBar = findViewById(R.id.am_bab);
+            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                bottomAppBar.setTitleTextColor(getResources().getColor(R.color.colorPrimary, null));
+                bottomAppBar.setSubtitleTextColor(getResources().getColor(R.color.secondary_text, null));
+            } else {
+                bottomAppBar.setTitleTextColor(getResources().getColor(R.color.colorPrimary));
+                bottomAppBar.setSubtitleTextColor(getResources().getColor(R.color.secondary_text));
+            }
+            bottomAppBar.setTitle(getString(R.string.app_name));
+            setSupportActionBar(bottomAppBar);*/
 
             mCalendarExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());
 
@@ -111,13 +138,11 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             mPbLoading = findViewById(R.id.am_pb_loading);
             mCTvNoSpends = findViewById(R.id.am_ctv_no_spends);
 
-            findViewById(R.id.am_fab_new).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent newExpenseIntent = new Intent(MainActivity.this, NewExpenseActivity.class);
-                    newExpenseIntent.putExtra(AppConstants.Bundle.EXPENSE_DATE, mCalendarExpenseDate);
-                    startActivityForResult(newExpenseIntent, AppConstants.NEW_EXPENSE_CODE);
-                }
+            fabAddNew = findViewById(R.id.am_fab_new);
+            fabAddNew.setOnClickListener(v -> {
+                Intent newExpenseIntent = new Intent(MainActivity.this, NewExpenseActivity.class);
+                newExpenseIntent.putExtra(AppConstants.Bundle.EXPENSE_DATE, mCalendarExpenseDate);
+                startActivityForResult(newExpenseIntent, AppConstants.NEW_EXPENSE_CODE);
             });
             getExpenses();
         }
@@ -185,39 +210,40 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
                         if (AppUtil.isConnected()) {
                             mCTvNoSpends.setText(R.string.no_spends_tracked);
 
+                            fabAddNew.setVisibility(View.VISIBLE);
+                            fabAddNew.show();
+
                         } else {
                             mCTvNoSpends.setText(R.string.no_internet);
+                            fabAddNew.hide();
                         }
                         mLvExpense.setVisibility(View.GONE);
                         mCTvNoSpends.setVisibility(View.VISIBLE);
                     }
                 }
             }
-        }, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                AppLog.d("MainActivity", "Spends Firestore:onFailure", e);
+        }, e -> {
+            AppLog.d("MainActivity", "Spends Firestore:onFailure", e);
 
-                hideDialog();
+            hideDialog();
 
-                if (isRefresh) {
-                    isRefresh = false;
+            if (isRefresh) {
+                isRefresh = false;
 
-                } else if (null != mExpenseAdapter) {
-                    if (mExpenseAdapter.isLoading()) {
-                        mExpenseAdapter.setIsLoading(false);
-                        //mExpenseAdapter.setIsLoadingRequired(false);
-                        mExpenseAdapter.notifyDataSetChanged();
+            } else if (null != mExpenseAdapter) {
+                if (mExpenseAdapter.isLoading()) {
+                    mExpenseAdapter.setIsLoading(false);
+                    //mExpenseAdapter.setIsLoadingRequired(false);
+                    mExpenseAdapter.notifyDataSetChanged();
 
-                    } else {
-                        AppUtil.showToast("Unable to refresh your spends.");
-                    }
                 } else {
-                    AppUtil.showToast("Unable to fetch your spends.");
-                    mLvExpense.setVisibility(View.GONE);
-                    mCTvNoSpends.setText(R.string.unable_fetch_spends);
-                    mCTvNoSpends.setVisibility(View.VISIBLE);
+                    AppUtil.showToast("Unable to refresh your spends.");
                 }
+            } else {
+                AppUtil.showToast("Unable to fetch your spends.");
+                mLvExpense.setVisibility(View.GONE);
+                mCTvNoSpends.setText(R.string.unable_fetch_spends);
+                mCTvNoSpends.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -285,10 +311,32 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
         } else if (item.getItemId() == R.id.menu_message_board) {
             startActivity(new Intent(MainActivity.this, MessageBoardActivity.class));
             return true;
-        }
+
+        }/* else if (item.getItemId() == R.id.menu_ui_mode) {
+            //changeUiMode(newConfig);
+            return true;
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
+
+    /*@Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        changeUiMode(newConfig);
+    }
+
+    private void changeUiMode(Configuration configuration) {
+        int currentNightMode = configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                // Night mode is not active, we're using the light theme
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                // Night mode is active, we're using dark theme
+                break;
+        }
+    }*/
 
     private void confirmLogout() {
         AlertDialog.Builder logoutBuilder = new AlertDialog.Builder(MainActivity.this)
@@ -358,18 +406,15 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             }
         });
 
-        aboutappDialog.setNegativeButton(getString(R.string.contact_us), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + Uri.encode("phoenix.apps.in@gmail.com")));
-                //intent.setType("text/plain");
-                //intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"phoenix.apps.in@gmail.com"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.about) + " " + getString(R.string.app_name) + "-v" + BuildConfig.VERSION_NAME);
-                Intent mailer = Intent.createChooser(intent, null);
-                startActivity(Intent.createChooser(mailer, "Send email via..."));
-                //startActivity(intent);
-            }
+        aboutappDialog.setNegativeButton(getString(R.string.contact_us), (dialog, which) -> {
+            dialog.dismiss();
+            Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + Uri.encode("phoenix.apps.in@gmail.com")));
+            //intent.setType("text/plain");
+            //intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"phoenix.apps.in@gmail.com"});
+            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.about) + " " + getString(R.string.app_name) + "-v" + BuildConfig.VERSION_NAME);
+            Intent mailer = Intent.createChooser(intent, null);
+            startActivity(Intent.createChooser(mailer, "Send email via..."));
+            //startActivity(intent);
         });
 
         if (!isFinishing()) {
@@ -433,7 +478,12 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
         }
 
         if (mIsExitFlag) {
-            AppUtil.showToast(getString(R.string.confirm_exit_app));
+            if (mViewComplete != null) {
+                AppUtil.showSnackbar(mViewComplete, R.string.confirm_exit_app);
+
+            } else {
+                AppUtil.showToast(getString(R.string.confirm_exit_app));
+            }
             mIsExitFlag = false;
             mLvExpense.postDelayed(new Runnable() {
                 @Override
@@ -446,6 +496,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AppConstants.VIEW_EXPENSE_CODE || requestCode == AppConstants.NEW_EXPENSE_CODE
                 || requestCode == AppConstants.EXPENSE_LIST_CODE) {
 
@@ -459,6 +510,12 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
                     if (data.hasExtra(AppConstants.Bundle.EXPENSE_PRIMARY_KEY)) {
                         //-- delete expense --//
                         mExpenseAdapter.removeSpend(data.getStringExtra(AppConstants.Bundle.EXPENSE_PRIMARY_KEY));
+                        if (mExpenseAdapter.getExpensesSize() == 0) {
+                            //-- all expenses deleted --//
+                            mCTvNoSpends.setText(R.string.no_spends_tracked);
+                            mLvExpense.setVisibility(View.GONE);
+                            mCTvNoSpends.setVisibility(View.VISIBLE);
+                        }
 
                     } else if (data.hasExtra(AppConstants.Bundle.EXPENSE)) {
                         mExpenseAdapter.updateSpend((NewExpense) data.getParcelableExtra(AppConstants.Bundle.EXPENSE));
@@ -507,7 +564,12 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
     private void setSpends(ArrayList<NewExpense> spends) {
         if (null == mExpenseAdapter) {
-            mExpenseAdapter = new NewExpenseAdapter(MainActivity.this, spends, clickListener);
+            MainScreenComponent mainScreenComponent = DaggerMainScreenComponent
+                    .builder()
+                    .mainScreenModule(new MainScreenModule(MainActivity.this, spends, clickListener))
+                    .build();
+            mainScreenComponent.inject(MainActivity.this);
+            //mExpenseAdapter = new NewExpenseAdapter(MainActivity.this, spends, clickListener);
             mLvExpense.setAdapter(mExpenseAdapter);
 
         } else {
@@ -525,6 +587,9 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
         if (mLvExpense.getVisibility() != View.VISIBLE) {
             mLvExpense.setVisibility(View.VISIBLE);
         }
+
+        fabAddNew.setVisibility(View.VISIBLE);
+        fabAddNew.show();
 
         if (mCTvNoSpends.getVisibility() != View.GONE) {
             mCTvNoSpends.setVisibility(View.GONE);

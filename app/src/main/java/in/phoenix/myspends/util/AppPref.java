@@ -16,7 +16,11 @@ public final class AppPref {
 
     private static AppPref APP_PREF = null;
 
-    private AppPref() {
+    public AppPref(Context context) {
+        mSharedPref = context.getSharedPreferences(MySpends.APP_CONTEXT.getString(R.string.pref_name), Context.MODE_PRIVATE);
+    }
+
+    public AppPref() {
         mSharedPref = MySpends.APP_CONTEXT.getSharedPreferences(MySpends.APP_CONTEXT.getString(R.string.pref_name), Context.MODE_PRIVATE);
     }
 

@@ -5,10 +5,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="in.phoenix.myspends.ui.fragment.ImpFragment">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardBackgroundColor="@color/colorPrimary"
+        app:cardBackgroundColor="@color/light_colorPrimary"
         android:layout_marginStart="6dp"
         android:layout_marginEnd="6dp"
         app:cardPreventCornerOverlap="true"
@@ -24,7 +24,8 @@
             android:layout_margin="10dp"
             android:textSize="17sp"
             android:textColor="@android:color/white"
-            android:gravity="center"/>
-    </android.support.v7.widget.CardView>
+            android:gravity="center"
+            app:fontFamily="@font/notosans_regular" />
+    </androidx.cardview.widget.CardView>
 
 </FrameLayout>

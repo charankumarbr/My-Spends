@@ -53,7 +53,6 @@ public final class ReportAdapter extends ExpandableRecyclerViewAdapter<CategoryV
             group, int childIndex) {
         final NewExpense expense = (NewExpense) group.getItems().get(childIndex);
         holder.onBindExpense(expense);
-
     }
 
     @Override

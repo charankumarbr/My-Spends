@@ -4,10 +4,11 @@
     android:id="@+id/lfn_layout_complete"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_screen">
+    android:background="@color/light_bg_screen">
 
-    <include layout="@layout/layout_toolbar"
-        android:id="@+id/ane_toolbar"/>
+    <include
+        layout="@layout/layout_toolbar"
+        android:id="@+id/ane_toolbar" />
 
     <RelativeLayout
         android:id="@+id/ane_layout_expense_date"
@@ -26,7 +27,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
             android:text="Expense on 11 April 2017"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/light_colorPrimary"
             android:textSize="19sp"
             app:fontFamily="@font/source_sans_pro" />
 
@@ -36,7 +37,7 @@
             android:layout_height="28dp"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/ane_ctextview_expense_date"
-            android:foregroundTint="@color/colorAccent"
+            android:foregroundTint="@color/light_colorAccent"
             android:foregroundTintMode="src_in"
             android:foreground="@drawable/ic_mode_edit_primary_24dp" />
     </RelativeLayout>
@@ -70,28 +71,28 @@
                     android:gravity="start|center_vertical"
                     android:drawablePadding="12dp"
                     android:textSize="17sp"
-                    android:textColor="@color/primary_text"
+                    android:textColor="@color/light_primary_text"
                     app:fontFamily="@font/source_sans_pro"
                     android:layout_alignParentStart="true"
-                    android:textAlignment="viewStart"/>
+                    android:textAlignment="viewStart" />
 
                 <CheckBox
                     android:id="@+id/ane_checkbox_add_another"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/add_another"
-                    android:textColor="@color/primary_text"
+                    android:textColor="@color/light_primary_text"
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
-                    app:fontFamily="@font/source_sans_pro"/>
+                    app:fontFamily="@font/source_sans_pro" />
             </RelativeLayout>
 
             <View
                 android:layout_width="143dp"
                 android:layout_height="1dp"
                 android:layout_marginStart="37dp"
-                android:background="@color/secondary_text"
-                android:layout_marginTop="-5dp"/>
+                android:background="@color/light_secondary_text"
+                android:layout_marginTop="-5dp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -105,15 +106,15 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:background="@color/colorAccent"
+                    android:background="@color/light_colorAccent"
                     android:elevation="3dp"
                     android:padding="6dp"
                     android:textColor="@android:color/white"
                     android:textSize="18sp"
                     android:gravity="center"
-                    app:fontFamily="@font/source_sans_pro"/>
+                    app:fontFamily="@font/source_sans_pro" />
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/ane_til_expense_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -122,19 +123,19 @@
                     android:layout_toEndOf="@+id/ane_ctextview_currency"
                     android:hint="Expense Amount">
 
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/ane_tiedittext_expense_amount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
                         android:maxLength="10"
                         android:maxLines="1"
-                        android:textColor="@color/primary_text"
+                        android:textColor="@color/light_primary_text"
                         android:textSize="18sp"
                         app:fontFamily="@font/source_sans_pro"
                         android:gravity="start"
-                        android:textAlignment="viewStart"/>
-                </android.support.design.widget.TextInputLayout>
+                        android:textAlignment="viewStart" />
+                </com.google.android.material.textfield.TextInputLayout>
             </RelativeLayout>
 
             <RelativeLayout
@@ -147,11 +148,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/paid_by_"
-                    android:textColor="@color/primary_text"
+                    android:textColor="@color/light_primary_text"
                     android:textSize="17sp"
                     app:fontFamily="@font/source_sans_pro"
                     android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true" />
 
                 <TextView
                     android:id="@+id/ane_ctextview_add_new_payment"
@@ -165,8 +166,8 @@
                     android:gravity="center_vertical"
                     app:fontFamily="@font/source_sans_pro"
                     android:textSize="16sp"
-                    android:textColor="@color/primary_text"
-                    android:visibility="gone"/>
+                    android:textColor="@color/light_primary_text"
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <Spinner
@@ -174,30 +175,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="12dp"
-                android:dropDownSelector="@color/colorAccent"
-                android:spinnerMode="dialog"/>
+                android:dropDownSelector="@color/light_colorAccent"
+                android:spinnerMode="dialog" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/category"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/light_primary_text"
                 android:textSize="17sp"
                 app:fontFamily="@font/source_sans_pro"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <Spinner
                 android:id="@+id/ane_spnr_category"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="12dp"
-                android:dropDownSelector="@color/colorAccent"
-                android:spinnerMode="dialog"/>
+                android:dropDownSelector="@color/light_colorAccent"
+                android:spinnerMode="dialog" />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/ane_til_expense_note"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -205,7 +206,7 @@
                 android:layout_marginTop="12dp"
                 android:hint="Note">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ane_tiedittext_expense_note"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -213,12 +214,12 @@
                     android:inputType="textCapSentences"
                     android:maxLength="80"
                     android:maxLines="1"
-                    android:textColor="@color/primary_text"
+                    android:textColor="@color/light_primary_text"
                     android:textSize="18sp"
                     app:fontFamily="@font/source_sans_pro"
                     android:gravity="start"
-                    android:textAlignment="viewStart"/>
-            </android.support.design.widget.TextInputLayout>
+                    android:textAlignment="viewStart" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </ScrollView>
 
@@ -227,5 +228,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </RelativeLayout>

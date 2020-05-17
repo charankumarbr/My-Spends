@@ -17,16 +17,20 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import in.phoenix.myspends.components.DaggerMySpendsComponent;
+import in.phoenix.myspends.components.MySpendsComponent;
 import in.phoenix.myspends.controller.HourTimeReceiver;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Category;
 import in.phoenix.myspends.model.PaymentType;
+import in.phoenix.myspends.modules.ContextModule;
 import in.phoenix.myspends.parser.CategoryParser;
 import in.phoenix.myspends.parser.PaymentTypeParser;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
+import timber.log.Timber;
 
 /**
  * Created by Charan.Br on 2/11/2017.
@@ -42,17 +46,29 @@ public class MySpends extends Application {
     private static ArrayList<Category> mAllCategories;
     private static HashMap<Integer, String> mMapAllCategories;
 
+    private MySpendsComponent mySpendsComponent;
+
     @Override
     public void onCreate() {
         super.onCreate();
         APP_CONTEXT = this;
 
-        AppPref.getInstance().putLong(AppConstants.PrefConstants.LAST_APP_OPENED_ON,
+        mySpendsComponent = DaggerMySpendsComponent
+                .builder()
+                .contextModule(new ContextModule(APP_CONTEXT))
+                .build();
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
+
+        getAppPref().putLong(AppConstants.PrefConstants.LAST_APP_OPENED_ON,
                 System.currentTimeMillis());
-        AppPref.getInstance().incrementAppOpenCount();
+        getAppPref().incrementAppOpenCount();
         if (AppUtil.isUserLoggedIn()) {
             Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
             //FirebaseDB.initDb().addACategory();
+            fetchPaymentTypes();
             fetchCategories();
         }
         initNotification();
@@ -95,6 +111,10 @@ public class MySpends extends Application {
                         new PaymentTypeParser(null).executeOnExecutor(
                                 AsyncTask.THREAD_POOL_EXECUTOR, dataSnapshot.getChildren());
                     }*/
+                } else {
+                    AppLog.d("MySpends", "null dataSnapshot");
+                    new PaymentTypeParser(null).executeOnExecutor(
+                            AsyncTask.THREAD_POOL_EXECUTOR, null);
                 }
             }
 
@@ -269,6 +289,7 @@ public class MySpends extends Application {
     }
 
     public static void clearAll() {
+
         if (null != mMapAllPaymentTypes) {
             mMapAllPaymentTypes.clear();
         }
@@ -288,5 +309,20 @@ public class MySpends extends Application {
             mMapAllCategories.clear();
         }
         mMapAllCategories = null;
+    }
+
+    /*public static MySpends getApplication(BaseActivity baseActivity) {
+        return (MySpends) baseActivity.getApplication();
+    }
+
+    public static MySpends getApplication(Context context) {
+        return (MySpends) context.getApplicationContext();
+    }*/
+
+    public AppPref getAppPref() {
+        if (mySpendsComponent == null) {
+            return null;
+        }
+        return mySpendsComponent.getAppPref();
     }
 }

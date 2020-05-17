@@ -4,19 +4,20 @@ import android.animation.Animator;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.crashlytics.android.Crashlytics;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -66,13 +67,13 @@ public class LaunchDeciderActivity extends BaseActivity {
             userLoggedIn();
 
         } else {
-            ViewPager pager = (ViewPager) findViewById(R.id.als_vp_imps);
+            ViewPager pager = findViewById(R.id.als_vp_imps);
             FragmentPagerAdapter adapter = new ImpsAdapter(LaunchDeciderActivity.this, getSupportFragmentManager());
             pager.setAdapter(adapter);
 
-            TabLayout tabLayout = (TabLayout) findViewById(R.id.als_tl_dots);
+            TabLayout tabLayout = findViewById(R.id.als_tl_dots);
             tabLayout.setupWithViewPager(pager, true);
-            pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            /*pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -92,28 +93,30 @@ public class LaunchDeciderActivity extends BaseActivity {
                 public void onPageScrollStateChanged(int state) {
 
                 }
-            });
+            });*/
+            toggleSignInNoAnim(true);
 
             AppUtil.removeDynamicShortcut();
             AppCompatButton btnLogin = findViewById(R.id.als_abtn_login);
-            btnLogin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (AppUtil.isConnected()) {
-                        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                                new AuthUI.IdpConfig.GoogleBuilder().build());
-                        startActivityForResult(
-                                AuthUI.getInstance()
-                                        .createSignInIntentBuilder()
-                                        .setAvailableProviders(providers)
-                                        .build(),
-                                RC_SIGN_IN);
-                    } else {
-                        AppUtil.showSnackbar(mViewComplete, "No Internet Connection!");
-                    }
+            btnLogin.setOnClickListener(view -> {
+                if (AppUtil.isConnected()) {
+                    List<AuthUI.IdpConfig> providers = Arrays.asList(
+                            new AuthUI.IdpConfig.GoogleBuilder().build());
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setAvailableProviders(providers)
+                                    .build(),
+                            RC_SIGN_IN);
+                } else {
+                    AppUtil.showSnackbar(mViewComplete, "No Internet Connection!");
                 }
             });
         }
+    }
+
+    private void toggleSignInNoAnim(boolean toShow) {
+        mVSignIn.setVisibility(View.VISIBLE);
     }
 
     private void toggleSignIn(boolean toShow) {
@@ -218,6 +221,8 @@ public class LaunchDeciderActivity extends BaseActivity {
                     eventBundle.putString("user_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                     AppAnalytics.init().logEvent("login_success", eventBundle);
 
+                    MySpends.fetchPaymentTypes();
+
                     //-- move fetch categories to FirebaseDB class --//
                     MySpends.fetchCategories();
 
@@ -289,8 +294,14 @@ public class LaunchDeciderActivity extends BaseActivity {
                     } else {
                         Currency currencyData = dataSnapshot.getValue(Currency.class);
                         if (null != currencyData && dataSnapshot.getChildrenCount() == 3) {
-                            AppPref.getInstance().putString(AppConstants.PrefConstants.CURRENCY, currencyData.getCurrencySymbol());
-                            AppPref.getInstance().putInt(AppConstants.PrefConstants.APP_SETUP, BuildConfig.VERSION_CODE);
+                            /*MySpendsComponent mySpendsComponent = DaggerMySpendsComponent.builder().contextModule
+                                    (new ContextModule(LaunchDeciderActivity.this)).build();*/
+
+                            ((MySpends) getApplication()).getAppPref()
+                                    .putString(AppConstants.PrefConstants.CURRENCY, currencyData.getCurrencySymbol());
+                            ((MySpends) getApplication()).getAppPref()
+                                    .putInt(AppConstants.PrefConstants.APP_SETUP, BuildConfig.VERSION_CODE);
+
                             nextIntent = new Intent(LaunchDeciderActivity.this, MainActivity.class);
 
                         } else {

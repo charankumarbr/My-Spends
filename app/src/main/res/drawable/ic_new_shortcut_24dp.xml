@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <shape
-            android:shape="oval">
-            <solid
-                android:color="#F5F5F5"/>
-            <size android:width="44dp" android:height="44dp"/>
+        <shape android:shape="oval">
+            <solid android:color="#F5F5F5" />
+            <size
+                android:width="44dp"
+                android:height="44dp" />
         </shape>
-        <padding android:bottom="2dp" android:left="2dp"
+        <padding
+            android:bottom="2dp"
+            android:left="2dp"
             android:right="2dp"
-            android:top="2dp"/>
+            android:top="2dp" />
     </item>
 
-    <item android:drawable="@drawable/ic_add_green_24dp"
-        android:width="24dp" android:height="24dp" android:gravity="center"/>
+    <item
+        android:drawable="@drawable/ic_add_green_24dp"
+        android:width="24dp"
+        android:height="24dp"
+        android:gravity="center" />
 </layer-list>

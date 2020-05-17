@@ -12,15 +12,19 @@ import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
+import android.os.Build;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.TaskStackBuilder;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,7 +69,7 @@ public final class AppUtil {
      */
     public static ExpenseDate convertToDate(long millis) {
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
         String date = simpleDateFormat.format(new Date(millis));
         String[] dateParts = date.split("-");
 
@@ -74,7 +78,7 @@ public final class AppUtil {
     }
 
     public static String convertToDateDB(long millis) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy h:mm:ss a");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy h:mm:ss a", Locale.ENGLISH);
         return simpleDateFormat.format(new Date(millis));
     }
 
@@ -117,7 +121,7 @@ public final class AppUtil {
     }
 
     public static String dateDBToString(String dateInString) throws ParseException {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy h:mm:ss a");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy h:mm:ss a", Locale.ENGLISH);
         Date strDate = simpleDateFormat.parse(dateInString);
         StringBuilder builder = new StringBuilder();
         Calendar calendar = Calendar.getInstance();
@@ -131,7 +135,7 @@ public final class AppUtil {
         return builder.toString();
     }
 
-    public static String dateDBToString(long timeInMillis) throws ParseException {
+    public static String dateDBToString(long timeInMillis) throws UnknownFormatConversionException {
         StringBuilder builder = new StringBuilder();
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timeInMillis);
@@ -144,7 +148,7 @@ public final class AppUtil {
         return builder.toString();
     }
 
-    public static String getShortMonth(int month) {
+    public static String getShortMonth(int month) throws UnknownFormatConversionException {
         switch (month) {
             case 0:
                 return "Jan";
@@ -172,8 +176,11 @@ public final class AppUtil {
                 return "Dec";
         }
 
-        AppLog.d("ExpenseDate", "Month:" + month, new UnknownFormatConversionException("Wrong month::" + month));
-        return "";
+        UnknownFormatConversionException exception =
+                new UnknownFormatConversionException("Wrong month::" + month);
+        AppLog.d("ExpenseDate", "Month:" + month, exception);
+        throw exception;
+        //return "";
     }
 
     public static String getMonth(int month) {
@@ -317,9 +324,7 @@ public final class AppUtil {
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm != null) {
             NetworkInfo netInfo = cm.getActiveNetworkInfo();
-            if (netInfo != null && netInfo.isConnected()) {
-                return true;
-            }
+            return netInfo != null && netInfo.isConnected();
         }
 
         return false;
@@ -353,13 +358,14 @@ public final class AppUtil {
     public static void createNotification(Context context, ExpenseDate expenseDate) {
 
         String channelId = "reminder";
-        String channelName = "Reminder";
-        int importance = NotificationManager.IMPORTANCE_HIGH;
 
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            String channelName = "Reminder";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+
             NotificationChannel mChannel = new NotificationChannel(
                     channelId, channelName, importance);
             notificationManager.createNotificationChannel(mChannel);
@@ -367,6 +373,7 @@ public final class AppUtil {
 
         Intent notificationIntent = null;
         PendingIntent pendingIntent = null;
+
         if (null == AppPref.getInstance().getString(AppConstants.PrefConstants.CURRENCY)) {
             //-- no currency setup, get it first --//
             notificationIntent = new Intent(context, LaunchDeciderActivity.class);
@@ -493,7 +500,11 @@ public final class AppUtil {
     }
 
     public static String getUserShortName() {
-        String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName().trim();
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (((firebaseUser == null) || firebaseUser.getDisplayName() == null) || TextUtils.isEmpty(firebaseUser.getDisplayName())) {
+            return "User";
+        }
+        String userName = firebaseUser.getDisplayName().trim();
         if (userName.contains(" ")) {
             String[] nameSplit = userName.split("\\s+");
             /*if (nameSplit.length > 2) {
@@ -506,7 +517,7 @@ public final class AppUtil {
 
     public static String getGreeting() {
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat dateformat = new SimpleDateFormat("HH");
+        SimpleDateFormat dateformat = new SimpleDateFormat("HH", Locale.ENGLISH);
         String datetime = dateformat.format(c.getTime());
         AppLog.d("AppUtil", "getGreeting: time:" + datetime);
         int hour = Integer.valueOf(datetime);
@@ -540,4 +551,86 @@ public final class AppUtil {
         }
         return 0;
     }
+
+    public static int getPrimaryTextColor() {
+        int nightMode = AppPref.getInstance().getInt(AppConstants.PrefConstants.NIGHT_MODE);
+        if (nightMode == 1) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.colorAccent, null);
+
+            } else {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.colorAccent);
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.light_primary_text, null);
+
+            } else {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.light_primary_text);
+            }
+        }
+    }
+
+    public static int getSecondaryTextColor() {
+        int nightMode = AppPref.getInstance().getInt(AppConstants.PrefConstants.NIGHT_MODE);
+        if (nightMode == 1) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.colorAccent, null);
+
+            } else {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.colorAccent);
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.light_secondary_text, null);
+
+            } else {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.light_secondary_text);
+            }
+        }
+    }
+
+    public static int getAccentColor() {
+        int nightMode = AppPref.getInstance().getInt(AppConstants.PrefConstants.NIGHT_MODE);
+        if (nightMode == 1) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.colorAccent, null);
+
+            } else {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.colorAccent);
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.light_colorAccent, null);
+
+            } else {
+                return MySpends.APP_CONTEXT.getResources().getColor(R.color.light_colorAccent);
+            }
+        }
+    }
+
+    /*private void printHashKey() {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA256");
+                md.update(signature.toByteArray());
+                final byte[] digest = md.digest();
+                final StringBuilder toRet = new StringBuilder();
+                for (int i = 0; i < digest.length; i++) {
+                    if (i != 0) toRet.append(":");
+                    int b = digest[i] & 0xff;
+                    String hex = Integer.toHexString(b);
+                    if (hex.length() == 1) toRet.append("0");
+                    toRet.append(hex);
+                }
+
+                Log.i("TAG", "SHA256: " + toRet.toString());
+            }
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("TAG", "printHashKey()", e);
+        } catch (Exception e) {
+            Log.e("TAG", "printHashKey()", e);
+        }
+    }*/
 }

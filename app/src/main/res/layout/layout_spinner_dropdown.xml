@@ -7,9 +7,8 @@
     android:layout_height="wrap_content"
     android:textSize="21sp"
     android:gravity="center_horizontal"
-    android:textColor="@color/colorAccent"
+    android:textColor="@color/light_colorAccent"
     android:paddingTop="3dp"
     android:layout_marginTop="6dp"
     android:layout_marginBottom="6dp"
-    app:fontFamily="@font/source_sans_pro">
-</TextView>
+    app:fontFamily="@font/source_sans_pro"></TextView>

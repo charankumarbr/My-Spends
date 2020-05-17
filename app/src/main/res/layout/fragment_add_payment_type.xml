@@ -17,20 +17,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Payment Type"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/light_colorPrimary"
             android:textSize="19sp"
             android:id="@+id/fapt_tv_title"
             android:layout_centerHorizontal="true"
-            android:fontFamily="@font/source_sans_pro"/>
+            app:fontFamily="@font/source_sans_pro" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/fapt_til_type_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/fapt_tv_title"
             android:layout_marginTop="12dp">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/fapt_tiedittext_type_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,8 +39,8 @@
                 android:hint="Payment Name"
                 android:textSize="16sp"
                 android:inputType="textCapWords"
-                app:fontFamily="@font/source_sans_pro"/>
-        </android.support.design.widget.TextInputLayout>
+                app:fontFamily="@font/source_sans_pro" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!--<TextView
             android:id="@+id/fapt_tv_type_header"
@@ -76,11 +76,11 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
-            android:dropDownSelector="@color/colorAccent"
+            android:dropDownSelector="@color/light_colorAccent"
             android:spinnerMode="dialog"
-            android:layout_below="@+id/fapt_til_type_name"/>
+            android:layout_below="@+id/fapt_til_type_name" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/fapt_acbutton_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -93,14 +93,14 @@
             android:layout_marginBottom="16dp"
             android:textColor="@android:color/white"
             android:layout_below="@+id/fapt_spnr_payment_type"
-            app:fontFamily="@font/source_sans_pro"/>
+            app:fontFamily="@font/source_sans_pro" />
 
         <ProgressBar
             android:id="@+id/fapt_pb_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
 
     </RelativeLayout>
 

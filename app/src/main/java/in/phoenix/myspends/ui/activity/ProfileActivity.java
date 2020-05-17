@@ -3,12 +3,13 @@ package in.phoenix.myspends.ui.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,11 +40,11 @@ public class ProfileActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_profile);
-
         init();
     }
 
     private void init() {
+        initLayout();
         Toolbar toolbar = findViewById(R.id.ap_toolbar);
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             toolbar.setTitleTextColor(getResources().getColor(android.R.color.white, null));
@@ -61,10 +62,22 @@ public class ProfileActivity extends BaseActivity {
 
         cTvData = findViewById(R.id.ap_tv_name);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        cTvData.setText(user.getDisplayName());
+        String displayName = user.getDisplayName();
+        String emailId = user.getEmail();
+        if (displayName == null || displayName.trim().length() < 1) {
+            if (emailId.contains("@")) {
+                String subEmail = emailId.substring(0, emailId.indexOf("@"));
+                cTvData.setText(subEmail);
+
+            } else {
+                cTvData.setText("User");
+            }
+        } else {
+            cTvData.setText(displayName);
+        }
         cTvData = null;
         cTvData = findViewById(R.id.ap_tv_email);
-        cTvData.setText(user.getEmail());
+        cTvData.setText(emailId);
         /*cTvData = findViewById(R.id.ap_tv_version);
         cTvData.setText("v " + BuildConfig.VERSION_NAME);*/
 
@@ -81,7 +94,6 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void getCurrency() {
-
         FirebaseDB.initDb().getCurrencyReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -98,7 +110,6 @@ public class ProfileActivity extends BaseActivity {
 
             }
         });
-
     }
 
     @Override
@@ -142,7 +153,8 @@ public class ProfileActivity extends BaseActivity {
                                         }
                                     });
                         } else {
-                            AppUtil.showToast(R.string.no_internet);
+                            //AppUtil.showToast(R.string.no_internet);
+                            AppUtil.showSnackbar(mViewComplete, R.string.no_internet);
                         }
                     }
                 })

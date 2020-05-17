@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/lre_layout_expense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,11 +32,11 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 app:fontFamily="@font/source_sans_pro"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/light_primary_text"
                 android:text="Lunch"
                 android:layout_toStartOf="@+id/lre_textview_amount"
                 android:gravity="start"
-                android:textAlignment="viewStart"/>
+                android:textAlignment="viewStart" />
 
             <TextView
                 android:id="@+id/lre_textview_payment_type"
@@ -45,40 +45,40 @@
                 android:maxLines="1"
                 app:fontFamily="@font/source_sans_pro"
                 android:textSize="14sp"
-                android:textColor="@color/secondary_text"
+                android:textColor="@color/light_secondary_text"
                 android:ellipsize="end"
                 android:text="Cash"
                 android:layout_toStartOf="@+id/lre_textview_date"
                 android:layout_alignBaseline="@+id/lre_textview_date"
                 android:gravity="start"
-                android:textAlignment="viewStart"/>
+                android:textAlignment="viewStart" />
 
             <TextView
                 android:id="@+id/lre_textview_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/light_colorPrimary"
                 app:fontFamily="@font/source_sans_pro"
                 android:layout_gravity="end"
                 android:text="300.00"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"/>
+                android:layout_marginEnd="10dp" />
 
             <TextView
                 android:id="@+id/lre_textview_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="@color/secondary_text"
+                android:textColor="@color/light_secondary_text"
                 android:layout_marginTop="8dp"
                 app:fontFamily="@font/source_sans_pro"
                 android:text="10 Apr"
                 android:layout_below="@id/lre_textview_amount"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"/>
+                android:layout_marginEnd="10dp" />
 
             <TextView
                 android:id="@+id/lre_textview_category"
@@ -92,12 +92,12 @@
                 android:text="Bills and Payments"
                 android:layout_below="@id/lre_textview_date"
                 android:layout_alignParentEnd="true"
-                android:background="@color/colorAccent"
+                android:background="@color/light_colorAccent"
                 android:paddingStart="6dp"
                 android:paddingEnd="6dp"
                 android:paddingTop="1dp"
                 android:paddingBottom="1dp"
-                android:layout_marginTop="6dp"/>
+                android:layout_marginTop="6dp" />
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

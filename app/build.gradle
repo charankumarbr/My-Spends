@@ -27,7 +27,7 @@ android {
         applicationId "in.phoenix.myspends"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 60
+        versionCode 62
         versionName "1.5"
         resConfigs "en"
         //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -89,8 +89,8 @@ dependencies {
 
     //testCompile 'junit:junit:4.12'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+    /*implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"*/
 
     //-- expandable recycler view, added as a module dependency --//
     //implementation 'com.thoughtbot:expandablerecyclerview:1.3'

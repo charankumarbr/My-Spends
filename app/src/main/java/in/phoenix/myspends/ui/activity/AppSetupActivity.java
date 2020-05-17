@@ -29,24 +29,25 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.inject.Inject;
-
 import in.phoenix.myspends.BuildConfig;
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.components.AppSetupComponent;
-import in.phoenix.myspends.components.DaggerAppSetupComponent;
-import in.phoenix.myspends.components.DaggerMySpendsComponent;
-import in.phoenix.myspends.components.MySpendsComponent;
 import in.phoenix.myspends.controller.CurrencyListAdapter;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;
-import in.phoenix.myspends.modules.AppSetupModule;
-import in.phoenix.myspends.modules.ContextModule;
 import in.phoenix.myspends.ui.dialog.AppDialog;
 import in.phoenix.myspends.util.AppConstants;
+import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 import in.phoenix.myspends.util.KotUtil;
+
+//import javax.inject.Inject;
+/*import in.phoenix.myspends.components.AppSetupComponent;
+import in.phoenix.myspends.components.DaggerAppSetupComponent;
+import in.phoenix.myspends.components.DaggerMySpendsComponent;
+import in.phoenix.myspends.components.MySpendsComponent;*/
+/*import in.phoenix.myspends.modules.AppSetupModule;
+import in.phoenix.myspends.modules.ContextModule;*/
 
 /**
  * Created by Charan.Br on 4/10/2017.
@@ -60,7 +61,7 @@ public class AppSetupActivity extends BaseActivity {
 
     private ProgressBar mPbLoading;
 
-    @Inject
+    //@Inject
     CurrencyListAdapter mAdapter;
 
     private ArrayList<Currency> mCurrencies;
@@ -166,10 +167,11 @@ public class AppSetupActivity extends BaseActivity {
         AppDialog.dismissDialog();
         if (status && null != mCurrencies && mCurrencies.size() > 0) {
 
-            AppSetupComponent appSetupComponent = DaggerAppSetupComponent.builder()
+            mAdapter = new CurrencyListAdapter(AppSetupActivity.this, mCurrencies);
+            /*AppSetupComponent appSetupComponent = DaggerAppSetupComponent.builder()
                     .appSetupModule(new AppSetupModule(AppSetupActivity.this, mCurrencies))
                     .build();
-            appSetupComponent.inject(AppSetupActivity.this);
+            appSetupComponent.inject(AppSetupActivity.this);*/
 
             mLvCurrencies.setVisibility(View.VISIBLE);
             mCTvStatus.setVisibility(View.GONE);
@@ -214,13 +216,13 @@ public class AppSetupActivity extends BaseActivity {
                 FirebaseDB.initDb().setCurrency(selectedCurrency, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                        MySpendsComponent mySpendsComponent = DaggerMySpendsComponent.builder().contextModule
-                                (new ContextModule(AppSetupActivity.this)).build();
+                        /*MySpendsComponent mySpendsComponent = DaggerMySpendsComponent.builder().contextModule
+                                (new ContextModule(AppSetupActivity.this)).build();*/
                         if (null == databaseError) {
-                            mySpendsComponent.getAppPref()
+                            AppPref.getInstance()
                                     .putString(AppConstants.PrefConstants.CURRENCY, selectedCurrency.getCurrencySymbol());
                             startActivity(new Intent(AppSetupActivity.this, MainActivity.class));
-                            mySpendsComponent.getAppPref()
+                            AppPref.getInstance()
                                     .putInt(AppConstants.PrefConstants.APP_SETUP, BuildConfig.VERSION_CODE);
                             finish();
 
@@ -232,7 +234,7 @@ public class AppSetupActivity extends BaseActivity {
                             } else if (errorCode == DatabaseError.INVALID_TOKEN || errorCode == DatabaseError.EXPIRED_TOKEN) {
                                 AppUtil.showToast("Session Expired/Invalid. Please login again.");
 
-                                mySpendsComponent.getAppPref().clearAll();
+                                AppPref.getInstance().clearAll();
                                 MySpends.clearAll();
                                 FirebaseDB.onLogout();
                                 AppUtil.removeDynamicShortcut();

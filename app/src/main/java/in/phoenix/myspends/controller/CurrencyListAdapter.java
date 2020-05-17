@@ -1,5 +1,6 @@
 package in.phoenix.myspends.controller;
 
+import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +10,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import javax.inject.Inject;
-
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.ui.activity.AppSetupActivity;
 import in.phoenix.myspends.util.AppUtil;
+
+//import javax.inject.Inject;
 
 /**
  * Created by Charan.Br on 4/10/2017.
@@ -23,7 +24,7 @@ import in.phoenix.myspends.util.AppUtil;
 
 public final class CurrencyListAdapter extends BaseAdapter {
 
-    private final AppSetupActivity mContext;
+    private final Context mContext;
 
     private ArrayList<Currency> mCurrencies;
 
@@ -35,7 +36,7 @@ public final class CurrencyListAdapter extends BaseAdapter {
         mContext = context;
     }*/
 
-    @Inject
+    //@Inject
     public CurrencyListAdapter(AppSetupActivity context, ArrayList<Currency> currencies) {
         mContext = context;
         mCurrencies = currencies;

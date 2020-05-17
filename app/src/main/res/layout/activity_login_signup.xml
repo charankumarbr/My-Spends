@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/lfn_layout_complete"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@android:color/white">
 
     <TextView
@@ -13,92 +13,84 @@
         android:text="@string/app_name"
         android:textColor="@color/light_colorPrimary"
         android:textSize="32sp"
+        app:fontFamily="@font/source_sans_pro"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="35dp"
-        android:layout_centerHorizontal="true"
-        app:fontFamily="@font/source_sans_pro" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/als_vp_imps"
             android:layout_width="match_parent"
             android:layout_height="180dp"
-            android:layout_alignParentTop="true" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/als_tl_dots"
             android:layout_width="match_parent"
             android:layout_height="8dp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/als_vp_imps"
-            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@id/als_vp_imps"
             app:tabBackground="@drawable/tab_selector"
             app:tabGravity="center"
             app:tabIndicatorHeight="0dp" />
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/als_pb_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:visibility="gone"
-        android:layout_marginTop="16dp" />
-
-    <LinearLayout
-        android:id="@+id/als_layout_signin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:orientation="vertical"
-        android:layout_above="@+id/als_tv_version"
-        android:visibility="invisible">
-
-        <ImageView
-            android:id="@+id/als_iv_google_logo"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/bg_google_logo"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="4dp"
-            android:visibility="gone" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Sign in to track your spends."
-            android:textSize="15sp"
-            android:textColor="@color/light_secondary_"
-            app:fontFamily="@font/source_sans_pro" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/als_abtn_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            app:fontFamily="@font/source_sans_pro"
-            android:paddingEnd="32dp"
-            android:paddingStart="32dp"
-            android:text="@string/sign_in_with_google"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="6dp" />
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/als_tv_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
+        android:gravity="center"
         android:layout_marginBottom="10dp"
-        android:textSize="13sp"
         android:textColor="@color/light_colorAccent"
+        android:textSize="13sp"
         app:fontFamily="@font/source_sans_pro"
-        android:gravity="center" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-</RelativeLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/als_abtn_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:text="@string/sign_in_with_google"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        app:fontFamily="@font/source_sans_pro"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/als_tv_version"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign in to track your spends."
+        android:textColor="@color/light_secondary_"
+        android:textSize="15sp"
+        app:fontFamily="@font/source_sans_pro"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/als_abtn_login"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -60,7 +60,7 @@ public class LaunchDeciderActivity extends BaseActivity {
         mPbLoading = findViewById(R.id.als_pb_loading);
         TextView tvVersion = findViewById(R.id.als_tv_version);
         tvVersion.setText("Phoenix Apps\nv " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")");
-        mVSignIn = findViewById(R.id.als_layout_signin);
+        //mVSignIn = findViewById(R.id.als_layout_signin);
 
         if (AppUtil.isUserLoggedIn()) {
             //MySpends.fetchPaymentTypes();
@@ -94,7 +94,6 @@ public class LaunchDeciderActivity extends BaseActivity {
 
                 }
             });*/
-            toggleSignInNoAnim(true);
 
             AppUtil.removeDynamicShortcut();
             AppCompatButton btnLogin = findViewById(R.id.als_abtn_login);
@@ -113,10 +112,6 @@ public class LaunchDeciderActivity extends BaseActivity {
                 }
             });
         }
-    }
-
-    private void toggleSignInNoAnim(boolean toShow) {
-        mVSignIn.setVisibility(View.VISIBLE);
     }
 
     private void toggleSignIn(boolean toShow) {

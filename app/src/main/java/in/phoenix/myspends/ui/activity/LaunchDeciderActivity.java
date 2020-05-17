@@ -49,7 +49,8 @@ public class LaunchDeciderActivity extends BaseActivity {
 
     private ProgressBar mPbLoading;
 
-    private View mVSignIn;
+    private TextView mTvSignInMsg;
+    private AppCompatButton btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,8 @@ public class LaunchDeciderActivity extends BaseActivity {
         mPbLoading = findViewById(R.id.als_pb_loading);
         TextView tvVersion = findViewById(R.id.als_tv_version);
         tvVersion.setText("Phoenix Apps\nv " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")");
-        //mVSignIn = findViewById(R.id.als_layout_signin);
+        mTvSignInMsg = findViewById(R.id.textView);
+        btnLogin = findViewById(R.id.als_abtn_login);
 
         if (AppUtil.isUserLoggedIn()) {
             //MySpends.fetchPaymentTypes();
@@ -96,7 +98,6 @@ public class LaunchDeciderActivity extends BaseActivity {
             });*/
 
             AppUtil.removeDynamicShortcut();
-            AppCompatButton btnLogin = findViewById(R.id.als_abtn_login);
             btnLogin.setOnClickListener(view -> {
                 if (AppUtil.isConnected()) {
                     List<AuthUI.IdpConfig> providers = Arrays.asList(
@@ -119,36 +120,36 @@ public class LaunchDeciderActivity extends BaseActivity {
             if (toShow) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     // get the center for the clipping circle
-                    int cx = mVSignIn.getWidth() / 2;
-                    int cy = mVSignIn.getHeight() / 2;
+                    int cx = mTvSignInMsg.getWidth() / 2;
+                    int cy = mTvSignInMsg.getHeight() / 2;
 
                     // get the final radius for the clipping circle
                     float finalRadius = (float) Math.hypot(cx, cy);
 
                     // create the animator for this view (the start radius is zero)
-                    Animator anim = ViewAnimationUtils.createCircularReveal(mVSignIn, cx, cy, 0f, finalRadius);
+                    Animator anim = ViewAnimationUtils.createCircularReveal(mTvSignInMsg, cx, cy, 0f, finalRadius);
                     anim.setDuration(300);
 
                     // make the view visible and start the animation
-                    mVSignIn.setVisibility(View.VISIBLE);
+                    mTvSignInMsg.setVisibility(View.VISIBLE);
                     anim.start();
 
                 } else {
                     // set the view to visible without a circular reveal animation below Lollipop
-                    mVSignIn.setVisibility(View.VISIBLE);
+                    mTvSignInMsg.setVisibility(View.VISIBLE);
                 }
 
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     // get the center for the clipping circle
-                    int cx = mVSignIn.getWidth() / 2;
-                    int cy = mVSignIn.getHeight() / 2;
+                    int cx = mTvSignInMsg.getWidth() / 2;
+                    int cy = mTvSignInMsg.getHeight() / 2;
 
                     // get the initial radius for the clipping circle
                     float initialRadius = (float) Math.hypot(cx, cy);
 
                     // create the animation (the final radius is zero)
-                    Animator anim = ViewAnimationUtils.createCircularReveal(mVSignIn, cx, cy, initialRadius, 0f);
+                    Animator anim = ViewAnimationUtils.createCircularReveal(mTvSignInMsg, cx, cy, initialRadius, 0f);
                     anim.setDuration(300);
 
                     // make the view invisible when the animation is done
@@ -160,7 +161,7 @@ public class LaunchDeciderActivity extends BaseActivity {
 
                         @Override
                         public void onAnimationEnd(Animator animator) {
-                            mVSignIn.setVisibility(View.INVISIBLE);
+                            mTvSignInMsg.setVisibility(View.INVISIBLE);
                         }
 
                         @Override
@@ -179,7 +180,7 @@ public class LaunchDeciderActivity extends BaseActivity {
 
                 } else {
                     // set the view to visible without a circular reveal animation below Lollipop
-                    mVSignIn.setVisibility(View.INVISIBLE);
+                    mTvSignInMsg.setVisibility(View.INVISIBLE);
                 }
             }
         }
@@ -188,7 +189,8 @@ public class LaunchDeciderActivity extends BaseActivity {
     private void userLoggedIn() {
         Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
         FirebaseDB.initDb().listenPaymentTypes();
-        mVSignIn.setVisibility(View.GONE);
+        btnLogin.setVisibility(View.GONE);
+        mTvSignInMsg.setVisibility(View.GONE);
         mPbLoading.setVisibility(View.VISIBLE);
         AppUtil.addDynamicShortcut();
         getCurrency();

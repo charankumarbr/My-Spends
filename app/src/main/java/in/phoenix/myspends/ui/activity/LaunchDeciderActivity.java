@@ -297,9 +297,9 @@ public class LaunchDeciderActivity extends BaseActivity {
                             /*MySpendsComponent mySpendsComponent = DaggerMySpendsComponent.builder().contextModule
                                     (new ContextModule(LaunchDeciderActivity.this)).build();*/
 
-                            ((MySpends) getApplication()).getAppPref()
+                            AppPref.getInstance()
                                     .putString(AppConstants.PrefConstants.CURRENCY, currencyData.getCurrencySymbol());
-                            ((MySpends) getApplication()).getAppPref()
+                            AppPref.getInstance()
                                     .putInt(AppConstants.PrefConstants.APP_SETUP, BuildConfig.VERSION_CODE);
 
                             nextIntent = new Intent(LaunchDeciderActivity.this, MainActivity.class);

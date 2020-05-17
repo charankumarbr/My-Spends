@@ -17,13 +17,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-import in.phoenix.myspends.components.DaggerMySpendsComponent;
-import in.phoenix.myspends.components.MySpendsComponent;
 import in.phoenix.myspends.controller.HourTimeReceiver;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Category;
 import in.phoenix.myspends.model.PaymentType;
-import in.phoenix.myspends.modules.ContextModule;
 import in.phoenix.myspends.parser.CategoryParser;
 import in.phoenix.myspends.parser.PaymentTypeParser;
 import in.phoenix.myspends.util.AppConstants;
@@ -31,6 +28,10 @@ import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 import timber.log.Timber;
+
+/*import in.phoenix.myspends.components.DaggerMySpendsComponent;
+import in.phoenix.myspends.components.MySpendsComponent;*/
+//import in.phoenix.myspends.modules.ContextModule;
 
 /**
  * Created by Charan.Br on 2/11/2017.
@@ -46,25 +47,25 @@ public class MySpends extends Application {
     private static ArrayList<Category> mAllCategories;
     private static HashMap<Integer, String> mMapAllCategories;
 
-    private MySpendsComponent mySpendsComponent;
+    //private MySpendsComponent mySpendsComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
         APP_CONTEXT = this;
 
-        mySpendsComponent = DaggerMySpendsComponent
+        /*mySpendsComponent = DaggerMySpendsComponent
                 .builder()
                 .contextModule(new ContextModule(APP_CONTEXT))
-                .build();
+                .build();*/
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
 
-        getAppPref().putLong(AppConstants.PrefConstants.LAST_APP_OPENED_ON,
+        AppPref.getInstance().putLong(AppConstants.PrefConstants.LAST_APP_OPENED_ON,
                 System.currentTimeMillis());
-        getAppPref().incrementAppOpenCount();
+        AppPref.getInstance().incrementAppOpenCount();
         if (AppUtil.isUserLoggedIn()) {
             Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
             //FirebaseDB.initDb().addACategory();
@@ -319,10 +320,10 @@ public class MySpends extends Application {
         return (MySpends) context.getApplicationContext();
     }*/
 
-    public AppPref getAppPref() {
+    /*public AppPref getAppPref() {
         if (mySpendsComponent == null) {
             return null;
         }
         return mySpendsComponent.getAppPref();
-    }
+    }*/
 }

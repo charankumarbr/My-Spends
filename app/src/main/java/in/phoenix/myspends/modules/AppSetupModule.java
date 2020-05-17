@@ -1,21 +1,16 @@
 package in.phoenix.myspends.modules;
 
-import java.util.ArrayList;
-
-import dagger.Module;
-import dagger.Provides;
-import in.phoenix.myspends.components.AppSetupScope;
-import in.phoenix.myspends.model.Currency;
-import in.phoenix.myspends.ui.activity.AppSetupActivity;
+/*import dagger.Module;
+import dagger.Provides;*/
 
 /**
  * Author: Charan Kumar
  * Date: 2019-05-02
  */
-@Module
+//@Module
 public class AppSetupModule {
 
-    private final AppSetupActivity appSetupActivity;
+    /*private final AppSetupActivity appSetupActivity;
 
     private ArrayList<Currency> currencies;
 
@@ -34,5 +29,5 @@ public class AppSetupModule {
     @Provides
     public ArrayList<Currency> providesCurrencies() {
         return currencies;
-    }
+    }*/
 }

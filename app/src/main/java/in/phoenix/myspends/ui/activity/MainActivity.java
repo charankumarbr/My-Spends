@@ -33,18 +33,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import javax.inject.Inject;
-
 import in.phoenix.myspends.BuildConfig;
 import in.phoenix.myspends.R;
-import in.phoenix.myspends.components.DaggerMainScreenComponent;
-import in.phoenix.myspends.components.MainScreenComponent;
 import in.phoenix.myspends.controller.NewExpenseAdapter;
 import in.phoenix.myspends.customview.ButteryProgressBar;
 import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
-import in.phoenix.myspends.modules.MainScreenModule;
 import in.phoenix.myspends.parser.FSSpendsParser;
 import in.phoenix.myspends.parser.SpendsParser;
 import in.phoenix.myspends.ui.fragment.AppRateFragment;
@@ -54,6 +49,11 @@ import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
+//import javax.inject.Inject;
+/*import in.phoenix.myspends.components.DaggerMainScreenComponent;
+import in.phoenix.myspends.components.MainScreenComponent;*/
+//import in.phoenix.myspends.modules.MainScreenModule;
+
 public class MainActivity extends BaseActivity implements SpendsParser.SpendsParserListener,
         NewExpenseAdapter.OnLoadingListener, AppRateFragment.OnAppRateActionListener {
 
@@ -61,7 +61,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
     private ListView mLvExpense;
 
-    @Inject
+    //@Inject
     NewExpenseAdapter mExpenseAdapter;
 
     private ProgressBar mPbLoading;
@@ -564,12 +564,12 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
     private void setSpends(ArrayList<NewExpense> spends) {
         if (null == mExpenseAdapter) {
-            MainScreenComponent mainScreenComponent = DaggerMainScreenComponent
+            /*MainScreenComponent mainScreenComponent = DaggerMainScreenComponent
                     .builder()
                     .mainScreenModule(new MainScreenModule(MainActivity.this, spends, clickListener))
                     .build();
-            mainScreenComponent.inject(MainActivity.this);
-            //mExpenseAdapter = new NewExpenseAdapter(MainActivity.this, spends, clickListener);
+            mainScreenComponent.inject(MainActivity.this);*/
+            mExpenseAdapter = new NewExpenseAdapter(MainActivity.this, spends, clickListener);
             mLvExpense.setAdapter(mExpenseAdapter);
 
         } else {

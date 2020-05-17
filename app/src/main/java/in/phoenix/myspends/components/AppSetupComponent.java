@@ -1,9 +1,6 @@
 package in.phoenix.myspends.components;
 
-import java.util.ArrayList;
-
 import dagger.Component;
-import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.modules.AppSetupModule;
 import in.phoenix.myspends.ui.activity.AppSetupActivity;
 

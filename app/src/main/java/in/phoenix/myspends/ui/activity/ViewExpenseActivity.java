@@ -33,8 +33,6 @@ import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
-import static android.app.Activity.RESULT_CANCELED;
-
 /**
  * Created by Charan.Br on 3/2/2017.
  */

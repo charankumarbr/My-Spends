@@ -2,7 +2,6 @@ package in.phoenix.myspends.components;
 
 import dagger.Component;
 import in.phoenix.myspends.modules.MainScreenModule;
-import in.phoenix.myspends.ui.activity.AppSetupActivity;
 import in.phoenix.myspends.ui.activity.MainActivity;
 
 /**

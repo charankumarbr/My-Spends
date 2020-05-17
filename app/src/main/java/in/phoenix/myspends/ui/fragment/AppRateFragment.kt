@@ -41,7 +41,7 @@ class AppRateFragment : DialogFragment() {
         if (context is OnAppRateActionListener) {
             listener = context
         } else {
-            throw RuntimeException(context.toString() + " must implement OnAppRateActionListener")
+            throw RuntimeException("$context must implement OnAppRateActionListener")
         }
     }
 

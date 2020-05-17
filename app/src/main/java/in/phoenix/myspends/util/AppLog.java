@@ -1,7 +1,5 @@
 package in.phoenix.myspends.util;
 
-import android.util.Log;
-
 import in.phoenix.myspends.BuildConfig;
 import timber.log.Timber;
 

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.WhatsAppTextActivity">
+
+    <include
+        layout="@layout/layout_toolbar"
+        android:id="@+id/awaToolbar"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/awaTvLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/awaToolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="20dp"
+        android:text="@string/whatsapp_label"
+        android:textColor="@color/primary_text"
+        android:textSize="15sp"
+        android:fontFamily="@font/source_sans_pro_bold"/>
+
+    <TextView
+        android:id="@+id/awaTvInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/awaTvLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="20dp"
+        android:text="@string/whatsapp_info"
+        android:textColor="@color/primary_text"
+        android:textSize="15sp"
+        android:fontFamily="@font/source_sans_pro"/>
+
+    <EditText
+        android:id="@+id/awaEtCode"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/awaTvInfo"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:maxLength="4"
+        android:hint="Code"
+        android:textSize="17sp"
+        android:textColorHint="@color/light_tertiary_"
+        android:textColor="@color/primary_text"
+        android:digits="0123456789"
+        android:fontFamily="@font/source_sans_pro"
+        android:nextFocusForward="@id/awaEtMobile"
+        android:nextFocusDown="@id/awaEtMobile"
+        android:nextFocusUp="@id/awaEtMobile"
+        android:nextFocusLeft="@id/awaEtMobile"
+        android:nextFocusRight="@id/awaEtMobile"
+        android:maxLines="1"
+        android:inputType="phone"/>
+
+    <EditText
+        android:id="@+id/awaEtMobile"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/awaTvInfo"
+        app:layout_constraintStart_toEndOf="@id/awaEtCode"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        android:maxLength="10"
+        android:maxLines="1"
+        android:hint="WhatsApp Number"
+        android:textSize="17sp"
+        android:textColorHint="@color/light_tertiary_"
+        android:textColor="@color/primary_text"
+        android:digits="0123456789"
+        android:imeOptions="actionDone"
+        android:fontFamily="@font/source_sans_pro"
+        android:inputType="phone"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/awaBtnText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/awaEtCode"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        android:text="Text on WhatsApp"
+        android:textSize="14sp"
+        android:textColor="@android:color/white"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:fontFamily="@font/source_sans_pro"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

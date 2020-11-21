@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <!--android:fullBackupContent="@xml/backupscheme"-->
     <application
         android:name=".MySpends"
         android:allowBackup="false"
@@ -27,8 +26,8 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ui.activity.PaymentActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".ui.activity.MainActivity"/>
+            android:parentActivityName=".ui.activity.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.LaunchDeciderActivity"
             android:screenOrientation="portrait">
@@ -103,7 +102,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activity.MainActivity" />
         </activity>
-        <activity android:name=".ui.activity.MessageBoardActivity"
+        <activity
+            android:name=".ui.activity.MessageBoardActivity"
+            android:parentActivityName=".ui.activity.MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activity.MainActivity" />
+        </activity>
+
+        <activity android:name=".ui.activity.WhatsAppTextActivity"
             android:parentActivityName=".ui.activity.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">

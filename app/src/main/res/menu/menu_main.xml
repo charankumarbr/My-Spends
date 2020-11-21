@@ -31,6 +31,11 @@
         android:title="@string/profile"
         app:showAsAction="never|withText" />
 
+    <item
+        android:id="@+id/menu_whatsapp"
+        android:title="@string/whatsapp_text"
+        app:showAsAction="never|withText" />
+
     <!--<item
         android:id="@+id/menu_ui_mode"
         android:title="@string/dark_mode"

@@ -1,7 +1,8 @@
 apply plugin: 'com.android.application'
 /*apply plugin: 'io.fabric'*/
-apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.firebase-perf'
+apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
@@ -36,7 +37,8 @@ android {
         release {
             debuggable false
             shrinkResources true
-            minifyEnabled true
+            minifyEnabled true // firebaseCrashlytics -> mappingFileUploadEnabled defaults to true
+            // if minifyEnabled is true.
             multiDexEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
@@ -44,6 +46,12 @@ android {
 
         debug {
             multiDexEnabled true
+            minifyEnabled false
+            firebaseCrashlytics {
+                // If you don't need crash reporting for your debug build,
+                // you can speed up your build by disabling mapping file uploading.
+                mappingFileUploadEnabled false
+            }
         }
     }
 }

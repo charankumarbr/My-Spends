@@ -16,7 +16,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.ViewCompat;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -29,6 +28,7 @@ import in.phoenix.myspends.model.ExpenseDate;
 import in.phoenix.myspends.model.NewExpense;
 import in.phoenix.myspends.ui.dialog.AppDialog;
 import in.phoenix.myspends.util.AppConstants;
+import in.phoenix.myspends.util.AppCrashLogger;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
@@ -137,7 +137,7 @@ public class ViewExpenseActivity extends BaseActivity {
                     mCTvAddedOn.setVisibility(View.VISIBLE);
 
                 } catch (UnknownFormatConversionException e) {
-                    Crashlytics.logException(e);
+                    AppCrashLogger.INSTANCE.reportException(e);
                     e.printStackTrace();
                     mCTvAddedOn.setVisibility(View.GONE);
                 }
@@ -149,7 +149,7 @@ public class ViewExpenseActivity extends BaseActivity {
                     mCTvLastUpdatedOn.setVisibility(View.VISIBLE);
 
                 } catch (UnknownFormatConversionException e) {
-                    Crashlytics.logException(e);
+                    AppCrashLogger.INSTANCE.reportException(e);
                     e.printStackTrace();
                     mCTvLastUpdatedOn.setVisibility(View.GONE);
                 }
@@ -235,6 +235,7 @@ public class ViewExpenseActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AppConstants.EDIT_EXPENSE_CODE) {
             if (resultCode == RESULT_OK) {
                 if (null != data && data.hasExtra(AppConstants.Bundle.EXPENSE) &&

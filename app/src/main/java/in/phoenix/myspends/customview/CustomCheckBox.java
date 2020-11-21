@@ -8,9 +8,8 @@ import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatCheckBox;
 
-import com.crashlytics.android.Crashlytics;
-
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.util.AppCrashLogger;
 
 public final class CustomCheckBox extends AppCompatCheckBox {
     public CustomCheckBox(Context context) {
@@ -49,7 +48,7 @@ public final class CustomCheckBox extends AppCompatCheckBox {
                 setTypeface(FontCache.getFont(getContext(), fontName, textStyle));
 
             } catch (Resources.NotFoundException e) {
-                Crashlytics.logException(e);
+                AppCrashLogger.INSTANCE.reportException(e);
             }
             typedArray.recycle();
         }

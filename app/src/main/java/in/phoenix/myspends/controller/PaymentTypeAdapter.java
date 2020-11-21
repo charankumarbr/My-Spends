@@ -6,8 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
+
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 
@@ -148,7 +149,7 @@ public class PaymentTypeAdapter extends BaseAdapter {
 
     class ViewHolder {
         TextView tvPaymentTypeName;
-        Switch swToggleActive;
+        SwitchMaterial swToggleActive;
         TextView tvPaymentTypeMode;
     }
 

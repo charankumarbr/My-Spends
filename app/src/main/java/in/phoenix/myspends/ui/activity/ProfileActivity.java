@@ -30,7 +30,6 @@ import in.phoenix.myspends.util.AppUtil;
 /**
  * Created by Charan.Br on 12/22/2017.
  */
-
 public class ProfileActivity extends BaseActivity {
 
     private TextView cTvData;
@@ -127,35 +126,32 @@ public class ProfileActivity extends BaseActivity {
         AlertDialog.Builder logoutBuilder = new AlertDialog.Builder(ProfileActivity.this)
                 .setTitle("Confirm Logout")
                 .setMessage("Are you sure you want to logout?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                        if (AppUtil.isConnected()) {
-                            AuthUI.getInstance()
-                                    .signOut(ProfileActivity.this)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                AppPref.getInstance().clearAll();
-                                                MySpends.clearAll();
-                                                FirebaseDB.onLogout();
-                                                AppUtil.removeDynamicShortcut();
-                                                Intent newIntent = new Intent(ProfileActivity.this, LaunchDeciderActivity.class);
-                                                newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                startActivity(newIntent);
-                                                finish();
+                .setPositiveButton("Yes", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    if (AppUtil.isConnected()) {
+                        AuthUI.getInstance()
+                                .signOut(ProfileActivity.this)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            AppPref.getInstance().clearAll();
+                                            MySpends.clearAll();
+                                            FirebaseDB.onLogout();
+                                            AppUtil.removeDynamicShortcut();
+                                            Intent newIntent = new Intent(ProfileActivity.this, LaunchDeciderActivity.class);
+                                            newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(newIntent);
+                                            finish();
 
-                                            } else {
-                                                AppUtil.showToast("Unable to logout.");
-                                            }
+                                        } else {
+                                            AppUtil.showToast("Unable to logout.");
                                         }
-                                    });
-                        } else {
-                            //AppUtil.showToast(R.string.no_internet);
-                            AppUtil.showSnackbar(mViewComplete, R.string.no_internet);
-                        }
+                                    }
+                                });
+                    } else {
+                        //AppUtil.showToast(R.string.no_internet);
+                        AppUtil.showSnackbar(mViewComplete, R.string.no_internet);
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {

@@ -101,16 +101,14 @@ public final class CurrencyListAdapter extends BaseAdapter {
                 convertView.setBackgroundColor(MySpends.APP_CONTEXT.getResources().getColor(android.R.color.white, null));
                 /*holder.cTvCurrencyName.setTextColor(mContext.getResources().getColor(R.color.primary_text, null));
                 holder.cTvCurrencyCode.setTextColor(mContext.getResources().getColor(R.color.primary_text, null));*/
-                holder.cTvCurrencyName.setTextColor(AppUtil.getPrimaryTextColor());
-                holder.cTvCurrencyCode.setTextColor(AppUtil.getPrimaryTextColor());
 
             } else {
                 convertView.setBackgroundColor(MySpends.APP_CONTEXT.getResources().getColor(android.R.color.white));
                 /*holder.cTvCurrencyName.setTextColor(mContext.getResources().getColor(R.color.primary_text));
                 holder.cTvCurrencyCode.setTextColor(mContext.getResources().getColor(R.color.primary_text));*/
-                holder.cTvCurrencyName.setTextColor(AppUtil.getPrimaryTextColor());
-                holder.cTvCurrencyCode.setTextColor(AppUtil.getPrimaryTextColor());
             }
+            holder.cTvCurrencyName.setTextColor(AppUtil.getPrimaryTextColor());
+            holder.cTvCurrencyCode.setTextColor(AppUtil.getPrimaryTextColor());
         }
 
         holder.cTvCurrencyCode.setText(currency.getCurrencyCode());

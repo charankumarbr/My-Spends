@@ -23,14 +23,14 @@
 -keepattributes SourceFile,LineNumberTable
 -keep public class * extends java.lang.Exception
 
--keep public class * extends android.support.v7.app.AppCompatActivity
+-keep public class * extends androidx.appcompat.app.AppCompatActivity
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
 -keep public class * extends android.app.Service
 -keep public class * extends android.content.BroadcastReceiver
 -keep public class * extends android.preference.Preference
--keep public class * extends android.support.v4.app.Fragment
--keep public class * extends android.support.v4.app.DialogFragment
+-keep public class * extends androidx.fragment.app.Fragment
+-keep public class * extends androidx.fragment.app.DialogFragment
 
 -keep public class * extends android.view.View {
  public <init>(android.content.Context);
@@ -52,27 +52,29 @@
 }
 
 -keep class * implements android.os.Parcelable {
- public static final android.os.Parcelable$Creator *;
+ public static final android.os.Parcelable.Creator *;
 }
 
 -keepclassmembers class **.R$* {
  public static <fields>;
 }
 
--keep class android.support.v4.app.** { *; }
--keep interface android.support.v4.app.** { *; }
+-keep class android.support.v4.* { *; }
+-keep interface android.support.v4.app.* { *; }
 
 -dontwarn javax.annotation.**
 
 -keepattributes Exceptions
 
--keep public class in.phoenix.myspends.model.** { *; }
+-keep public class in.phoenix.myspends.model.* { *; }
 
 # rule to test the
 -keep class android.util.Log
 
--keep class com.crashlytics.** { *; }
--dontwarn com.crashlytics.**
+-keep class com.google.firebase.* { *; }
+-dontwarn com.google.firebase.**
+
+-keepattributes LineNumberTable, SourceFile
 
 # Dagger 2
 -dontwarn com.google.errorprone.annotations.**

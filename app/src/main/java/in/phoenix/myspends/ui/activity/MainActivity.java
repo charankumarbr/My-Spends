@@ -342,40 +342,32 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
         AlertDialog.Builder logoutBuilder = new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Confirm Logout")
                 .setMessage("Are you sure you want to logout?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                        if (AppUtil.isConnected()) {
-                            AuthUI.getInstance()
-                                    .signOut(MainActivity.this)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                AppPref.getInstance().clearAll();
-                                                AppUtil.removeDynamicShortcut();
-                                                Intent newIntent = new Intent(MainActivity.this, LaunchDeciderActivity.class);
-                                                newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                startActivity(newIntent);
-                                                finish();
+                .setPositiveButton("Yes", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    if (AppUtil.isConnected()) {
+                        AuthUI.getInstance()
+                                .signOut(MainActivity.this)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            AppPref.getInstance().clearAll();
+                                            AppUtil.removeDynamicShortcut();
+                                            Intent newIntent = new Intent(MainActivity.this, LaunchDeciderActivity.class);
+                                            newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(newIntent);
+                                            finish();
 
-                                            } else {
-                                                AppUtil.showToast("Unable to logout.");
-                                            }
+                                        } else {
+                                            AppUtil.showToast("Unable to logout.");
                                         }
-                                    });
-                        } else {
-                            AppUtil.showToast(R.string.no_internet);
-                        }
+                                    }
+                                });
+                    } else {
+                        AppUtil.showToast(R.string.no_internet);
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
+                .setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss());
         logoutBuilder.create().show();
     }
 

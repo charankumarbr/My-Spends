@@ -8,9 +8,8 @@ import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.crashlytics.android.Crashlytics;
-
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.util.AppCrashLogger;
 
 /**
  * Created by Charan.Br on 2/28/2017.
@@ -49,7 +48,7 @@ public final class CustomTextView extends AppCompatTextView {
                 setTypeface(FontCache.getFont(getContext(), fontName, textStyle));
 
             } catch (Resources.NotFoundException e) {
-                Crashlytics.logException(e);
+                AppCrashLogger.INSTANCE.reportException(e);
             }
 
             typedArray.recycle();

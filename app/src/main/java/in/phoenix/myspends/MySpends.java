@@ -6,9 +6,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -67,7 +68,10 @@ public class MySpends extends Application {
                 System.currentTimeMillis());
         AppPref.getInstance().incrementAppOpenCount();
         if (AppUtil.isUserLoggedIn()) {
-            Crashlytics.setUserIdentifier(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            String firebaseUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            if (!TextUtils.isEmpty(firebaseUserId)) {
+                FirebaseCrashlytics.getInstance().setUserId(firebaseUserId);
+            }
             //FirebaseDB.initDb().addACategory();
             fetchPaymentTypes();
             fetchCategories();

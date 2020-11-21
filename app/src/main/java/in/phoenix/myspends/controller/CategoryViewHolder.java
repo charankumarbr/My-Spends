@@ -15,15 +15,15 @@ import in.phoenix.myspends.util.AppUtil;
 
 public final class CategoryViewHolder extends GroupViewHolder {
 
-    private TextView tvTotal;
-    private TextView tvGrandTotal;
+    private final TextView tvTotal;
+    private final TextView tvGrandTotal;
 
-    private TextView tvCategoryName;
-    private TextView tvCategoryTotal;
-    private View vSpendPercentage;
-    private TextView tvCategoryPercentage;
+    private final TextView tvCategoryName;
+    private final TextView tvCategoryTotal;
+    private final View vSpendPercentage;
+    private final TextView tvCategoryPercentage;
 
-    private String mCurrencySymbol;
+    private final String mCurrencySymbol;
     private Float mPixel1Percent = 0F;
 
     public CategoryViewHolder(View groupView, int pixelHundredPercent, String currencySymbol) {

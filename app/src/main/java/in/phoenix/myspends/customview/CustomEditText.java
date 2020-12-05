@@ -12,10 +12,10 @@ import android.view.inputmethod.InputConnection;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.android.material.textfield.TextInputLayout;
 
 import in.phoenix.myspends.R;
+import in.phoenix.myspends.util.AppCrashLogger;
 
 /**
  * Created by Charan.Br on 6/28/2018.
@@ -55,7 +55,7 @@ public final class CustomEditText extends AppCompatEditText {
                 setTypeface(FontCache.getFont(getContext(), fontName, textStyle));
 
             } catch (Resources.NotFoundException e) {
-                Crashlytics.logException(e);
+                AppCrashLogger.INSTANCE.reportException(e);
             }
 
             typedArray.recycle();

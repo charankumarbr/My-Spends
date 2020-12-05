@@ -32,8 +32,7 @@ public final class FSSpendsParser extends AsyncTask<Iterator<QueryDocumentSnapsh
 
         if (null != iterators && iterators.length > 0) {
 
-            for (int index = 0; index < iterators.length; index++) {
-                Iterator<QueryDocumentSnapshot> documentSnapshots = iterators[index];
+            for (Iterator<QueryDocumentSnapshot> documentSnapshots : iterators) {
                 if (null != documentSnapshots) {
                     while (documentSnapshots.hasNext()) {
                         DocumentSnapshot documentSnapshot = documentSnapshots.next();

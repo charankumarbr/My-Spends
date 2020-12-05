@@ -20,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
@@ -37,6 +36,7 @@ import in.phoenix.myspends.database.FirebaseDB;
 import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.ui.dialog.AppDialog;
 import in.phoenix.myspends.util.AppConstants;
+import in.phoenix.myspends.util.AppCrashLogger;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 import in.phoenix.myspends.util.KotUtil;
@@ -92,7 +92,7 @@ public class AppSetupActivity extends BaseActivity {
         aasEtSearch.addTextChangedListener(textWatcher);
     }
 
-    private TextWatcher textWatcher = new TextWatcher() {
+    private final TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -137,11 +137,12 @@ public class AppSetupActivity extends BaseActivity {
                 currencyHandler.sendEmptyMessage(AppConstants.CURRENCY_HANDLER_SUCCESS);
 
             } catch (IOException e) {
-                Crashlytics.logException(e);
+                AppCrashLogger.INSTANCE.reportException(e);
                 e.printStackTrace();
                 currencyHandler.sendEmptyMessage(AppConstants.CURRENCY_HANDLER_FAILURE);
+
             } catch (JSONException e) {
-                Crashlytics.logException(e);
+                AppCrashLogger.INSTANCE.reportException(e);
                 e.printStackTrace();
                 currencyHandler.sendEmptyMessage(AppConstants.CURRENCY_HANDLER_FAILURE);
             }

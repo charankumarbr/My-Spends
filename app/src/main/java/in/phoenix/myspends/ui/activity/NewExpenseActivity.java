@@ -27,7 +27,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -53,6 +52,7 @@ import in.phoenix.myspends.ui.dialog.AppDialog;
 import in.phoenix.myspends.ui.fragment.AddPaymentTypeFragment;
 import in.phoenix.myspends.util.AppAnalytics;
 import in.phoenix.myspends.util.AppConstants;
+import in.phoenix.myspends.util.AppCrashLogger;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
@@ -453,7 +453,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                             AppDialog.dismissDialog();
                             AppUtil.showSnackbar(mViewComplete, "Could not add this Expense!");
                             AppLog.d("NewExpense", "OnFailure: Exception", e);
-                            Crashlytics.logException(e);
+                            AppCrashLogger.INSTANCE.reportException(e);
                         }
                     });
 
@@ -558,7 +558,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
             }
         } catch (NumberFormatException e) {
             AppUtil.showSnackbar(mViewComplete, "Amount can be only number!!");
-            Crashlytics.logException(e);
+            AppCrashLogger.INSTANCE.reportException(e);
             return false;
         }
 

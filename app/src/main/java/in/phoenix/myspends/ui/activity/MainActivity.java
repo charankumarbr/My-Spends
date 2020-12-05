@@ -151,7 +151,9 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
     @Override
     protected void onResume() {
         super.onResume();
-        toolbar.setSubtitle(AppUtil.getGreeting() + AppUtil.getUserShortName());
+        if (toolbar != null) {
+            toolbar.setSubtitle(AppUtil.getGreeting() + AppUtil.getUserShortName());
+        }
     }
 
     private void getExpenses() {
@@ -312,6 +314,10 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             startActivity(new Intent(MainActivity.this, MessageBoardActivity.class));
             return true;
 
+        } else if (item.getItemId() == R.id.menu_whatsapp) {
+            startActivity(new Intent(MainActivity.this, WhatsAppTextActivity.class));
+            return true;
+
         }/* else if (item.getItemId() == R.id.menu_ui_mode) {
             //changeUiMode(newConfig);
             return true;
@@ -342,40 +348,32 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
         AlertDialog.Builder logoutBuilder = new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Confirm Logout")
                 .setMessage("Are you sure you want to logout?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                        if (AppUtil.isConnected()) {
-                            AuthUI.getInstance()
-                                    .signOut(MainActivity.this)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                AppPref.getInstance().clearAll();
-                                                AppUtil.removeDynamicShortcut();
-                                                Intent newIntent = new Intent(MainActivity.this, LaunchDeciderActivity.class);
-                                                newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                startActivity(newIntent);
-                                                finish();
+                .setPositiveButton("Yes", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    if (AppUtil.isConnected()) {
+                        AuthUI.getInstance()
+                                .signOut(MainActivity.this)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            AppPref.getInstance().clearAll();
+                                            AppUtil.removeDynamicShortcut();
+                                            Intent newIntent = new Intent(MainActivity.this, LaunchDeciderActivity.class);
+                                            newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(newIntent);
+                                            finish();
 
-                                            } else {
-                                                AppUtil.showToast("Unable to logout.");
-                                            }
+                                        } else {
+                                            AppUtil.showToast("Unable to logout.");
                                         }
-                                    });
-                        } else {
-                            AppUtil.showToast(R.string.no_internet);
-                        }
+                                    }
+                                });
+                    } else {
+                        AppUtil.showToast(R.string.no_internet);
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
+                .setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss());
         logoutBuilder.create().show();
     }
 
@@ -406,7 +404,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             }
         });
 
-        aboutappDialog.setNegativeButton(getString(R.string.contact_us), (dialog, which) -> {
+        /*aboutappDialog.setNegativeButton(getString(R.string.contact_us), (dialog, which) -> {
             dialog.dismiss();
             Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + Uri.encode("phoenix.apps.in@gmail.com")));
             //intent.setType("text/plain");
@@ -415,6 +413,18 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             Intent mailer = Intent.createChooser(intent, null);
             startActivity(Intent.createChooser(mailer, "Send email via..."));
             //startActivity(intent);
+        });*/
+
+        aboutappDialog.setNegativeButton(getString(R.string.shout_out), (dialog, which) -> {
+            dialog.dismiss();
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "My Spends - Your Expense Tracker.");
+            intent.putExtra(Intent.EXTRA_TEXT, "My Spends app is an unique expense tracker, " +
+                    "which does not read your messages, emails or notifications.\n\n" +
+                    "Go ahead and start tracking your expenses.\n\nAvailable on android:\n" +
+                    "https://play.google.com/store/apps/details?id=in.phoenix.myspends");
+            startActivity(Intent.createChooser(intent, "Shout - My Spends"));
         });
 
         if (!isFinishing()) {

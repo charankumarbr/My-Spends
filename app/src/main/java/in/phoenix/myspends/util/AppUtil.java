@@ -5,6 +5,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
@@ -41,6 +43,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.UnknownFormatConversionException;
 import java.util.concurrent.TimeUnit;
@@ -54,6 +57,8 @@ import in.phoenix.myspends.model.PaymentMode;
 import in.phoenix.myspends.model.PaymentType;
 import in.phoenix.myspends.ui.activity.LaunchDeciderActivity;
 import in.phoenix.myspends.ui.activity.NewExpenseActivity;
+
+import static android.content.pm.PackageManager.GET_META_DATA;
 
 /**
  * Created by Charan.Br on 2/10/2017.
@@ -607,6 +612,22 @@ public final class AppUtil {
                 return MySpends.APP_CONTEXT.getResources().getColor(R.color.light_colorAccent);
             }
         }
+    }
+
+    public static boolean isWhatsAppInstalled(PackageManager packageManager) {
+        if (packageManager == null) {
+            return false;
+        }
+
+        List<ApplicationInfo> installedApps = packageManager.getInstalledApplications(GET_META_DATA);
+        if (!installedApps.isEmpty()) {
+            for (ApplicationInfo applicationInfo : installedApps) {
+                if (WhatsAppUtil.INSTANCE.isWhatsApp(applicationInfo.packageName)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /*private void printHashKey() {

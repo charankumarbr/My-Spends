@@ -49,11 +49,6 @@ import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 
-//import javax.inject.Inject;
-/*import in.phoenix.myspends.components.DaggerMainScreenComponent;
-import in.phoenix.myspends.components.MainScreenComponent;*/
-//import in.phoenix.myspends.modules.MainScreenModule;
-
 public class MainActivity extends BaseActivity implements SpendsParser.SpendsParserListener,
         NewExpenseAdapter.OnLoadingListener, AppRateFragment.OnAppRateActionListener {
 
@@ -574,11 +569,6 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
     private void setSpends(ArrayList<NewExpense> spends) {
         if (null == mExpenseAdapter) {
-            /*MainScreenComponent mainScreenComponent = DaggerMainScreenComponent
-                    .builder()
-                    .mainScreenModule(new MainScreenModule(MainActivity.this, spends, clickListener))
-                    .build();
-            mainScreenComponent.inject(MainActivity.this);*/
             mExpenseAdapter = new NewExpenseAdapter(MainActivity.this, spends, clickListener);
             mLvExpense.setAdapter(mExpenseAdapter);
 

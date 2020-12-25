@@ -41,14 +41,6 @@ import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 import in.phoenix.myspends.util.KotUtil;
 
-//import javax.inject.Inject;
-/*import in.phoenix.myspends.components.AppSetupComponent;
-import in.phoenix.myspends.components.DaggerAppSetupComponent;
-import in.phoenix.myspends.components.DaggerMySpendsComponent;
-import in.phoenix.myspends.components.MySpendsComponent;*/
-/*import in.phoenix.myspends.modules.AppSetupModule;
-import in.phoenix.myspends.modules.ContextModule;*/
-
 /**
  * Created by Charan.Br on 4/10/2017.
  */
@@ -169,16 +161,9 @@ public class AppSetupActivity extends BaseActivity {
         if (status && null != mCurrencies && mCurrencies.size() > 0) {
 
             mAdapter = new CurrencyListAdapter(AppSetupActivity.this, mCurrencies);
-            /*AppSetupComponent appSetupComponent = DaggerAppSetupComponent.builder()
-                    .appSetupModule(new AppSetupModule(AppSetupActivity.this, mCurrencies))
-                    .build();
-            appSetupComponent.inject(AppSetupActivity.this);*/
-
             mLvCurrencies.setVisibility(View.VISIBLE);
             mCTvStatus.setVisibility(View.GONE);
-            //mAdapter = new CurrencyListAdapter(AppSetupActivity.this);
             if (mAdapter != null) {
-                //mAdapter.setCurrencies(mCurrencies);
                 mLvCurrencies.setAdapter(mAdapter);
             }
             mLvCurrencies.setOnItemClickListener(currencyClickListener);
@@ -217,8 +202,6 @@ public class AppSetupActivity extends BaseActivity {
                 FirebaseDB.initDb().setCurrency(selectedCurrency, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                        /*MySpendsComponent mySpendsComponent = DaggerMySpendsComponent.builder().contextModule
-                                (new ContextModule(AppSetupActivity.this)).build();*/
                         if (null == databaseError) {
                             AppPref.getInstance()
                                     .putString(AppConstants.PrefConstants.CURRENCY, selectedCurrency.getCurrencySymbol());

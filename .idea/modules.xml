@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ExpandableRecyclerview/ExpandableRecyclerview.iml" filepath="$PROJECT_DIR$/ExpandableRecyclerview/ExpandableRecyclerview.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/apps-my-spends.iml" filepath="$PROJECT_DIR$/apps-my-spends.iml" group="my-spends" />
-      <module fileurl="file://$PROJECT_DIR$/expense-tracker.iml" filepath="$PROJECT_DIR$/expense-tracker.iml" />
-      <module fileurl="file://$PROJECT_DIR$/my-spends.iml" filepath="$PROJECT_DIR$/my-spends.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ExpandableRecyclerview/my-spends-ExpandableRecyclerview.iml" filepath="$PROJECT_DIR$/ExpandableRecyclerview/my-spends-ExpandableRecyclerview.iml" group="my-spends/ExpandableRecyclerview" />
-      <module fileurl="file://$PROJECT_DIR$/app/my-spends-app.iml" filepath="$PROJECT_DIR$/app/my-spends-app.iml" group="my-spends/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/my-spends.iml" filepath="$PROJECT_DIR$/.idea/modules/my-spends.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ExpandableRecyclerview/my-spends.ExpandableRecyclerview.iml" filepath="$PROJECT_DIR$/.idea/modules/ExpandableRecyclerview/my-spends.ExpandableRecyclerview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/my-spends.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/my-spends.app.iml" />
     </modules>
   </component>
 </project>

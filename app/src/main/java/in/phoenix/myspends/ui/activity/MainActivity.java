@@ -29,6 +29,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -44,6 +47,7 @@ import in.phoenix.myspends.parser.FSSpendsParser;
 import in.phoenix.myspends.parser.SpendsParser;
 import in.phoenix.myspends.ui.fragment.AppRateFragment;
 import in.phoenix.myspends.ui.fragment.AppRateFragmentKt;
+import in.phoenix.myspends.util.AppAnalytics;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
@@ -563,8 +567,39 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
     private void checkAppRateDialog() {
         if (!isFinishing() && AppUtil.canRateDialogShow()) {
-            getSupportFragmentManager().beginTransaction().add(AppRateFragment.newInstance(), "AppRate").commitAllowingStateLoss();
+            /*getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(AppRateFragment.newInstance(), "AppRate")
+                    .commitAllowingStateLoss();*/
+            checkForReviewApi();
         }
+    }
+
+    private void checkForReviewApi() {
+        ReviewManager reviewManager = ReviewManagerFactory.create(MainActivity.this);
+        com.google.android.play.core.tasks.Task<ReviewInfo> request = reviewManager.requestReviewFlow();
+        request.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                //-- Can get the ReviewInfo object and continue ahead --//
+                ReviewInfo reviewInfo = task.getResult();
+                launchReviewFlow(reviewManager, reviewInfo);
+            } else {
+                //-- There was some problem, continue regardless of the result. --//
+            }
+        });
+    }
+
+    private void launchReviewFlow(ReviewManager reviewManager, ReviewInfo reviewInfo) {
+        com.google.android.play.core.tasks.Task<Void> reviewFlow = reviewManager.launchReviewFlow(MainActivity.this, reviewInfo);
+        reviewFlow.addOnCompleteListener(task -> {
+            // The flow has finished. The API does not indicate whether the user
+            // reviewed or not, or even whether the review dialog was shown. Thus, no
+            // matter the result, we continue our app flow.
+            boolean isSuccess = task.isSuccessful();
+            Bundle eventBundle = new Bundle();
+            eventBundle.putBoolean("is_success", isSuccess);
+            AppAnalytics.init().logEvent("in_app_review", eventBundle);
+        });
     }
 
     private void setSpends(ArrayList<NewExpense> spends) {

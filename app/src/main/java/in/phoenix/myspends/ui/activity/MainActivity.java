@@ -60,8 +60,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
     private ListView mLvExpense;
 
-    //@Inject
-    NewExpenseAdapter mExpenseAdapter;
+    private NewExpenseAdapter mExpenseAdapter;
 
     private ProgressBar mPbLoading;
 
@@ -76,8 +75,6 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
     private boolean mIsExitFlag = true;
     private Toolbar toolbar;
-
-    //private BottomAppBar bottomAppBar;
 
     private FloatingActionButton fabAddNew;
 
@@ -109,16 +106,6 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
             toolbar.setTitle(getString(R.string.app_name));
             setSupportActionBar(toolbar);
-            //bottomAppBar = findViewById(R.id.am_bab);
-            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                bottomAppBar.setTitleTextColor(getResources().getColor(R.color.colorPrimary, null));
-                bottomAppBar.setSubtitleTextColor(getResources().getColor(R.color.secondary_text, null));
-            } else {
-                bottomAppBar.setTitleTextColor(getResources().getColor(R.color.colorPrimary));
-                bottomAppBar.setSubtitleTextColor(getResources().getColor(R.color.secondary_text));
-            }
-            bottomAppBar.setTitle(getString(R.string.app_name));
-            setSupportActionBar(bottomAppBar);*/
 
             mCalendarExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());
 

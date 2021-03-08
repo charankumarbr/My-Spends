@@ -1,7 +1,7 @@
 package `in`.phoenix.myspends.util
 
 import `in`.phoenix.myspends.model.Currency
-import org.jetbrains.annotations.NotNull
+import androidx.annotation.NonNull
 import java.util.*
 
 /**
@@ -10,7 +10,7 @@ import java.util.*
 object KotUtil {
 
     @JvmStatic
-    fun filterCurrency(searchTerm: @NotNull String, allCurrencies: ArrayList<Currency>?):
+    fun filterCurrency(@NonNull searchTerm: String, allCurrencies: ArrayList<Currency>?):
             ArrayList<Currency>? {
         return if (allCurrencies != null) {
             val searchTermInLower = searchTerm.toLowerCase()

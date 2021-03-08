@@ -7,6 +7,9 @@ import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Parcelable
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -14,7 +17,7 @@ import android.os.Parcelable
  */
 object WhatsAppUtil {
 
-    private val ALLOWED_PACKAGE_NAMES = arrayOf("com.whatsapp","com.whatsapp.w4b")
+    private val ALLOWED_PACKAGE_NAMES = arrayOf("com.whatsapp", "com.whatsapp.w4b")
 
     fun generateCustomChooserIntent(context: Context, codeAndNumber: String?): Intent? {
 
@@ -74,6 +77,11 @@ object WhatsAppUtil {
 
     fun isWhatsApp(packageName: String): Boolean {
         return ALLOWED_PACKAGE_NAMES.contains(packageName)
+    }
+
+    fun entryTimeStamp(): String {
+        val simpleDateFormat = SimpleDateFormat("EEE, dd MMM hh:mm a", Locale.ENGLISH)
+        return simpleDateFormat.format(Date())
     }
 
 }

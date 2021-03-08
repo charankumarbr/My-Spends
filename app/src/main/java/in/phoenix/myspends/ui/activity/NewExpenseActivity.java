@@ -22,12 +22,10 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
@@ -436,6 +434,7 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                             eventBundle.putInt("category_id", newExpense.getCategoryId());
                             AppAnalytics.init().logEvent("added_expense", eventBundle);
 
+                            AppPref.getInstance().putInt(AppConstants.PrefConstants.SPENDS_ADDED, 1);
                             if (!mCbAddAnotherExpense.isChecked()) {
                                 AppUtil.toggleKeyboard(mViewComplete, false);
                                 /*setResult(RESULT_OK);
@@ -446,15 +445,12 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                                 resetAll();
                             }
                         }
-                    }, new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            //mPbLoading.setVisibility(View.GONE);
-                            AppDialog.dismissDialog();
-                            AppUtil.showSnackbar(mViewComplete, "Could not add this Expense!");
-                            AppLog.d("NewExpense", "OnFailure: Exception", e);
-                            AppCrashLogger.INSTANCE.reportException(e);
-                        }
+                    }, e -> {
+                        //mPbLoading.setVisibility(View.GONE);
+                        AppDialog.dismissDialog();
+                        AppUtil.showSnackbar(mViewComplete, "Could not add this Expense!");
+                        AppLog.d("NewExpense", "OnFailure: Exception", e);
+                        AppCrashLogger.INSTANCE.reportException(e);
                     });
 
                 } else {
@@ -515,21 +511,20 @@ public final class NewExpenseActivity extends BaseActivity implements AddPayment
                             AppUtil.showToast("Updated.");
                             AppUtil.toggleKeyboard(mViewComplete, false);
                             mOkStatus = RESULT_OK;
+
+                            AppPref.getInstance().putInt(AppConstants.PrefConstants.SPENDS_ADDED, 1);
+
                             Intent backIntent = new Intent();
                             backIntent.putExtra(AppConstants.Bundle.EXPENSE, mExpense);
                             setResult(RESULT_OK, backIntent);
                             finish();
-
                         }
-                    }, new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            //mPbLoading.setVisibility(View.GONE);
-                            AppDialog.dismissDialog();
-                            AppLog.d("NewExpense", "Edit: onFailure");
-                            AppUtil.showToast("Unable to update.");
-                            AppUtil.toggleKeyboard(mViewComplete, false);
-                        }
+                    }, e -> {
+                        //mPbLoading.setVisibility(View.GONE);
+                        AppDialog.dismissDialog();
+                        AppLog.d("NewExpense", "Edit: onFailure");
+                        AppUtil.showToast("Unable to update.");
+                        AppUtil.toggleKeyboard(mViewComplete, false);
                     });
                 }
             }

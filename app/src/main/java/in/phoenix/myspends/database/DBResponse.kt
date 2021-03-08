@@ -5,9 +5,7 @@ package `in`.phoenix.myspends.database
  */
 sealed class DBResponse<T> {
 
-    data class Success<T>(val data: T): DBResponse<T>() {
-
-    }
+    data class Success<T>(val data: T): DBResponse<T>()
 
     data class Failed<Nothing>(val message: String): DBResponse<Nothing>()
 

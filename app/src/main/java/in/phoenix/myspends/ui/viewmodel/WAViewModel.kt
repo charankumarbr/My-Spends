@@ -6,11 +6,16 @@ import `in`.phoenix.myspends.repo.WARepository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 /**
  * Created by Charan on March 07, 2021
  */
 class WAViewModel: ViewModel() {
+
+    private val disposable: CompositeDisposable by lazy {
+        CompositeDisposable()
+    }
 
     private val _waEntries: MutableLiveData<DBResponse<List<WAEntity>>> by lazy {
         MutableLiveData<DBResponse<List<WAEntity>>>()
@@ -18,7 +23,7 @@ class WAViewModel: ViewModel() {
     val observeWAEntries: LiveData<DBResponse<List<WAEntity>>> by lazy { _waEntries }
 
     fun getAllWAEntries() {
-        WARepository.getWhatsAppEntries(_waEntries)
+        disposable.add(WARepository.getWhatsAppEntries(_waEntries))
     }
 
     private val _waAddEntry: MutableLiveData<DBResponse<WAEntity>> by lazy {
@@ -27,19 +32,26 @@ class WAViewModel: ViewModel() {
     val observeWAAddEntry: LiveData<DBResponse<WAEntity>> by lazy { _waAddEntry }
 
     fun saveWAEntry(code: String, mobileNumber: String) {
-        WARepository.addEntry(code, mobileNumber, _waAddEntry)
+        disposable.add(WARepository.addEntry(code, mobileNumber, _waAddEntry))
     }
 
     private val _waDeleteEntry: MutableLiveData<DBResponse<Int>> by lazy {
         MutableLiveData<DBResponse<Int>>()
     }
     val observeWADeleteEntry: LiveData<DBResponse<Int>> by lazy { _waDeleteEntry }
+
     fun deleteEntry(waEntity: WAEntity, position: Int) {
-        WARepository.deleteEntry(waEntity, position, _waDeleteEntry)
+        disposable.add(WARepository.deleteEntry(waEntity, position, _waDeleteEntry))
     }
 
     override fun onCleared() {
         super.onCleared()
-        WARepository.dispose()
+        dispose()
+    }
+
+    private fun dispose() {
+        if (!disposable.isDisposed) {
+            disposable.dispose()
+        }
     }
 }

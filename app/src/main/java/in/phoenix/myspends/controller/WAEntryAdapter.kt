@@ -28,8 +28,14 @@ class WAEntryAdapter(private val entries: MutableList<WAEntity>,
     }
 
     fun addNewEntry(newEntry: WAEntity) {
-        entries.add(0, newEntry)
-        notifyDataSetChanged()
+        val isExisting = entries.find {
+            it.code == newEntry.code && it.number == newEntry.number
+        }
+
+        if (isExisting == null) {
+            entries.add(0, newEntry)
+            notifyDataSetChanged()
+        }
     }
 
     fun deleteEntryAtPosition(position: Int): Boolean {

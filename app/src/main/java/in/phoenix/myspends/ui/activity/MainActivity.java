@@ -572,6 +572,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
                 launchReviewFlow(reviewManager, reviewInfo);
             } else {
                 //-- There was some problem, continue regardless of the result. --//
+                onAppRateAction(AppRateFragmentKt.ACTION_LATER);
             }
         });
     }
@@ -583,9 +584,19 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             // reviewed or not, or even whether the review dialog was shown. Thus, no
             // matter the result, we continue our app flow.
             boolean isSuccess = task.isSuccessful();
+            boolean isComplete = task.isComplete();
+            Exception exception = task.getException();
+
             Bundle eventBundle = new Bundle();
-            eventBundle.putBoolean("success", isSuccess);
+            eventBundle.putBoolean("is_success", isSuccess);
+            eventBundle.putBoolean("is_complete", isComplete);
+            if (exception != null) {
+                eventBundle.putString("exception", exception.getMessage());
+            } else {
+                eventBundle.putString("exception", "N/A");
+            }
             AppAnalytics.init().logEvent("in_app_review", eventBundle);
+            onAppRateAction(AppRateFragmentKt.ACTION_LATER);
         });
     }
 

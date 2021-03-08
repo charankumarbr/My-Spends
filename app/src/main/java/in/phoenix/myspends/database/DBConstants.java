@@ -6,6 +6,10 @@ package in.phoenix.myspends.database;
 
 public interface DBConstants {
 
+    String DB_NAME = "in_phoenix_myspends.db";
+
+    int MAX_WA_ENTRY = 20;
+
     /*String DB_NAME = "in_phoenix_myspends.db";
 
     int DB_VERSION = 1;

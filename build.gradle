@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.4.30'
 
     repositories {
         /*maven {
@@ -39,12 +39,12 @@ allprojects {
 ext {
     supportLibraryVersion = '28.0.0'
     flexboxVersion = '0.2.5'
-    firebaseCoreVersion = "18.0.0"
+    firebaseCoreVersion = "18.0.2"
     firebaseUIAuthVersion = "6.4.0"
-    firebaseDBVersion = "19.5.1"
-    firebaseFirestoreVersion = "22.0.0"
-    firebasePerfVersion = "19.0.10"
-    gmsVersion = "15.0.1"
+    firebaseDBVersion = "19.6.0"
+    firebaseFirestoreVersion = "22.1.1"
+    firebasePerfVersion = "19.1.1"
+    gmsVersion = "19.0.0"
     archVersion = '1.0.0'
     junitVersion = '4.12'
     mockitoVersion = '1.10.19'
@@ -54,6 +54,7 @@ ext {
     //daggerVersion = '2.20'
     timberVersion = '4.7.1'
     constraintLayoutVersion = '2.0.4'
+    roomVersion = '2.3.0-beta02'
 }
 
 task clean(type: Delete) {

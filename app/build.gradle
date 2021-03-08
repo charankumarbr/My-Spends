@@ -153,4 +153,10 @@ dependencies {
     //-- viewmodel --//
     implementation "androidx.activity:activity-ktx:1.2.0"
     kapt "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0"
+
+    //-- play core --//
+    def play_core = "1.9.0"
+    implementation "com.google.android.play:core:$play_core"
+    //Kotlin extensions library for Play Core
+    //implementation "com.google.android.play:core-ktx:$play_core"
 }

@@ -188,6 +188,7 @@ class WhatsAppTextActivity : BaseActivity(), WAEntryListener {
             waIntent?.let {
                 FirebaseAnalytics.getInstance(MySpends.APP_CONTEXT)
                         .logEvent("wa_clicked", Bundle().apply {
+                            putString("code", code.reversed())
                             putString("mn", mobileNumber.reversed())
                         })
                 startActivity(waIntent)
@@ -215,6 +216,11 @@ class WhatsAppTextActivity : BaseActivity(), WAEntryListener {
 
     override fun onDelete(waEntity: WAEntity, position: Int) {
         waViewModel.deleteEntry(waEntity, position)
+        FirebaseAnalytics.getInstance(MySpends.APP_CONTEXT)
+                .logEvent("delete_clicked", Bundle().apply {
+                    putString("code", waEntity.code.reversed())
+                    putString("mn", waEntity.number.reversed())
+                })
     }
 
     override fun onDial(waEntity: WAEntity, position: Int) {
@@ -223,6 +229,7 @@ class WhatsAppTextActivity : BaseActivity(), WAEntryListener {
             intent.data = Uri.parse("tel:${waEntity.code}${waEntity.number}")
             FirebaseAnalytics.getInstance(MySpends.APP_CONTEXT)
                     .logEvent("dial_clicked", Bundle().apply {
+                        putString("code", waEntity.code.reversed())
                         putString("mn", waEntity.number.reversed())
                     })
             startActivity(intent)

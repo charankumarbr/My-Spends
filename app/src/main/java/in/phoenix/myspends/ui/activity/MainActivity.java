@@ -584,7 +584,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
             // matter the result, we continue our app flow.
             boolean isSuccess = task.isSuccessful();
             Bundle eventBundle = new Bundle();
-            eventBundle.putBoolean("is_success", isSuccess);
+            eventBundle.putBoolean("success", isSuccess);
             AppAnalytics.init().logEvent("in_app_review", eventBundle);
         });
     }

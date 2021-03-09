@@ -30,10 +30,6 @@ import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
 import timber.log.Timber;
 
-/*import in.phoenix.myspends.components.DaggerMySpendsComponent;
-import in.phoenix.myspends.components.MySpendsComponent;*/
-//import in.phoenix.myspends.modules.ContextModule;
-
 /**
  * Created by Charan.Br on 2/11/2017.
  */
@@ -48,17 +44,10 @@ public class MySpends extends Application {
     private static ArrayList<Category> mAllCategories;
     private static HashMap<Integer, String> mMapAllCategories;
 
-    //private MySpendsComponent mySpendsComponent;
-
     @Override
     public void onCreate() {
         super.onCreate();
         APP_CONTEXT = this;
-
-        /*mySpendsComponent = DaggerMySpendsComponent
-                .builder()
-                .contextModule(new ContextModule(APP_CONTEXT))
-                .build();*/
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="4dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardElevation="2dp"
+    android:layout_marginStart="6dp"
+    android:layout_marginEnd="6dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="12dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/lweiTvCodeNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:textSize="17sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:fontFamily="@font/source_sans_pro_bold"
+            android:textColor="@color/light_primary_text"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/lweiTvAddedOn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lweiTvCodeNumber"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:textSize="15sp"
+            android:maxLines="1"
+            app:fontFamily="@font/source_sans_pro"
+            android:textColor="@color/light_primary_text"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/lweiTvAddedOn"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/lweiIvDial"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_call_black_24"
+                android:layout_marginEnd="12dp"/>
+
+            <ImageView
+                android:id="@+id/lweiIvWA"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_whatsapp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/lweiIvDelete"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_delete_red_24"
+            app:layout_constraintTop_toBottomOf="@id/lweiTvAddedOn"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

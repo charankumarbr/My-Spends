@@ -10,13 +10,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import in.phoenix.myspends.MySpends;
 import in.phoenix.myspends.R;
 import in.phoenix.myspends.model.Currency;
 import in.phoenix.myspends.ui.activity.AppSetupActivity;
 import in.phoenix.myspends.util.AppUtil;
-
-//import javax.inject.Inject;
 
 /**
  * Created by Charan.Br on 4/10/2017.
@@ -31,12 +31,12 @@ public final class CurrencyListAdapter extends BaseAdapter {
     private int mSelectedPosition = -1;
     private Currency mSelectedCurrency = null;
 
-    /*@Inject
+    @Inject
     public CurrencyListAdapter(AppSetupActivity context) {
         mContext = context;
-    }*/
+    }
 
-    //@Inject
+    @Inject
     public CurrencyListAdapter(AppSetupActivity context, ArrayList<Currency> currencies) {
         mContext = context;
         mCurrencies = currencies;

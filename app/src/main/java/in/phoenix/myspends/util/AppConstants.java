@@ -40,6 +40,7 @@ public interface AppConstants {
         String LAST_APP_OPENED_ON = "lastAppOpenedOn";
         String LAUNCH_COUNT = "launchCount";
         String NIGHT_MODE = "nightMode";
+        String SPENDS_ADDED = "spendsAdded";
     }
 
     int PAGE_SPENDS_SIZE = 30;
@@ -68,5 +69,5 @@ public interface AppConstants {
     int ACTION_SPEND_DELETE = 339;
     int ACTION_SPEND_EDIT = 338;
 
-    int APP_RATE_FREQUENCY = 3;
+    int APP_RATE_FREQUENCY = 2;
 }

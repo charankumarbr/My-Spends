@@ -29,6 +29,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -44,15 +47,11 @@ import in.phoenix.myspends.parser.FSSpendsParser;
 import in.phoenix.myspends.parser.SpendsParser;
 import in.phoenix.myspends.ui.fragment.AppRateFragment;
 import in.phoenix.myspends.ui.fragment.AppRateFragmentKt;
+import in.phoenix.myspends.util.AppAnalytics;
 import in.phoenix.myspends.util.AppConstants;
 import in.phoenix.myspends.util.AppLog;
 import in.phoenix.myspends.util.AppPref;
 import in.phoenix.myspends.util.AppUtil;
-
-//import javax.inject.Inject;
-/*import in.phoenix.myspends.components.DaggerMainScreenComponent;
-import in.phoenix.myspends.components.MainScreenComponent;*/
-//import in.phoenix.myspends.modules.MainScreenModule;
 
 public class MainActivity extends BaseActivity implements SpendsParser.SpendsParserListener,
         NewExpenseAdapter.OnLoadingListener, AppRateFragment.OnAppRateActionListener {
@@ -61,8 +60,7 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
     private ListView mLvExpense;
 
-    //@Inject
-    NewExpenseAdapter mExpenseAdapter;
+    private NewExpenseAdapter mExpenseAdapter;
 
     private ProgressBar mPbLoading;
 
@@ -77,8 +75,6 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
     private boolean mIsExitFlag = true;
     private Toolbar toolbar;
-
-    //private BottomAppBar bottomAppBar;
 
     private FloatingActionButton fabAddNew;
 
@@ -110,16 +106,6 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
             toolbar.setTitle(getString(R.string.app_name));
             setSupportActionBar(toolbar);
-            //bottomAppBar = findViewById(R.id.am_bab);
-            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                bottomAppBar.setTitleTextColor(getResources().getColor(R.color.colorPrimary, null));
-                bottomAppBar.setSubtitleTextColor(getResources().getColor(R.color.secondary_text, null));
-            } else {
-                bottomAppBar.setTitleTextColor(getResources().getColor(R.color.colorPrimary));
-                bottomAppBar.setSubtitleTextColor(getResources().getColor(R.color.secondary_text));
-            }
-            bottomAppBar.setTitle(getString(R.string.app_name));
-            setSupportActionBar(bottomAppBar);*/
 
             mCalendarExpenseDate = AppUtil.convertToDate(System.currentTimeMillis());
 
@@ -568,17 +554,54 @@ public class MainActivity extends BaseActivity implements SpendsParser.SpendsPar
 
     private void checkAppRateDialog() {
         if (!isFinishing() && AppUtil.canRateDialogShow()) {
-            getSupportFragmentManager().beginTransaction().add(AppRateFragment.newInstance(), "AppRate").commitAllowingStateLoss();
+            /*getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(AppRateFragment.newInstance(), "AppRate")
+                    .commitAllowingStateLoss();*/
+            checkForReviewApi();
         }
+    }
+
+    private void checkForReviewApi() {
+        ReviewManager reviewManager = ReviewManagerFactory.create(MainActivity.this);
+        com.google.android.play.core.tasks.Task<ReviewInfo> request = reviewManager.requestReviewFlow();
+        request.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                //-- Can get the ReviewInfo object and continue ahead --//
+                ReviewInfo reviewInfo = task.getResult();
+                launchReviewFlow(reviewManager, reviewInfo);
+            } else {
+                //-- There was some problem, continue regardless of the result. --//
+                onAppRateAction(AppRateFragmentKt.ACTION_LATER);
+            }
+        });
+    }
+
+    private void launchReviewFlow(ReviewManager reviewManager, ReviewInfo reviewInfo) {
+        com.google.android.play.core.tasks.Task<Void> reviewFlow = reviewManager.launchReviewFlow(MainActivity.this, reviewInfo);
+        reviewFlow.addOnCompleteListener(task -> {
+            // The flow has finished. The API does not indicate whether the user
+            // reviewed or not, or even whether the review dialog was shown. Thus, no
+            // matter the result, we continue our app flow.
+            boolean isSuccess = task.isSuccessful();
+            boolean isComplete = task.isComplete();
+            Exception exception = task.getException();
+
+            Bundle eventBundle = new Bundle();
+            eventBundle.putBoolean("is_success", isSuccess);
+            eventBundle.putBoolean("is_complete", isComplete);
+            if (exception != null) {
+                eventBundle.putString("exception", exception.getMessage());
+            } else {
+                eventBundle.putString("exception", "N/A");
+            }
+            AppAnalytics.init().logEvent("in_app_review", eventBundle);
+            onAppRateAction(AppRateFragmentKt.ACTION_LATER);
+        });
     }
 
     private void setSpends(ArrayList<NewExpense> spends) {
         if (null == mExpenseAdapter) {
-            /*MainScreenComponent mainScreenComponent = DaggerMainScreenComponent
-                    .builder()
-                    .mainScreenModule(new MainScreenModule(MainActivity.this, spends, clickListener))
-                    .build();
-            mainScreenComponent.inject(MainActivity.this);*/
             mExpenseAdapter = new NewExpenseAdapter(MainActivity.this, spends, clickListener);
             mLvExpense.setAdapter(mExpenseAdapter);
 

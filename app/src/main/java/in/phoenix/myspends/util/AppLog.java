@@ -17,7 +17,7 @@ public final class AppLog {
         }
     }
 
-    public static void d(String tag, String message, Exception e) {
+    public static void d(String tag, String message, Throwable e) {
         if (BuildConfig.DEBUG) {
             //Log.d(tag, message, e);
             Timber.tag(tag);

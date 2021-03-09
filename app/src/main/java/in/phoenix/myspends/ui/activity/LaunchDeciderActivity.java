@@ -296,9 +296,6 @@ public class LaunchDeciderActivity extends BaseActivity {
                     } else {
                         Currency currencyData = dataSnapshot.getValue(Currency.class);
                         if (null != currencyData && dataSnapshot.getChildrenCount() == 3) {
-                            /*MySpendsComponent mySpendsComponent = DaggerMySpendsComponent.builder().contextModule
-                                    (new ContextModule(LaunchDeciderActivity.this)).build();*/
-
                             AppPref.getInstance()
                                     .putString(AppConstants.PrefConstants.CURRENCY, currencyData.getCurrencySymbol());
                             AppPref.getInstance()

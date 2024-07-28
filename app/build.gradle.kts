@@ -33,8 +33,26 @@ android {
         buildConfig = true
     }
 
+    signingConfigs {
+        getByName("debug") {
+            keyAlias = "phoenixmyspends"
+            keyPassword = "phoenixMySpends"
+            storePassword = "phoenixMySpends"
+            storeFile = file("../MySpends.jks")
+        }
+
+        create("release") {
+            keyAlias = "phoenixmyspends"
+            keyPassword = "phoenixMySpends"
+            storePassword = "phoenixMySpends"
+            storeFile = file("../MySpends.jks")
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
+            isDebuggable = false
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -43,6 +61,8 @@ android {
         }
 
         debug {
+            signingConfig = signingConfigs.getByName("debug")
+            isDebuggable = true
             isMinifyEnabled = false
             multiDexEnabled = true
             firebaseCrashlytics {

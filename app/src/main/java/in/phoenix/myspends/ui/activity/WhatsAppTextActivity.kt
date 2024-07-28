@@ -41,7 +41,7 @@ class WhatsAppTextActivity : BaseActivity(), WAEntryListener {
     }
 
     private fun init() {
-        val toolbar = binding.awaToolbar
+        val toolbar: Toolbar = binding.awaToolbar.ltToolbar
         toolbar.setTitle(R.string.text_on_whatsapp)
         setSupportActionBar(toolbar)
 
@@ -66,13 +66,14 @@ class WhatsAppTextActivity : BaseActivity(), WAEntryListener {
     }
 
     private fun subscribeObservers() {
-        waViewModel.observeWAEntries.observe(this, { dbResponse ->
+        waViewModel.observeWAEntries.observe(this) { dbResponse ->
             dbResponse?.let {
                 when (dbResponse) {
                     is DBResponse.Success -> {
                         val data = dbResponse.data
                         if (data != null && data.isNotEmpty()) {
-                            binding.awaRvHistoryItems.adapter = WAEntryAdapter(data.toMutableList(), this)
+                            binding.awaRvHistoryItems.adapter =
+                                WAEntryAdapter(data.toMutableList(), this)
                             binding.awaTvHistoryInfo.visible()
                             binding.awaRvHistoryItems.visible()
 
@@ -81,13 +82,14 @@ class WhatsAppTextActivity : BaseActivity(), WAEntryListener {
                             binding.awaRvHistoryItems.gone()
                         }
                     }
+
                     is DBResponse.Failed -> {
                         binding.awaTvHistoryInfo.gone()
                         binding.awaRvHistoryItems.gone()
                     }
                 }
             }
-        })
+        }
 
         waViewModel.observeWAAddEntry.observe(this, { dbResponse ->
             dbResponse?.let {

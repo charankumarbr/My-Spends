@@ -18,19 +18,24 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".ui.activity.BaseActivity" />
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:exported="false"/>
+        <activity android:name=".ui.activity.BaseActivity"
+            android:exported="false"/>
         <activity
             android:name=".ui.activity.ViewExpenseActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:exported="false"/>
         <activity
             android:name=".ui.activity.PaymentActivity"
             android:parentActivityName=".ui.activity.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:exported="false"/>
         <activity
             android:name=".ui.activity.LaunchDeciderActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,12 +45,14 @@
         <activity
             android:name=".ui.activity.AppSetupActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:exported="false"/>
         <activity
             android:name=".ui.activity.NewExpenseActivity"
             android:parentActivityName=".ui.activity.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -80,7 +87,8 @@
 
         <receiver
             android:name=".controller.BootCompletedReceiver"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -95,7 +103,8 @@
         <activity
             android:name=".ui.activity.ProfileActivity"
             android:parentActivityName=".ui.activity.MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:exported="false">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -106,7 +115,8 @@
             android:name=".ui.activity.MessageBoardActivity"
             android:parentActivityName=".ui.activity.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -117,7 +127,8 @@
         <activity android:name=".ui.activity.WhatsAppTextActivity"
             android:parentActivityName=".ui.activity.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data

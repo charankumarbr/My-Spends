@@ -1,0 +1,73 @@
+[versions]
+agp = "8.5.0"
+kotlin = "1.9.20"
+coreKtx = "1.13.1"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+appcompat = "1.7.0"
+material = "1.12.0"
+activity = "1.9.1"
+constraintlayout = "2.1.4"
+firebase-bom = "33.1.2"
+firebase-crashlytics = "3.0.2"
+firebase-ui-auth = "7.2.0"
+flexbox = "3.0.0"
+xcardview = "1.0.0"
+recyclerview = "1.3.2"
+xbrowser = "1.8.0"
+timber-log = "4.7.1"
+rxJava = "3.0.11"
+rxAndroid = "3.0.0"
+roomDb = "2.6.1"
+gmsVersion = "4.4.2"
+android-library = "8.5.1"
+app-compat-v7 = "28.0.0"
+play-core = "1.10.3"
+play-review = "2.0.1"
+view-binding = "8.5.1"
+mockito-core = "5.11.0"
+roboelectric = "3.5.1"
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-ui-auth = { module = "com.firebaseui:firebase-ui-auth", version.ref = "firebase-ui-auth" }
+firebase-realtime-db = { module = "com.google.firebase:firebase-database" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
+firebase-performance = { module = "com.google.firebase:firebase-perf" }
+flexbox = { group = "com.google.android.flexbox", name = "flexbox", version.ref = "flexbox" }
+xcardview = { group = "androidx.cardview", name = "cardview", version.ref = "xcardview" }
+xrecyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+xbrowser = { group = "androidx.browser", name = "browser", version.ref = "xbrowser" }
+timberLog = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber-log" }
+rxJava = { group = "io.reactivex.rxjava3", name = "rxjava", version.ref = "rxJava" }
+rxAndroid = { group = "io.reactivex.rxjava3", name = "rxandroid", version.ref = "rxAndroid" }
+roomDb = { group = "androidx.room", name = "room-ktx", version.ref = "roomDb" }
+roomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "roomDb" }
+roomKotCorou = { group = "androidx.room", name = "room-rxjava3", version.ref = "roomDb" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomDb" }
+app-compat-v7 = { module = "com.android.support:appcompat-v7", version.ref = "app-compat-v7" }
+recyclerview-v7 = { module = "com.android.support:recyclerview-v7", version.ref = "app-compat-v7" }
+play-core = { module = "com.google.android.play:core", version.ref = "play-core" }
+play-review = { module = "com.google.android.play:review", version.ref = "play-review" }
+view-binding = { module = "com.android.databinding:viewbinding", version.ref = "view-binding"}
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito-core"}
+roboelectric = { module = "org.robolectric:robolectric", version.ref = "roboelectric"}
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+firebaseCrashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics" }
+gms-google-services = { id = "com.google.gms.google-services", version.ref = "gmsVersion" }
+android-library = { id = "com.android.library", version.ref = "agp" }

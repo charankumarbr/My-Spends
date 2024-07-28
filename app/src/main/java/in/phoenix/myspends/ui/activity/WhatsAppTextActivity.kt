@@ -24,21 +24,24 @@ import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Lifecycle
 import com.google.firebase.analytics.FirebaseAnalytics
-import kotlinx.android.synthetic.main.activity_whats_app.*
+import `in`.phoenix.myspends.databinding.ActivityWhatsAppBinding
 
 class WhatsAppTextActivity : BaseActivity(), WAEntryListener {
 
     private val waViewModel: WAViewModel by viewModels()
 
+    private lateinit var binding: ActivityWhatsAppBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_whats_app)
+        binding = ActivityWhatsAppBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         init()
     }
 
     private fun init() {
-        val toolbar = findViewById<Toolbar>(R.id.awaToolbar)
+        val toolbar: Toolbar = binding.awaToolbar.ltToolbar
         toolbar.setTitle(R.string.text_on_whatsapp)
         setSupportActionBar(toolbar)
 
@@ -47,7 +50,7 @@ class WhatsAppTextActivity : BaseActivity(), WAEntryListener {
 
         /*awaEtCode.addTextChangedListener(textWatcher)
         awaEtMobile.addTextChangedListener(textWatcher)*/
-        awaEtMobile.setOnEditorActionListener { v, actionId, event ->
+        binding.awaEtMobile.setOnEditorActionListener { v, actionId, event ->
             return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_DONE) {
                 handleWhatsAppApi()
                 true
@@ -56,35 +59,37 @@ class WhatsAppTextActivity : BaseActivity(), WAEntryListener {
             }
         }
 
-        awaBtnText.setOnClickListener { handleWhatsAppApi() }
+        binding.awaBtnText.setOnClickListener { handleWhatsAppApi() }
 
         subscribeObservers()
         waViewModel.getAllWAEntries()
     }
 
     private fun subscribeObservers() {
-        waViewModel.observeWAEntries.observe(this, { dbResponse ->
+        waViewModel.observeWAEntries.observe(this) { dbResponse ->
             dbResponse?.let {
                 when (dbResponse) {
                     is DBResponse.Success -> {
                         val data = dbResponse.data
                         if (data != null && data.isNotEmpty()) {
-                            awaRvHistoryItems.adapter = WAEntryAdapter(data.toMutableList(), this)
-                            awaTvHistoryInfo.visible()
-                            awaRvHistoryItems.visible()
+                            binding.awaRvHistoryItems.adapter =
+                                WAEntryAdapter(data.toMutableList(), this)
+                            binding.awaTvHistoryInfo.visible()
+                            binding.awaRvHistoryItems.visible()
 
                         } else {
-                            awaTvHistoryInfo.gone()
-                            awaRvHistoryItems.gone()
+                            binding.awaTvHistoryInfo.gone()
+                            binding.awaRvHistoryItems.gone()
                         }
                     }
+
                     is DBResponse.Failed -> {
-                        awaTvHistoryInfo.gone()
-                        awaRvHistoryItems.gone()
+                        binding.awaTvHistoryInfo.gone()
+                        binding.awaRvHistoryItems.gone()
                     }
                 }
             }
-        })
+        }
 
         waViewModel.observeWAAddEntry.observe(this, { dbResponse ->
             dbResponse?.let {
@@ -111,12 +116,12 @@ class WhatsAppTextActivity : BaseActivity(), WAEntryListener {
                     is DBResponse.Success -> {
                         val deletedPosition = dbResponse.data
                         if (deletedPosition >= 0) {
-                            val adapter = awaRvHistoryItems.adapter
+                            val adapter = binding.awaRvHistoryItems.adapter
                             if (adapter is WAEntryAdapter) {
                                 val isAdapterUpdated = adapter.deleteEntryAtPosition(deletedPosition)
                                 if (!isAdapterUpdated) {
-                                    awaTvHistoryInfo.gone()
-                                    awaRvHistoryItems.gone()
+                                    binding.awaTvHistoryInfo.gone()
+                                    binding.awaRvHistoryItems.gone()
                                 }
                             }
                         }
@@ -130,23 +135,23 @@ class WhatsAppTextActivity : BaseActivity(), WAEntryListener {
     }
 
     private fun updateUiWithNewEntry(addedEntry: WAEntity) {
-        var adapter = awaRvHistoryItems.adapter
+        var adapter = binding.awaRvHistoryItems.adapter
         if (adapter == null) {
             adapter = WAEntryAdapter(mutableListOf(addedEntry), this)
-            awaRvHistoryItems.adapter = adapter
-            awaTvHistoryInfo.visible()
-            awaRvHistoryItems.visible()
+            binding.awaRvHistoryItems.adapter = adapter
+            binding.awaTvHistoryInfo.visible()
+            binding.awaRvHistoryItems.visible()
 
         } else {
             if (adapter is WAEntryAdapter) {
                 adapter.addNewEntry(addedEntry)
 
-                if (awaTvHistoryInfo.visibility != View.VISIBLE) {
-                    awaTvHistoryInfo.visible()
+                if (binding.awaTvHistoryInfo.visibility != View.VISIBLE) {
+                    binding.awaTvHistoryInfo.visible()
                 }
 
-                if (awaRvHistoryItems.visibility != View.VISIBLE) {
-                    awaRvHistoryItems.visible()
+                if (binding.awaRvHistoryItems.visibility != View.VISIBLE) {
+                    binding.awaRvHistoryItems.visible()
                 }
             }
         }
@@ -162,8 +167,8 @@ class WhatsAppTextActivity : BaseActivity(), WAEntryListener {
     }
 
     private fun handleWhatsAppApi() {
-        val code = awaEtCode.text.trim().toString()
-        val mobileNumber = awaEtMobile.text.trim().toString()
+        val code = binding.awaEtCode.text.trim().toString()
+        val mobileNumber = binding.awaEtMobile.text.trim().toString()
 
         if (code.isEmpty() || mobileNumber.isEmpty()) {
             AppUtil.showToast("Enter both Code and WhatsApp Number.")
@@ -210,7 +215,8 @@ class WhatsAppTextActivity : BaseActivity(), WAEntryListener {
         }
 
         override fun afterTextChanged(s: Editable?) {
-            awaBtnText.isEnabled = awaEtCode.text.trim().isNotEmpty() && awaEtMobile.text.trim().isNotEmpty()
+            binding.awaBtnText.isEnabled = binding.awaEtCode.text.trim().isNotEmpty() &&
+                    binding.awaEtMobile.text.trim().isNotEmpty()
         }
     }
 
